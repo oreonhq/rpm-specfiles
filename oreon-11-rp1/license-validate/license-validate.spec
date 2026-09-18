@@ -1,7 +1,7 @@
 %global source0_hash 4215b6d4512397bf77295d0473bc0f05e00973982b665b6322b9edb187a82e99
 
 Name:           license-validate
-Version:        30
+Version:        31-1
 Release:        1%{?dist}
 Summary:        Validate SPEC license string
 

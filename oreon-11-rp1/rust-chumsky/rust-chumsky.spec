@@ -8,7 +8,7 @@
 %global crate chumsky
 
 Name:           rust-chumsky
-Version:        0.9.3
+Version:        0.13.0
 Release:        %autorelease
 Summary:        Parser library for humans with powerful error recovery
 

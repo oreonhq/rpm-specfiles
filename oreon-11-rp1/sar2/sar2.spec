@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:		sar2
-Version:	2.5.0
-Release:	14%{?dist}
+Version:	2.6.0
+Release:	1%{?dist}
 Summary:	An open source helicopter simulator
 # Code is GPLv2+
 # Content is either GPLv2+ or Public Domain

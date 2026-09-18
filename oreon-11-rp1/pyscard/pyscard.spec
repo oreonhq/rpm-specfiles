@@ -1,7 +1,7 @@
 %global source0_hash a2f9f1343c1fb4a1f57e3b3adc658d4a313e7130e6f4ea3bd978e5969f938c67
 
 Name:           pyscard
-Version:        2.2.2
+Version:        2.3.1
 Release:        %autorelease
 Summary:        A framework for building smart card aware applications in Python
 

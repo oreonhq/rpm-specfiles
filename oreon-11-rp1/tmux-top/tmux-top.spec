@@ -15,11 +15,11 @@
 # 1. We need to set version
 # 2. And cannot set commit macro
 # 3. Place version before gometa
-Version:        0.1.1
+Version:        1.0.2
 %gometa
 
 Name:           tmux-top
-Release:        16%{?dist}
+Release:        1%{?dist}
 Summary:        Monitoring information for your tmux status line.
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

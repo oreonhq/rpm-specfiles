@@ -7,7 +7,7 @@
 %global crate dlopen2
 
 Name:           rust-dlopen2
-Version:        0.7.0
+Version:        0.9.0
 Release:        %autorelease
 Summary:        Library for opening and operating on dynamic link libraries
 

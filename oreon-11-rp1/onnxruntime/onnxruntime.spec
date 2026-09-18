@@ -25,7 +25,7 @@
 
 Summary:    A cross-platform inferencing and training accelerator
 Name:       onnxruntime
-Version:    1.22.2
+Version:    1.30.0
 Release:    %autorelease
 # onnxruntime and SafeInt are MIT
 # onnx is Apache License 2.0

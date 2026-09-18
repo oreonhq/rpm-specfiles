@@ -31,8 +31,8 @@
 #
 
 Name:           bsh
-Version:        2.1.0
-Release:        19%{?dist}
+Version:        2.1.1
+Release:        1%{?dist}
 Epoch:          0
 Summary:        Lightweight Scripting for Java
 URL:            https://beanshell.github.io/
@@ -41,7 +41,7 @@ URL:            https://beanshell.github.io/
 License:        Apache-2.0 AND BSD-3-Clause AND LicenseRef-Public-Domain
 
 # ./generate-tarball.sh
-Source0:        https://github.com/beanshell/beanshell/archive/refs/tags/2.1.0.tar.gz#/bsh-2.1.0.tar.gz
+Source0:        https://github.com/beanshell/beanshell/archive/refs/tags/2.1.1.tar.gz#/bsh-2.1.0.tar.gz
 
 # Remove bundled jars which cannot be easily verified for licensing
 # Remove code marked as SUN PROPRIETARY/CONFIDENTAIL

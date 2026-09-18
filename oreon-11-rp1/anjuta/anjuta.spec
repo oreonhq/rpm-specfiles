@@ -11,8 +11,8 @@
 
 Name:           anjuta
 Epoch:          1
-Version:        3.34.0
-Release:        30%{?dist}
+Version:        3_34_0
+Release:        1%{?dist}
 Summary:        GNOME IDE for various programming languages (including C/C++, Python, Vala and JavaScript)
 
 License:        GPL-2.0-or-later

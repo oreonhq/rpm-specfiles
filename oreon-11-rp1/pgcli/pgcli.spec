@@ -1,7 +1,7 @@
 %global source0_hash bd5f8d68af28fd69551a3cb48a2849cad5f6854aa48022e9d98c6236d109eeae
 
 Name:           pgcli
-Version:        4.4.0
+Version:        4.6.0
 Release:        %autorelease
 Summary:        CLI for Postgres Database. With auto-completion and syntax highlighting
 

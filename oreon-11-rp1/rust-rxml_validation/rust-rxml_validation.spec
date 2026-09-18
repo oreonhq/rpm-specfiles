@@ -7,7 +7,7 @@
 %global crate rxml_validation
 
 Name:           rust-rxml_validation
-Version:        0.9.1
+Version:        0.12.0
 Release:        %autorelease
 Summary:        Plumbing crate for rxml and rxml_proc crates
 

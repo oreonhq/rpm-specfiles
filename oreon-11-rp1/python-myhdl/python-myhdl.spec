@@ -1,57 +1,56 @@
-%global source0_hash 34218a2d73b119b9dcd07369cfe738062cb5ac14d2a084ee79ab4d2eaa17a9fe
+%global source0_hash none
 
-%global srcname myhdl
-%global sum A python hardware description and verification language
-
-Name:           python-%{srcname}
-Version:        0.11
+Name:           python-myhdl
+Version:        0.11.52
 Release:        %autorelease
-Summary:        %{sum}
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
-License:        LicenseRef-Callaway-LGPLv2+
-URL:            http://myhdl.org
-Source0:        https://files.pythonhosted.org/packages/source/m/%{srcname}/%{srcname}-%{version}.tar.gz
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python as a Hardware Description Language
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            http://www.myhdl.org
+Source:         %{pypi_source myhdl}
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%description
-%{name} is a Python hardware description and verification language that 
-helps you go from Python to silicon. MyHDL code can be converted to Verilog 
-and VHDL. It can also be used to convert signals, do co-simulation 
-with Verilog, generating test benches with test vectors for VHDL, Verilog and 
-supports viewing waveform by tracing signal changes in a VCD file.
 
-%package -n python3-%{srcname}
-Summary:        %{sum}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'myhdl' generated automatically by pyp2spec.}
 
-%description -n python3-%{srcname}
-%{name} is a Python3 hardware description and verification language that 
-helps you go from Python to silicon. MyHDL code can be converted to Verilog 
-and VHDL. It can also be used to convert signals, do co-simulation 
-with Verilog, generating test benches with test vectors for VHDL, Verilog and 
-supports viewing waveform by tracing signal changes in a VCD file.
+%description %_description
+
+%package -n     python3-myhdl
+Summary:        %{summary}
+
+%description -n python3-myhdl %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n myhdl-%{version}
 
-%setup -q -n myhdl-%{version}
-find -name '*.txt' | xargs chmod -x
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l '*'
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc /usr/share/myhdl/cosimulation/
+
+%files -n python3-myhdl -f %{pyproject_files}
 
 %changelog
 %autochangelog

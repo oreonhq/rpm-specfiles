@@ -7,7 +7,7 @@
 %global crate googletest_macro
 
 Name:           rust-googletest_macro
-Version:        0.11.0
+Version:        0.14.3
 Release:        %autorelease
 Summary:        Procedural macros for GoogleTest Rust
 

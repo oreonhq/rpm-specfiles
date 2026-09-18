@@ -1,10 +1,13 @@
-%global source0_hash 9b06f0df7f4ee75a8d39bbba327e05bcb01123b63acd291d2f1782c78f6d35dd
+%global source0_hash none
 
 Name:           python-u-boot-pylib
-Version:        0.0.6
+Version:        0.0.7
 Release:        %autorelease
-Summary:        U-Boot Python library
+# Fill in the actual package summary to submit package to Fedora
+Summary:        U-Boot python library
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
 URL:            https://docs.u-boot.org
 Source:         %{pypi_source u_boot_pylib}
@@ -12,9 +15,10 @@ Source:         %{pypi_source u_boot_pylib}
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is a Python library used by various U-Boot tools, including patman,
-buildman and binman.}
+This is package 'u-boot-pylib' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -23,26 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-u-boot-pylib %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n u_boot_pylib-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files u_boot_pylib
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-u-boot-pylib -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

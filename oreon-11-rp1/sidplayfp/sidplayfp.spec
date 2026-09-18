@@ -1,8 +1,8 @@
 %global source0_hash a0a87952bac79668b30fedd3d80dffd0cb83c605414b60491f04a56fe861fb36
 
 Name:           sidplayfp
-Version:        2.15.0
-Release:        2%{?dist}
+Version:        3.2.0
+Release:        1%{?dist}
 Summary:        SID chip music module player
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

@@ -1,7 +1,7 @@
 %global source0_hash ef085ffde2d48b05b3665939e5ae1e359d3a381008fb827684f7d6fd4c533704
 
 Name:           qiv
-Version:        2.3.3
+Version:        3.0.1
 Release:        %autorelease
 
 Summary:        Quick Image Viewer
@@ -11,8 +11,8 @@ License:        GPL-2.0-only
 URL:            http://spiegl.de/qiv/
 Source0:        http://spiegl.de/qiv/download/%{name}-%{version}.tgz
 
-Patch0:         2.3.3-makefile-destdir.patch
-Patch1:         2.3.3-fix-prototypes.patch
+Patch0:         3.0.1-makefile-destdir.patch
+Patch1:         3.0.1-fix-prototypes.patch
 
 BuildRequires:  make
 BuildRequires:  gcc

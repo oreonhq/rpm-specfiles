@@ -1,8 +1,8 @@
 %global source0_hash b00d488b29cd007fadf9a4e44193cbdd72b48c94080be5ebc02565f21f9a2a71
 
 Name:		xedit
-Version:	1.2.4
-Release:	6%{?dist}
+Version:	1.2.5
+Release:	1%{?dist}
 Summary:	Simple text editor for X
 URL:		http://xorg.freedesktop.org
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.xz

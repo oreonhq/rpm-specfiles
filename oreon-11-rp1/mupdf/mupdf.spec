@@ -6,7 +6,7 @@ Name:		mupdf
 
 %global libname libmupdf
 %global pypiname mupdf
-Version:	1.27.2
+Version:	1.28.4
 %global somajor 27
 %global sominor 2
 %global soname %{somajor}.%{sominor}

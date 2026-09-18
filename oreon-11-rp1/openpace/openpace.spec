@@ -1,8 +1,8 @@
 %global source0_hash ef82a172d82e8300b91b4ec08df282292ac841f9233188e00554f56e97c2c089
 
 Name:           openpace
-Version:        1.1.3
-Release:        5%{?dist}
+Version:        1.1.4
+Release:        1%{?dist}
 Summary:        Cryptographic library for EAC version 2
 
 License:        GPL-3.0-only

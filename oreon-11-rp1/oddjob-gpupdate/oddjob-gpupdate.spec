@@ -1,8 +1,8 @@
 %global source0_hash e3f19c460dc7ccd62c462c112e72cf7cbde14b8a13d67f67e3ae85e345562963
 
 Name:           oddjob-gpupdate
-Version:        0.2.1
-Release:        11%{?dist}
+Version:        0.2.3
+Release:        1%{?dist}
 Summary:        An oddjob helper which applies group policy objects
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD

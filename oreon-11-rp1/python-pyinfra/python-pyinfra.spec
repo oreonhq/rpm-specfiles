@@ -1,32 +1,24 @@
-%global source0_hash c2fff4dc1c45513180a7324db609d5b4d3a32d2765032f9daf6d441c83fbfe35
+%global source0_hash none
 
-%global  forgeurl https://github.com/pyinfra-dev/pyinfra
-%global  pypi_name pyinfra
-Name:           python-%{pypi_name}
-Version:        3.4.1
-%global  tag    v%{version}
+Name:           python-pyinfra
+Version:        3.10.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        pyinfra automates/provisions/manages/deploys infrastructure.
 
-Summary:        Provision, manage and deploy infrastructure
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://pyinfra.com
-VCS:            git:%{forgeurl}.git
-Source:         %{forgesource}
-%forgemeta
+Source:         %{pypi_source pyinfra}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# Test dependencies include extra formatting and coverage tests
-# that are not needed in Fedora CI
-BuildRequires:  python3-pytest
-BuildRequires:  python3-pyyaml
-BuildRequires:  python3-pytest-testinfra
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-pyinfra turns Python code into shell commands and runs them on your
-servers. Execute ad-hoc commands and write declarative operations.
-Target SSH servers, local machine and Docker containers.}
+This is package 'pyinfra' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -35,47 +27,32 @@ Summary:        %{summary}
 
 %description -n python3-pyinfra %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%forgesetup
-# Remove unneeded dependency
-sed -i '/configparser/d' setup.py
-# Remove unused scripts, package documentation
-# as text files
-rm docs/*.py
+%prep
+%autosetup -p1 -n pyinfra-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-# Remove test files
-rm -r %{buildroot}%{python3_sitelib}/tests
-%pyproject_save_files -l pyinfra
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-# Do not run test that depend on network access
-k="${k-}${k+ and }not (test_put_file_sudo)"
-# Temporarily deselect tests that need click 8.2+
-deselect="${deselect-} --deselect=tests/test_cli/test_cli.py::TestFactCli::test_get_fact"
-deselect="${deselect-} --deselect=tests/test_cli/test_cli.py::TestFactCli::test_get_fact_with_kwargs"
-deselect="${deselect-} --deselect=tests/test_cli/test_cli_inventory.py::TestCliInventory::test_host_groups_may_only_contain_strings_or_tuples"
-deselect="${deselect-} --deselect=tests/test_cli/test_cli_inventory.py::TestCliInventory::test_ignores_variables_with_leading_underscore"
-deselect="${deselect-} --deselect=tests/test_cli/test_cli_inventory.py::TestCliInventory::test_only_supports_list_and_tuples"
-%pytest -k "${k-}" ${deselect-}
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pyinfra -f %{pyproject_files}
 %{_bindir}/pyinfra
-%{python3_sitelib}/pyinfra_cli/
-%license LICENSE.md
-%doc README.md
-%doc CHANGELOG.md
-%doc docs
 
 %changelog
 %autochangelog

@@ -25,8 +25,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        3.0.0
-Release:        9%{?dist}
+Version:        4.0.0
+Release:        1%{?dist}
 Summary:        Allows reflection of object attributes, version %{major}
 
 License:        BSD-3-Clause

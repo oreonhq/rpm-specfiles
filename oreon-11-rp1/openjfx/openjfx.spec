@@ -6,8 +6,8 @@
 
 Name:           openjfx
 Epoch:          3
-Version:        25.0.2.3
-Release:        2%{?dist}
+Version:        25.0.5+3
+Release:        1%{?dist}
 Summary:        Rich client application platform for Java
 %forgemeta
 

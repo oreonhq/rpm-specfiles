@@ -22,8 +22,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{pk_vendor}-%{pk_project}%{ver_major}
-Version:        4.0.1
-Release:        8%{?dist}
+Version:        5.0.0
+Release:        1%{?dist}
 Summary:        Managing the version number of Git-hosted PHP projects, version %{ver_major}
 
 License:        BSD-3-Clause

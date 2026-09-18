@@ -7,7 +7,7 @@
 %global crate deku
 
 Name:           rust-deku
-Version:        0.18.1
+Version:        0.20.3
 Release:        %autorelease
 Summary:        Bit level serialization/deserialization proc-macro for structs
 

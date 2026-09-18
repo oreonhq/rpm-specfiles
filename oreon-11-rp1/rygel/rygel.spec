@@ -5,7 +5,7 @@
 %global tarball_version %%(echo %{version} | tr '~' '.')
 
 Name:          rygel
-Version:       45.1
+Version:       46.0
 Release:       %autorelease
 Summary:       A collection of UPnP/DLNA services
 

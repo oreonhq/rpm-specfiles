@@ -26,8 +26,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        4.0.4
-Release:        9%{?dist}
+Version:        6.0.0
+Release:        1%{?dist}
 Summary:        Traverses array and object to enumerate all referenced objects, version %{major}
 
 License:        BSD-3-Clause

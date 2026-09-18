@@ -9,8 +9,8 @@
 %endif
 
 Name:          tesseract
-Version:       5.5.2
-Release:       2%{?dist}
+Version:       5.5.3
+Release:       1%{?dist}
 Summary:       Raw OCR Engine
 
 License:       Apache-2.0

@@ -10,7 +10,7 @@ records. With ext::function class, it's also easy to use the sqlite3's
 functions and aggregations in C++.}
 
 Name:           sqlite3pp
-Version:        1.0.9
+Version:        1.0.10
 Release:        %autorelease
 Summary:        C++ wrapper of SQLite3 API
 

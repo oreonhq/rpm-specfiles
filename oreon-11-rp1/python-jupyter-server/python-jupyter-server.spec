@@ -1,25 +1,23 @@
-%global source0_hash c38ea898566964c888b4772ae1ed58eca84592e88251d2cfc4d171f81f7e99d5
-
-# Tests depend on pytest-jupyter and that depends back
-# on jupyter-server[test] so we might need to break this loop.
-%bcond bootstrap 0
-%bcond tests %{without bootstrap}
+%global source0_hash none
 
 Name:           python-jupyter-server
-Version:        2.17.0
+Version:        2.21.1
 Release:        %autorelease
-Summary:        The backend for Jupyter web applications
-License:        BSD-3-Clause
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications.
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://jupyter-server.readthedocs.io
 Source:         %{pypi_source jupyter_server}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The Jupyter Server provides the backend (i.e. the core services,
-APIs, and REST endpoints) for Jupyter web applications like
-Jupyter notebook, JupyterLab, and Voila.}
+This is package 'jupyter-server' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -28,35 +26,37 @@ Summary:        %{summary}
 
 %description -n python3-jupyter-server %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-jupyter-server docs,test
 
-%autosetup -n jupyter_server-%{version}
-sed -i '/"pre-commit"/d' pyproject.toml
+
+%prep
+%autosetup -p1 -n jupyter_server-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-x test}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files jupyter_server
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-# ResourceWarning is flaky and causes some test to fail
-# reported: https://github.com/jupyter-server/jupyter_server/issues/1387
-# PytestUnraisableExceptionWarning added to the same report.
-%pytest -vv -W "always:unclosed <socket.socket:ResourceWarning" -W "always::pytest.PytestUnraisableExceptionWarning"
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-jupyter-server -f %{pyproject_files}
-%doc README.md
 %{_bindir}/jupyter-server
-
-%pyproject_extras_subpkg -n python3-jupyter-server test
 
 %changelog
 %autochangelog

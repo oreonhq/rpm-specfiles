@@ -8,8 +8,8 @@
 %global giturl  https://github.com/pradyunsg/sphinx-basic-ng
 
 Name:           python-sphinx-basic-ng
-Version:        1.0.0
-Release:        0.19.%{prerel}%{?dist}
+Version:        1.0.0b2
+Release:        1.19.%{prerel}%{?dist}
 Summary:        Modernized skeleton for Sphinx themes
 
 License:        MIT

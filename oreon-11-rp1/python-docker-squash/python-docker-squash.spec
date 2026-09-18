@@ -3,8 +3,8 @@
 %global modname docker-squash
 
 Name:           python-%{modname}
-Version:        1.1.0
-Release:        14%{?dist}
+Version:        1.2.2
+Release:        1%{?dist}
 Summary:        Docker layer squashing tool
 License:        MIT
 URL:            https://github.com/goldmann/docker-squash

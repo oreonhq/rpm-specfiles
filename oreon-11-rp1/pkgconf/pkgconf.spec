@@ -24,7 +24,7 @@
 %global libsomajor 7
 
 Name:           pkgconf
-Version:        2.5.1
+Version:        3.0.7
 Release:        1%{?dist}
 Summary:        Package compiler and linker metadata toolkit
 

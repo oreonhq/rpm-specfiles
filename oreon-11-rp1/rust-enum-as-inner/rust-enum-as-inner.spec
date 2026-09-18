@@ -7,7 +7,7 @@
 %global crate enum-as-inner
 
 Name:           rust-enum-as-inner
-Version:        0.6.1
+Version:        0.7.0
 Release:        %autorelease
 Summary:        A proc-macro for deriving inner field accessor functions on enums.
 

@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        0.1.24.0
+Version:        0.1.25.0
 Release:        %autorelease
 Summary:        A standard library for Haskell
 

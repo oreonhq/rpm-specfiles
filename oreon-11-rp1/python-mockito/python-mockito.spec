@@ -1,54 +1,57 @@
-%global source0_hash 599356409c790bc663d51a076696d59b84789acd013207355d98a47dd040389f
+%global source0_hash none
 
-%global pypi_name mockito
-
-Summary:        Python spying framework inspired by Java's Mockito
 Name:           python-mockito
-Version:        1.5.0
-Release:        7%{?dist}
+Version:        2.0.4
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Spying framework
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/kaste/%{pypi_name}-python
-Source0:        %{url}/archive/%{version}/%{pypi_name}-python-%{version}.tar.gz
+URL:            ...
+Source:         %{pypi_source mockito}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(numpy)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This spying framework allows to easily create mocks with a very readable syntax.}
+This is package 'mockito' generated automatically by pyp2spec.}
 
-%description
-%{_description}
+%description %_description
+
+%package -n     python3-mockito
+Summary:        %{summary}
+
+%description -n python3-mockito %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n mockito-%{version}
 
-%autosetup -n %{pypi_name}-python-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%{py3_build}
+%pyproject_wheel
 
-%check
-%pytest
 
 %install
-%{py3_install}
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%package -n python3-mockito
-Summary: %{summary}
 
-%description -n python3-mockito
-%{_description}
+%check
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-mockito
-%doc AUTHORS
-%doc CHANGES.txt
-%doc README.rst
-%{python3_sitelib}/mockito/
-%{python3_sitelib}/mockito-*.egg-info
-%license LICENSE
+
+%files -n python3-mockito -f %{pyproject_files}
 
 %changelog
 %autochangelog

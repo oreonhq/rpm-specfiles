@@ -7,7 +7,7 @@
 %global crate hyper-rustls
 
 Name:           rust-hyper-rustls
-Version:        0.27.7
+Version:        0.27.9
 Release:        %autorelease
 Summary:        Rustls+hyper integration for pure rust HTTPS
 

@@ -1,7 +1,7 @@
 %global source0_hash 3cc66cc5952654767053af8a04f32af2c8f2b78da396b5dace093b0c673d6efa
 
 Name:           xsnow
-Version:        3.9.0
+Version:        3.9.4
 Release:        %autorelease
 Summary:        Let it snow on your desktop
 License:        GPL-3.0-or-later

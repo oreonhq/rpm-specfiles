@@ -3,8 +3,8 @@
 Name:		sha
 #Upstream will continue in the next version 
 #with the behavior of shared libraries (specifically version 1.2)
-Version:	1.0.4b
-Release:	29%{?dist}
+Version:	1.1
+Release:	1%{?dist}
 Summary:	File hashing utility
 # Automatically converted from old format: BSD - review is highly recommended.
 License:	LicenseRef-Callaway-BSD

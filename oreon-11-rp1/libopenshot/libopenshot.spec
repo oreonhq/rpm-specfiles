@@ -62,8 +62,8 @@ CVOutline:Outline_Tests
 %endif
 
 Name:           libopenshot
-Version:        0.5.0
-Release:        4%{?dist}
+Version:        1.0.0
+Release:        1%{?dist}
 Summary:        Library for creating and editing videos
 
 # See .reuse/dep5 for details

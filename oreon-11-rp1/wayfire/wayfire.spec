@@ -12,7 +12,7 @@
 %global shortcommit2 %(c=%{commit2}; echo ${c:0:7})
 
 Name:           wayfire
-Version:        0.10.1
+Version:        0.11.0
 %forgemeta
 Release:        %autorelease
 Summary:        A modular and extensible wayland compositor

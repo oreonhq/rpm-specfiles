@@ -3,7 +3,7 @@
 %global gcalmantag 4
 
 Name:		gcal
-Version:	4.1
+Version:	4.2.0
 Release:	%autorelease
 Summary:	GNU Gregorian calendar program
 
@@ -14,7 +14,7 @@ Source0:	https://ftp.gnu.org/gnu/gcal/%{name}-%{version}.tar.xz
 # The man pages are not shipped in tarball but reside in the git repository
 # at https://git.savannah.gnu.org/git/gcal.git
 # To fetch the man pages from a clone of that repository, do:
-# $ gcalmantag=4  # n.b. there is no 4.1 tag
+# $ gcalmantag=4  # n.b. there is no 4.2.0 tag
 # $ git archive --format=tar v${gcalmantag} -- doc/en/man | \
 #     xz > gcal-man-v${gcalmantag}.tar.xz
 Source1:	gcal-man-v%{gcalmantag}.tar.xz

@@ -1,8 +1,8 @@
 %global source0_hash 7bee104afa0f81ce6ca7ce2205f65943b5e3650105507363f1a628bbca3a075b
 
 Name:           xrotor
-Version:        7.55
-Release:        30%{?dist}
+Version:        7.57
+Release:        1%{?dist}
 Summary:        Design and analysis tools for propellers and windmills
 
 # Plotlib is LGPLv2+, the rest is GPLv2+

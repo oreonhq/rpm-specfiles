@@ -1,79 +1,57 @@
-%global source0_hash 0c9285db09c8e3b66f884a0448dc2ae78737e228f69bfe9dfde1faa1d4f1c945
+%global source0_hash none
 
-%global modname pypng
+Name:           python-pypng
+Version:        0.20220715.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Pure Python library for saving and loading PNG images
 
-Name:               python-pypng
-Version:            0.0.21
-Release:            16%{?dist}
-Summary:            Pure Python PNG image encoder/decoder
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://gitlab.com/drj11/pypng
+Source:         %{pypi_source pypng}
 
-License:            MIT
-URL:                http://pypi.python.org/pypi/pypng
-Source0:            https://github.com/drj11/%{modname}/archive/%{modname}-%{version}.tar.gz
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildArch:          noarch
 
-BuildRequires:      python3-devel
-BuildRequires:      python3-pytest
-
-%global _description\
-PyPNG allows PNG image files to be read and written using pure Python.\
-\
-It's available from github.com https://github.com/drj11/pypng\
-\
-Documentation is kindly hosted by PyPI http://pythonhosted.org/pypng/
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pypng' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-pypng
-Summary:            Pure Python PNG image encoder/decoder
-%{?python_provide:%python_provide python3-pypng}
+%package -n     python3-pypng
+Summary:        %{summary}
 
-%description -n python3-pypng
-PyPNG allows PNG image files to be read and written using pure Python.
+%description -n python3-pypng %_description
 
-It's available from github.com https://github.com/drj11/pypng
-
-Documentation is kindly hosted by PyPI http://pythonhosted.org/pypng/
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pypng-%{version}
 
-%setup -q -n %{modname}-%{modname}-%{version}
-
-# Remove bundled egg-info in case it exists
-rm -rf %{modname}.egg-info
-
-# Remove the shebang from the main lib
-lib=code/png.py
-sed '1{\@^#!/usr/bin/env python@d}' $lib > $lib.new &&
-touch -r $lib $lib.new &&
-mv $lib.new $lib
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files png*
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pypng -f %{pyproject_files}
-%doc README.md LICENCE
-%{_bindir}/prichunkpng
-%{_bindir}/priditherpng
-%{_bindir}/priforgepng
-%{_bindir}/prigreypng
-%{_bindir}/pripalpng
-%{_bindir}/pripamtopng
-%{_bindir}/pripnglsch
-%{_bindir}/pripngtopam
-%{_bindir}/priweavepng
 
 %changelog
 %autochangelog

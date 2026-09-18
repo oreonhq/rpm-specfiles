@@ -1,61 +1,61 @@
-%global source0_hash 6eef7dce88bdb4ebb0ba11b209d65b6f8e47d84c9c9bff351ecbbe681c55f413
+%global source0_hash none
 
-%global srcname traitlets
-
-Name:           python-%{srcname}
-Version:        5.14.3
+Name:           python-traitlets
+Version:        5.16.1
 Release:        %autorelease
-Summary:        A lightweight derivative of Enthought Traits for configuring Python objects
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Traitlets Python configuration system
 
-License:        BSD-3-Clause
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/ipython/traitlets
-Source0:        https://github.com/ipython/traitlets/archive/v%{version}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source traitlets}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-A lightweight pure-Python derivative of Enthought Traits, used for
-configuring Python objects.
 
-This package powers the config system of IPython and Jupyter.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'traitlets' generated automatically by pyp2spec.}
 
-%package -n python%{python3_pkgversion}-%{srcname}
-Summary:        A lightweight derivative of Enthought Traits for configuring Python objects
-BuildRequires:  python%{python3_pkgversion}-devel
-# For tests
-BuildRequires:  python%{python3_pkgversion}-pytest
+%description %_description
 
-%description -n python%{python3_pkgversion}-%{srcname}
-A lightweight pure-Python derivative of Enthought Traits, used for
-configuring Python objects.
+%package -n     python3-traitlets
+Summary:        %{summary}
 
-This package powers the config system of IPython and Jupyter.
+%description -n python3-traitlets %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-traitlets docs,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n traitlets-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-
-# Remove tests of type annotations
-rm tests/test_typing.py
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files traitlets
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
 
- 
-%files -n python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
-%doc CHANGELOG.md README.md
-%license LICENSE
+
+%files -n python3-traitlets -f %{pyproject_files}
 
 %changelog
 %autochangelog

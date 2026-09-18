@@ -4,8 +4,8 @@
 
 Summary:        GKrellM plugin which shows 3 most CPU intensive processes
 Name:           gkrellm-top
-Version:        2.2.13
-Release:        31%{?dist}
+Version:        2.2.13.orig.orig
+Release:        1%{?dist}
 License:        GPL-1.0-or-later
 URL:            http://gkrelltop.sourceforge.net/
 Source0:        https://downloads.sourceforge.net/gkrelltop/gkrelltop_%{version}.orig.tar.gz

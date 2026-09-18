@@ -1,64 +1,59 @@
-%global source0_hash f9919c65ec0d5263078551cc232fdee3c2a95947cecd46a044a5b751c96de819
+%global source0_hash none
 
-%bcond check 0
-%global srcname OBD
+Name:           python-obd
+Version:        0.7.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Serial module for handling live sensor data from a vehicle_s OBD-II port
 
-Name:          python-%{srcname}
-Version:       0.7.2
-Release:       12%{?dist}
-Summary:       OBD-II serial module for reading engine data
-License:       GPL-2.0-or-later
-URL:           https://github.com/brendan-w/%{name}
-Source0:       https://github.com/brendan-w/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-# Fix python dependency generator error
-# error: Illegal char '*' (0x2a) in: 0.7.*
-# error: Illegal char '*' (0x2a) in: 3.*
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-2.0-only
+URL:            https://github.com/brendan-w/python-OBD
+Source:         %{pypi_source obd}
+
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'obd' generated automatically by pyp2spec.}
+
 Patch0:        %{name}-dep-ver.patch
-BuildArch:     noarch
 
-%global desc A python module for handling realtime sensor data from OBD-II vehicle ports.\
-Works with ELM327 OBD-II adapters, and is fit for the Raspberry Pi.
+%description %_description
 
-%description
-%{desc}
+%package -n     python3-obd
+Summary:        %{summary}
 
-%package -n python3-%{srcname}
-Summary:       %{summary}
-BuildRequires: python3-devel
-%if %{with check}
-BuildRequires: python3-pytest
-%endif
+%description -n python3-obd %_description
 
-%description -n python3-%{srcname}
-%{desc}
-
-Python 3 version.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n obd-%{version}
 
-%autosetup
+
 %generate_buildrequires
-%if %{with check}
-%pyproject_buildrequires -x test
-%else
 %pyproject_buildrequires
-%endif
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files obd
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with check}
+
 %check
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
+
+%files -n python3-obd -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,8 +1,8 @@
 %global source0_hash d4fc82893cfb00109578d0a1a2337fb8ca335b3ceccf97b97e5cc7f08e4353e1
 
 Name:           glew
-Version:        2.2.0
-Release:        12%{?dist}
+Version:        2.3.1
+Release:        1%{?dist}
 Summary:        The OpenGL Extension Wrangler Library
 License:        BSD-3-Clause AND MIT AND MIT-Khronos-old
 URL:            https://github.com/nigels-com/glew

@@ -7,12 +7,12 @@ ExcludeArch: %{ix86}
 %global debug_package %{nil}
 
 Name:           ocaml-obuild
-Version:        0.1.11
+Version:        0.3.0
 Summary:        Simple package build system for OCaml
 
 %forgemeta
 
-Release:        10%{?dist}
+Release:        1%{?dist}
 License:        BSD-2-Clause
 URL:            https://github.com/ocaml-obuild/obuild
 VCS:            git:%{url}.git

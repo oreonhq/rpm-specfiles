@@ -7,7 +7,7 @@
 %global crate elliptic-curve
 
 Name:           rust-elliptic-curve
-Version:        0.13.8
+Version:        0.14.1
 Release:        %autorelease
 Summary:        General purpose Elliptic Curve Cryptography (ECC) support, including...
 

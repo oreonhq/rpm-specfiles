@@ -1,68 +1,57 @@
-%global source0_hash 2fdbcdead6f169f3a6f6beabe1d664a1c01ced9a7f34dd1622a7e9612e66a194
+%global source0_hash none
 
-# Created by pyp2rpm-3.3.5
-%global pypi_name wcmatch
+Name:           python-wcmatch
+Version:        11.0.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Wildcard/glob file name matcher.
 
-Name:           python-%{pypi_name}
-Version:        10.0
-Release:        7%{?dist}
-Summary:        Wildcard/glob file name matcher
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/facelessuser/wcmatch
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source:         %{pypi_source wcmatch}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(bracex)
-BuildRequires:  python3dist(setuptools)
 
-%description
-Wildcard Match provides an enhanced fnmatch, glob, and pathlib library in order
-to provide file matching and globbing that more closely follows the features
-found in Bash. In some ways these libraries are similar to Python's builtin
-libraries as they provide a similar interface to match, filter, and glob the
-file system. But they also include a number of features found in Bash's
-globbing such as backslash escaping, brace expansion, extended glob pattern
-groups, etc. They also add a number of new useful functions as well, such as
-globmatch which functions like fnmatch, but for paths.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'wcmatch' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-wcmatch
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-Wildcard Match provides an enhanced fnmatch, glob, and pathlib library in order
-to provide file matching and globbing that more closely follows the features
-found in Bash. In some ways these libraries are similar to Python's builtin
-libraries as they provide a similar interface to match, filter, and glob the
-file system. But they also include a number of features found in Bash's
-globbing such as backslash escaping, brace expansion, extended glob pattern
-groups, etc. They also add a number of new useful functions as well, such as
-globmatch which functions like fnmatch, but for paths.
+%description -n python3-wcmatch %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n wcmatch-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -vv -k "not test_tilde_user"
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE.md
-%doc README.md
+
+%files -n python3-wcmatch -f %{pyproject_files}
 
 %changelog
 %autochangelog

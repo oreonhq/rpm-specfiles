@@ -2,8 +2,8 @@
 
 Name:		globus-xio-gridftp-driver
 %global _name %(tr - _ <<< %{name})
-Version:	3.6
-Release:	10%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Globus XIO GridFTP Driver
 
 License:	Apache-2.0

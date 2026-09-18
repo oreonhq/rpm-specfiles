@@ -3,8 +3,8 @@
 #%%global _hardened_build 1
 
 Name:           slock
-Version:        1.5
-Release:        8%{?dist}
+Version:        1.7
+Release:        1%{?dist}
 Summary:        Simple X display locker
 License:        MIT
 URL:            http://tools.suckless.org/%{name}

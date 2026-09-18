@@ -1,7 +1,7 @@
 %global source0_hash f1c588bd7d8da02f7d67f20e9e3e953acd6bc1d7f39209f1da45e1780fb6ed5f
 
 Name:           python-pyscipopt
-Version:        6.1.0
+Version:        6.2.1
 Release:        %autorelease
 Summary:        Python interface and modeling environment for SCIP
 

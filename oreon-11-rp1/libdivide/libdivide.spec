@@ -3,7 +3,7 @@
 %bcond ctest 1
 
 Name:           libdivide
-Version:        5.3.0
+Version:        5.4.0
 Release:        %autorelease
 Summary:        Optimized integer division
 

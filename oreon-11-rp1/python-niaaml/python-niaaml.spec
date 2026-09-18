@@ -11,7 +11,7 @@
 %bcond doc_pdf 1
 
 Name:           python-niaaml
-Version:        2.2.0
+Version:        2.2.1
 Release:        %autorelease
 Summary:        Python automated machine learning framework
 

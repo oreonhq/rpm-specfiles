@@ -7,7 +7,7 @@
 %global crate cryptoki
 
 Name:           rust-cryptoki
-Version:        0.12.0
+Version:        0.12.1
 Release:        %autorelease
 Summary:        Rust-native wrapper around the PKCS #11 API
 

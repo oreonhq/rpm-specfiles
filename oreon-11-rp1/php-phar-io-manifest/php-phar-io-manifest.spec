@@ -26,8 +26,8 @@
 %endif
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        1.0.3
-Release:        18%{?dist}
+Version:        2.0.4
+Release:        1%{?dist}
 Summary:        Component for reading phar.io manifest information
 
 # Automatically converted from old format: BSD - review is highly recommended.

@@ -3,8 +3,8 @@
 %global somajor 2
 
 Name:           guvcview
-Version:        2.1.0
-Release:        10%{?dist}
+Version:        2.2.2
+Release:        1%{?dist}
 Summary:        GTK+ UVC Viewer and Capturer
 License:        GPL-2.0-or-later
 URL:            http://guvcview.sourceforge.net/

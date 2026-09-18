@@ -4,7 +4,7 @@
 # changes, since clang releases are not ABI compatible between major
 # versions. See also https://bugzilla.redhat.com/1544964.
 
-Version:       4.35c
+Version:       5.03c
 %global forgeurl https://github.com/AFLplusplus/AFLplusplus/
 %global commit   afbcb07e7602791390adfc63932efcd14d39bab8
 %forgemeta
@@ -14,7 +14,7 @@ Summary:       Practical, instrumentation-driven fuzzer for binary formats
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:       Apache-2.0
 
-Release:       5%{?dist}
+Release:       1%{?dist}
 URL:           %{forgeurl}
 Source0:       %{forgesource}
 

@@ -1,102 +1,59 @@
-%global source0_hash be7d478f5a9e027ed16ac7e4753bdf1f4cb9feffcee18fd8c0e4ff7d521070e0
+%global source0_hash none
 
-# TODO: tox tests
-# E: NO TESTS RAN
-# /usr/bin/python3 -m unittest discover pid=413
-#   py312: FAIL code 5 
-%bcond_with tests
-
-%global pypi_name PyKCS11
-%global srcname pykcs11
-
-Name:           python-%{srcname}
-Version:        1.5.15
+Name:           python-pykcs11
+Version:        1.5.20
 Release:        %autorelease
-Summary:        A Full PKCS11 wrapper for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Full PKCS#11 wrapper for Python
 
-License:        GPL-2.0-only
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-2.0-or-later
 URL:            https://github.com/LudovicRousseau/PyKCS11
-Source:         %{pypi_source}
-# Add Fedora PyKCS11 library location search path
-# https://github.com/LudovicRousseau/PyKCS11/pull/113
+Source:         %{pypi_source pykcs11}
+
+BuildRequires:  python3-devel
+BuildRequires:  gcc
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pykcs11' generated automatically by pyp2spec.}
+
 Patch:          %{url}/pull/113.patch#/Add-Fedora-PyKCS11-library-location-search-path.patch
 
-BuildRequires:  gcc-c++
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(sphinx)
-BuildRequires:  swig
-%if %{with tests}
-BuildRequires:  opensc
-BuildRequires:  softhsm
-%endif
+%description %_description
 
-%global _description %{expand:
-A complete PKCS11 wrapper for Python. You can use any PKCS11 (aka CryptoKi)
-module such as the PSM which comes as part of mozilla or the various modules
-supplied by vendors of hardware crypto tokens, and almost all PKCS11 functions
-and data types. The wrapper has been generated with the help of the SWIG
-compiler.}
-
-%description %{_description}
-
-%package -n     python3-%{srcname}
+%package -n     python3-pykcs11
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-pykcs11 %_description
 
-%package -n python-%{srcname}-doc
-Summary:        %{pypi_name} documentation
-BuildArch:      noarch
-%description -n python-%{srcname}-doc
-Documentation for %{pypi_name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pykcs11-%{version}
 
-%autosetup -n pykcs11-%{version}
-# rpmlint fixes
-#   * E: env-script-interpreter
-#     - Remove shebang from Python libraries
-for lib in samples/{*.py,LowLevel/*.py}; do
- sed '1{\@^#!/usr/bin/env python3@d}' $lib > $lib.new &&
- touch -r $lib $lib.new &&
- mv $lib.new $lib
-done
-#     - Add shebang
-sed -i -e '1i#!/usr/bin/python3' samples/{*.py,LowLevel/*.py}
 
-# There is no swig python module in Fedora. Instead we using 'swig' package.
-sed -i 's/, "swig"//' pyproject.toml
 %generate_buildrequires
-%pyproject_buildrequires -t
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
-# generate html docs
-PYTHONPATH=${PWD} sphinx-build-3 docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo,nojekyll}
+
 
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%if %{with tests}
-./get_PYKCS11LIB.py > tox.env
-%tox
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md Changes.txt
-%license docs/license.rst COPYING
 
-%files -n python-%{srcname}-doc
-%doc html/ samples/
-%license COPYING
+%files -n python3-pykcs11 -f %{pyproject_files}
 
 %changelog
 %autochangelog

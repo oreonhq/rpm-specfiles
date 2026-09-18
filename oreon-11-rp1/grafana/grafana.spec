@@ -27,8 +27,8 @@ end}
 %global selinux_variants mls targeted
 
 Name:             grafana
-Version:          10.2.6
-Release:          24%{?dist}
+Version:          13.2.2
+Release:          1%{?dist}
 Summary:          Metrics dashboard and graph editor
 License:          AGPL-3.0-only
 URL:              https://grafana.org

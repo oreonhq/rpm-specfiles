@@ -1,7 +1,7 @@
 %global source0_hash d1761b06c0c1c4e8aa17704d71cb3a4445fb856ab60680bd64e93684a5c923b0
 
 Name:           SimGear
-Version:        2024.1.4
+Version:        2024.1.7
 Release:        1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

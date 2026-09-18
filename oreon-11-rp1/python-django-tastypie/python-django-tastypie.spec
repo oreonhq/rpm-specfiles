@@ -1,81 +1,56 @@
-%global source0_hash 0c39471e9efcf7651c56561f7de670b1fb5adf8ca517c3afe121985b5b4035b1
+%global source0_hash none
 
-%global pypi_name django-tastypie
-%global sum A flexible and capable API layer for Django
-Name:           python-%{pypi_name}
-Version:        0.14.7
+Name:           python-django-tastypie
+Version:        0.15.1
 Release:        %autorelease
-Summary:        %{sum}
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A flexible _ capable API layer for Django.
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://github.com/toastdriven/django-tastypie/
-
-# Release version doesn't include tests
-Source0:        https://github.com/%{pypi_name}/%{pypi_name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/django-tastypie/django-tastypie
+Source:         %{pypi_source django_tastypie}
 
 BuildArch:      noarch
-# Let's keep Requires and BuildRequires sorted alphabetically
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-sphinx
 
-%description
-Tastypie is an webservice API framework for Django. It provides a convenient, 
-yet powerful and highly customizable, abstraction for creating REST-style 
-interfaces.
 
-%package doc
-Summary: Documentation for %{name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'django-tastypie' generated automatically by pyp2spec.}
 
-Requires: python3-%{pypi_name} = %{version}-%{release}
+%description %_description
 
-%description doc
-This package contains documentation for %{name}.
+%package -n     python3-django-tastypie
+Summary:        %{summary}
 
-%package -n python3-%{pypi_name}
-Summary:        %{sum}
-%{?python_provide:%python_provide python3-%{pypi_name}}
+%description -n python3-django-tastypie %_description
 
-Requires:       python3-dateutil
-Requires:       python3-django
-Requires:       python3-mimeparse
-
-Obsoletes:      %{pypi_name} < 0.9.11-3
-Obsoletes:      python-%{pypi_name} <= 0.13.3-8
-Obsoletes:      python2-%{pypi_name} <= 0.13.3-8
-
-%description -n python3-%{pypi_name}
-Tastypie is an webservice API framework for Django. It provides a convenient, 
-yet powerful and highly customizable, abstraction for creating REST-style 
-interfaces.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n django_tastypie-%{version}
 
-%setup -q -n %{pypi_name}-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-# (re)generate the documentation
-#pushd docs
-sphinx-build-3 docs docs/_build/html
-#make html
-#popd
-rm -rf docs/_build/html/.??*
+%pyproject_wheel
 
-%py3_build
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{pypi_name}
-%doc README.rst AUTHORS LICENSE
-%dir %{python3_sitelib}/tastypie
-%{python3_sitelib}/django_tastypie*
-%{python3_sitelib}/tastypie/*
 
-%files doc
-%doc docs/_build/html
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-django-tastypie -f %{pyproject_files}
 
 %changelog
 %autochangelog

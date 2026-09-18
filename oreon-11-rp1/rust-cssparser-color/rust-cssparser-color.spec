@@ -7,7 +7,7 @@
 %global crate cssparser-color
 
 Name:           rust-cssparser-color
-Version:        0.3.0
+Version:        0.6.0
 Release:        %autorelease
 Summary:        Color implementation based on cssparser
 

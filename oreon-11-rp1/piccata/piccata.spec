@@ -1,7 +1,7 @@
 %global source0_hash f2aedd1be781744c6cda18a5cfaaee35e3888ce1efd1c528f66f80a757f2cd99
 
 Name:          piccata
-Version:       2.0.2
+Version:       2.0.3
 Release:       %autorelease
 Summary:       A simple Python based CoAP (RFC7252) toolkit
 License:       MIT

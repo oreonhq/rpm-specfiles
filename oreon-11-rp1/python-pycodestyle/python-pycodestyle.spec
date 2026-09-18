@@ -1,76 +1,58 @@
-%global source0_hash 231f65fbf5558e342cbad275245accb8a988d637cbeaf66508dd890f3d2d60fa
+%global source0_hash none
 
 Name:           python-pycodestyle
-# WARNING: When updating pycodestyle, check not to break flake8!
-Version:        2.12.1
+Version:        2.14.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Python style guide checker
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pypi.python.org/pypi/pycodestyle
-# pypi source missing docs - https://github.com/PyCQA/pycodestyle/issues/1231
-Source0:        https://github.com/PyCQA/pycodestyle/archive/%{version}/pycodestyle-%{version}.tar.gz
+URL:            https://pycodestyle.pycqa.org/en/latest/developer.html#changes
+Source:         %{pypi_source pycodestyle}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-pycodestyle is a tool to check your Python code against some of the style
-conventions in PEP 8. It has a plugin architecture, making new checks easy, and
-its output is parseable, making it easy to jump to an error location in your
-editor.
 
-%package -n python%{python3_pkgversion}-pycodestyle
-Summary:    Python style guide checker
-Conflicts:      python-pycodestyle < %{version}-%{release}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pycodestyle' generated automatically by pyp2spec.}
 
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-sphinx
-BuildRequires:  python%{python3_pkgversion}-sphinx_rtd_theme
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  make
+%description %_description
 
-%description -n python%{python3_pkgversion}-pycodestyle
-pycodestyle is a tool to check your Python code against some of the style
-conventions in PEP 8. It has a plugin architecture, making new checks easy, and
-its output is parseable, making it easy to jump to an error location in your
-editor.
+%package -n     python3-pycodestyle
+Summary:        %{summary}
 
-This is a version for Python %{python3_pkgversion}.
+%description -n python3-pycodestyle %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pycodestyle-%{version}
 
-%autosetup -n pycodestyle-%{version} -p1
-
-# Remove #! from pycodestyle.py
-sed --in-place "s:#!\s*/usr.*::" pycodestyle.py
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
-make -C docs man SPHINXBUILD=sphinx-build-%{python3_version}
 
 %install
 %pyproject_install
-%pyproject_save_files -l pycodestyle
-mv %{buildroot}%{_bindir}/pycodestyle %{buildroot}%{_bindir}/pycodestyle-%{python3_version}
-ln -s ./pycodestyle-%{python3_version} %{buildroot}%{_bindir}/pycodestyle-3
-ln -s ./pycodestyle-3 %{buildroot}%{_bindir}/pycodestyle
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-install -D docs/_build/man/pycodestyle.1 %{buildroot}%{_mandir}/man1/pycodestyle.1
 
 %check
-%pyproject_check_import
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-pycodestyle -f %{pyproject_files}
-%doc README.rst CHANGES.txt
-%{_mandir}/man1/pycodestyle.1.gz
+
+%files -n python3-pycodestyle -f %{pyproject_files}
 %{_bindir}/pycodestyle
-%{_bindir}/pycodestyle-3
-%{_bindir}/pycodestyle-%{python3_version}
 
 %changelog
 %autochangelog

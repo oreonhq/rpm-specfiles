@@ -7,7 +7,7 @@
 %global crate comfy-table
 
 Name:           rust-comfy-table
-Version:        7.1.3
+Version:        8.0.0
 Release:        %autorelease
 Summary:        Library for building beautiful tables with automatic content wrapping
 

@@ -7,7 +7,7 @@
 %global crate futures-timer
 
 Name:           rust-futures-timer
-Version:        3.0.3
+Version:        3.0.4
 Release:        %autorelease
 Summary:        Timeouts for futures
 

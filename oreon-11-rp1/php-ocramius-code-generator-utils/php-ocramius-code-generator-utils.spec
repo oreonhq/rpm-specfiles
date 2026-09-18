@@ -13,7 +13,7 @@
 
 %global github_owner     Ocramius
 %global github_name      CodeGenerationUtils
-%global github_version   1.2.0
+%global github_version   1.8.0
 %global github_commit    02aab6ab303c93f60915d0f6d4ffaf0381a6671b
 
 %global composer_vendor  ocramius
@@ -32,7 +32,7 @@
 
 Name:          php-%{composer_vendor}-%{composer_project}
 Version:       %{github_version}
-Release:       11%{?github_release}%{?dist}
+Release:       1%{?github_release}%{?dist}
 Summary:       A set of code generator utilities built on top of PHP-Parsers
 
 License:       MIT
@@ -49,7 +49,7 @@ BuildArch:     noarch
 BuildRequires: php(language) >= %{php_min_ver}
 BuildRequires: phpunit9
 BuildRequires: (php-composer(nikic/php-parser) >= %{php_parser_min_ver} with php-composer(nikic/php-parser) < %{php_parser_max_ver})
-# phpcompatinfo (computed from version 1.2.0)
+# phpcompatinfo (computed from version 1.8.0)
 BuildRequires: php-pcre
 BuildRequires: php-reflection
 BuildRequires: php-spl
@@ -60,7 +60,7 @@ BuildRequires: php-composer(fedora/autoloader)
 # composer.json
 Requires:      php(language) >= %{php_min_ver}
 Requires:      (php-composer(nikic/php-parser) >= %{php_parser_min_ver} with php-composer(nikic/php-parser) < %{php_parser_max_ver})
-# phpcompatinfo (computed from version 1.2.0)
+# phpcompatinfo (computed from version 1.8.0)
 Requires:      php-pcre
 Requires:      php-reflection
 Requires:      php-spl

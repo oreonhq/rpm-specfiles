@@ -1,7 +1,7 @@
 %global source0_hash c9bdfb80f5a17db1aab9337baed64a8ebea5c0ddf82915c6887b8cfb87ece61e
 
 Name:           sng
-Version:        1.1.1
+Version:        1.1.2
 Release:        %autorelease
 Summary:        Lossless editing of PNGs via a textual representation
 

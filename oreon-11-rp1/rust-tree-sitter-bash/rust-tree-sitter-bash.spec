@@ -7,7 +7,7 @@
 %global crate tree-sitter-bash
 
 Name:           rust-tree-sitter-bash
-Version:        0.23.3
+Version:        0.25.1
 Release:        %autorelease
 Summary:        Bash grammar for tree-sitter
 

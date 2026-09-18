@@ -7,7 +7,7 @@
 %global crate formatx
 
 Name:           rust-formatx
-Version:        0.2.4
+Version:        0.4.2
 Release:        %autorelease
 Summary:        Macro for formatting non literal strings at runtime
 

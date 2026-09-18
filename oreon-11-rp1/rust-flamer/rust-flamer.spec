@@ -7,7 +7,7 @@
 %global crate flamer
 
 Name:           rust-flamer
-Version:        0.4.0
+Version:        0.5.0
 Release:        %autorelease
 Summary:        a procedural macro to insert `flame::start_guard(_)` calls
 

@@ -10,7 +10,7 @@
 %global crate uu_users
 
 Name:           rust-uu_users
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        users ~ (uutils) display names of currently logged-in users
 

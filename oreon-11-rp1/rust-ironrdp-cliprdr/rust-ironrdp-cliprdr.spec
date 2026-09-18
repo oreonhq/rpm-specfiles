@@ -7,7 +7,7 @@
 %global crate ironrdp-cliprdr
 
 Name:           rust-ironrdp-cliprdr
-Version:        0.3.0
+Version:        0.7.0
 Release:        %autorelease
 Summary:        CLIPRDR static channel for clipboard implemented as described in MS-RDPECLIP
 

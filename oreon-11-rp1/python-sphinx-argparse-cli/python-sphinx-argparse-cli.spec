@@ -1,69 +1,59 @@
-%global source0_hash 012cf8694c35d2f08e196fa2d3c63576c62661ae9230af664c1733df611dcd62
+%global source0_hash none
 
-%global         srcname         sphinx-argparse-cli
-%global         importname      sphinx_argparse_cli
-%global         forgeurl        https://github.com/tox-dev/sphinx-argparse-cli
-Version:        1.11.1
-%forgemeta
-
-Name:           python-%{srcname}
+Name:           python-sphinx-argparse-cli
+Version:        1.23.0
 Release:        %autorelease
-Summary:        Render CLI arguments defined by the argparse module
+# Fill in the actual package summary to submit package to Fedora
+Summary:        render CLI arguments _sub-commands friendly_ defined by argparse module
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            %forgeurl
-Source:         %forgesource
-Patch:          no-coverage.patch
+URL:            https://github.com/tox-dev/sphinx-argparse-cli
+Source:         %{pypi_source sphinx_argparse_cli}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildArch: noarch
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Render CLI arguments (sub-commands friendly) defined by the argparse module.
-For live demo check out the documentation of tox, pypa-build and mdpo.}
+This is package 'sphinx-argparse-cli' generated automatically by pyp2spec.}
+
+Patch:          no-coverage.patch
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-sphinx-argparse-cli
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-sphinx-argparse-cli %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sphinx_argparse_cli-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-sed -i '/name = "sphinx-argparse-cli"/a version = "%{version}"' \
-  pyproject.toml
-sed -i '/version.source = "vcs"/d' pyproject.toml
-sed -i '/"version",/{n;d;}' pyproject.toml
-sed -i '/  "version",/d' pyproject.toml
-sed -i '/^dynamic = \[/d' pyproject.toml
-# relax version requirement
-sed -i 's/sphinx>=7.0.1/sphinx>=5.0.0/g' pyproject.toml
-ver=%{version}
-ver_comma=${ver//./, }
-touch version.py
-echo "__version__ = version = '%{version}'" > version.py
-echo "__version_tuple__ = version_tuple = (${ver_comma})" >> version.py
-mv version.py src/sphinx_argparse_cli/
-chmod 644 src/sphinx_argparse_cli/version.py
 
 %generate_buildrequires
-%pyproject_buildrequires -x build-system -t
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{importname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%tox -- -- --verbose
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
- 
+
+%files -n python3-sphinx-argparse-cli -f %{pyproject_files}
+
 %changelog
 %autochangelog

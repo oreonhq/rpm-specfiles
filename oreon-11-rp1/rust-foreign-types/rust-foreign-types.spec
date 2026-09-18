@@ -7,7 +7,7 @@
 %global crate foreign-types
 
 Name:           rust-foreign-types
-Version:        0.3.2
+Version:        0.5.0
 Release:        %autorelease
 Summary:        A framework for Rust wrappers over C APIs
 

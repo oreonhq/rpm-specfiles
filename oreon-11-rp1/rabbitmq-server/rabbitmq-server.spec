@@ -8,7 +8,7 @@
 %global debug_package %{nil}
 
 Name: rabbitmq-server
-Version: 4.2.5
+Version: 4.3.6
 Release: 1%{?dist}
 Summary: The RabbitMQ server
 License: MPL-2.0

@@ -1,48 +1,57 @@
-%global source0_hash 6da7ce2b1da869f6bb54c927b415b95727c4bb6d9a84c4615ea77d9872911b05
+%global source0_hash none
 
 Name:           python-colored-traceback
-Version:        0.3.0
-Release:        18%{?dist}
-Summary:        A library to color exception traces
+Version:        0.4.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Automatically color uncaught exception tracebacks
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ISC
-URL:            https://github.com/staticshock/colored-traceback.py
-Source0:        %{pypi_source colored-traceback}
+URL:            https://www.github.com/staticshock/colored-traceback.py
+Source:         %{pypi_source colored-traceback}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Colored-traceback is a python library to color exception traces.}
+This is package 'colored-traceback' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-colored-traceback
+%package -n     python3-colored-traceback
 Summary:        %{summary}
 
 %description -n python3-colored-traceback %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n colored-traceback-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%py3_check_import colored_traceback
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-colored-traceback
-%doc README.rst
-%{python3_sitelib}/colored_traceback-%{version}.dist-info/
-%{python3_sitelib}/colored_traceback/
+
+%files -n python3-colored-traceback -f %{pyproject_files}
 
 %changelog
 %autochangelog

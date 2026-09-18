@@ -6,8 +6,8 @@ ERAlchemy generates Entity Relation (ER) diagram (like the one below) from \
 databases or from SQLAlchemy models.
 
 Name:           eralchemy
-Version:        1.5.0
-Release:        3%{?dist}
+Version:        1.7.0
+Release:        1%{?dist}
 Summary:        %{sum}
 
 License:        Apache-2.0

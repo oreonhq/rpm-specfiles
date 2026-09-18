@@ -7,7 +7,7 @@
 %global crate elasticlunr-rs
 
 Name:           rust-elasticlunr-rs
-Version:        3.0.3
+Version:        3.1.0
 Release:        %autorelease
 Summary:        Generate static document search indexes
 

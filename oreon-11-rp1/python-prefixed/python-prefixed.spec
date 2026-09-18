@@ -1,48 +1,57 @@
-%global source0_hash d10ac90acfc4cc14d82c1408b330b2fda85ed7cec2206a800d43899f8c385265
+%global source0_hash none
 
-%global pypi_name prefixed
-%global desc %{expand:
-Prefixed provides an alternative implementation of the built-in float which
-supports formatted output with SI (decimal) and IEC (binary) prefixes.}
-
-Name:           python-%{pypi_name}
-Version:        0.7.1
-Release:        9%{?dist}
+Name:           python-prefixed
+Version:        0.9.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Prefixed alternative numeric library
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MPL-2.0
-URL:            https://github.com/Rockhopper-Technologies/prefixed
-Source0:        %{pypi_source}
-BuildArch:      noarch
+URL:            https://prefixed.readthedocs.io
+Source:         %{pypi_source prefixed}
 
-BuildRequires:  python3dist(setuptools)
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%description %{desc}
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'prefixed' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-prefixed
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %{desc}
+%description -n python3-prefixed %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n prefixed-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{__python3} -m unittest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%doc README*
-%license LICENSE
-%{python3_sitelib}/prefixed*
+
+%files -n python3-prefixed -f %{pyproject_files}
 
 %changelog
 %autochangelog

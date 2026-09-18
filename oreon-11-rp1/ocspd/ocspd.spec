@@ -4,8 +4,8 @@
 %global revision	%{?alphatag:-}%{?alphatag}
 
 Name:		ocspd
-Version:	1.9.0
-Release:	36%{?alphatag:.}%{?alphatag}%{?dist}
+Version:	3.1.2
+Release:	1%{?alphatag:.}%{?alphatag}%{?dist}
 Summary:	OpenCA OCSP Daemon
 License:	Apache-1.0
 Source:		http://downloads.sourceforge.net/openca/openca-ocspd-%{version}%{revision}.tar.gz

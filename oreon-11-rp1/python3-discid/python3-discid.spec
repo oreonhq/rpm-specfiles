@@ -1,7 +1,7 @@
 %global source0_hash 9dbb07ea0d6a0b4fb607004be66e540df1a518c5431cc1e9ea542582abd7711f
 
 Name:    python3-discid
-Version: 1.3.0
+Version: 1.4.2
 Release: %autorelease
 Summary: Libdiscid Python bindings
 URL:     https://github.com/metabrainz/python-discid

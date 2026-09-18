@@ -10,7 +10,7 @@
 %global crate uu_df
 
 Name:           rust-uu_df
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        df ~ (uutils) display file system information
 

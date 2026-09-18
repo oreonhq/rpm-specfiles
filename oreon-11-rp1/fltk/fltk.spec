@@ -17,8 +17,8 @@
 %endif
 
 Name:           fltk
-Version:        1.4.4
-Release:        5%{?dist}
+Version:        1.4.5
+Release:        1%{?dist}
 Summary:        C++ user interface toolkit
 
 # see COPYING (or http://www.fltk.org/COPYING.php ) for exceptions details

@@ -1,7 +1,7 @@
 %global source0_hash 6aef1e8351bccb97e6833fcae04c80f9d01b290b627f70df3e3870555c40deaa
 
 Name:           syncplay
-Version:        1.7.5
+Version:        1.7.6
 Release:        %autorelease
 Summary:        Synchronize playback of various video players via internet
 

@@ -29,7 +29,7 @@
 %define __cmake_switch(b:) %[%{expand:%%{?with_%{-b*}}} ? "ON" : "OFF"]
 
 Name:           lib%{libname}
-Version:        0.7.36
+Version:        0.7.39
 Release:        %autorelease
 Summary:        Package dependency solver
 
@@ -52,7 +52,7 @@ Summary:        Package dependency solver
 License:        BSD-3-Clause
 SourceLicense:  %{license} AND BSD-2-Clause AND MIT
 URL:            https://github.com/openSUSE/libsolv
-Source:        https://github.com/openSUSE/libsolv/archive/refs/tags/0.7.36.tar.gz#/libsolv-0.7.36.tar.gz
+Source:        https://github.com/openSUSE/libsolv/archive/refs/tags/0.7.39.tar.gz#/libsolv-0.7.36.tar.gz
 # Provides: python3dist(solv) in python3-solv
 # https://github.com/openSUSE/libsolv/pull/602
 # https://bugzilla.redhat.com/show_bug.cgi?id=2252743

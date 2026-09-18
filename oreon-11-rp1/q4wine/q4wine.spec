@@ -3,8 +3,8 @@
 %undefine __cmake_in_source_build
 
 Name:           q4wine
-Version:        1.4.1
-Release:        3%{?dist}
+Version:        1.4.2
+Release:        1%{?dist}
 Summary:        Qt GUI for wine
 
 License:        GPL-3.0-or-later

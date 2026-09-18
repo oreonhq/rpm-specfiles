@@ -1,94 +1,57 @@
-%global source0_hash 74912c8761651f2063151c6c2a36ebe023393de491ec86744771a2888ab9845b
+%global source0_hash none
 
 Name:           python-kgb
-Version:        7.1.1
-Release:        14%{?dist}
-Summary:        Intercept and record calls to functions
+Version:        7.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Utilities for spying on function calls in unit tests.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/beanbaginc/kgb
-Source0:        %{pypi_source kgb}
+Source:         %{pypi_source kgb}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-# required for tests
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Ever deal with a large test suite before, monkey patching functions to figure
-out whether it was called as expected? It’s a dirty job. If you’re not careful,
-you can make a mess of things. Leave behind evidence.
-
-kgb’s spies will take care of that little problem for you.
-
-What are spies? Spies intercept and record calls to functions. They can report
-on how many times a function was called and with what arguments. They can allow
-the function call to go through as normal, to block it, or to reroute it to
-another function.
-
-Spies are awesome.
-
-(If you’ve used Jasmine, you know this.)
-
-Spies are like mocks, but better. You’re not mocking the world. You’re
-replacing very specific function logic, or listening to functions without
-altering them.}
+This is package 'kgb' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-kgb
+%package -n     python3-kgb
 Summary:        %{summary}
 
 %description -n python3-kgb %_description
 
-%package -n python3-kgb-tests
-Summary:        Unit tests for python3-kgb
-Requires:       python3-kgb = %{version}-%{release}
-
-%description -n python3-kgb-tests
-Unit tests for python3-kgb
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n kgb-%{version}
 
-%if !0%{?el8}
+
 %generate_buildrequires
 %pyproject_buildrequires
-%endif
+
 
 %build
-%if 0%{?el8}
-%py3_build
-%else
 %pyproject_wheel
-%endif
+
 
 %install
-%if 0%{?el8}
-%py3_install
-%else
 %pyproject_install
-%endif
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest --pyargs kgb
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n  python3-kgb
-%license LICENSE
-%doc README.rst NEWS.rst AUTHORS
-%{python3_sitelib}/kgb/
-%exclude %{python3_sitelib}/kgb/tests/
-%if 0%{?el8}
-%{python3_sitelib}/kgb-%{version}-py*.egg-info/
-%else
-%{python3_sitelib}/kgb-%{version}.dist-info/
-%endif
 
-%files -n python3-kgb-tests
-%{python3_sitelib}/kgb/tests/
+%files -n python3-kgb -f %{pyproject_files}
 
 %changelog
 %autochangelog

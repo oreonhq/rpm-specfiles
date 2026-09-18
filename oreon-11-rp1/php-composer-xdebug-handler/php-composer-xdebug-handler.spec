@@ -21,8 +21,8 @@
 %bcond_without       tests
 
 Name:           php-%{gh_owner}-%{gh_project}
-Version:        1.4.6
-Release:        12%{?gh_date:.%{gh_date}git%{gh_short}}%{?dist}
+Version:        3.0.5
+Release:        1%{?gh_date:.%{gh_date}git%{gh_short}}%{?dist}
 Summary:        Restarts a process without Xdebug
 
 License:        MIT

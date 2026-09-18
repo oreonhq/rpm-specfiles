@@ -2,7 +2,7 @@
 
 Summary:        FrameBuffer Imageviewer
 Name:           fbida
-Version:        2.15
+Version:        2.15-1-1
 Release:        1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

@@ -3,8 +3,8 @@
 %global alt_name GPaste
 
 Name:           gpaste
-Version:        45.3
-Release:        4%{?dist}
+Version:        45.12
+Release:        1%{?dist}
 Summary:        Clipboard management system
 
 License:        BSD-2-Clause

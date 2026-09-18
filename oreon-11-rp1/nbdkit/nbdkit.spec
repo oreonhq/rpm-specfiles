@@ -60,7 +60,7 @@
 %global source_directory 1.47-development
 
 Name:           nbdkit
-Version:        1.47.9
+Version:        1.49.3
 Release:        1%{?dist}
 Summary:        NBD server
 

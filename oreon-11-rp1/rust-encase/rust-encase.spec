@@ -7,7 +7,7 @@
 %global crate encase
 
 Name:           rust-encase
-Version:        0.12.0
+Version:        0.12.1
 Release:        %autorelease
 Summary:        Provides a mechanism to lay out data into GPU buffers ensuring WGSL's...
 

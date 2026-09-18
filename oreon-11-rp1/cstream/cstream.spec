@@ -2,7 +2,7 @@
 
 Summary:   General-purpose stream-handling tool
 Name:      cstream
-Version:   3.2.1
+Version:   4.0.0
 Release:   %autorelease
 
 License:   MIT

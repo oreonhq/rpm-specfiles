@@ -3,8 +3,8 @@
 %global _hardened_build 1
 
 Name:		voms
-Version:	2.1.3
-Release:	3%{?dist}
+Version:	2.1.4-rc1
+Release:	1%{?dist}
 Summary:	Virtual Organization Membership Service
 
 License:	Apache-2.0

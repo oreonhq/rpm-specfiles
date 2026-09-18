@@ -3,7 +3,7 @@
 %global apiversion 0.1
 
 Name: libe-book
-Version: 0.1.3
+Version: 0.1.4
 Release: %autorelease
 Summary: A library for import of reflowable e-book formats
 

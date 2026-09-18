@@ -9,7 +9,7 @@
 %global crate dtor
 
 Name:           rust-dtor
-Version:        0.1.1
+Version:        1.0.6
 Release:        %autorelease
 Summary:        __attribute__((destructor)) for Rust
 

@@ -7,7 +7,7 @@
 %global crate icu_time
 
 Name:           rust-icu_time
-Version:        2.1.1
+Version:        2.3.0
 Release:        %autorelease
 Summary:        Processing of dates, times, and time zones with a focus on i18n and interop
 

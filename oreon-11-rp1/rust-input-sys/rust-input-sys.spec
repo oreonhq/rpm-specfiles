@@ -7,7 +7,7 @@
 %global crate input-sys
 
 Name:           rust-input-sys
-Version:        1.18.0
+Version:        1.19.0
 Release:        %autorelease
 Summary:        Bindgen generated unsafe libinput wrapper
 

@@ -4,8 +4,8 @@
 %global whispercpp_version 1.8.2
 
 Name:           %{pypi_name}
-Version:        1.4.0
-Release:        2%{?dist}
+Version:        1.5.1
+Release:        1%{?dist}
 Summary:        Python bindings for whisper.cpp with a simple Pythonic API
 # Architecture-specific due to C/C++ extensions
 ExcludeArch: %{ix86}

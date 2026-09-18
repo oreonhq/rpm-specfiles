@@ -8,8 +8,8 @@
 %define beanstalkd_binlogdir %{beanstalkd_home}/binlog
 
 Name:           beanstalkd
-Version:        1.10
-Release:        28%{?dist}
+Version:        1.13
+Release:        1%{?dist}
 Summary:        A simple, fast work-queue service
 
 License:        MIT

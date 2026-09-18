@@ -1,123 +1,64 @@
 %global source0_hash none
 
-%global desc %{expand: \
-A collection of Benchmark functions for numerical optimization problems.
-
-Current information can always be found from the repository - https://github.com/thieu1995/opfunu}
-
-# enable when new Sphinx stack is available on all platforms
-%bcond_with docs
-
-%bcond_without tests
-
-%global forgeurl https://github.com/thieu1995/opfunu
-
 Name:           python-opfunu
-Version:        1.0.0
+Version:        1.0.4
 Release:        %autorelease
-Summary:        Benchmark functions for numerical optimization problems
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Opfunu: An Open-source Python Library for Optimization Benchmark Functions
 
-%forgemeta
-
-License:        GPL-3.0-only
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/thieu1995/opfunu
-Source0:        %forgesource
+Source:         %{pypi_source opfunu}
 
-# This patch is intended not to package tests.
-# It was not submitted to the upstream since this is optional
-# for the upstream to apply this.
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'opfunu' generated automatically by pyp2spec.}
+
 Patch:          0001-do-not-package-tests-examples.patch
-# Do not import numpy.int, which was deprecated and removed
-# https://github.com/thieu1995/opfunu/pull/12
 Patch:          %{url}/pull/12.patch
 
-BuildArch:      noarch
+%description %_description
 
-%description
-%{desc}
-
-%package -n python3-opfunu
-Summary:        %{summary}
-BuildRequires:      python3-devel
-BuildRequires:      %{py3_dist requests}
-
-%if %{with tests}
-BuildRequires:      %{py3_dist pytest}
-%endif
-
-%if %{with docs}
-BuildRequires:  make
-BuildRequires:  python3-sphinx-latex
-BuildRequires:  latexmk
-BuildRequires:  %{py3_dist sphinx}
-BuildRequires:  %{py3_dist sphinx-rtd-theme}
-%endif
-
-# scipy, Pillow, requests and pandas are missing in setup file
-BuildRequires: %{py3_dist scipy}
-BuildRequires: %{py3_dist Pillow}
-BuildRequires: %{py3_dist pandas}
-Requires:      %{py3_dist Pillow}
-Requires:      %{py3_dist pandas}
-Requires:      %{py3_dist requests}
-Requires:      %{py3_dist scipy}
-BuildRequires:  hardlink
-
-%description -n python3-opfunu
-%{desc}
-
-%package doc
-BuildArch:      noarch
+%package -n     python3-opfunu
 Summary:        %{summary}
 
-%description doc
-Documentation for %{name}.
+%description -n python3-opfunu %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-opfunu dev
+
 
 %prep
-%forgeautosetup -p1
+%autosetup -p1 -n opfunu-%{version}
 
-# Adjust shebangs and executable permissions
-# https://github.com/thieu1995/opfunu/pull/9
-find examples -type f -name '*.py' ! -name '__init__.py' \
-    -execdir chmod +x '{}' '+'
-find opfunu tests -type f -name '*.py' \
-    -execdir sed -r -i '1{/^#!/d}' '{}' '+'
-
-%py3_shebang_fix examples
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
-%if %{with docs}
-%make_build -C docs latex SPHINXOPTS='%{?_smp_mflags}'
-%make_build -C docs/_build/latex LATEXMKOPTS='-quiet'
-%endif
 
 %install
 %pyproject_install
-%pyproject_save_files opfunu
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-hardlink '%{buildroot}%{python3_sitelib}/opfunu'
 
 %check
+%_pyproject_check_import_allow_no_modules -t
 
-%if %{with tests}
-%pytest
-%endif
 
 %files -n python3-opfunu -f %{pyproject_files}
-%doc README.md ChangeLog.md
-%doc examples/
-
-%files doc
-%license LICENSE
-%doc CODE_OF_CONDUCT.md
-%if %{with docs}
-%doc docs/_build/latex/opfunu.pdf
-%endif
 
 %changelog
 %autochangelog

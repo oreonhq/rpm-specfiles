@@ -43,7 +43,7 @@ Known flaws:
 %global debug_package %{nil}
 
 Name:           highfive
-Version:        2.10.1
+Version:        3.3.0
 Release:        %autorelease
 Summary:        Header-only C++ HDF5 interface
 

@@ -7,7 +7,7 @@
 %global crate h2
 
 Name:           rust-h20.4
-Version:        0.4.15
+Version:        0.4.19
 Release:        %autorelease
 Summary:        An HTTP/2 client and server
 

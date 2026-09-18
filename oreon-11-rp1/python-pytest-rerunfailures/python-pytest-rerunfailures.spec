@@ -1,55 +1,57 @@
-%global source0_hash 2f86533ed18abf79ac01cad569b4bed6dd8eafcf9df37f2fca06c40ce4fdda00
+%global source0_hash none
 
-%global srcname pytest-rerunfailures
+Name:           python-pytest-rerunfailures
+Version:        16.7
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        pytest plugin to re-run tests to eliminate flaky failures
 
-# Needed for Python bootstrap
-%bcond_without tests
-
-Name:           python-%{srcname}
-Version:        15.0
-Release:        7%{?dist}
-Summary:        A py.test plugin that re-runs failed tests to eliminate flakey failures
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MPL-2.0
 URL:            https://github.com/pytest-dev/pytest-rerunfailures
-Source0:        https://github.com/pytest-dev/pytest-rerunfailures/archive/%{version}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source pytest_rerunfailures}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-pytest-rerunfailures is a plugin for py.test that re-runs tests to eliminate
-intermittent failures.}
+This is package 'pytest-rerunfailures' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python%{python3_pkgversion}-%{srcname}
+%package -n     python3-pytest-rerunfailures
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-devel
 
-%description -n python%{python3_pkgversion}-%{srcname} %_description
+%description -n python3-pytest-rerunfailures %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_rerunfailures-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l pytest_rerunfailures
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-%pytest tests
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
-%doc CHANGES.rst README.rst
+
+%files -n python3-pytest-rerunfailures -f %{pyproject_files}
 
 %changelog
 %autochangelog

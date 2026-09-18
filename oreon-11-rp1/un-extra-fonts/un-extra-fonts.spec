@@ -8,8 +8,8 @@
 
 BuildArch: noarch
 
-Version: 1.0.2
-Release: 0.43.%{alphatag}%{?dist}
+Version: 1.0.2-080608-080608
+Release: 1.43.%{alphatag}%{?dist}
 License: GPL-2.0-only
 URL:     http://kldp.net/projects/unfonts/
 
@@ -126,7 +126,7 @@ This package includes the UnShinmun font.
 %global fontfamily10       Un Extra Taza
 %global fontsummary10      Un Extra fonts - UnTaza
 %global fontpkgheader10    %{expand:
-Obsoletes:       %{name}-common < 1.0.2-0.36.080608
+Obsoletes:       %{name}-common < 1.0.2-080608-0.36.080608
 Provides:        %{name}-common = %{version}-%{release}
 }
 %global fonts10            UnTaza.ttf

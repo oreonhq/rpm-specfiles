@@ -3,7 +3,7 @@
 %global         desktop_id org.gnome.SimpleScan
 
 Name:           simple-scan
-Version:        49.1
+Version:        50.0
 Release:        %autorelease
 Summary:        Simple scanning utility
 # Sources are under GPLv3+, icon and help are under CC-BY-SA.

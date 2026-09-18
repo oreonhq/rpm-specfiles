@@ -2,8 +2,8 @@
 
 Summary: Small application for listing the contents of DVDs
 Name: lsdvd
-Version: 0.17
-Release: 26%{?dist}
+Version: 0.21
+Release: 1%{?dist}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
 URL: http://sourceforge.net/projects/lsdvd/

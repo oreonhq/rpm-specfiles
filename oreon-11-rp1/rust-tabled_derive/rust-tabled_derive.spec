@@ -7,7 +7,7 @@
 %global crate tabled_derive
 
 Name:           rust-tabled_derive
-Version:        0.8.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        Derive macros which is used by tabled crate
 

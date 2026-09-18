@@ -4,8 +4,8 @@
 
 Summary: Zope Component Architecture
 Name: python-zope-component
-Version: 5.0.1
-Release: 17%{?dist}
+Version: 7.1
+Release: 1%{?dist}
 Source0: https://pypi.io/packages/source/z/%{modname}/%{modname}-%{version}.tar.gz
 License: ZPL-2.1
 BuildArch: noarch

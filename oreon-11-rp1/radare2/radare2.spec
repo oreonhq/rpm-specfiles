@@ -2,7 +2,7 @@
 
 Name:           radare2
 Summary:        The reverse engineering framework
-Version:        5.9.8
+Version:        6.2.2
 URL:            https://radare.org/
 %global         vcsurl          https://github.com/radareorg/radare2
 VCS:            git:%{vcsurl}

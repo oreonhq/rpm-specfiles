@@ -3,8 +3,8 @@
 Name:    qbittorrent
 Summary: A Bittorrent Client
 Epoch:   1
-Version: 5.1.4
-Release: 2%{?dist}
+Version: 5.2.3
+Release: 1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 URL:     https://www.qbittorrent.org

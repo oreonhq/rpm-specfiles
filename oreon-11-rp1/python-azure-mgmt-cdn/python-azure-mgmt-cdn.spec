@@ -1,66 +1,57 @@
-%global source0_hash 4c4cd1d54ec0dba61f9247aacda8831a6f18c83c99bb9c4b84cbcd3ec9e6facd
+%global source0_hash none
 
-# Tests require docker + network access. Disabled for now.
-%bcond_with     tests
-
-%global         srcname     azure-mgmt-cdn
-
-Name:           python-%{srcname}
-Version:        12.0.0
+Name:           python-azure-mgmt-cdn
+Version:        14.0.0
 Release:        %autorelease
-Summary:        Microsoft Azure CDN Client Library for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Microsoft Azure Cdn Management Client Library for Python
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pypi.org/project/%{srcname}/
-# This source comes from making a git archive of the main azure-sdk-for-python
-# repository. To reproduce the source code, run the generate-source.sh script.
-Source0:        %{srcname}-%{version}.tgz
+URL:            https://github.com/Azure/azure-sdk-for-python
+Source:         %{pypi_source azure_mgmt_cdn}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%if %{with tests}
-BuildRequires:  python3dist(azure-devtools)
-BuildRequires:  python3dist(azure-mgmt-keyvault)
-BuildRequires:  python3dist(azure-mgmt-resource)
-BuildRequires:  python3dist(azure-sdk-tools)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(python-dotenv)
-%endif
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Microsoft Azure CDN Client Library for Python}
+This is package 'azure-mgmt-cdn' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-azure-mgmt-cdn
 Summary:        %{summary}
-%description -n python3-%{srcname} %{_description}
+
+%description -n python3-azure-mgmt-cdn %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n azure_mgmt_cdn-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
-%check
-%pyproject_check_import
-
-%if %{with tests}
-%pytest
-%endif
 
 %install
 %pyproject_install
-%pyproject_save_files azure
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md CHANGELOG.md
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-azure-mgmt-cdn -f %{pyproject_files}
 
 %changelog
 %autochangelog

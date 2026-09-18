@@ -1,59 +1,62 @@
-%global source0_hash e7cb6a7e6214e3ee88ae3ec2e796a689bca41dc0555806b44ea2689a31fd828e
+%global source0_hash none
 
 Name:           python-patch-manager
-Version:        0.0.6
+Version:        0.2.0
 Release:        %autorelease
-Summary:        Patman patch manager
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Create, check and email patch series, with Patchwork integration
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
-URL:            https://docs.u-boot.org/en/latest/develop/patman.html
-Source:         %{pypi_source patch-manager}
+URL:            https://github.com/nxtboot/patman
+Source:         %{pypi_source patch_manager}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  sed
 
-BuildRequires:  python3dist(pygit2)
-BuildRequires:  python3dist(requests)
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package provides a tool intended to automate patch creation and make it a
-less error-prone process. It is useful for U-Boot and Linux work so far, since
-they use the checkpatch.pl script.}
+This is package 'patch-manager' generated automatically by pyp2spec.}
 
 %description %_description
 
 %package -n     python3-patch-manager
 Summary:        %{summary}
 
-Requires:       python3dist(pygit2)
-Requires:       python3dist(requests)
-
 %description -n python3-patch-manager %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-patch-manager all,gmail,review,test
+
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n patch_manager-%{version}
 
-%autosetup -p1 -n patch-manager-%{version}
-
-# Remove unnecessary shebangs
-sed -i "\|#!/usr/bin/env python3|d" src/patman/*.py
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,gmail,review,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files patman
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import -e patman.setup
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-patch-manager -f %{pyproject_files}
-%doc README.rst
 %{_bindir}/patman
 
 %changelog

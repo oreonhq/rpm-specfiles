@@ -1,8 +1,8 @@
 %global source0_hash 4f69f7f13a8ef4076d499d798b6bddfc1800d30aa19b0354006a23754de54c64
 
 Name:           yascreen
-Version:        2.06
-Release:        4%{?dist}
+Version:        2.14
+Release:        1%{?dist}
 Summary:        Yet Another Screen Library (lib(n)curses alternative)
 
 License:        LGPL-3.0-only

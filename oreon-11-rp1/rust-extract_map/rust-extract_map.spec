@@ -7,7 +7,7 @@
 %global crate extract_map
 
 Name:           rust-extract_map
-Version:        0.1.2
+Version:        0.3.1
 Release:        %autorelease
 Summary:        A HashMap for memory efficent storage of value types which contain th...
 

@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           sqlcipher
-Version:        4.5.2
-Release:        8%{?dist}
+Version:        4.19.0
+Release:        1%{?dist}
 Summary:        Fork of the SQLite database library that adds 256 bit AES encryption
 
 License:        BSD-3-Clause

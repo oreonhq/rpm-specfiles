@@ -16,7 +16,7 @@
 %global shortcommit3 %(c=%{commit3}; echo ${c:0:7})
 
 Name: pe-bear
-Version: 0.7.1
+Version: 0.7.2
 Release: %autorelease
 
 # main - GPL-2.0-or-later

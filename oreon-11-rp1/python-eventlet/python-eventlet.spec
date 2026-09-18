@@ -1,75 +1,64 @@
-%global source0_hash 290852db0065d78cec17a821b78c8a51cafb820a792796a354592ae4d5fceeb0
+%global source0_hash none
 
-%global srcname eventlet
-%global _description %{expand:
-Eventlet is a networking library written in Python. It achieves high
-scalability by using non-blocking io while at the same time retaining
-high programmer usability by using co-routines to make the non-blocking
-io operations appear blocking at the source code level.}
-
-%bcond_without tests
-
-Name:           python-%{srcname}
-Version:        0.40.3
-Release:        3%{?dist}
+Name:           python-eventlet
+Version:        0.41.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Highly concurrent networking library
-License:        MIT
 
-URL:            https://eventlet.net
-Source:         %pypi_source %{srcname}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/eventlet/eventlet
+Source:         %{pypi_source eventlet}
 
 BuildArch:      noarch
-
-%description %{_description}
-
-%package -n python3-%{srcname}
-Summary:        %{summary}
 BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'eventlet' generated automatically by pyp2spec.}
 
 Patch0: 0001-Update-pyzmq-and-psycopg2-binary-versions.patch
 
-%description -n python3-%{srcname} %{_description}
+%description %_description
 
-%package -n python3-%{srcname}-doc
-Summary:        Documentation for python3-%{srcname}
+%package -n     python3-eventlet
+Summary:        %{summary}
 
-%description -n python3-%{srcname}-doc
-%{summary}.
+%description -n python3-eventlet %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-eventlet dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n eventlet-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-
-sed -i '/ *pip install -e.*/d' tox.ini
 
 %generate_buildrequires
-%pyproject_buildrequires -t -e %{default_toxenv},docs
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%tox -e docs
 
 %check
-%if %{with tests}
-# Disable setting up dns (we have no /etc/resolv.conf in mock)
-export EVENTLET_NO_GREENDNS=yes
-%tox -e %{default_toxenv} -- -- -k 'not test_clear and not test_noraise_dns_tcp and not test_raise_dns_tcp and not test_dns_methods_are_green and not test_fork_after_monkey_patch and not test_send_timeout'
-%else
-%pyproject_check_import -e eventlet.green.* -e eventlet.hubs.pyevent -e eventlet.support.* -e eventlet.zipkin.*
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst AUTHORS NEWS
 
-%files -n python3-%{srcname}-doc
-%license LICENSE
-%doc doc/build/html
+%files -n python3-eventlet -f %{pyproject_files}
 
 %changelog
 %autochangelog

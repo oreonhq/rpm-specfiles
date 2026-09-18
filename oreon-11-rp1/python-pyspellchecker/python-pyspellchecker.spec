@@ -1,34 +1,24 @@
 %global source0_hash none
 
 Name:           python-pyspellchecker
-Version:        0.8.4
+Version:        0.9.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Pure python spell checker based on work by Peter Norvig
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/barrust/pyspellchecker
-Source:         %{url}/archive/v%{version}/pyspellchecker-%{version}.tar.gz
+Source:         %{pypi_source pyspellchecker}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-pyspellchecker (Pure Python Spell Checking) uses a Levenshtein Distance
-algorithm to find permutations within an edit distance of 2 from the original
-word. It then compares all permutations (insertions, deletions, replacements,
-and transpositions) to known words in a word frequency list. Those words that
-are found more often in the frequency list are more likely the correct results.
-
-pyspellchecker supports multiple languages including English, Spanish, German,
-French, Portuguese, Arabic and Basque. For information on how the dictionaries
-were created and how they can be updated and improved, please see the Dictionary
-Creation and Updating section of the readme!
-
-pyspellchecker allows for the setting of the Levenshtein Distance (up to two) to
-check. For longer words, it is highly recommended to use a distance of 1 and not
-the default 2. See the quickstart to find how one can change the distance
-parameter.}
+This is package 'pyspellchecker' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -37,21 +27,29 @@ Summary:        %{summary}
 
 %description -n python3-pyspellchecker %_description
 
+
 %prep
 %autosetup -p1 -n pyspellchecker-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files spellchecker
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pyspellchecker -f %{pyproject_files}
 

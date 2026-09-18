@@ -1,62 +1,57 @@
-%global source0_hash 6521907eefbffd23527518217e6ded4f12eeac1b7c95a3fa40703b342278975c
+%global source0_hash none
 
-%global pypi_name requests_unixsocket2
-%global package_name requests-unixsocket
-
-# pypi:requests-unixsocket is nolonger maintained upstream
-# pypi:requests-unixsocket2 is a for that provides requests-unixsocket
-# This package pulls from requests-unixsocket2 and packages as requests-unixsocket
-# See change log 0.4.0-1 for details.
-
-Name:           python-%{package_name}
-Version:        0.4.1
+Name:           python-requests-unixsocket2
+Version:        1.0.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Use requests to talk HTTP via a UNIX domain socket
 
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
-License:        Apache-2.0
-URL:            https://github.com/thelabnyc/requests-unixsocket2
-Source0:        %{pypi_source}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        ISC
+URL:            https://gitlab.com/thelabnyc/requests-unixsocket2
+Source:         %{pypi_source requests_unixsocket2}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-%{summary}.
 
-%package -n     python3-%{package_name}
-Summary:        Use requests to talk HTTP via a UNIX domain socket
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'requests-unixsocket2' generated automatically by pyp2spec.}
 
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(waitress)
+%description %_description
 
-%description -n python3-%{package_name}
-%{summary}.
+%package -n     python3-requests-unixsocket2
+Summary:        %{summary}
+
+%description -n python3-requests-unixsocket2 %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n requests_unixsocket2-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-# Remove shebangs
-sed -i '1d' requests_unixsocket/tests/test_requests_unixsocket.py
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-mv %{buildroot}%{python3_sitelib}/requests_unixsocket2-%{version}.dist-info %{buildroot}%{python3_sitelib}/requests_unixsocket-%{version}.dist-info
-sed -i 's/unixsocket2/unixsocket/g' %{buildroot}%{python3_sitelib}/requests_unixsocket-%{version}.dist-info/METADATA
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{package_name}
-%doc README.md
-%license LICENSE
-%{python3_sitelib}/requests_unixsocket
-%{python3_sitelib}/requests_unixsocket-%{version}.dist-info
+
+%files -n python3-requests-unixsocket2 -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -7,7 +7,7 @@
 %global crate itertools
 
 Name:           rust-itertools
-Version:        0.14.0
+Version:        0.15.0
 Release:        %autorelease
 Summary:        Extra iterator adaptors, iterator methods, free functions, and macros
 

@@ -4,8 +4,8 @@
 
 %global gh_name seadrive-fuse
 Name:           seadrive-daemon
-Version:        3.0.18
-Release:        2%{?dist}
+Version:        3.0.24
+Release:        1%{?dist}
 Summary:        Daemon part of Seafile Drive client
 
 License:        GPL-3.0-only

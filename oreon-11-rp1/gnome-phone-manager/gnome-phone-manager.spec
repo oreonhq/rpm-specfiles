@@ -2,8 +2,8 @@
 
 Name:		gnome-phone-manager
 Summary:	Gnome Phone Manager
-Version: 	0.69
-Release: 	50%{?dist}
+Version: 	0_69
+Release: 	1%{?dist}
 License: 	GPL-2.0-or-later
 Source:		http://ftp.gnome.org/pub/GNOME/sources/gnome-phone-manager/%{version}/%{name}-%{version}.tar.xz
 #Using git clone plus patch from GNOME BZ 680927.

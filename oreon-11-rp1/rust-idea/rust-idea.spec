@@ -7,7 +7,7 @@
 %global crate idea
 
 Name:           rust-idea
-Version:        0.5.1
+Version:        0.6.0
 Release:        %autorelease
 Summary:        IDEA block cipher
 

@@ -1,7 +1,7 @@
 %global source0_hash 73fe784bed583653b460c60a27caecd5bdf99112af3c6e8e36f58771bf47a552
 
 Name:           python-cron-converter
-Version:        1.3.1
+Version:        2.0.1
 Release:        %autorelease
 Summary:        Cron string parser and scheduler for Python
 

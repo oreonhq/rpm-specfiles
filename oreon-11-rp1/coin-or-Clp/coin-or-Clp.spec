@@ -16,8 +16,8 @@
 
 Name:		coin-or-%{module}
 Summary:	Coin-or linear programming
-Version:	1.17.10
-Release:	11%{?dist}
+Version:	1.17.11
+Release:	1%{?dist}
 
 # The project as a whole is licensed EPL-2.0.  However, many source files still
 # claim to be licensed EPL-1.0.  This is probably an upstream oversight.

@@ -1,72 +1,57 @@
-%global source0_hash fb44e4c466d99b6bd9f063d82cbb996fe50c0f8e1c36abe8bcf6787ba550cdef
+%global source0_hash none
 
-# Created by pyp2rpm-3.3.4
-%global pypi_name click-spinner
-%global commit b27b8d1e2785ce75be1433e579e05193a9b3a782
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
-Name:           python-%{pypi_name}
-Version:        0.1.10
+Name:           python-click-spinner
+Version:        0.2.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Spinner for Click
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/click-contrib/click-spinner
-# We *should* use the latest release + upstream's pull request #39, but versioneer plays with the output of git-archive
-# This prevents us cleanly applying upstream's patch, so we have to do the next best thing and pull that commit
-# If upstream publishes a new release, we can remove this
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source:         %{pypi_source click_spinner}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-Provides:       python-blindspin = %{version}-%{release}
-Obsoletes:      python-blindspin < 2.0.1
 
-%description
-Click Spinner shows the user some progress when a progress bar is
-not suitable because you don’t know how much longer it would take.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'click-spinner' generated automatically by pyp2spec.}
 
-%package -n     python3-%{pypi_name}
+%description %_description
+
+%package -n     python3-click-spinner
 Summary:        %{summary}
 
-BuildRequires: sed
+%description -n python3-click-spinner %_description
 
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(click)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(six)
-BuildRequires:  python3dist(wheel)
-BuildRequires:  python3dist(pip)
-%{?python_provide:%python_provide python3-%{pypi_name}}
-
-%description -n python3-%{pypi_name}
-Click Spinner shows the user some progress when a progress bar is
-not suitable because you don’t know how much longer it would take.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n click_spinner-%{version}
 
-%autosetup -n %{pypi_name}-%{commit}
-# These are bad and should be removed once upstream takes a release
-sed -i "s/versioneer.get_version()/'%{version}'/g" setup.py
-sed -i "s/description-file/description_file/g" setup.py
-sed -i "/from . import _version/d" click_spinner/__init__.py
-sed -i "s/_version.get_versions()\['version'\]/'%{version}'/g" click_spinner/__init__.py
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files click_spinner
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v tests
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
-%license LICENSE
+
+%files -n python3-click-spinner -f %{pyproject_files}
 
 %changelog
 %autochangelog

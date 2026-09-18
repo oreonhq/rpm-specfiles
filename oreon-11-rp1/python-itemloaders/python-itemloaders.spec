@@ -1,59 +1,57 @@
-%global source0_hash 4faf5b3abe83bf014476e3fd9ccf66867282971d9f1d4e96d9a61b60c3786770
+%global source0_hash none
 
-%global srcname itemloaders
-%global desc %{expand:
-itemloaders is a library that helps you collect data from HTML and XML sources.
+Name:           python-itemloaders
+Version:        1.4.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Base library for scrapy_s ItemLoader
 
-It comes in handy to extract data from web pages, as it supports data extraction
-using CSS and XPath Selectors.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://github.com/scrapy/itemloaders
+Source:         %{pypi_source itemloaders}
 
-It's specially useful when you need to standardize the data from many sources.
-For example, it allows you to have all your casting and parsing rules in a 
-single place.}
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-Name:		python-itemloaders
-Version:	1.3.2
-Release:	7%{?dist}
-Summary:	Library that helps you collect data from HTML and XML sources.
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:	LicenseRef-Callaway-BSD
-URL:		https://github.com/scrapy/itemloaders
-Source0:	%{pypi_source}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'itemloaders' generated automatically by pyp2spec.}
 
-BuildArch:	noarch
+%description %_description
 
-%description
-%{desc}
+%package -n     python3-itemloaders
+Summary:        %{summary}
 
-%package -n python3-%{srcname}
-Summary:	%{summary}
+%description -n python3-itemloaders %_description
 
-BuildRequires:	python3-devel
-BuildRequires:	python3-setuptools
-BuildRequires:	python3-parsel
-BuildRequires:	python3-jmespath
-BuildRequires:	python3-w3lib
-
-%description -n python3-%{srcname}
-%{desc}
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n itemloaders-%{version}
 
-%autosetup -n %{srcname}-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{srcname}
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/itemloaders
-%{python3_sitelib}/itemloaders-*.egg-info
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-itemloaders -f %{pyproject_files}
 
 %changelog
 %autochangelog

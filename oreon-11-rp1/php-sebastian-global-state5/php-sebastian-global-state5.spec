@@ -25,8 +25,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        5.0.8
-Release:        2%{?dist}
+Version:        7.0.1
+Release:        1%{?dist}
 Summary:        Snapshotting of global state, version %{major}
 
 License:        BSD-3-Clause

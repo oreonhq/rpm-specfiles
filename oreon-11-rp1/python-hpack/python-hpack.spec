@@ -1,78 +1,57 @@
-%global source0_hash d8e08ec703362fab42224f31e3eee0a73b8c6a28e1f05c1318feb2c54453abcf
+%global source0_hash none
 
-%global srcname hpack
-
-%global common_description %{expand:
-HTTP/2 Header Encoding for Python This module contains a pure-Python
-HTTP/2 header encoding (HPACK) logic for use in Python programs that implement
-HTTP/2. It also contains a compatibility layer that automatically enables the
-use of nghttp2 if it's available.}
-
-Name:           python-%{srcname}
-Version:        4.1.0
+Name:           python-hpack
+Version:        4.2.0
 Release:        %autorelease
-Summary:        Pure-Python HPACK header compression
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Pure-Python HPACK header encoding
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            http://hyper.rtfd.org
-VCS:            https://github.com/python-hyper/hpack
-Source0:        %vcs/archive/v%{version}/%{srcname}-%{version}.tar.gz
+URL:            https://github.com/python-hyper/hpack/
+Source:         %{pypi_source hpack}
 
 BuildArch:      noarch
-BuildRequires:  make
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(hypothesis)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(sphinx)
 
-%description %{common_description}
 
-%package -n     python3-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'hpack' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-hpack
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{common_description}
+%description -n python3-hpack %_description
 
-%package doc
-Summary:        Documentation for %{name}
-
-%description doc
-%{common_description}
-
-This is the documentation package for %{name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n hpack-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-# Upstream uses tox to call pytest.  If we used it we'd have to patch out
-# pytest-xdist, pytest-cov, and coverage related pytest flags.  Instead, we'll
-# just call pytest directly.
 %pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
-# generate html docs
-PYTHONPATH=${PWD} sphinx-build docs/source html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
 
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with check}
+
 %check
-%pytest -k 'not test_get_by_index_out_of_range'
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
 
-%files doc
-%doc html
-%license LICENSE
+%files -n python3-hpack -f %{pyproject_files}
 
 %changelog
 %autochangelog

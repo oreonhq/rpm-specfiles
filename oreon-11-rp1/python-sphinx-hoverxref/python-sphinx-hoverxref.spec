@@ -1,65 +1,64 @@
-%global source0_hash 41faf1f90e2ca5cd577fa07ffefe90286e432df51ccef2822d0de6d013922f04
+%global source0_hash none
 
-%global srcname sphinx-hoverxref
-%global sum Sphinx extension to add tooltips on cross references
-
-Name:           python-%{srcname}
-Version:        1.4.1
+Name:           python-sphinx-hoverxref
+Version:        1.4.2
 Release:        %autorelease
-Summary:        %{sum}
-BuildArch:      noarch
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Sphinx extension to show tooltips with content embedded when hover a reference.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-Url:            https://%{srcname}.readthedocs.io/en/latest/
-Source:         https://github.com/readthedocs/%{srcname}/archive/%{version}.tar.gz#/%{srcname}-%{version}.tar.gz
-# drop references to .
-# drop dependency on pdbpp, it requires a lot of unpackaged modules and pyrepl is broken and inactive upstream
-Patch:          sphinx-hoverxref-fix_tox_ini.diff
+URL:            https://github.com/readthedocs/sphinx-hoverxref
+Source:         %{pypi_source sphinx_hoverxref}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  python3-setuptools
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Sphinx extension to show a floating window (tooltips or modal dialogues) on the
-cross references of the documentation embedding the content of the linked
-section on them. With sphinx-hoverxref, you don’t need to click a link to see
-what’s in there.}
+This is package 'sphinx-hoverxref' generated automatically by pyp2spec.}
+
+Patch:          sphinx-hoverxref-fix_tox_ini.diff
 
 %description %_description
 
-%package -n python3-%{srcname}
-Requires:       python3-sphinx
-BuildRequires:  python3-sphinx
-Summary:        %{sum}
+%package -n     python3-sphinx-hoverxref
+Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-sphinx-hoverxref %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sphinx-hoverxref doc,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sphinx_hoverxref-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-# remove superfluous files
-rm -rf %{buildroot}%{python3_sitelib}/tests/
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files hoverxref
 
 %check
-# exclude intersphinx tests, they don't work offline
-%pytest -v tests/ -k "not test_intersphinx_default_configs and not test_intersphinx_python_mapping and not test_intersphinx_all_mappings"
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
+
+%files -n python3-sphinx-hoverxref -f %{pyproject_files}
 
 %changelog
 %autochangelog

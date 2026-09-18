@@ -7,7 +7,7 @@
 %global crate p384
 
 Name:           rust-p384
-Version:        0.13.1
+Version:        0.14.0
 Release:        %autorelease
 Summary:        Pure Rust implementation of the NIST P-384 (a.k.a. secp384r1) ellipti...
 

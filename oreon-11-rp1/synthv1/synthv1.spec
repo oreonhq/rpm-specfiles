@@ -4,8 +4,8 @@
 
 Summary:       A 4-oscillator subtractive polyphonic synthesizer
 Name:          synthv1
-Version:       0.9.91
-Release:       4%{?dist}
+Version:       1.5.0
+Release:       1%{?dist}
 URL:           https://%{name}.sourceforge.io/
 Source0:       https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 # Do not strip executables

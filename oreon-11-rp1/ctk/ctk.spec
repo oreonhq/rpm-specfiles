@@ -1,7 +1,7 @@
 %global source0_hash c65412549876e1ad6266a322b3a30e130765444a8564d1152bcd801a4645f9f1
 
 Name: ctk
-Version: 2023.07.13
+Version: 2026.09.02
 %global soname_version 0.1
 Release: %autorelease
 Summary: The Commmon Toolkit for biomedical imaging

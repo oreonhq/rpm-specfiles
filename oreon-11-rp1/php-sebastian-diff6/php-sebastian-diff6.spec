@@ -28,8 +28,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        6.0.2
-Release:        6%{?dist}
+Version:        8.1.7
+Release:        1%{?dist}
 Summary:        Diff implementation, version %{major}
 
 License:        BSD-3-Clause

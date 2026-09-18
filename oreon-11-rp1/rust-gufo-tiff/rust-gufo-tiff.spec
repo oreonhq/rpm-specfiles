@@ -7,7 +7,7 @@
 %global crate gufo-tiff
 
 Name:           rust-gufo-tiff
-Version:        0.4.0
+Version:        0.5.0
 Release:        %autorelease
 Summary:        Data structure for TIFF images
 

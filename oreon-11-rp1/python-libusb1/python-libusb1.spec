@@ -1,62 +1,57 @@
-%global source0_hash 3951d360f2daf0e0eacf839e15d2d1d2f4f5e7830231eb3188eeffef2dd17bad
+%global source0_hash none
 
 Name:           python-libusb1
-Version:        3.3.1
-Release:        6%{?dist}
+Version:        3.4.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Pure-python wrapper for libusb-1.0
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-2.1-or-later
 URL:            https://github.com/vpelletier/python-libusb1
-Source0:        %{pypi_source libusb1}
-Source1:        https://github.com/vpelletier/%{name}/releases/download/%{version}/libusb1-%{version}.tar.gz.asc
-
-#https://github.com/vpelletier/python-libusb1/blob/5bc97a163ee1ca98ca6bfc11045f5c4ab94ec654/KEYS
-#Wed Jan 05 2022, exported the upstream gpg key using the command:
-#gpg2 --armor --export --export-options export-minimal 983AE8B73B9115987A923845CAC936914257B0C1 > gpgkey-python-libusb1.gpg
-Source2:        gpgkey-python-libusb1.gpg
+Source:         %{pypi_source libusb1}
 
 BuildArch:      noarch
-BuildRequires:  gnupg2
-BuildRequires:  libusb1-devel
 BuildRequires:  python3-devel
-Requires:       libusb1
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Pure-python wrapper for libusb-1.0.
-
-Supports all transfer types, both in synchronous and asynchronous mode.}
+This is package 'libusb1' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-libusb1
-Summary: %{summary}
+%package -n     python3-libusb1
+Summary:        %{summary}
 
 %description -n python3-libusb1 %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%prep
 %autosetup -p1 -n libusb1-%{version}
-rm -rf libusb1.egg-info
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l usb1 libusb1
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%{python3} -m unittest usb1/test*.py
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-libusb1 -f %{pyproject_files}
-%license COPYING COPYING.LESSER
-%doc README.rst PKG-INFO
 
 %changelog
 %autochangelog

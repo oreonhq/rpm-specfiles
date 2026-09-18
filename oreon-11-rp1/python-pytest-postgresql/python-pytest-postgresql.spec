@@ -1,71 +1,62 @@
-%global source0_hash 0a84f3bc1bad9e53e77dc0cfab3697fb2eef34541657b2a1077a940c08494004
+%global source0_hash none
 
-%global pypi_name pytest-postgresql
-%global name_with_underscore pytest_postgresql
-
-Name:           python-%{pypi_name}
-Version:        7.0.2
+Name:           python-pytest-postgresql
+Version:        9.1.0
 Release:        %autorelease
-Summary:        A pytest plugin for PostgreSQL database integration
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Postgresql fixtures and fixture factories for Pytest.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-3.0-or-later
-URL:            https://github.com/ClearcodeHQ/pytest-postgresql
-Source0:        https://github.com/ClearcodeHQ/pytest-postgresql/archive/v%{version}.tar.gz
+URL:            https://github.com/dbfixtures/pytest-postgresql
+Source:         %{pypi_source pytest_postgresql}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
 
-# for check
-BuildRequires:  glibc-langpack-en
-BuildRequires:  glibc-langpack-de
-BuildRequires:  libpq-devel
-BuildRequires:  python3dist(psycopg)
-BuildRequires:  postgresql-server
 
-%description
-This is a pytest plugin, that enables you to test your code that relies on a
-running PostgreSQL Database. It allows you to specify fixtures for PostgreSQL
-process and client.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pytest-postgresql' generated automatically by pyp2spec.}
 
-%package -n     python3-%{pypi_name}
+%description %_description
+
+%package -n     python3-pytest-postgresql
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-This is a pytest plugin, that enables you to test your code that relies on a
-running PostgreSQL Database. It allows you to specify fixtures for PostgreSQL
-process and client.
+%description -n python3-pytest-postgresql %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pytest-postgresql async
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_postgresql-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -r -x tests
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x async
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{name_with_underscore}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Since 5.0.0 there are issues during the check phase as pytest-postgresql is
-# loaded twice and pytest errors as same params are loaded twice.
-#
-# To fix:
-#   - remove unkown params from pyproject.toml
-#   - remove test_postgres_options_plugin.py to avoid failing tests
-#   - "-p no:postgresql" to avoid loading the plugin twice
-sed -i '/^addopts/d' pyproject.toml
-rm tests/test_postgres_options_plugin.py
-%pytest -p no:postgresql --postgresql-exec="/usr/bin/pg_ctl" -k "not docker"
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license COPYING COPYING.lesser
-%doc AUTHORS.rst CHANGES.rst README.rst
+
+%files -n python3-pytest-postgresql -f %{pyproject_files}
 
 %changelog
 %autochangelog

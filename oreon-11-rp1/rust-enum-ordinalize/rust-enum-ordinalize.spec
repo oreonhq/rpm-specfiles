@@ -7,7 +7,7 @@
 %global crate enum-ordinalize
 
 Name:           rust-enum-ordinalize
-Version:        4.3.2
+Version:        4.4.2
 Release:        %autorelease
 Summary:        Construct enum variant from its ordinal
 

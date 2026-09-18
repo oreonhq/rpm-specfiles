@@ -1,7 +1,7 @@
 %global source0_hash fa0650c3edcd5dfd68d3a69a94c8f436224c71fabdcecfe521a2fd63e56992b9
 
 Name:           deepin-pdfium
-Version:        1.5.1
+Version:        1.5.8
 Release:        %autorelease
 Summary:        development library for pdf on Deepin
 # the library is under LGPL-3.0-or-later license

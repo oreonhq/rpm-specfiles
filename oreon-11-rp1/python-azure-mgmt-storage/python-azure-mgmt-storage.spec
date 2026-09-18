@@ -1,67 +1,57 @@
-%global source0_hash b1ae225ef87ada85f29c02e406140ab5895285ca64de2bcfe50b631c4818a337
-
-# All tests are skipped by upstream. Skip installing test requirements.
-%bcond_with     tests
-
-%global         srcname     azure-mgmt-storage
-%global         tarball_name     azure_mgmt_storage
+%global source0_hash none
 
 Name:           python-azure-mgmt-storage
-Version:        24.0.0
+Version:        25.1.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Microsoft Azure Storage Management Client Library for Python
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pypi.org/project/azure-mgmt-storage/
-Source:         %{pypi_source azure_mgmt_storage %{version}}
+URL:            https://github.com/Azure/azure-sdk-for-python
+Source:         %{pypi_source azure_mgmt_storage}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%if %{with tests}
-BuildRequires:  python3-azure-sdk-tools
-BuildRequires:  python3dist(azure-devtools)
-BuildRequires:  python3dist(azure-mgmt-keyvault)
-BuildRequires:  python3dist(azure-mgmt-resource)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-aiohttp)
-BuildRequires:  python3dist(python-dotenv)
-%endif
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Microsoft Azure Storage Management Client Library for Python}
+This is package 'azure-mgmt-storage' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-azure-mgmt-storage
+%package -n     python3-azure-mgmt-storage
 Summary:        %{summary}
 
-%description -n python3-azure-mgmt-storage %{_description}
+%description -n python3-azure-mgmt-storage %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n azure_mgmt_storage-%{version}
 
-%autosetup -n azure_mgmt_storage-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l azure
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%if %{with tests}
-%pytest
-%endif
 
 %files -n python3-azure-mgmt-storage -f %{pyproject_files}
-%doc README.md CHANGELOG.md
 
 %changelog
 %autochangelog

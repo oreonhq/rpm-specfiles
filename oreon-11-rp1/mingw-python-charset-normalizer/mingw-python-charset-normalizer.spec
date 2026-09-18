@@ -7,8 +7,8 @@
 
 Name:          mingw-python-%{pkg_name}
 Summary:       MinGW Windows Python %{pypi_name} library
-Version:       3.4.4
-Release:       2%{?dist}
+Version:       3.5.1
+Release:       1%{?dist}
 BuildArch:     noarch
 
 License:       MIT

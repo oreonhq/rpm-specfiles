@@ -1,80 +1,64 @@
-%global source0_hash 8561a3269e6801106863fd0d6d84bb737be9e7631e33aaed3fb9ce5953688da3
+%global source0_hash none
 
-%bcond check 0
+Name:           python-joblib
+Version:        1.6.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Lightweight pipelining with Python functions
 
-%global srcname joblib
-
-Name:  python-%{srcname}
-Version: 1.5.3
-Release: %autorelease
-Summary: Lightweight pipelining: using Python functions as pipeline jobs
-
-License: BSD-3-Clause
-URL: https://joblib.readthedocs.io
-Source0: %{pypi_source}
-
-Patch: joblib-unbundle-cloudpickle.patch
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://joblib.readthedocs.io
+Source:         %{pypi_source joblib}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Joblib is a set of tools to provide lightweight pipelining in Python.
-In particular, joblib offers:
- * transparent disk-caching of the output values and lazy
-   re-evaluation (memorize pattern)
- * easy simple parallel computing
- * logging and tracing of the execution}
+This is package 'joblib' generated automatically by pyp2spec.}
+
+Patch: joblib-unbundle-cloudpickle.patch
 
 %description %_description
 
-%package -n python3-%{srcname}
-Summary: %{summary}
+%package -n     python3-joblib
+Summary:        %{summary}
 
-# Testing
-%if %{with check}
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist pytest-asyncio}
-BuildRequires:  %{py3_dist numpy}
-BuildRequires:  %{py3_dist lz4}
-BuildRequires:  %{py3_dist psutil} 
-BuildRequires:  %{py3_dist threadpoolctl}
-%endif
+%description -n python3-joblib %_description
 
-Recommends: %{py3_dist numpy}
-Recommends: %{py3_dist lz4}
-Recommends: %{py3_dist psutil} 
-Provides: bundled(python3dist(loky)) = 3.5.6
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-joblib docs,test
 
-%description -n python3-%{srcname} %_description
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n joblib-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-rm -rf joblib/externals/cloudpickle/ 
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files joblib
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with check}
+
 %check
-%pytest \
- --deselect "joblib/test/test_memory.py::test_parallel_call_cached_function_defined_in_jupyter" \
- --deselect "joblib/test/test_numpy_pickle.py::test_joblib_pickle_across_python_versions" \
- --deselect "joblib/test/test_numpy_pickle.py::test_joblib_pickle_across_python_versions_with_mmap" \
-  joblib
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
+
+%files -n python3-joblib -f %{pyproject_files}
 
 %changelog
 %autochangelog

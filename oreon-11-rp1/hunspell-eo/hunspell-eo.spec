@@ -8,7 +8,7 @@
 
 Name: hunspell-eo
 Summary: Esperanto hunspell dictionaries
-Version: 25.2.3
+Version: 26.8.0.3
 Release: 1%{?dist}
 License: GPL-2.0-or-later
 URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/eo

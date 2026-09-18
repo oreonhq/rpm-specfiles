@@ -1,130 +1,57 @@
-%global source0_hash 7255f0ae1213d34a3bdb1081830ab25afb9b263250875e3e61e46ba586adaeba
+%global source0_hash none
 
-%global srcname etcd3gw
+Name:           python-etcd3gw
+Version:        2.7.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Python client for etcd3 grpc-gateway v3 API
 
-%if 0%{?fedora} && 0%{?fedora} < 30
-%bcond_without python2
-%bcond_without python3
-%else
-%if 0%{?fedora} || 0%{?rhel} > 7
-%bcond_with    python2
-%bcond_without python3
-%else
-%bcond_without python2
-%bcond_with    python3
-%endif
-%endif
-
-Name:           python-%{srcname}
-Version:        2.5.0
-Release:        2%{?dist}
-Summary:        An etcd3 gateway Python client
-
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://pypi.python.org/pypi/%{srcname}
-Source0:        %{pypi_source}
+URL:            https://docs.openstack.org/etcd3gw
+Source:         %{pypi_source etcd3gw}
 
 BuildArch:      noarch
-
-%description
-A python client for etcd3 grpc-gateway v3alpha API
-
-%if %{with python2}
-%package -n python2-%{srcname}
-Summary:        %{summary}
-BuildRequires:  python2-devel
-
-BuildRequires:  python2-futurist
-BuildRequires:  python2-oslotest
-BuildRequires:  python2-pytest
-BuildRequires:  python2-requests
-
-Requires:  python2-futurist
-Requires:  python2-pbr
-Requires:  python2-requests
-Requires:  python2-six
-
-%description -n python2-%{srcname}
-A python client for etcd3 grpc-gateway v3alpha API
-%endif
-
-%if %{with python3}
-%package -n python3-%{srcname}
-Summary:        %{summary}
 BuildRequires:  python3-devel
 
-BuildRequires:  python3-futurist
-BuildRequires:  python3-oslotest
-BuildRequires:  python3-pytest
-BuildRequires:  python3-requests
 
-Requires: python3-futurist
-Requires: python3-pbr
-Requires: python3-requests
-Requires: python3-six
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'etcd3gw' generated automatically by pyp2spec.}
 
-%description -n python3-%{srcname}
-A python client for etcd3 grpc-gateway v3alpha API
-%endif
+%description %_description
+
+%package -n     python3-etcd3gw
+Summary:        %{summary}
+
+%description -n python3-etcd3gw %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n etcd3gw-%{version}
 
-%autosetup -n %{srcname}-%{version}
-
-# Let's manage dependencies using rpm deps.
-rm -f *requirements.txt
 
 %generate_buildrequires
 %pyproject_buildrequires
 
-%build
-%if %{with python2}
-%py2_build
-%endif
 
-%if %{with python3}
+%build
 %pyproject_wheel
-%endif
+
 
 %install
-%if %{with python2}
-%py2_install
-%endif
-
-%if %{with python3}
 %pyproject_install
-%pyproject_save_files -l %{srcname}
-%endif
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%if %{with python2}
-export PYTHON=%{__python2}
-py.test
-%endif
 
-%if %{with python3}
-export PYTHON=%{__python3}
-# workaround for https://bugs.launchpad.net/testrepository/+bug/1229445
-rm -rf .testrepository/times.dbm
-py.test-3
-%endif
-
-%if %{with python2}
-%files -n python2-%{srcname}
-%license LICENSE
-%doc README.md CONTRIBUTING.rst HACKING.rst
-%{python2_sitelib}/%{srcname}-*.egg-info/
-%{python2_sitelib}/%{srcname}/
-%endif
-
-%if %{with python3}
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md CONTRIBUTING.rst HACKING.rst
-%endif
+%files -n python3-etcd3gw -f %{pyproject_files}
 
 %changelog
 %autochangelog

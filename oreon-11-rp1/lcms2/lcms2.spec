@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           lcms2
-Version:        2.16
+Version:        2.19.1
 Release:        %autorelease
 Summary:        Color Management Engine
 # part of src/cmssm.c is softsurf (no SPDX yet) see https://gitlab.com/fedora/legal/fedora-license-data/-/issues/469
@@ -9,7 +9,7 @@ Summary:        Color Management Engine
 # plugins/threaded/src/ is GPL-3.0-or-later
 License:        MIT AND GPL-3.0-or-later
 URL:            https://github.com/mm2/Little-CMS
-# Upstream moved tarballs off littlecms.com; GitHub release tag is lcms2.<minor> (e.g. 2.16 -> lcms2.16).
+# Upstream moved tarballs off littlecms.com; GitHub release tag is lcms2.<minor> (e.g. 2.19.1 -> lcms2.16).
 %global lcms2_gh_tag lcms2.%(echo %{version} | cut -d. -f2)
 Source0:        http://www.littlecms.com/lcms2-%{version}.tar.gz
 

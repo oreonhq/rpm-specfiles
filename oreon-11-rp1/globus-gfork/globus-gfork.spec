@@ -2,8 +2,8 @@
 
 Name:		globus-gfork
 %global _name %(tr - _ <<< %{name})
-Version:	5.0
-Release:	19%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - GFork
 
 License:	Apache-2.0

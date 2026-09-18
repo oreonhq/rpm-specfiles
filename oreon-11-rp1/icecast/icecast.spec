@@ -1,8 +1,8 @@
 %global source0_hash 49b5979f9f614140b6a38046154203ee28218d8fc549888596a683ad604e4d44
 
 Name:		icecast
-Version:	2.4.4
-Release:	26%{?dist}
+Version:	2.5.0
+Release:	1%{?dist}
 Summary:	ShoutCast compatible streaming media server
 
 # admin/xspf.xsl:	GPL-2.0-or-later

@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/circle
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.6.6
+Version:        1.7.1
 Release:        %autorelease
 Summary:        Adjoint groups of finite rings
 

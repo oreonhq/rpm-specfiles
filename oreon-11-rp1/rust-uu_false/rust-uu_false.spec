@@ -10,7 +10,7 @@
 %global crate uu_false
 
 Name:           rust-uu_false
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        false ~ (uutils) do nothing and fail
 

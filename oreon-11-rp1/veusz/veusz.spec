@@ -1,8 +1,8 @@
 %global source0_hash 8f28213e4feee131c79d7ac6fd40f31df5b80244ba9f408477754af865fd85ed
 
 Name:           veusz
-Version:        4.2
-Release:        2%{?dist}
+Version:        4.2.1
+Release:        1%{?dist}
 Summary:        GUI scientific plotting package
 
 License:        GPL-2.0-or-later AND (LGPL-2.1-only OR GPL-3.0-only) AND PSF-2.0 AND CC0-1.0

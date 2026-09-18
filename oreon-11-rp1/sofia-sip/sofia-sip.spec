@@ -1,7 +1,7 @@
 %global source0_hash daca3d961b6aa2974ad5d3be69ed011726c3e4d511b2a0d4cb6d878821a2de7a
 
 Name:           sofia-sip
-Version:        1.13.17
+Version:        1.13.18
 Release:        %autorelease
 Summary:        Sofia SIP User-Agent library
 

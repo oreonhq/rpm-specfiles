@@ -5,11 +5,11 @@
 %global debug_package %{nil}
 
 %global crate libgit2-sys
-%global crate_version 0.18.7+1.9.6
+%global crate_version 0.18.8+1.9.7+1.9.6
 %global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-libgit2-sys
-Version:        0.18.7
+Version:        0.18.8+1.9.7
 Release:        %autorelease
 Summary:        Native bindings to the libgit2 library
 

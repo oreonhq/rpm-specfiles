@@ -1,7 +1,7 @@
 %global source0_hash e9a0beafd37ffcbe245f479e50b024a779945e332ad49d61f6e9c9c2144e9dc7
 
 Name:           qvr
-Version:        4.0.2
+Version:        4.1.0
 Release:        %autorelease
 Summary:        QT library for VR applications
 

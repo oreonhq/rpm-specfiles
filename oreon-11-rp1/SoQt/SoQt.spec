@@ -11,8 +11,8 @@
 %global sogui_date 20200419
 
 Name:           SoQt
-Version:        1.6.0
-Release:        21%{?dist}
+Version:        1.6.4
+Release:        1%{?dist}
 Summary:        High-level 3D visualization library
 # Old version had been licensed GPLv2
 License:        BSD-3-Clause

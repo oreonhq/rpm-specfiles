@@ -7,7 +7,7 @@
 %global tarball_version %%(echo %{version} | tr '~' '-')
 
 Name:           vifm
-Version:        0.14.3
+Version:        0.14.4
 Release:        %autorelease
 Summary:        Vifm is a file manager with curses interface
 

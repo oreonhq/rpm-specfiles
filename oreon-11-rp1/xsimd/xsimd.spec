@@ -1,7 +1,7 @@
 %global source0_hash edd8cd3d548c185adc70321c53c36df41abe64c1fe2c67bc6d93c3ecda82447a
 
 Name:           xsimd
-Version:        13.2.0
+Version:        14.3.0
 Release:        %autorelease
 Summary:        C++ wrappers for SIMD intrinsic
 License:        BSD-3-Clause

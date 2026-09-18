@@ -1,96 +1,64 @@
-%global source0_hash ecc81a1bfd2681eb571e361839d5defcbeec583ae3ee0503bc83b066106b88cd
+%global source0_hash none
 
-Name:		python-ipyparallel
-Version:	9.1.0
-Release:	1%{?dist}
-Summary:	Interactive Parallel Computing with IPython
+Name:           python-ipyparallel
+Version:        9.2.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Interactive Parallel Computing with IPython
 
-License:	BSD-3-Clause
-URL:		https://github.com/ipython/ipyparallel
-Source0:	%pypi_source ipyparallel
-BuildArch:	noarch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://ipython.org
+Source:         %{pypi_source ipyparallel}
 
-%description
-IPython Parallel (ipyparallel) is a Python package and collection of
-CLI scripts for controlling clusters of IPython processes, built on
-the Jupyter protocol.
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%package -n python3-ipyparallel
-Summary:	Interactive Parallel Computing with IPython
-%py_provides	python3-ipyparallel
-Requires:	python-jupyter-filesystem >= 4.7.0-5
-Obsoletes:	python-ipyparallel-doc <= 8.7.0
 
-%description -n python3-ipyparallel
-IPython Parallel (ipyparallel) is a Python package and collection of
-CLI scripts for controlling clusters of IPython processes, built on
-the Jupyter protocol.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'ipyparallel' generated automatically by pyp2spec.}
 
-%package -n python3-ipyparallel+test
-Summary:	Tests for python3-ipyparallel
-%py_provides	python3-ipyparallel+test
-%py_provides	python3-ipyparallel-tests
-Obsoletes:	python3-ipyparallel-tests < 8.4.1-3
-Requires:	python3-ipyparallel = %{version}-%{release}
+%description %_description
 
-%description -n python3-ipyparallel+test
-This package contains the tests of python3-ipyparallel.
+%package -n     python3-ipyparallel
+Summary:        %{summary}
+
+%description -n python3-ipyparallel %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-ipyparallel benchmark,labextension,nbext,retroextension,serverextension,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n ipyparallel-%{version}
 
-%setup -q -n ipyparallel-%{version}
-
-rm ipyparallel/labextension/schemas/ipyparallel-labextension/package.json.orig
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x benchmark,labextension,nbext,retroextension,serverextension,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-for f in apps/iploggerapp.py cluster/app.py controller/app.py \
-	 controller/heartmonitor.py engine/app.py ; do
-  sed '/\/usr\/bin\/env/d' -i %{buildroot}%{python3_sitelib}/ipyparallel/${f}
-  chmod -x %{buildroot}%{python3_sitelib}/ipyparallel/${f}
-done
-
-# Fix wrong install directory for configuraton files
-mv %{buildroot}%{_prefix}%{_sysconfdir} %{buildroot}%{_sysconfdir}
 
 %check
-%pytest -v --color=no
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-ipyparallel
-%license COPYING.md
-%doc README.md
-%{python3_sitelib}/ipyparallel-*.*-info
-%dir %{python3_sitelib}/ipyparallel
-%{python3_sitelib}/ipyparallel/*.py
-%{python3_sitelib}/ipyparallel/__pycache__
-%{python3_sitelib}/ipyparallel/apps
-%{python3_sitelib}/ipyparallel/client
-%{python3_sitelib}/ipyparallel/cluster
-%{python3_sitelib}/ipyparallel/controller
-%{python3_sitelib}/ipyparallel/engine
-%{python3_sitelib}/ipyparallel/labextension
-%{python3_sitelib}/ipyparallel/nbextension
-%{python3_sitelib}/ipyparallel/serialize
+
+%files -n python3-ipyparallel -f %{pyproject_files}
 %{_bindir}/ipcluster
 %{_bindir}/ipcontroller
 %{_bindir}/ipengine
-%{_datadir}/jupyter/labextensions/ipyparallel-labextension
-%{_datadir}/jupyter/nbextensions/ipyparallel
-%config(noreplace) %{_sysconfdir}/jupyter/jupyter_notebook_config.d/ipyparallel.json
-%config(noreplace) %{_sysconfdir}/jupyter/jupyter_server_config.d/ipyparallel.json
-%config(noreplace) %{_sysconfdir}/jupyter/nbconfig/tree.d/ipyparallel.json
-
-%files -n python3-ipyparallel+test
-%ghost %{python3_sitelib}/ipyparallel-*.*-info
-%{python3_sitelib}/ipyparallel/tests
 
 %changelog
 %autochangelog

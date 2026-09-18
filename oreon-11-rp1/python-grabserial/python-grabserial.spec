@@ -3,8 +3,8 @@
 %global realname grabserial
 
 Name: python-grabserial
-Version: 2.0.2
-Release: 21%{?dist}
+Version: 2.1.8
+Release: 1%{?dist}
 Summary: Reads a serial port and writes data to standard output
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.

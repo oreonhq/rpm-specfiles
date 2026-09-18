@@ -6,8 +6,8 @@
 %global srcname zuluCrypt
 
 Name:           zulucrypt
-Version:        7.1.0
-Release:        4%{?dist}
+Version:        7.1.1
+Release:        1%{?dist}
 Summary:        Qt GUI front end to cryptsetup
 
 # More details available in the copyright file in the source tarball.

@@ -1,8 +1,8 @@
 %global source0_hash ea72ac7b2a67578e9994dcb0619602ead3097a46fb9336661da200e63927ebe6
 
 Name:           xwaylandvideobridge
-Version:        0.4.0
-Release:        12%{?dist}
+Version:        0.5.3
+Release:        1%{?dist}
 Summary:        Utility to allow streaming Wayland windows to X applications
 
 License:        (GPL-2.0-only or GPL-3.0-only) and LGPL-2.0-or-later and BSD-3-Clause

@@ -7,7 +7,7 @@
 %global crate hash32
 
 Name:           rust-hash32_0.2
-Version:        0.2.1
+Version:        1.0.0
 Release:        %autorelease
 Summary:        32-bit hashing machinery
 

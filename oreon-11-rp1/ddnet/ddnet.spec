@@ -4,7 +4,7 @@
 %bcond_without ninja_build
 
 Name:           ddnet
-Version:        19.5
+Version:        20.0
 Release:        1%{?dist}
 Summary:        DDraceNetwork, a cooperative racing mod of Teeworlds
 

@@ -1,82 +1,65 @@
-%global source0_hash a8f1dd2902d01ba5d9de15f698cb3944c54e1029c0e3c881f85ed3a38afd3602
+%global source0_hash none
 
-%global srcname colcon-core
+Name:           python-colcon-core
+Version:        0.21.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Command line tool to build sets of software packages.
 
-Name:           python-%{srcname}
-Version:        0.20.1
-Release:        1%{?dist}
-Summary:        Command line tool to build sets of software packages
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://colcon.readthedocs.io
-Source0:        https://github.com/colcon/%{srcname}/archive/%{version}/%{srcname}-%{version}.tar.gz
-
-# Not submitted upstream - make pytest dependency weak
-Patch0:         %{name}-0.5.3-remove-pytest.patch
-# Not submitted upstream - compatibility with pytest 2.9.X
-Patch1:         %{name}-0.19.0-pytest-compat.patch
+URL:            https://github.com/colcon/colcon-core/
+Source:         %{pypi_source colcon_core}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-colcon is a command line tool to improve the workflow of building, testing and
-using multiple software packages. It automates the process, handles the ordering
-and sets up the environment to use the packages.
 
-%package -n python%{python3_pkgversion}-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'colcon-core' generated automatically by pyp2spec.}
+
+Patch0:         %{name}-0.5.3-remove-pytest.patch
+Patch1:         %{name}-0.19.0-pytest-compat.patch
+
+%description %_description
+
+%package -n     python3-colcon-core
 Summary:        %{summary}
-BuildRequires:  (python%{python3_pkgversion} >= 3.8 or python%{python3_pkgversion}-importlib-metadata)
-BuildRequires:  (python%{python3_pkgversion} >= 3.11 or python%{python3_pkgversion}-tomli >= 1)
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-distlib >= 0.2.5
-BuildRequires:  python%{python3_pkgversion}-empy
-BuildRequires:  python%{python3_pkgversion}-packaging
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  python%{python3_pkgversion}-setuptools >= 30.3.0
-BuildRequires:  python%{python3_pkgversion}-setuptools < 80
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
 
-%if %{undefined __pythondist_requires}
-Requires:       (python%{python3_pkgversion} >= 3.8 or python%{python3_pkgversion}-importlib-metadata)
-Requires:       (python%{python3_pkgversion} >= 3.11 or python%{python3_pkgversion}-tomli >= 1)
-Requires:       python%{python3_pkgversion}-distlib >= 0.2.5
-Requires:       python%{python3_pkgversion}-empy
-Requires:       python%{python3_pkgversion}-packaging
-Requires:       python%{python3_pkgversion}-setuptools < 80
-%endif
+%description -n python3-colcon-core %_description
 
-Recommends:     python%{python3_pkgversion}-coloredlogs
-Recommends:     python%{python3_pkgversion}-pytest
-Recommends:     python%{python3_pkgversion}-pytest-cov
-Recommends:     python%{python3_pkgversion}-pytest-repeat
-Recommends:     python%{python3_pkgversion}-pytest-rerunfailures
-Recommends:     python%{python3_pkgversion}-pytest-runner
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-colcon-core test
 
-%description -n python%{python3_pkgversion}-%{srcname}
-colcon is a command line tool to improve the workflow of building, testing and
-using multiple software packages. It automates the process, handles the ordering
-and sets up the environment to use the packages.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n colcon_core-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -m 'not linter' test
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname}
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/colcon/
-%{python3_sitelib}/colcon_core/
-%{python3_sitelib}/colcon_core-%{version}-py%{python3_version}.egg-info/
+
+%files -n python3-colcon-core -f %{pyproject_files}
 %{_bindir}/colcon
 
 %changelog

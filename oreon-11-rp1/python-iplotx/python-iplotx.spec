@@ -7,7 +7,7 @@
 %global giturl  https://github.com/fabilab/iplotx
 
 Name:           python-iplotx
-Version:        1.7.1
+Version:        1.8.0
 Release:        %autorelease
 Summary:        Visualize networks and trees
 

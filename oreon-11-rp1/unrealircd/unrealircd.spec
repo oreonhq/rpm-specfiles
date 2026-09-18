@@ -8,8 +8,8 @@
 
 Summary:        Open Source IRC server
 Name:           unrealircd
-Version:        6.1.10
-Release:        3%{?dist}
+Version:        6.2.7
+Release:        1%{?dist}
 # UnrealIRCd declares itself as GPL-2.0-or-later as it's the common denominator for
 # a GPL-1.0-or-later and GPL-2.0-or-later mixture, breakdown of other source codes:
 # BSD-3-Clause: include/mempool.h and src/mempool.c

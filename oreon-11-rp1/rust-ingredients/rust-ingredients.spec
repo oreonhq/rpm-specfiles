@@ -6,7 +6,7 @@
 %global crate ingredients
 
 Name:           rust-ingredients
-Version:        0.2.2
+Version:        0.3.0
 Release:        %autorelease
 Summary:        Check ingredients of published Rust crates
 

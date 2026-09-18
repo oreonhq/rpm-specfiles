@@ -7,7 +7,7 @@
 %global crate docker_credential
 
 Name:           rust-docker_credential
-Version:        1.3.2
+Version:        1.4.0
 Release:        %autorelease
 Summary:        Reads a user's docker credentials from config
 

@@ -3,7 +3,7 @@
 %global homedir %{_sharedstatedir}/%{name}
 
 Name:           mopidy
-Version:        4.0.0~a12
+Version:        4.0.4
 Release:        1%{?dist}
 Summary:        An extensible music server written in Python
 

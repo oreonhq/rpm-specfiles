@@ -1,7 +1,7 @@
 %global source0_hash aa13effa3a27bee2fecf0eb228b631b0323bc2e085c88bbdc7f4518f8fedcee3
 
 Name: par2cmdline
-Version: 1.1.1
+Version: 1.5.0
 Release: %autorelease
 Summary: PAR 2.0 compatible file verification and repair tool
 

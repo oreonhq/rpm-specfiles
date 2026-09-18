@@ -8,8 +8,8 @@
 %global rustflags_debuginfo 1
 
 Name:           fractal
-Version:        13
-Release:        4%{?dist}
+Version:        14.1
+Release:        1%{?dist}
 Summary:        Matrix group messaging app
 
 # fractal itself is GPL-3.0-or-later. The rest are statically linked rust libraries based on cargo_license_summary output.

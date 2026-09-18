@@ -6,8 +6,8 @@
 %define release_version %(echo %{version} | awk -F. '{print $1"."$2}')
 
 Name:           mingw-goocanvas2
-Version:        2.0.4
-Release:        18%{?dist}
+Version:        3.0.0
+Release:        1%{?dist}
 Summary:        MinGW Windows canvas library for GTK+
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

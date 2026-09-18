@@ -6,8 +6,8 @@
 %{!?_httpd_modconfdir: %{expand: %%global _httpd_modconfdir %%{_sysconfdir}/httpd/conf.d}}
 
 Name:           mod_qos
-Version:        11.76
-Release:        2%{?dist}
+Version:        11.79
+Release:        1%{?dist}
 Summary:        Quality of service module for Apache
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.

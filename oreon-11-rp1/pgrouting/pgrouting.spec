@@ -1,8 +1,8 @@
 %global source0_hash b8a5f0472934fdf7cda3fb4754d01945378d920cdaddc01f378617ddbb9c447f
 
 Name:          pgrouting
-Version:       3.8.0
-Release:       3%{?dist}
+Version:       4.0.2
+Release:       1%{?dist}
 Summary:       Provides routing functionality to PostGIS / PostgreSQL
 License:       GPL-2.0-or-later AND BSL-1.0 AND MIT
 URL:           https://pgrouting.org

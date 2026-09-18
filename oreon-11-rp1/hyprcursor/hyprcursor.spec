@@ -1,7 +1,7 @@
 %global source0_hash 17e4576b884e6bdb463b445cffff099ad16647b826a87a67b78d38b8cad4c39e
 
 Name:           hyprcursor
-Version:        0.1.11
+Version:        0.1.13
 Release:        %autorelease
 Summary:        The hyprland cursor format, library and utilities
 

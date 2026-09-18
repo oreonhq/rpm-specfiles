@@ -12,7 +12,7 @@
 %global giturl    https://github.com/rocq-prover/stdlib
 
 Name:           rocq-stdlib
-Version:        9.1.0
+Version:        9.2.0
 Release:        %autorelease
 Summary:        The Rocq proof assistant standard library
 

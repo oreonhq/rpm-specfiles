@@ -13,7 +13,7 @@
 
 %global github_owner     php-fig
 %global github_name      cache
-%global github_version   1.0.1
+%global github_version   3.0.0
 %global github_commit    d11b50ad223250cf17b86e38383413f5a6764bf8
 
 %global composer_vendor  psr
@@ -26,7 +26,7 @@
 
 Name:      php-%{composer_vendor}-%{composer_project}
 Version:   %{github_version}
-Release:   22%{?github_release}%{?dist}
+Release:   1%{?github_release}%{?dist}
 Summary:   PSR Cache: Common interface for caching libraries
 
 License:   MIT

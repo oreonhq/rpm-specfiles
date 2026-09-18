@@ -7,7 +7,7 @@
 %global crate ed25519-compact
 
 Name:           rust-ed25519-compact
-Version:        2.3.1
+Version:        2.4.2
 Release:        %autorelease
 Summary:        A small, self-contained, wasm-friendly Ed25519 implementation
 

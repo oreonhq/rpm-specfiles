@@ -3,8 +3,8 @@
 %global debug_package %{nil}
 
 Name:           robin-map
-Version:        1.3.0
-Release:        7%{?dist}
+Version:        1.4.1
+Release:        1%{?dist}
 Summary:        C++ implementation of a fast hash map and hash set using robin hood hashing
 
 License:        MIT

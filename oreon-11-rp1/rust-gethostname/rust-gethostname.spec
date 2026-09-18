@@ -7,7 +7,7 @@
 %global crate gethostname
 
 Name:           rust-gethostname
-Version:        0.5.0
+Version:        1.1.0
 Release:        %autorelease
 Summary:        gethostname for all platforms
 

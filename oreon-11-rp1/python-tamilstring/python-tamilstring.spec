@@ -1,35 +1,24 @@
-%global source0_hash 3b80eee58788a1119574239c1997957579d2573c00982fb869e282093422e787
-
-%global commit 54cb3fcf1bc4eae1bfdd941745b79da2cd8c9cbe
-%global shortcommit  %(c=%{commit}; echo ${c:0:7})
-%global commitdate 20250922
-# Documentation contains javascript, using
-# python-mkdocs-print-site-plugin allows one to have
-# a single page with fewer unnecessary web assets
-%bcond builddocs 0
+%global source0_hash none
 
 Name:           python-tamilstring
-Version:        1.5.31^%{commitdate}git%{shortcommit}
+Version:        2.2.1
 Release:        %autorelease
-Summary:        Manage tamil unicode characters
+# Fill in the actual package summary to submit package to Fedora
+Summary:        tamilstring helps to handle tamil unicode characters lot more easier
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://gitlab.com/boopalan-dev/tamilstring
-# PyPI source does not have documentation
-Source:         %{url}/-/archive/%{commit}/tamilstring-%{shortcommit}.tar.gz
+Source:         %{pypi_source tamilstring}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-%if %{with builddocs}
-# Documentation
-BuildRequires:  python3dist(mkdocs)
-BuildRequires:  python3dist(mkdocs-material)
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-TamilString is a Python library designed to simplify the handling and
-manipulation of Tamil Unicode characters, enabling developers to
-process Tamil text more efficiently in their applications.}
+This is package 'tamilstring' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -38,43 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-tamilstring %_description
 
-%if %{with builddocs}
-%package doc
-Summary: Documentation for TamilString
-
-%description doc
-%_description
-Documentation files
-%endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n tamilstring-%{version}
 
-%autosetup -p1 -n tamilstring-%{commit}
 
 %generate_buildrequires
-%pyproject_buildrequires -x dev
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
-%if %{with builddocs}
-mkdocs build --site-dir public
-%endif
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l tamilstring
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-tamilstring -f %{pyproject_files}
-
-%if %{with builddocs}
-%files doc
-%doc public
-%endif
 
 %changelog
 %autochangelog

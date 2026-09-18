@@ -1,73 +1,64 @@
-%global source0_hash 3b6000a01a237c23bccfdf6d20256ea5111ec74a826ae9e74f9f0e5bb5b2383f
+%global source0_hash none
 
-%global pyname python-cloudflare
-%global pypi_name cloudflare
+Name:           python-cloudflare
+Version:        5.7.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The official Python library for the cloudflare API
 
-Name:           python-%{pypi_name}
-Version:        2.19.4
-Release:        7%{?dist}
-Summary:        Python wrapper for the Cloudflare Client API v4
-
-License:        MIT
-URL:            https://pypi.python.org/pypi/%{pypi_name}
-Source0:        %{pypi_source}
-# upstream does not provide gpg signatures for 2.9.x releases anymore:
-# https://github.com/cloudflare/python-cloudflare/issues/146
-#Source1:        %%{pypi_source}.asc
-# upstream confirmed release signing key via github:
-#   https://github.com/cloudflare/python-cloudflare/issues/93
-# gpg2 --recv-keys "D093 0FD2 2220 3ABF 557C  A485 6112 9109 56F6 F8B8"
-# gpg2 --export --export-options export-minimal "D093 0FD2 2220 3ABF 557C  A485 6112 9109 56F6 F8B8" > gpgkey-D093_0FD2_2220_3ABF_557C__A485_6112_9109_56F6_F8B8.gpg
-Source2:        gpgkey-D093_0FD2_2220_3ABF_557C__A485_6112_9109_56F6_F8B8.gpg
-
-# TODO: Remove this once jsonlines is packaged
-Patch0:         remove-jsonlines.patch
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0
+URL:            https://github.com/cloudflare/cloudflare-python
+Source:         %{pypi_source cloudflare}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-# Used to verify OpenPGP signature
-BuildRequires:  gnupg2
-BuildRequires:  sed
 
-%description
-Python wrapper library for the Cloudflare Client API v4.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cloudflare' generated automatically by pyp2spec.}
 
-%package -n python3-%{pypi_name}
+Patch0:         remove-jsonlines.patch
 
+%description %_description
+
+%package -n     python3-cloudflare
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{pypi_name}}
 
-%description -n python3-%{pypi_name}
-Python wrapper library for the Cloudflare Client API v4.
+%description -n python3-cloudflare %_description
 
-This is the Python 3 version of the package.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-cloudflare aiohttp
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n cloudflare-%{version}
 
-#%%{gpgverify} --keyring='%%{SOURCE2}' --signature='%%{SOURCE1}' --data='%%{SOURCE0}'
-%autosetup -p1 -n %{pypi_name}-%{version}
-rm -rf *.egg-info
-# Remove shebangs
-sed -i -e '1!b' -e '\~^#!/usr/bin/env python~d' cli4/*.py
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x aiohttp
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files CloudFlare
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
-%{_bindir}/cli4
-%doc %attr(0644,root,root) %{_mandir}/man1/cli4.1*
-%{python3_sitelib}/cli4
-%exclude %{python3_sitelib}/examples
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-cloudflare -f %{pyproject_files}
 
 %changelog
 %autochangelog

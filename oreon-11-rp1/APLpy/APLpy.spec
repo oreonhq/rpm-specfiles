@@ -3,7 +3,7 @@
 %global srcname aplpy
 
 Name:           APLpy
-Version:        2.2.0
+Version:        2.2.1
 Release:        %autorelease
 Summary:        The Astronomical Plotting Library in Python
 

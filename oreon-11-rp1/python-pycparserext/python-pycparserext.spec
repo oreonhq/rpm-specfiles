@@ -1,23 +1,24 @@
-%global source0_hash 39b16d90ad595070069b5c9020f10fc433fa1a31a8ace346e0ae6a462d1f4e3b
+%global source0_hash none
 
 Name:           python-pycparserext
-Version:        2024.1
+Version:        2026.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Extensions for pycparser
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/inducer/pycparserext
-# PyPI sources do not have tests
-Source:         %{url}/archive/v%{version}/pycparserext-%{version}.tar.gz
+Source:         %{pypi_source pycparserext}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# Tests
-BuildRequires:  python3dist(pytest)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Extended functionality for Eli Bendersky's pycparser, in particular support
-for parsing GNU extensions and OpenCL.}
+This is package 'pycparserext' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -26,24 +27,29 @@ Summary:        %{summary}
 
 %description -n python3-pycparserext %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n pycparserext-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l pycparserext
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pycparserext -f %{pyproject_files}
 

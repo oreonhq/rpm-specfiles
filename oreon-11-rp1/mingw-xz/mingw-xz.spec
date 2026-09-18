@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-xz
-Version:        5.2.4
-Release:        16%{?dist}
+Version:        5.8.4
+Release:        1%{?dist}
 Summary:        Cross-compiled LZMA compression utilities
 
 # Scripts xz{grep,diff,less,more} and symlinks (copied from gzip) are

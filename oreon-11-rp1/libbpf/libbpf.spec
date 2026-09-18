@@ -2,9 +2,9 @@
 %global source1_hash 69467234c3c009952fea99dd057e5200160603c7e3e04ecb74458e29746e5b95
 
 %global githubname   libbpf
-%global githubver    1.6.3
+%global githubver    1.7.0
 %global githubfull   %{githubname}-%{githubver}
-%global libver       1.6.3
+%global libver       1.7.0
 
 %global usdtname     usdt
 %global usdtver      0.1.0
@@ -12,7 +12,7 @@
 
 Name:           %{githubname}
 Version:        %{githubver}
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Libbpf library
 
 License:        LGPL-2.1-only OR BSD-2-Clause

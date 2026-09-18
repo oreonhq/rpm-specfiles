@@ -11,7 +11,7 @@
 %global toolchain clang
 
 Name:           wlmaker
-Version:        0.7
+Version:        0.8.1
 Release:        %autorelease
 Summary:        Wayland compositor inspired by Window Maker
 

@@ -4,7 +4,7 @@
 
 Name:           apache-commons-io
 Epoch:          1
-Version:        2.20.0
+Version:        2.22.0
 Release:        %autorelease
 Summary:        Utilities to assist with developing IO functionality
 License:        Apache-2.0

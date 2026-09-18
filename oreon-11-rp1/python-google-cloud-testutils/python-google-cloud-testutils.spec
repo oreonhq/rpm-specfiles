@@ -1,73 +1,57 @@
-%global source0_hash dcdb08d97fd9e73203bab97d33216f9b69ca372e1e35ecd2a0f7c0a4332ca22c
+%global source0_hash none
 
-# tests are enabled by default
-%bcond_without tests
-
-%global         srcname     google-cloud-testutils
-%global         forgeurl    https://github.com/googleapis/python-test-utils
-Version:        1.4.0
-%global         tag         v%{version}
-%forgemeta
-
-Name:           python-%{srcname}
+Name:           python-google-cloud-testutils
+Version:        1.9.3
 Release:        %autorelease
-Summary:        Python test utilities for Google Cloud APIs
+# Fill in the actual package summary to submit package to Fedora
+Summary:        ...
 
-License:        Apache-2.0
-URL:            %forgeurl
-Source0:        %forgesource
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/googleapis/google-cloud-python/packages/google-cloud-testutils
+Source:         %{pypi_source google_cloud_testutils}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-google-auth
 
-%if %{with tests}
-BuildRequires:  python3dist(pytest)
-%endif
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is a collection of common tools used in system tests of Python client
-libraries for Google APIs.}
+This is package 'google-cloud-testutils' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-%{srcname}
-%py_provides    python3-test-utils
+%package -n     python3-google-cloud-testutils
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-google-cloud-testutils %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n google_cloud_testutils-%{version}
 
-%forgesetup
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files test_utils
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Remove extra scripts and tests.
-rm %{buildroot}%{_bindir}/lower-bound-checker
 
 %check
-%pyproject_check_import -e "tests*"
+%_pyproject_check_import_allow_no_modules -t
 
-%if %{with tests}
-# Lower bounds checking tests won't work since installing things via
-# pip is not going to work during RPM builds.
-%pytest --disable-warnings --ignore tests/unit/test_lower_bound_checker.py
-%endif
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst CHANGELOG.md CODE_OF_CONDUCT.md
-%license LICENSE
+%files -n python3-google-cloud-testutils -f %{pyproject_files}
+%{_bindir}/lower-bound-checker
 
 %changelog
 %autochangelog

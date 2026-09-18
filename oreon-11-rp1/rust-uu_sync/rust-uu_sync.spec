@@ -10,7 +10,7 @@
 %global crate uu_sync
 
 Name:           rust-uu_sync
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        sync ~ (uutils) synchronize cache writes to storage
 

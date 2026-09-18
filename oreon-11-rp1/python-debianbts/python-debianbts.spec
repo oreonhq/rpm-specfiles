@@ -1,68 +1,63 @@
-%global source0_hash 0cb11992c07629bc31cdb54c3a7c3f4c5d2a5096fbb01e06b12f68d35aaf5453
+%global source0_hash none
 
-%global rpmname debianbts
-%global pypi_name python-debianbts
+Name:           python-debianbts
+Version:        4.1.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python interface to Debian_s Bug Tracking System
 
-Name:           %{pypi_name}
-Version:        2.8.2
-Release:        23%{?dist}
-Summary:        Python interface to Debian's Bug Tracking System
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/venthur/python-debianbts
-Source0:        %{pypi_source}
-Source1:        https://raw.githubusercontent.com/venthur/python-debianbts/master/LICENSE
+Source:         %{pypi_source python_debianbts}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(flake8)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-cov)
-BuildRequires:  python3dist(setuptools)
 
-%description
-Python-debianbts is a Python library that allows for querying
-Debian's Bug Tracking System.
 
-%package -n     python3-%{rpmname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'python-debianbts' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-python-debianbts
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{rpmname}}
 
-Requires:       python3dist(mock)
-Requires:       python3dist(pysimplesoap)
-Requires:       python3dist(setuptools)
+%description -n python3-python-debianbts %_description
 
-%description -n python3-%{rpmname}
-python-debianbts is a Python library that allows for querying
-Debian's Bug Tracking System.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-python-debianbts dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n python_debianbts-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-for lib in debianbts/*.py; do
- sed -e '1{\@^#! /usr/bin/env python@d}' -e '1{\@^#!/usr/bin/env python@d}' \
-     -e '1{\@^#!/usr/bin/python@d}' $lib > $lib.new &&
- touch -r $lib $lib.new &&
- mv $lib.new $lib
-done
-cp -p %{SOURCE1} .
 
-# Remove bundled egg-info
-#rm -rf %{pypi_name}.egg-info
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{rpmname}
-%doc README.md
-%license LICENSE
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-python-debianbts -f %{pyproject_files}
 %{_bindir}/debianbts
-%{python3_sitelib}/debianbts
-%{python3_sitelib}/python_debianbts-%{version}-py%{python3_version}.egg-info
 
 %changelog
 %autochangelog

@@ -16,7 +16,7 @@
 %global api_version %{api_version_major}.%{api_version_minor}.%{api_version_patch}
 
 Name: janus
-Version: 1.3.3
+Version: 1.4.1
 Release: %autorelease
 Summary: An open source WebRTC server designed and developed by Meetecho
 

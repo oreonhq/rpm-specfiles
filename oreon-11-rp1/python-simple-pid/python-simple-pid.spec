@@ -1,52 +1,62 @@
-%global source0_hash b7649cb8912435ef4f2f4f997b10f2b85757bc9ee79d94c4fab33f9d3b84dd5b
+%global source0_hash none
 
-Name:		python-simple-pid
-Version:	2.0.0
-Release:	9%{?dist}
-Summary:	A PID (proportional–integral–derivative) controller in Python
+Name:           python-simple-pid
+Version:        2.0.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A simple, easy to use PID controller
 
-License:	MIT
-URL:		https://github.com/m-lundberg/simple-pid
-Source0:	%{pypi_source simple-pid}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/m-lundberg/simple-pid
+Source:         %{pypi_source simple_pid}
 
-BuildArch:	noarch
-BuildRequires:	python3-devel
-BuildRequires:	python3-pytest
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A simple and easy to use PID controller in Python. If you want a PID
-controller without external dependencies that just works, this is for you!
-The PID was designed to be robust with help from Brett Beauregards guide.}
+This is package 'simple-pid' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-simple-pid
-Summary:	A PID (proportional–integral–derivative) controller in Python
+%package -n     python3-simple-pid
+Summary:        %{summary}
 
 %description -n python3-simple-pid %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-simple-pid doc,examples,test
 
-%autosetup -p1 -n simple-pid-%{version}
+
+%prep
+%autosetup -p1 -n simple_pid-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,examples,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-simple-pid
-%license LICENSE.md
-%doc README.md
-%{python3_sitelib}/simple_pid/
-%{python3_sitelib}/simple_pid-%{version}.dist-info/
+
+%files -n python3-simple-pid -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,18 +1,24 @@
-%global source0_hash 6171d12403e0d9474c97c92db4b3ceaae86936edd967428eb15b7d610b31d4d1
+%global source0_hash none
 
 Name:           python-lxml-html-clean
-Version:        0.4.4
+Version:        0.4.5
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        HTML cleaner from lxml project
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://github.com/fedora-python/lxml_html_clean/
-Source:         %{url}/archive/refs/tags/%{version}.tar.gz
+URL:            https://lxml-html-clean.readthedocs.io/
+Source:         %{pypi_source lxml_html_clean}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-HTML cleaner from lxml project.}
+This is package 'lxml-html-clean' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -21,31 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-lxml-html-clean %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n lxml_html_clean-%{version}
-sed -i "/memory_profiler/d" tox.ini
-# This test requires newer version of libxml2
-# https://src.fedoraproject.org/rpms/libxml2/pull-request/16
-rm tests/test_clean.txt
-sed -i "s@tests/test_clean.txt@@" tox.ini
+
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l lxml_html_clean
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-lxml-html-clean -f %{pyproject_files}
-%doc CHANGES.rst README.md
 
 %changelog
 %autochangelog

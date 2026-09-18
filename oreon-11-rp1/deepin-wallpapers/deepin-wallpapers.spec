@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           deepin-wallpapers
-Version:        1.7.16
+Version:        1.8.3
 Release:        %autorelease
 Summary:        Deepin Wallpapers provides wallpapers of DDE
 License:        CC-BY-4.0

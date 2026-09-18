@@ -1,59 +1,57 @@
-%global source0_hash f2fdb5fb29615c77c2743e1cb3d9314353a6e87b10c37d238d91ae1c6feae086
+%global source0_hash none
 
 Name:           python-gnupg
-Version:        0.5.4
+Version:        2.3.1
 Release:        %autorelease
-Summary:        A wrapper for the Gnu Privacy Guard (GPG or GnuPG)
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Python wrapper for GnuPG
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://gnupg.readthedocs.io/
-Source0:        https://github.com/vsajip/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
-Source1:        https://github.com/vsajip/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz.asc
-# From keys.openpgp.org based on fingerprinted listed in setup.cfg
-Source2:        https://keys.openpgp.org/vks/v1/by-fingerprint/CA749061914EAC138E66EADB9147B477339A9B86
-# Add missing pyproject.toml and tox.ini (taken from github.com/vsajip/python-gnupg)
-Source3:        https://raw.githubusercontent.com/vsajip/python-gnupg/refs/tags/%{version}/tox.ini
-Source4:        https://raw.githubusercontent.com/vsajip/python-gnupg/refs/tags/%{version}/pyproject.toml
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-3.0-or-later
+URL:            https://github.com/isislovecruft/python-gnupg
+Source:         %{pypi_source gnupg}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-GnuPG bindings for python. This uses the gpg command.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'gnupg' generated automatically by pyp2spec.}
+
+%description %_description
 
 %package -n     python3-gnupg
-Summary:        A wrapper for the Gnu Privacy Guard (GPG or GnuPG)
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  gnupg2
-Requires:       gnupg
-%{?python_provide:%python_provide python3-gnupg}
+Summary:        %{summary}
 
-%description -n python3-gnupg
-GnuPG bindings for python. This uses the gpg command.
+%description -n python3-gnupg %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n gnupg-%{version}
 
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
-%autosetup -n %{name}-%{version}
-cp %{SOURCE3} %{SOURCE4} .
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files gnupg
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-gnupg -f %{pyproject_files}
-%doc README.rst
-%license LICENSE.txt
 
 %changelog
 %autochangelog

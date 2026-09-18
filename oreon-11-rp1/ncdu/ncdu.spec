@@ -1,8 +1,8 @@
 %global source0_hash e91135281cb66569f2ca4c0bac277246991e7e52524c0ca8cba3de5c8e81cec9
 
 Name:           ncdu
-Version:        2.9.2
-Release:        2%{?dist}
+Version:        2.11.1
+Release:        1%{?dist}
 Summary:        Text-based disk usage viewer
 
 License:        MIT

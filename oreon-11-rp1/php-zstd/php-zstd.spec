@@ -20,8 +20,8 @@
 
 Summary:       Zstandard extension
 Name:          php-%{pecl_name}
-Version:       0.15.2
-Release:       3%{?dist}
+Version:       0.18.0
+Release:       1%{?dist}
 License:       MIT
 URL:           https://pecl.php.net/package/%{pecl_name}
 Source0:       https://pecl.php.net/get/%{sources}.tgz

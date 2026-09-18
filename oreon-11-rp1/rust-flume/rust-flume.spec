@@ -7,7 +7,7 @@
 %global crate flume
 
 Name:           rust-flume
-Version:        0.11.1
+Version:        0.12.0
 Release:        %autorelease
 Summary:        Blazingly fast multi-producer channel
 

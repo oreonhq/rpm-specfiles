@@ -1,8 +1,8 @@
 %global source0_hash cb89a553ee202b0a941605072a857102376ae44b0ccd225e4fa0e0e0b9708bf0
 
 Name:           alglib
-Version:        4.07.0
-Release:        3%{?dist}
+Version:        4.08.0.solver
+Release:        1%{?dist}
 Summary:        A numerical analysis and data processing library
 
 License:        GPL-2.0-or-later

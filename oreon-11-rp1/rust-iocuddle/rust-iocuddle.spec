@@ -7,7 +7,7 @@
 %global crate iocuddle
 
 Name:           rust-iocuddle
-Version:        0.1.1
+Version:        0.3.0
 Release:        %autorelease
 Summary:        Library for building runtime-safe linux `ioctl()` interfaces
 

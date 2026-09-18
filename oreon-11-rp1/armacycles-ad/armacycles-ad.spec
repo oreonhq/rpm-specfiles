@@ -6,8 +6,8 @@
 %forgemeta
 
 Name: armacycles-ad
-Version: 0.2.9.2.5
-Release: 3%{?dist}
+Version: 0.2.9.3.0
+Release: 1%{?dist}
 Summary: A lightcycle game in 3D
 
 License: GPL-2.0-or-later

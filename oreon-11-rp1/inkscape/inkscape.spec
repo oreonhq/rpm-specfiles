@@ -26,7 +26,7 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:10})
 
 Name:           inkscape
-Version:        1.4.3
+Version:        1_4_4
 Release:        %autorelease
 Summary:        Vector-based drawing program using SVG
 

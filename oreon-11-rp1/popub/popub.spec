@@ -9,8 +9,8 @@
 %endif
 
 Name:    %{reponame}
-Version: 0
-Release: 0.28.%{commitdate}git%{shortcommit}%{?dist}
+Version: 5.0.1
+Release: 1.28.%{commitdate}git%{shortcommit}%{?dist}
 Summary: Publish a service from localhost onto your server
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License: GPL-3.0-or-later

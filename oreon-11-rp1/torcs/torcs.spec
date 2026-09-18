@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           torcs
-Version:        1.3.8
+Version:        1.3.9
 Release:        1%{?dist}
 Summary:        The Open Racing Car Simulator
 

@@ -7,7 +7,7 @@
 %global crate x509-cert
 
 Name:           rust-x509-cert
-Version:        0.2.5
+Version:        0.3.0
 Release:        %autorelease
 Summary:        Pure Rust implementation of the X.509 Public Key Infrastructure Certi...
 

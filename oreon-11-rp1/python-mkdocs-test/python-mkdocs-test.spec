@@ -1,28 +1,24 @@
-%global source0_hash f4f3463a3c80d4998917101d38a1dae62913b60ba8603ebc21440876c939d526
-
-%bcond tests 1
-%global forgeurl https://github.com/fralau/mkdocs-test
+%global source0_hash none
 
 Name:           python-mkdocs-test
-Version:        0.5.3
+Version:        0.6.0
 Release:        %autorelease
-Summary:        Test framework for MkDocs projects
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A test framework for MkDocs projects
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://mkdocs-test-plugin.readthedocs.io
-# PyPI tarball doesn't include test artifacts
-Source:         %{forgeurl}/archive/v%{version}/mkdocs-test-%{version}.tar.gz
+URL:            https://github.com/fralau/mkdocs-test
+Source:         %{pypi_source mkdocs_test}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-%if %{with tests}
-BuildRequires:  mkdocs
-BuildRequires:  python3dist(pyyaml)
-BuildRequires:  python3dist(super-collections)
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package provides a framework for testing MkDocs projects.}
+This is package 'mkdocs-test' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -31,34 +27,36 @@ Summary:        %{summary}
 
 %description -n python3-mkdocs-test %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-mkdocs-test doc,test
 
-%autosetup -p1 -n mkdocs-test-%{version}
+
+%prep
+%autosetup -p1 -n mkdocs_test-%{version}
+
 
 %generate_buildrequires
-%if %{with tests}
-%pyproject_buildrequires -x test
-%else
-%pyproject_buildrequires
-%endif
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l mkdocs_test
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-%pytest -v
-%else
-%pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-mkdocs-test -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

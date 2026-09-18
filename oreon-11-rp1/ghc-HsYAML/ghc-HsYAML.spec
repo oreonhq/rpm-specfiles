@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        0.2.1.5
+Version:        0.2.1.6
 Release:        %autorelease
 Summary:        Pure Haskell YAML 1.2 processor
 

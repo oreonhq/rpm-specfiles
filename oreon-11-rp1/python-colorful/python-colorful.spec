@@ -1,45 +1,57 @@
-%global source0_hash c5452179b56601c178b03d468a5326cc1fe37d9be81d24d0d6bdab36c4b93ad8
+%global source0_hash none
 
 Name:           python-colorful
-Version:        0.5.7
+Version:        0.5.8
 Release:        %autorelease
-Summary:        Terminal string styling done right
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Terminal string styling done right, in Python.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/timofurrer/colorful
+URL:            http://github.com/timofurrer/colorful
 Source:         %{pypi_source colorful}
+
 BuildArch:      noarch
-
-%description
-%{summary}.
-
-%package -n python3-colorful
-Summary:        %{summary}
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
-%description -n python3-colorful
-%{summary}.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'colorful' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-colorful
+Summary:        %{summary}
+
+%description -n python3-colorful %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n colorful-%{version}
 
-%autosetup -n colorful-%{version} -p 1
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l colorful
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest --verbose tests
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-colorful -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

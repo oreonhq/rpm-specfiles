@@ -1,68 +1,64 @@
-%global source0_hash fff37d87bef44d117bc3060c25ac2d4d1f241d6c8b683c256044f841712e12a5
-
-# mailman3's TestableMaster can't be used outside of a
-# source checkout?
-%bcond_with tests
+%global source0_hash none
 
 Name:           python-postorius
-Version:        1.3.12
+Version:        1.3.13
 Release:        %autorelease
-Summary:        Web UI for GNU Mailman
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A web user interface for GNU Mailman
 
-License:        GPL-3.0-or-later
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://gitlab.com/mailman/postorius
 Source:         %{pypi_source postorius}
-# don't ship examples, they end up in sitelib
-Patch:          postorius-dont-ship-examples.diff
-# allow Django 5.2, for Python 3.14 compatibility
-Patch:          postorius-django52.diff
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The Postorius Django app provides a web user interface to access GNU Mailman.}
+This is package 'postorius' generated automatically by pyp2spec.}
 
-%description %{_description}
+Patch:          postorius-dont-ship-examples.diff
+Patch:          postorius-django52.diff
 
-%package -n postorius
+%description %_description
+
+%package -n     python3-postorius
 Summary:        %{summary}
 
-%description -n postorius %{_description}
+%description -n python3-postorius %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-postorius test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n postorius-%{version}
 
+
 %generate_buildrequires
-%if %{with tests}
-%pyproject_buildrequires -t
-%else
-%pyproject_buildrequires
-%endif
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files postorius
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# this requires the Django app to be set up first
-# export DJANGO_SETTINGS_MODULE=postorius.doc.settings
-# %%pyproject_check_import
-%if %{with tests}
-PYTHONPATH=$(pwd)/src:${PYTHONPATH} \
-%tox
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n postorius -f %{pyproject_files}
-%license COPYING
-%doc README.rst
+
+%files -n python3-postorius -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -3,7 +3,7 @@
 %global forgeurl https://github.com/WayfireWM/wcm
 
 Name:           wayfire-config-manager
-Version:        0.10.0
+Version:        0.11.0
 %forgemeta
 Release:        %autorelease
 Summary:        Wayfire Config Manager
@@ -19,10 +19,10 @@ BuildRequires:  meson
 BuildRequires:  pkgconfig(gtk+-3.0)
 BuildRequires:  pkgconfig(gtkmm-3.0)
 BuildRequires:  pkgconfig(libxml-2.0)
-BuildRequires:  pkgconfig(wayfire) >= 0.10.0
+BuildRequires:  pkgconfig(wayfire) >= 0.11.0
 BuildRequires:  pkgconfig(wayland-protocols)
-BuildRequires:  pkgconfig(wf-config) >= 0.10.0
-BuildRequires:  pkgconfig(wf-shell) >= 0.10.0
+BuildRequires:  pkgconfig(wf-config) >= 0.11.0
+BuildRequires:  pkgconfig(wf-shell) >= 0.11.0
 Requires:       hicolor-icon-theme
 
 %description

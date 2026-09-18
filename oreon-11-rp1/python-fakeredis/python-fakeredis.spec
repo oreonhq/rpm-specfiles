@@ -1,37 +1,26 @@
-%global source0_hash 72bc51a7ab39bedf5004f0cf1b5206822619c1be8c2657fd878d1f4250256c57
-
-%global extras json,lua,valkey
+%global source0_hash none
 
 Name:           python-fakeredis
-Version:        2.34.0
+Version:        2.38.0
 Release:        %autorelease
-Summary:        A python implementation of Redis Protocol API
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python implementation of redis API, can be used for testing purposes.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/cunla/fakeredis-py
 Source:         %{pypi_source fakeredis}
 
-# The `lupa` library ships with bundled lua versions in upstream, which, makes
-# this code work as-is, but in our downstream versions of `python3-lupa`, we
-# are packaging it without any lua source (--no-bundle), in that case, neither
-# lupa or fakeredis have a way to indicate the location of lua sources when
-# installed on the system. This patch aims to use `lupa.LuaRuntime()` directly,
-# as it correctly picks the LuaJIT and Lua 5.1 that is installed alongside with
-# python3-lupa.
-Patch:          patch-script-mixing-to-use-luaruntime-directly.diff
-
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# Test dependencies
-BuildRequires:  python3-pytest
-BuildRequires:  python3-pytest-asyncio
-BuildRequires:  python3-hypothesis
-BuildRequires:  python3-valkey
-BuildRequires:  valkey
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Implementation of Redis API in python without having a server running. Fully
-compatible with using redis-py.}
+This is package 'fakeredis' generated automatically by pyp2spec.}
+
+Patch:          patch-script-mixing-to-use-luaruntime-directly.diff
 
 %description %_description
 
@@ -40,44 +29,36 @@ Summary:        %{summary}
 
 %description -n python3-fakeredis %_description
 
-%pyproject_extras_subpkg -n python3-fakeredis %{extras}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-fakeredis bf,cf,json,lua,probabilistic,valkey,vectorset
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n fakeredis-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires -x %{extras}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x bf,cf,json,lua,probabilistic,valkey,vectorset
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l fakeredis
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%{_bindir}/valkey-server --bind 127.0.0.1 --port 6390 &
-VALKEY_SERVER_PID=$!
-# Skip the failing tests or missing dependencies ones.
-%pytest \
-    --ignore=test/test_mixins/test_redis_8_4.py \
-    --ignore=test/test_json \
-    --ignore=test/test_mixins \
-    --ignore=test/test_asyncredis.py \
-    --ignore=test/test_hypothesis/test_hash.py \
-    --ignore=test/test_hypothesis/test_transaction.py \
-    --ignore=test/test_hypothesis/test_zset.py \
-    --ignore=test/test_hypothesis_joint.py \
-    -m "not tcp_server"
-kill $VALKEY_SERVER_PID
 
 %files -n python3-fakeredis -f %{pyproject_files}
-%license LICENSE
-%doc README.md
 
 %changelog
 %autochangelog

@@ -1,7 +1,7 @@
 %global source0_hash 3d188b0c1cda84dfa11ef9e6bbf4cb5b509ba68555bd6e4d8d7224ddd1112880
 
 Name:           kicad
-Version:        10.0.0
+Version:        10.0.6
 Release:        1%{?dist}
 Epoch:          1
 Summary:        EDA software suite for creation of schematic diagrams and PCBs
@@ -80,7 +80,7 @@ diagrams and printed circuit board artwork of up to
 Summary:        3D Models for KiCad
 License:        CC-BY-SA-4.0
 BuildArch:      noarch
-Requires:       kicad >= 10.0.0
+Requires:       kicad >= 10.0.6
 
 %description    packages3d
 3D Models for KiCad.

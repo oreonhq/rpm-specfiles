@@ -7,7 +7,7 @@
 %global crate delharc
 
 Name:           rust-delharc
-Version:        0.6.1
+Version:        0.8.0
 Release:        %autorelease
 Summary:        Library for parsing and extracting files from LHA/LZH archives
 

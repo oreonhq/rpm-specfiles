@@ -13,8 +13,8 @@
 
 Summary: The exim mail transfer agent
 Name: exim
-Version: 4.99.1
-Release: 3%{?dist}
+Version: 4.100
+Release: 1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 Url: https://www.exim.org/

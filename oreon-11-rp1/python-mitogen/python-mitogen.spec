@@ -1,80 +1,57 @@
-%global source0_hash dd0d6f0046e53409325cec43e7fa727b62f48dd09c4a2c06586886aa8fdb12ba
+%global source0_hash none
 
-# what it's called on pypi
-%global srcname mitogen
-# what it's imported as
-%global libname %{srcname}
-# name of egg info directory
-%global eggname %{srcname}
-# package name fragment
-%global pkgname %{srcname}
+Name:           python-mitogen
+Version:        0.3.53
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Library for writing distributed self-replicating programs.
 
-Name:           python-%{pkgname}
-Version:        0.3.29
-Release:        2%{?dist}
-Summary:        Distributed self-replicating programs in Python
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://github.com/mitogen-hq/mitogen/
+Source:         %{pypi_source mitogen}
 
-License:        LicenseRef-Callaway-BSD
-URL:            https://github.com/dw/mitogen
-Source0:        %pypi_source
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%global common_description %{expand:
-Mitogen is a Python library for writing distributed self-replicating programs.
 
-There is no requirement for installing packages, copying files around, writing
-shell snippets, upfront configuration, or providing any secondary link to a
-remote machine aside from an SSH connection. Due to its origins for use in
-managing potentially damaged infrastructure, the remote machine need not even
-have free disk space or a writeable filesystem.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'mitogen' generated automatically by pyp2spec.}
 
-It is not intended as a generic RPC framework; the goal is to provide a robust
-and efficient low-level API on which tools like Salt, Ansible, or Fabric can be
-built, and while the API is quite friendly and comparable to Fabric, ultimately
-it is not intended for direct use by consumer software.
+%description %_description
 
-The focus is to centralize and perfect the intricate dance required to run
-Python code safely and efficiently on a remote machine, while avoiding
-temporary files or large chunks of error-prone shell scripts, and supporting
-common privilege escalation techniques like sudo, potentially in combination
-with exotic connection methods such as WMI, telnet, or console-over-IPMI.}
-
-%description %{common_description}
-
-%package -n python%{python3_pkgversion}-%{pkgname}
+%package -n     python3-mitogen
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
 
-%description -n python%{python3_pkgversion}-%{pkgname} %{common_description}
+%description -n python3-mitogen %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n mitogen-%{version}
 
-%autosetup -n %{srcname}-%{version} -p 1
-# No compat support needed
-rm -r mitogen/compat ansible_mitogen/compat
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files -l %{srcname}
 
 %check
-# tests/README.md says the tests need:
-#    - internet connection
-#    - working docker daemon
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{pkgname} -f %{pyproject_files}
-%license LICENSE
-%doc README.md
-%{python3_sitelib}/ansible_%{libname}
+
+%files -n python3-mitogen -f %{pyproject_files}
 
 %changelog
 %autochangelog

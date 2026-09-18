@@ -7,7 +7,7 @@
 %global crate tracy-client-sys
 
 Name:           rust-tracy-client-sys
-Version:        0.28.0
+Version:        0.30.0
 Release:        %autorelease
 Summary:        Low level bindings to the client libraries for the Tracy profiler
 

@@ -1,65 +1,62 @@
-%global source0_hash a0249afacb66688ef258ffe503528360443e2b9a8d8c4581b6ebefa58c841ef1
-
-%bcond tests 1
+%global source0_hash none
 
 Name:           python-asgiref
-Version:        3.9.2
+Version:        3.12.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        ASGI specs, helper code, and adapters
-# main source code is BSD-3-Clause
-# bundled async-timeout is Apache-2.0
-License:        BSD-3-Clause AND Apache-2.0
-BuildArch:      noarch
-URL:            https://github.com/django/asgiref
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://asgi.readthedocs.io/
 Source:         %{pypi_source asgiref}
+
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%global _description %{expand:
-ASGI is a standard for Python asynchronous web apps and servers to communicate
-with each other, and positioned as an asynchronous successor to WSGI.  This
-package includes ASGI base libraries, such as:
 
-* Sync-to-async and async-to-sync function wrappers, asgiref.sync
-* Server base classes, asgiref.server
-* A WSGI-to-ASGI adapter, in asgiref.wsgi}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'asgiref' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-asgiref
+%package -n     python3-asgiref
 Summary:        %{summary}
-# https://github.com/django/asgiref/commit/9c6df6e02700092eb19adefff3552d44388f69b8
-# This code is modified and probably cannot be unvendored.
-Provides:       bundled(python3dist(async-timeout)) == 3.0.1
 
 %description -n python3-asgiref %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-asgiref mypy,tests
+
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n asgiref-%{version}
 
-%autosetup -n asgiref-%{version}
-
-# avoid additional mypy build requirement
-sed '/^\s*mypy\s*>=/d' -i setup.cfg
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-x tests}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x mypy,tests
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l asgiref
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-%pytest --verbose
-%else
-%pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-asgiref -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

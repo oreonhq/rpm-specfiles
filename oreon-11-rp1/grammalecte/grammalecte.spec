@@ -18,8 +18,8 @@ n'est pas possible de déterminer avec de fortes chances qu'une suite de mots
 douteuse est erronée, le correcteur ne signalera rien.}
 
 Name:           grammalecte
-Version:        2.3.0
-Release:        2%{?dist}
+Version:        7.7
+Release:        1%{?dist}
 Summary:        French grammar checker
 Summary(fr):    Correcteur grammatical dédié à la langue française
 

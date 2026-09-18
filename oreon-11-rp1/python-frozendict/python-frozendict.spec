@@ -1,51 +1,56 @@
-%global source0_hash df7cd16470fbd26fc4969a208efadc46319334eb97def1ddf48919b351192b8e
+%global source0_hash none
 
-%{?python_enable_dependency_generator}
-%global srcname frozendict
-
-Name:           python-%{srcname}
-Version:        2.4.6
+Name:           python-frozendict
+Version:        2.4.7
 Release:        %autorelease
-Summary:        An immutable dictionary
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A simple immutable dictionary
 
-License:        MIT
-URL:            https://pypi.python.org/pypi/frozendict
-Source0:        %{pypi_source}
-BuildArch:      noarch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/Marco-Sulla/python-frozendict
+Source:         %{pypi_source frozendict}
 
-%global _description %{expand:
-frozendict is an immutable wrapper around dictionaries that implements
-the complete mapping interface. It can be used as a drop-in
-replacement for dictionaries where immutability is desired.}
-
-%description %{_description}
-
-%package -n python3-%{srcname}
-Summary:        %{summary}
 BuildRequires:  python3-devel
+BuildRequires:  gcc
 
-%description -n python3-%{srcname} %{_description}
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'frozendict' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-frozendict
+Summary:        %{summary}
+
+%description -n python3-frozendict %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n frozendict-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
-# Build the python only version (no python 3.11 support)
-export FROZENDICT_PURE_PY=1
 %pyproject_wheel
 
-%install
-export FROZENDICT_PURE_PY=1
-%pyproject_install
-%pyproject_save_files -l %{srcname}
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-frozendict -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,64 +1,66 @@
-%global source0_hash a2181bff01eeb84479e38571d2c0718eb52042f9afd8c194d0d02877e84b7d74
+%global source0_hash none
 
-%global modname SQLAlchemy-Utils
+Name:           python-sqlalchemy-utils
+Version:        0.42.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Various utility functions for SQLAlchemy.
 
-Name:               python-sqlalchemy-utils
-Version:            0.41.1
-Release:            14%{?dist}
-Summary:            Various utility functions for SQLAlchemy
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://github.com/kvesteri/sqlalchemy-utils
+Source:         %{pypi_source sqlalchemy_utils}
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:            LicenseRef-Callaway-BSD
-URL:                http://pypi.python.org/pypi/SQLAlchemy-Utils
-Source0:            %{pypi_source SQLAlchemy-Utils}
-# Omit test on unpackaged python-psycopg2cffi
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sqlalchemy-utils' generated automatically by pyp2spec.}
+
 Patch0:             no-psycopg2cffi.patch
 Patch1:             python-sqlalchemy-utils-0.41.1-no-pyodbc-dep.patch
-# This can be removed with version >= 0.42.2
 Patch2:             python-sqlalchemy-utils-0.41.1-nosqla2.patch
 
-BuildArch:          noarch
+%description %_description
 
-BuildRequires:      python3-devel
-BuildRequires:      python3-pytest
-# For tests
-BuildRequires:      python3-colour
-BuildRequires:      python3-phonenumbers
+%package -n     python3-sqlalchemy-utils
+Summary:        %{summary}
 
-%description
-Various utility functions and custom data types for SQLAlchemy.
+%description -n python3-sqlalchemy-utils %_description
 
-%package -n         python3-sqlalchemy-utils
-Summary:            Various utility functions for SQLAlchemy
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sqlalchemy-utils arrow,babel,color,encrypted,intervals,password,pendulum,phone,test,test-all,timezone,url
 
-%description -n python3-sqlalchemy-utils
-Various utility functions and custom data types for SQLAlchemy.
-
-%generate_buildrequires
-%pyproject_buildrequires -x test
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sqlalchemy_utils-%{version}
 
-%autosetup -p1 -n %{modname}-%{version}
 
-# Remove bundled egg-info in case it exists
-rm -rf %{modname}.egg-info
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x arrow,babel,color,encrypted,intervals,password,pendulum,phone,test,test-all,timezone,url
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files sqlalchemy_utils
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Tons of test failures, not sure they are meant to be run like this?
-%pytest || :
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-sqlalchemy-utils -f %{pyproject_files}
-%doc README.rst
-%license LICENSE
 
 %changelog
 %autochangelog

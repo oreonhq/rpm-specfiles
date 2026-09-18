@@ -7,7 +7,7 @@ ExclusiveArch: %{ocaml_native_compiler}
 %undefine _auto_set_build_flags
 
 Name:           frama-c
-Version:        32.1
+Version:        33.0
 Release:        %autorelease
 Summary:        Framework for source code analysis of C software
 

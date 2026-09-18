@@ -1,99 +1,59 @@
-%global source0_hash 890aa0a07dd9a0a0bea52f6036441df3d6180bd997d7fdf97e9fcbc7dec200cc
+%global source0_hash none
 
-# Created by pyp2rpm-3.3.2
-
-%global srcname flask-caching
-
-Name:           python-%{srcname}
-Version:        2.3.1
+Name:           python-flask-caching
+Version:        2.5.1
 Release:        %autorelease
-Summary:        Adds caching support to your Flask application
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Adds caching support to Flask applications.
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://github.com/sh4nks/flask-caching
-Source0:        https://github.com/sh4nks/%{srcname}/archive/v%{version}/%{srcname}-v%{version}.tar.gz
-
-# Update intersphinx_mapping for Sphinx 8 compatibility
-# https://github.com/pallets-eco/flask-caching/pull/599/commits/3c8df1714292549d2fe27fa4a03110657fd647a3
-#
-# Fixes:
-#
-# The intersphinx_mapping in docs/conf.py is incompatible with Sphinx 8
-# https://github.com/pallets-eco/flask-caching/issues/598
-#
-# python-flask-caching fails to build with sphinx 8.x: ERROR: Invalid value
-# `None` in intersphinx_mapping['https://docs.python.org/3/'].
-# https://bugzilla.redhat.com/show_bug.cgi?id=2329857
-#
-# python-flask-caching: FTBFS in Fedora rawhide/f42
-# https://bugzilla.redhat.com/show_bug.cgi?id=2341153
-Patch:          https://github.com/pallets-eco/flask-caching/pull/599/commits/3c8df1714292549d2fe27fa4a03110657fd647a3.patch
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://github.com/pallets-eco/flask-caching
+Source:         %{pypi_source flask_caching}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(asgiref)
-BuildRequires:  python3dist(cachelib)
-BuildRequires:  python3dist(flask)
-BuildRequires:  python3dist(pylibmc)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-cov)
-BuildRequires:  python3dist(pytest-xprocess)
-BuildRequires:  python3dist(pytest-asyncio)
-BuildRequires:  python3dist(redis)
-BuildRequires:  redis
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(sphinx)
 
-%description
-Flask-Caching Adds easy cache support to Flask
 
-%package -n     python3-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'flask-caching' generated automatically by pyp2spec.}
+
+Patch:          https://github.com/pallets-eco/flask-caching/pull/599/commits/3c8df1714292549d2fe27fa4a03110657fd647a3.patch
+
+%description %_description
+
+%package -n     python3-flask-caching
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
 
-Requires:       python3dist(flask)
-%description -n python3-%{srcname}
-Flask-Caching Adds easy cache support to Flask
+%description -n python3-flask-caching %_description
 
-%package -n python-%{srcname}-doc
-Summary:        Flask-Caching documentation
-%description -n python-%{srcname}-doc
-Documentation for Flask-Caching
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n flask_caching-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
-# Remove bundled egg-info
-rm -rf %{srcname}.egg-info
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
-# generate html docs
-PYTHONPATH=${PWD} sphinx-build-3 docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-redis-server &
-%pytest
-kill %1
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname}
-%license LICENSE docs/license.rst
-%doc README.rst
-%{python3_sitelib}/flask_caching
-%{python3_sitelib}/Flask_Caching-%{version}-py%{python3_version}.egg-info
 
-%files -n python-%{srcname}-doc
-%doc html
-%license LICENSE docs/license.rst
+%files -n python3-flask-caching -f %{pyproject_files}
 
 %changelog
 %autochangelog

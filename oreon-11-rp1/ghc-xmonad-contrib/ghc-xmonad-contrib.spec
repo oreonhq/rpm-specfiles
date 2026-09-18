@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        0.18.1
+Version:        0.18.2
 Release:        %autorelease
 Summary:        Community-maintained extensions for xmonad
 

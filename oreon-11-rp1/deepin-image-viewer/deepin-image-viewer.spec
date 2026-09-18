@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           deepin-image-viewer
-Version:        5.8.2
+Version:        6.0.48
 Release:        %autorelease
 Summary:        Deepin Image Viewer
 # Automatically converted from old format: GPLv3 - review is highly recommended.

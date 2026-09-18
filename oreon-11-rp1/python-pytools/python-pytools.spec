@@ -1,69 +1,62 @@
-%global source0_hash cc2db25666aa64094d3fb4532aa8a7deaa2da8edd7340fb270ed1807dcc75202
+%global source0_hash none
 
-%global srcname pytools
-
-Name:           python-%{srcname}
-Version:        2024.1.3
+Name:           python-pytools
+Version:        2026.1.1
 Release:        %autorelease
-Summary:        Collection of tools for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A collection of tools for Python
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pypi.python.org/pypi/pytools
-Source0:        %{pypi_source}
+URL:            https://github.com/inducer/pytools/
+Source:         %{pypi_source pytools}
 
 BuildArch:      noarch
-
-%global _description \
-Pytools is a big bag of things that are "missing" from the Python standard\
-library. This is mainly a dependency of my other software packages, and is\
-probably of little interest to you unless you use those. If you're curious\
-nonetheless, here's what's on offer:\
-\
-  * A ton of small tool functions such as `len_iterable`, `argmin`,\
-    tuple generation, permutation generation, ASCII table pretty printing,\
-    GvR's mokeypatch_xxx() hack, the elusive `flatten`, and much more.\
-  * Michele Simionato's decorator module\
-  * A time-series logging module, `pytools.log`.\
-  * Batch job submission, `pytools.batchjob`.\
-  * A lexer, `pytools.lex`.
-
-%description %{_description}
-
-%package -n python3-%{srcname}
-Summary:        %{summary}
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-pytest
-BuildRequires:  python3dist(decorator)
-BuildRequires:  python3dist(appdirs)
-BuildRequires:  python3dist(numpy)
-BuildRequires:  python3dist(typing-extensions)
-BuildRequires:  python3dist(platformdirs)
 
-%description -n python3-%{srcname} %{_description}
 
-Python 3 version.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pytools' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-pytools
+Summary:        %{summary}
+
+%description -n python3-pytools %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pytools numpy,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytools-%{version}
 
-%autosetup -n %{srcname}-%{version}
-rm -vrf *.egg-info
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x numpy,test
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname}
-%license LICENSE
-%doc README.rst PKG-INFO
-%{python3_sitelib}/%{srcname}-*.egg-info/
-%{python3_sitelib}/%{srcname}/
+
+%files -n python3-pytools -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,7 +1,7 @@
 %global source0_hash 53a12e39feef56c812f6dd452cad875c0b14b16952108c9aa4f7651462c09574
 
 Name:           deepin-gtk-theme
-Version:        23.11.23
+Version:        25.3.7
 Release:        %autorelease
 Summary:        Deepin GTK Theme
 License:        GPL-3.0-or-later

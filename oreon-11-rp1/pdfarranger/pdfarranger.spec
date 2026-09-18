@@ -1,7 +1,7 @@
 %global source0_hash 0f5f642b6a5c8f07159aa75919106ac13a62c638c7613373f469dcc3bfb88dfe
 
 Name:           pdfarranger
-Version:        1.13.0
+Version:        1.14.0
 Release:        %autorelease
 Summary:        PDF file merging, rearranging, and splitting
 

@@ -3,8 +3,8 @@
 %global cardsets_minimal_ver 3.0.0
 
 Name:           PySolFC
-Version:        3.4.0
-Release:        7%{?dist}
+Version:        3.6.1
+Release:        1%{?dist}
 Summary:        A collection of solitaire card games
 License:        GPL-2.0-or-later
 URL:            https://pysolfc.sourceforge.io

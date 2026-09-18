@@ -6,7 +6,7 @@
 %global crate varlink-cli
 
 Name:           rust-varlink-cli
-Version:        4.5.3
+Version:        5.0.0
 Release:        %autorelease
 Summary:        Varlink command line tool
 

@@ -25,8 +25,8 @@
 %global ns_project   Invoker
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        4.0.0
-Release:        9%{?dist}
+Version:        5.0.0
+Release:        1%{?dist}
 Summary:        Invoke callables with a timeout, version %{major}
 
 License:        BSD-3-Clause
@@ -49,7 +49,7 @@ BuildRequires:  phpunit10
 # From composer.json, require
 #        "php": ">=8.1",
 Requires:       php(language) >= 8.1
-# From phpcompatinfo report for version 4.0.0
+# From phpcompatinfo report for version 5.0.0
 Requires:       php-pcntl
 Requires:       php-spl
 # Autoloader

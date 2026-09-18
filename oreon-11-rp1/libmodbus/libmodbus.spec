@@ -1,7 +1,7 @@
 %global source0_hash 2f4d4191cd196c1fba131daec03b621db75129d8255c832fc66b259d9fc46e7b
 
 Name: libmodbus
-Version: 3.1.12
+Version: 3.2.0
 Release: 1%{?dist}
 Summary: A Modbus library
 License: LGPL-2.1-or-later

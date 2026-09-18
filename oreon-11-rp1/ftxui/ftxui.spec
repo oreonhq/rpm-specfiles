@@ -1,7 +1,7 @@
 %global source0_hash 45819c1e54914783d4a1ca5633885035d74146778a1f74e1213cdb7b76340e71
 
 %global forgeurl https://github.com/ArthurSonzogni/FTXUI
-Version:        6.1.9
+Version:        7.0.3
 %forgemeta
 
 Name:           ftxui

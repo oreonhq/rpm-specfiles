@@ -7,7 +7,7 @@
 
 Name:           mingw-python-%{mod_name}
 Summary:        MinGW Python %{pypi_name} library
-Version:        12.18.0
+Version:        12.19.0
 Release:        1%{?dist}
 BuildArch:      noarch
 

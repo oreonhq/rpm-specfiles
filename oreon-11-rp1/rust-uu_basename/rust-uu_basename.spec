@@ -10,7 +10,7 @@
 %global crate uu_basename
 
 Name:           rust-uu_basename
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        basename ~ (uutils) display PATHNAME with leading directory components removed
 

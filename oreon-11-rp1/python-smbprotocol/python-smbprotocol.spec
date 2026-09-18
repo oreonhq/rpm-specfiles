@@ -1,67 +1,62 @@
-%global source0_hash af81861d2dc4698c49e3d965348c240f711a6d9dba4b0d1e15bd299ec2480d88
+%global source0_hash none
 
-%global pypi_name smbprotocol
-
-Name:           python-%{pypi_name}
-Version:        1.15.0
-Release:        4%{?dist}
+Name:           python-smbprotocol
+Version:        1.17.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Interact with a server using the SMB 2/3 Protocol
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/jborean93/smbprotocol
-Source0:        %{url}/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source smbprotocol}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-SMB is a network file sharing protocol and has numerous iterations
-over the years. This library implements the SMBv2 and SMBv3 protocol
-based on the MS-SMB2 document.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'smbprotocol' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-smbprotocol
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(cryptography)
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-cov)
-BuildRequires:  python3dist(pyspnego)
-%{?python_provide:%python_provide python3-%{pypi_name}}
+%description -n python3-smbprotocol %_description
 
-%description -n python3-%{pypi_name}
-SMB is a network file sharing protocol and has numerous iterations
-over the years. This library implements the SMBv2 and SMBv3 protocol
-based on the MS-SMB2 document.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-smbprotocol kerberos
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n smbprotocol-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x kerberos
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest -v tests \
-  -k "not reset_connection \
-  and not config_domain \
-  and not message \
-  and not dfs"
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}  -f %{pyproject_files}
-%license LICENSE
-%doc README.md
-%{python3_sitelib}/smbclient/
+
+%files -n python3-smbprotocol -f %{pyproject_files}
 
 %changelog
 %autochangelog

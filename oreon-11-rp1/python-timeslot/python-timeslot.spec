@@ -1,65 +1,57 @@
-%global source0_hash c7a178a0ac0f1f4e753d2d6bac47e863987933f23485dd946ca38de2324c435e
+%global source0_hash none
 
-%global srcname timeslot
-%global commit af35445e96cbb2f3fb671a75aac6aa93e4e7e7a6
-%global short_commit %(c=%{commit}; echo ${c:0:7})
-
-Name:           python-%{srcname}
-Version:        0.1.2^20240509.%{short_commit}
+Name:           python-timeslot
+Version:        0.1.2
 Release:        %autorelease
-Summary:        Class for working with time slots that have an arbitrary start and end
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Data type for representing time slots with a start and end.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/ErikBjare/%{srcname}
-Source:         %{url}/archive/%{commit}/%{srcname}-%{short_commit}.tar.gz
+URL:            https://github.com/ErikBjare/timeslot
+Source:         %{pypi_source timeslot}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Completes the Python datetime module: datetime (a time), time delta
-(a duration), timezone (an offset), timeslot (a range/interval).
+This is package 'timeslot' generated automatically by pyp2spec.}
 
-Supports operations such as: overlaps, intersects, contains, intersection,
-adjacent, gap, union.
+%description %_description
 
-Initially developed as part of aw-core, and inspired by a similar library for
-.NET.
-
-You might also be interested in pandas.Interval.}
-
-%description %{_description}
-
-%package -n python3-%{srcname}
+%package -n     python3-timeslot
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-timeslot %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n timeslot-%{version}
 
-%autosetup -n %{srcname}-%{commit}
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-sed -ri '/^[[:blank:]]*pytest-cov\b/d' pyproject.toml
-sed -ri '/--cov=timeslot/d' pyproject.toml
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
-%license LICENSE
+
+%files -n python3-timeslot -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -7,7 +7,7 @@
 %global crate libglycin-gtk4-rebind-sys
 
 Name:           rust-libglycin-gtk4-rebind-sys
-Version:        0.1.0
+Version:        0.2.0
 Release:        %autorelease
 Summary:        FFI bindings for libglycin-gtk4
 

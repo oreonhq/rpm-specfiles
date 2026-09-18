@@ -1,101 +1,62 @@
-%global source0_hash ad8c70e6e3f8926cb8a92619b832b4ea5299e2831c14284663184e200546fa6c
+%global source0_hash none
 
-%if 0%{?fedora} || 0%{?rhel} > 7
-# Enable python3 build by default
-%bcond_without python3
-# Disable python2 build by default
-%bcond_with python2
-%else
-%bcond_with python3
-%bcond_without python2
-%endif
+Name:           python-docker
+Version:        7.2.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Python library for the Docker Engine API.
 
-%global srcname docker
-
-Name:           python-%{srcname}
-Version:        7.1.0
-Release:        10%{?dist}
-Summary:        A Python library for the Docker Engine API
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://pypi.org/project/%{srcname}
-Source0:        https://files.pythonhosted.org/packages/source/d/%{srcname}/%{srcname}-%{version}.tar.gz
+URL:            https://github.com/docker/docker-py
+Source:         %{pypi_source docker}
 
 BuildArch:      noarch
-
-%description
-It lets you do anything the docker command does, but from within Python apps –
-run containers, manage containers, manage Swarms, etc.
-
-%if %{with python2}
-%package -n python2-%{srcname}
-Summary:        A Python library for the Docker Engine API
-%{?python_provide:%python_provide python2-%{srcname}}
-
-BuildRequires:  python2-devel
-BuildRequires:  python%{?fedora:2}-setuptools
-Obsoletes:      python-docker-py < 1:2
-
-%description -n python2-%{srcname}
-It lets you do anything the docker command does, but from within Python apps –
-run containers, manage containers, manage Swarms, etc.
-%endif # with python2
-
-%if %{with python3}
-%package -n python3-%{srcname}
-Summary:        A Python library for the Docker Engine API
-%{?python_provide:%python_provide python3-%{srcname}}
-
 BuildRequires:  python3-devel
-Obsoletes:      python3-docker-py < 1:2
 
-%description -n python3-%{srcname}
-It lets you do anything the docker command does, but from within Python apps –
-run containers, manage containers, manage Swarms, etc.
-%endif # with_python3
 
-%{?python_extras_subpkg:%python_extras_subpkg -n python3-%{srcname} -i %{python3_sitelib}/*.dist-info ssh}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'docker' generated automatically by pyp2spec.}
 
-%generate_buildrequires
-%pyproject_buildrequires
+%description %_description
+
+%package -n     python3-docker
+Summary:        %{summary}
+
+%description -n python3-docker %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-docker dev,docs,ssh,tls,websockets
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n docker-%{version}
 
-%autosetup -n %{srcname}-%{version}
-rm -fr docker.egg-info
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs,ssh,tls,websockets
+
 
 %build
-%if %{with python2}
-%py2_build
-%endif # with python2
-
-%if %{with python3}
 %pyproject_wheel
-%endif # with_python3
+
 
 %install
-%if %{with python2}
-%py2_install
-%endif # with python2
-
-%if %{with python3}
 %pyproject_install
-%pyproject_save_files docker
-%endif # with_python3
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with python2}
-%files -n python2-%{srcname}
-%license LICENSE
-%doc README.md
-%{python2_sitelib}/*
-%endif # with python2
 
-%if %{with python3}
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc README.md
-%endif # with_python3
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-docker -f %{pyproject_files}
 
 %changelog
 %autochangelog

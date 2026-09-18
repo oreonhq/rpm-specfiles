@@ -1,9 +1,9 @@
 %global source0_hash 96f0facfde6d78eacad35b91b0f46fecd0b35e474c03e00e30da3fdd345f9ada
 
 Name:           xdotool
-Version:        3.20211022.1
+Version:        4.20260303.1
 Epoch:          1
-Release:        10%{?dist}
+Release:        1%{?dist}
 Summary:        Fake keyboard/mouse input
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD

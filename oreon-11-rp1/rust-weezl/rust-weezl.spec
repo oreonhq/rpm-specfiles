@@ -7,7 +7,7 @@
 %global crate weezl
 
 Name:           rust-weezl
-Version:        0.1.12
+Version:        0.2.1
 Release:        %autorelease
 Summary:        Fast LZW compression and decompression.
 

@@ -1,11 +1,11 @@
 %global source0_hash f69fdf79b7f76d2a81724828124a6fce76803a9122a4c82de8f3dfa3efbb179a
 
 # Review at https://bugzilla.redhat.com/show_bug.cgi?id=173552
-%global minor_version 1.4
+%global minor_version 1.5
 %global xfceversion 4.18
 
 Name:           xfce4-sensors-plugin
-Version:        1.4.5
+Version:        1.5.0
 Release:        %autorelease
 Summary:        Sensors plugin for the Xfce panel
 

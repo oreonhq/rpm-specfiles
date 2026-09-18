@@ -1,69 +1,62 @@
-%global source0_hash 2937b1450fc935620f24709d87d40c67e055a043d7b8541a25fdfa994dda67de
+%global source0_hash none
 
-%global srcname pytest-arraydiff
-%global modname pytest_arraydiff
-%global sum Pytest plugin to help with comparing array output from tests
-
-Name:           python-%{srcname}
-Version:        0.6.1
+Name:           python-pytest-arraydiff
+Version:        0.7.0
 Release:        %autorelease
-Summary:        %{sum}
+# Fill in the actual package summary to submit package to Fedora
+Summary:        pytest plugin to help with comparing array output from tests
 
-License:        BSD-2-Clause
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
 URL:            https://github.com/astropy/pytest-arraydiff
-Source0:        %{pypi_source}
+Source:         %{pypi_source pytest_arraydiff}
 
 BuildArch:      noarch
-# pytable is missing in the following arch
-ExcludeArch:    %{ix86} 
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is a py.test plugin to facilitate the generation and comparison of
-data arrays produced during tests.
-
-The basic idea is that you can write a test that generates a Numpy array
-(or other related objects depending on the format). You can then either
-run the tests in a mode to generate reference files from the arrays, or
-you can run the tests in comparison mode, which will compare the results
-of the tests to the reference ones within some tolerance.
-
-At the moment, the supported file formats for the reference files are:
-* A plain text-based format (baed on Numpy loadtxt output)
-* The FITS format (requires astropy). With this format, tests can return
-  either a Numpy array for a FITS HDU object.}
+This is package 'pytest-arraydiff' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
-Summary:        %{sum}
+%package -n     python3-pytest-arraydiff
+Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-pytest-arraydiff %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pytest-arraydiff test,test-hdf5
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_arraydiff-%{version}
 
-%autosetup -n %{srcname}-%{version}
-
-# Remove egg files from source
-rm -r %{modname}.egg-info
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test,test-hdf5
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{modname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc CHANGES.md README.rst
+
+%files -n python3-pytest-arraydiff -f %{pyproject_files}
 
 %changelog
 %autochangelog

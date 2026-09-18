@@ -1,7 +1,7 @@
 %global source0_hash b67fa79829ecffac9c36260b056b0c8b649bb0a56f28fd284148670e3dd5b0b9
 
 Name:           python-engineio
-Version:        4.13.1
+Version:        4.14.0
 Release:        %autorelease
 Summary:        Python Engine.IO server and client
 

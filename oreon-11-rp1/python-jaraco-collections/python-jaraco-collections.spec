@@ -1,67 +1,62 @@
-%global source0_hash 0e4829409d39ad18a40aa6754fee2767f4d9730c4ba66dc9df89f1d2756994c2
-
-# doc dependecies are not packaged
-%bcond_with docs
+%global source0_hash none
 
 Name:           python-jaraco-collections
-Version:        5.1.0
+Version:        5.2.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Collection objects similar to those in stdlib by jaraco
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/jaraco/jaraco.collections
-Source0:        %{pypi_source jaraco_collections}
-BuildArch:      noarch
+Source:         %{pypi_source jaraco_collections}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%description
-%{summary}
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'jaraco-collections' generated automatically by pyp2spec.}
+
+%description %_description
 
 %package -n     python3-jaraco-collections
 Summary:        %{summary}
 
-%description -n python3-jaraco-collections
-%{summary}
+%description -n python3-jaraco-collections %_description
 
-%package -n python-jaraco-collections-doc
-Summary:        jaraco.collections documentation
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-jaraco-collections check,cover,doc,enabler,test,type
 
-%description -n python-jaraco-collections-doc
-Documentation for jaraco.collections
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n jaraco_collections-%{version}
 
-%autosetup -n jaraco_collections-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -x test%{?with_docs:,doc}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x check,cover,doc,enabler,test,type
+
 
 %build
 %pyproject_wheel
-%if %{with docs}
-# generate html docs
-%{python3} -m sphinx docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
-%endif
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l jaraco
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-jaraco-collections -f %{pyproject_files}
-%doc README.rst
-
-%if %{with docs}
-%files -n python-jaraco-collections-doc
-%doc html
-%license LICENSE
-%endif
 
 %changelog
 %autochangelog

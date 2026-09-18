@@ -1,69 +1,64 @@
-%global source0_hash b11b7884a2b735c415a81f6b6aa3a2e233c68d012e12df9b6092d29737224f19
+%global source0_hash none
 
-%global pypi_name cotyledon
+Name:           python-cotyledon
+Version:        2.2.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Cotyledon provides a framework for defining long-running services.
 
-Name:           python-%{pypi_name}
-Version:        2.0.0
-Release:        6%{?dist}
-Summary:        Cotyledon provides a framework for defining long-running services
-
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://cotyledon.readthedocs.io
-Source0:        %{pypi_source}
-# Upstream code already uses unittest.mock but the metadata still specifies mock
-# Maintainers, please upstream
-Patch0:         python-cotyledon-rm-python-mock-usage.diff
+URL:            https://github.com/sileht/cotyledon
+Source:         %{pypi_source cotyledon}
 
 BuildArch:      noarch
-
-%package -n python3-%{pypi_name}
-Summary:        Cotyledon provides a framework for defining long-running services
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
 
-%description -n python3-%{pypi_name}
-Cotyledon provides a framework for defining long-running services.
 
-%package doc
-Summary:    Documentation for %{name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cotyledon' generated automatically by pyp2spec.}
 
-%description doc
-Cotyledon provides a framework for defining long-running services.
+Patch0:         python-cotyledon-rm-python-mock-usage.diff
 
-This package contains documentation in HTML format.
+%description %_description
 
-%description
-Cotyledon provides a framework for defining long-running services.
+%package -n     python3-cotyledon
+Summary:        %{summary}
+
+%description -n python3-cotyledon %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-cotyledon doc,oslo,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n cotyledon-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires -x test -x doc -x oslo
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,oslo,test
+
 
 %build
 %pyproject_wheel
 
-export PYTHONPATH="$( pwd ):$PYTHONPATH"
-sphinx-build-3 -b html doc/source html
-# Fix hidden-file-or-dir warnings
-rm -rf html/.doctrees html/.buildinfo
 
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest ||:
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.rst
 
-%files doc
-%doc html
+%files -n python3-cotyledon -f %{pyproject_files}
 
 %changelog
 %autochangelog

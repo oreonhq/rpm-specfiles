@@ -1,8 +1,8 @@
 %global source0_hash 35efb04063f1b7bd9d715f1d8d3ab75352b595b1fd12349d7570a7ba19ba6d86
 
 Name:           powerpc-utils
-Version:        1.3.13
-Release:        5%{?dist}
+Version:        1.3.14
+Release:        1%{?dist}
 Summary:        PERL-based scripts for maintaining and servicing PowerPC systems
 
 License:        GPL-2.0-only

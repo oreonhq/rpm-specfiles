@@ -1,63 +1,57 @@
-%global source0_hash 1ff2992b7d5e39ccf92413098a376e0f91e7b4ca532c4f3e71298dbc8a4a9900
+%global source0_hash none
 
-%global srcname sphinx-autoapi
-%global srcname_ sphinx_autoapi
-
-Name:           python-%{srcname}
-Version:        3.6.1
+Name:           python-sphinx-autoapi
+Version:        3.8.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Sphinx API documentation generator
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/readthedocs/sphinx-autoapi
-Source:         %pypi_source %{srcname_}
+URL:            http://github.com/readthedocs/sphinx-autoapi
+Source:         %{pypi_source sphinx_autoapi}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(beautifulsoup4)
-BuildRequires:  python3dist(pytest)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Sphinx AutoAPI is a Sphinx extension for generating complete API documentation
-without needing to load, run, or import the project being documented.
+This is package 'sphinx-autoapi' generated automatically by pyp2spec.}
 
-In contrast to the traditional Sphinx autodoc, which requires manual authoring
-and uses code imports, AutoAPI finds and generates documentation by parsing
-source code.}
+%description %_description
 
-%description %{_description}
-
-%package -n     python3-%{srcname}
+%package -n     python3-sphinx-autoapi
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-sphinx-autoapi %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sphinx_autoapi-%{version}
 
-%autosetup -n %{srcname_}-%{version} -p1
-# This symlink is lost from the sdist.
-ln -s ../pyexample/example tests/python/pymovedconfpy/example
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Switch to -l when flit supports PEP639 (3.11, probably.)
-%pyproject_save_files -L autoapi
 
 %check
-%{pytest} -m 'not network'
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
-%license LICENSE.rst
+
+%files -n python3-sphinx-autoapi -f %{pyproject_files}
 
 %changelog
 %autochangelog

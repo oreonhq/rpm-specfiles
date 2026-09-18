@@ -7,7 +7,7 @@
 %global crate gpt
 
 Name:           rust-gpt
-Version:        3.1.0
+Version:        4.1.0
 Release:        %autorelease
 Summary:        Pure-Rust library to work with GPT partition tables
 

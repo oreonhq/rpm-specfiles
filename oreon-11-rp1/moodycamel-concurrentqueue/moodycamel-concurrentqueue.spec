@@ -8,7 +8,7 @@
 %global project concurrentqueue
 
 Name:           moodycamel-%{project}
-Version:        1.0.4
+Version:        1.0.5
 Release:        %autorelease
 Summary:        An industrial-strength lock-free queue for C++
 

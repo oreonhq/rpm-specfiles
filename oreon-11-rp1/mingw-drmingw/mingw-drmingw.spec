@@ -5,8 +5,8 @@
 %global name1 drmingw
 
 Name:           mingw-%{name1}
-Version:        0.9.3
-Release:        13%{?dist}
+Version:        0.9.13
+Release:        1%{?dist}
 Summary:        Just-in-Time (JIT) debugger for MinGW
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

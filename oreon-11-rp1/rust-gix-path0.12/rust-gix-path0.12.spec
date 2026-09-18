@@ -7,7 +7,7 @@
 %global crate gix-path
 
 Name:           rust-gix-path0.12
-Version:        0.12.3
+Version:        0.12.6
 Release:        %autorelease
 Summary:        A crate of the gitoxide project dealing paths and their conversions
 

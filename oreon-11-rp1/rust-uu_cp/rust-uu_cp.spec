@@ -10,7 +10,7 @@
 %global crate uu_cp
 
 Name:           rust-uu_cp
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        cp ~ (uutils) copy SOURCE to DESTINATION
 

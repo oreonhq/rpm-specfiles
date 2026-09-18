@@ -8,7 +8,7 @@
 
 Name: hunspell-it
 Summary: Italian hunspell dictionaries
-Version: 25.2.3
+Version: 26.8.0.3
 Release: %autorelease
 License: GPL-3.0-only
 URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/it_IT

@@ -1,53 +1,62 @@
-%global source0_hash 60ea0036a5514e2610e5bf561586f324e75ffd91a7209f5fb9e06b8fe28b06bb
+%global source0_hash none
 
-%global srcname sievelib
-
-Name:           python-%{srcname}
-Version:        1.4.2
-Release:        7%{?dist}
+Name:           python-sievelib
+Version:        1.5.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Client-side SIEVE library
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/tonioo/sievelib
-Source0:        %{pypi_source}
+Source:         %{pypi_source sievelib}
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Client-side Sieve and Managesieve library written in Python.
-* Sieve : An Email Filtering Language (RFC 5228).
-* ManageSieve : A Protocol for Remotely Managing Sieve Scripts (RFC 5804).}
+This is package 'sievelib' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-sievelib
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-sievelib %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sievelib dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sievelib-%{version}
 
-%autosetup -n %{srcname}-%{version}
-# remove bundled egg-info
-rm -rf %{srcname}.egg-info
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l sievelib
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
-%license COPYING
+
+%files -n python3-sievelib -f %{pyproject_files}
 
 %changelog
 %autochangelog

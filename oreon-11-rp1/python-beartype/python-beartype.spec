@@ -1,28 +1,24 @@
-%global source0_hash ecc0518c0c9102637e711c8f46ce0ba561c3138c89aea522d4b28b84a5f47b2d
-
-%global forgeurl https://github.com/beartype/beartype
-%global version0 0.22.9
-%forgemeta
+%global source0_hash none
 
 Name:           python-beartype
-Version:        %forgeversion
+Version:        0.23.0~rc1
 Release:        %autorelease
-Summary:        Unbearably fast runtime type checking in pure Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Unbearably fast near-real-time pure-Python runtime-static type-checker.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://beartype.readthedocs.io
-Source:         %forgesource
+URL:            https://github.com/beartype/beartype
+Source:         %{pypi_source beartype 0.23.0rc1}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest) 
-BuildRequires:  python3dist(sphinx)
-BuildRequires:  make
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-An open-source pure-Python PEP-compliant near-real-time hybrid
-runtime-static third-generation type checker emphasizing efficiency,
-usability, unsubstantiated jargon we just made up, and thrilling puns.}
+This is package 'beartype' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -31,36 +27,36 @@ Summary:        %{summary}
 
 %description -n python3-beartype %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-beartype dev,doc-ghp,doc-rtd,test,test-tox,test-tox-coverage
 
-%autosetup -p1 %{forgesetupargs}
+
+%prep
+%autosetup -p1 -n beartype-0.23.0rc1
+
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,doc-ghp,doc-rtd,test,test-tox,test-tox-coverage
+
 
 %build
 %pyproject_wheel
-(cd doc; make man singlehtml)
+
 
 %install
 %pyproject_install
-%pyproject_save_files beartype
-install -m0644 -D doc/trg/man/beartype.1 %{buildroot}%{_mandir}/man1/beartype.1
-gzip %{buildroot}%{_mandir}/man1/beartype.1
-mv doc/trg/singlehtml/index.html beartype.html
-# https://github.com/beartype/beartype/issues/331
-find %{buildroot}/%{python3_sitelib} -type f -name \*.py -print0 | xargs -0  sed -i "s:#\!/usr/bin/env python3:# :"
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-# test_api_typing: https://github.com/beartype/beartype/issues/620
-%pytest beartype_test -k 'not test_api_typing'
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-beartype -f %{pyproject_files}
-%license LICENSE
-%doc beartype.html
-%{_mandir}/man1/beartype.1.*
 
 %changelog
 %autochangelog

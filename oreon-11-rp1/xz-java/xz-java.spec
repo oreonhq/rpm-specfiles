@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           xz-java
-Version:        1.9
+Version:        1.12
 Release:        %autorelease
 Summary:        Java implementation of XZ data compression
 License:        LicenseRef-Public-Domain
@@ -20,7 +20,7 @@ BuildRequires:  javapackages-local-openjdk25
 BuildRequires:  ant-openjdk25 
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.9-25
+Obsoletes:      %{name}-javadoc < 1.12-25
 
 %description
 A complete implementation of XZ data compression in Java.

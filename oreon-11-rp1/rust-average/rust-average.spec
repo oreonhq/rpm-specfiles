@@ -7,7 +7,7 @@
 %global crate average
 
 Name:           rust-average
-Version:        0.15.1
+Version:        0.17.0
 Release:        %autorelease
 Summary:        Calculate statistics iteratively
 

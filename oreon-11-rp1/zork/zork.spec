@@ -1,8 +1,8 @@
 %global source0_hash 929871abae9be902d4fb592f2e76e52b58b386d208f127c826ae1d7b7bade9ef
 
 Name:           zork
-Version:        1.0.3
-Release:        12%{?dist}
+Version:        1.1.0
+Release:        1%{?dist}
 Summary:        Public Domain original DUNGEON game (AKA, Zork)
 
 License:        LicenseRef-Fedora-Public-Domain

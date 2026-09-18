@@ -10,7 +10,7 @@
 %bcond check 1
 
 Name:           ty
-Version:        0.0.26
+Version:        0.0.82
 # The ty package has a permanent exception to the Updates Policy in Fedora,
 # so it can be updated in stable releases across SemVer boundaries (subject to
 # good judgement and actual compatibility of any reverse dependencies). See

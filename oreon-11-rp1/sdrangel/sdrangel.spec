@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:		sdrangel
-Version:	7.23.1
+Version:	7.27.2
 Release:	1%{?dist}
 Summary:	Software defined radio (SDR) and signal analyzer frontend to various hardware
 License:	GPL-3.0-or-later

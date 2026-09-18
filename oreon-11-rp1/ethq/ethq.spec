@@ -4,7 +4,7 @@
 %define _lto_cflags %{nil}
 
 Name:           ethq
-Version:        0.7.0
+Version:        0_7_0
 Release:        %autorelease
 Summary:        Ethernet NIC Queue stats viewer
 

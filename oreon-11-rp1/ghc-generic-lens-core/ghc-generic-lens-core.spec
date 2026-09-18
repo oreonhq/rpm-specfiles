@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        2.2.1.0
+Version:        2.3.0.0
 Release:        %autorelease
 Summary:        Generically derive traversals, lenses and prisms
 

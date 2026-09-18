@@ -7,7 +7,7 @@
 %global crate gufo-jpeg
 
 Name:           rust-gufo-jpeg
-Version:        0.4.0
+Version:        0.5.1
 Release:        %autorelease
 Summary:        Inspect JPEG image structure
 

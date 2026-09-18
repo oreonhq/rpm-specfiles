@@ -1,48 +1,57 @@
-%global source0_hash ec32e8df0285f1951a331f463c45f790e137294ea5d3a583502718b9a7db4a69
+%global source0_hash none
 
-%global pypi_name pywizlight
+Name:           python-pywizlight
+Version:        0.6.6
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A python connector for WiZ light bulbs _e.g SLV Play_
 
-Name:           python-%{pypi_name}
-Version:        0.6.3
-Release:        5%{?dist}
-Summary:        Python connector for WiZ light devices
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/sbidy/pywizlight
-Source0:        %{url}/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source pywizlight}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-A Python connector for WiZ light devices.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pywizlight' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-pywizlight
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
+%description -n python3-pywizlight %_description
 
-%description -n python3-%{pypi_name}
-A Python connector for WiZ light devices.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pywizlight-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files -l %{pypi_name}
 
-%files -n %files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
-%license LICENSE
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-pywizlight -f %{pyproject_files}
 %{_bindir}/wizlight
 
 %changelog

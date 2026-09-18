@@ -12,8 +12,8 @@
 %endif
 
 Name: fail2ban
-Version: 1.1.0
-Release: 16%{?dist}
+Version: 1.1.1
+Release: 1%{?dist}
 Summary: Daemon to ban hosts that cause multiple authentication errors
 
 License: GPL-2.0-or-later

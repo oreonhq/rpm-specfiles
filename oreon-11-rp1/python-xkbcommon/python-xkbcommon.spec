@@ -1,22 +1,24 @@
-%global source0_hash 5be5973bf5b7525687a4df6c84789b421590d7f7cf92ae56f2aab177b795d516
+%global source0_hash none
 
 Name:           python-xkbcommon
-Version:        0.8
-Release:        13%{?dist}
+Version:        1.5.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Bindings for libxkbcommon using cffi
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/sde1000/python-xkbcommon
 Source:         %{pypi_source xkbcommon}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-BuildRequires:  libxkbcommon-devel
 
-Requires:  libxkbcommon
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Python bindings for libxkbcommon using cffi.}
+This is package 'xkbcommon' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -25,29 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-xkbcommon %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n xkbcommon-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
-%python3 xkbcommon/ffi_build.py
+
 
 %install
 %pyproject_install
-%pyproject_save_files xkbcommon
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import -t
-%{py3_test_envvars} %{python3} -m unittest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-xkbcommon -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
 
 %changelog
 %autochangelog

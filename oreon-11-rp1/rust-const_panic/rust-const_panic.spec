@@ -7,7 +7,7 @@
 %global crate const_panic
 
 Name:           rust-const_panic
-Version:        0.2.15
+Version:        0.2.17
 Release:        %autorelease
 Summary:        const panic with formatting
 

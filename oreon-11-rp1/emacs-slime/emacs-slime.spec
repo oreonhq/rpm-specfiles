@@ -4,8 +4,8 @@
 
 Name:            emacs-%{pkg}
 Epoch:           2
-Version:         2.28
-Release:         8%{?dist}
+Version:         2.32
+Release:         1%{?dist}
 Summary:         The superior lisp interaction mode for emacs        
 
 #Public domain: Mentioned in README file

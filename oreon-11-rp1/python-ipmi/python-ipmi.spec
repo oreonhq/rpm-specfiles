@@ -1,57 +1,57 @@
-%global source0_hash c0428bbdfd42969e9586cb73b21c276fa9686cbac4e2bf4dd27669c533065149
+%global source0_hash none
 
-%global pypi_name python-ipmi
-%global srcname ipmi
+Name:           python-ipmi
+Version:        1.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A ipmi python client used in NetXMS migrated from perl
 
-Name:           python-%{srcname}
-Version:        0.5.5
-Release:        8%{?dist}
-Summary:        Pure python IPMI library
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
-License:        LicenseRef-Callaway-LGPLv2+
-URL:            https://github.com/kontron/python-ipmi
-Source0:        %{url}/archive/%{version}/%{pypi_name}-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/zhao-ji/check_ipmi_sensor_v3
+Source:         %{pypi_source ipmi}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%?python_enable_dependency_generator
 
-BuildRequires: python3-devel
-BuildRequires: python3dist(markdown)
-BuildRequires: python3dist(setuptools)
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'ipmi' generated automatically by pyp2spec.}
 
-%description
-Pure Python IPMI Library.
+%description %_description
 
-%package -n     python3-%{srcname}
+%package -n     python3-ipmi
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
 
-%description -n python3-%{srcname}
-Pure Python IPMI Library.
+%description -n python3-ipmi %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n ipmi-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p1
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
 
-find . -type f -name "*.py" -exec sed -i '/^#![  ]*\/usr\/bin\/env.*$/ d' {} ';'
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install 
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-export PYTHONPATH=$RPM_BUILD_ROOT/%{python3_sitelib}
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname}
-%doc README.rst
-%{_bindir}/ipmitool.py
-%{python3_sitelib}/pyipmi
-%{python3_sitelib}/*-py%{python3_version}.egg-info
+
+%files -n python3-ipmi -f %{pyproject_files}
 
 %changelog
 %autochangelog

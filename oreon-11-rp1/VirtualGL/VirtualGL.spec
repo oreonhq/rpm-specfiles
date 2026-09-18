@@ -1,8 +1,8 @@
 %global source0_hash 055b781d6ac7b109eccd6c8be9f27f8bb60f92f1001ded84d2619f9e349894a7
 
 Name:           VirtualGL
-Version:        3.1.3
-Release:        6%{?dist}
+Version:        3.1.5
+Release:        1%{?dist}
 Summary:        A toolkit for displaying OpenGL applications to thin clients
 
 # Automatically converted from old format: wxWindows - review is highly recommended.

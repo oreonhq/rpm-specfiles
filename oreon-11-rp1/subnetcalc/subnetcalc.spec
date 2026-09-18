@@ -1,7 +1,7 @@
 %global source0_hash 6c44ddcbe0e216559667b11ec836b74f33319d8f13c35f4b735f4734f79b6446
 
 Name:           subnetcalc
-Version:        2.6.5
+Version:        2.7.5
 Release:        %autorelease
 Summary:        IPv4/IPv6 Subnet Calculator
 License:        GPL-3.0-or-later

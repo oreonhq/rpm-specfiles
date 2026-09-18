@@ -10,7 +10,7 @@
 # testsuite missing deps: test-framework test-framework-hunit test-framework-quickcheck2
 
 Name:           ghc-%{pkg_name}
-Version:        0.5.4.3
+Version:        0.5.4.5
 Release:        %autorelease
 Summary:        An easy-to-use HTTP client library
 

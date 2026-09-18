@@ -1,10 +1,10 @@
 %global source0_hash none
 
 Name:           votca
-Version:        2025.1
+Version:        2026
 %global         uversion %{version}
 %global         sover 2025
-Release:        5%{?dist}
+Release:        1%{?dist}
 Summary:        Versatile Object-oriented Toolkit for Coarse-graining Applications
 License:        Apache-2.0
 URL:            http://www.votca.org

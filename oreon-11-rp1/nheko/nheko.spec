@@ -1,7 +1,7 @@
 %global source0_hash 81cc613ee2420b1289c9cc7aeee81cae69a153971fd3112225e48d1c7b224ea5
 
 Name: nheko
-Version: 0.12.1
+Version: 0.12.1-1-1
 Release: %autorelease
 
 License: GPL-3.0-or-later

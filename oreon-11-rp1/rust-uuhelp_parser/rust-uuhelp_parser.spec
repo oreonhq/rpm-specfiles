@@ -7,7 +7,7 @@
 %global crate uuhelp_parser
 
 Name:           rust-uuhelp_parser
-Version:        0.0.27
+Version:        0.2.2
 Release:        %autorelease
 Summary:        Collection of functions to parse the markdown code of help files
 

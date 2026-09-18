@@ -6,7 +6,7 @@
 %global forgeurl https://github.com/weldr/lorax
 
 Name:           lorax
-Version:        44.6
+Version:        46.0-1
 Release:        1%{?dist}
 Summary:        Tool for creating the anaconda install images
 License:        GPL-2.0-or-later

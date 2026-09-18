@@ -7,7 +7,7 @@
 %global crate markup
 
 Name:           rust-markup
-Version:        0.13.1
+Version:        0.16.0
 Release:        %autorelease
 Summary:        A blazing fast, type-safe template engine for Rust.
 

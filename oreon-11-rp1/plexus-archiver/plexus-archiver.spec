@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           plexus-archiver
-Version:        4.10.0
+Version:        4.14.0
 Release:        %autorelease
 Summary:        Plexus Archiver Component
 License:        Apache-2.0
@@ -38,7 +38,7 @@ BuildRequires:  mvn(org.slf4j:slf4j-simple)
 BuildRequires:  mvn(org.tukaani:xz)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 4.10.0-6
+Obsoletes:      %{name}-javadoc < 4.14.0-6
 
 %description
 The Plexus project seeks to create end-to-end developer tools for

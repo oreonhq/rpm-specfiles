@@ -1,72 +1,56 @@
-%global source0_hash b2b8452c319ae786476992011ac7c0655a63697e529292b3ca78116795c9ca66
+%global source0_hash none
 
-%global pypi_name django-markdownx
+Name:           python-django-markdownx
+Version:        4.0.11
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A comprehensive Markdown editor built for Django.
 
-Name:           python-%{pypi_name}
-Version:        3.0.1
-Release:        24%{?dist}
-Summary:        A comprehensive Markdown editor built for Django
-
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/neutronX/django-markdownx
-Source0:        %{url}/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source django_markdownx}
+
 BuildArch:      noarch
- 
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(django)
-BuildRequires:  python3dist(markdown)
-BuildRequires:  python3dist(pillow)
-BuildRequires:  python3dist(pip)
-BuildRequires:  python3dist(setuptools)
 
-%description
-Django MarkdownX is a comprehensive Markdown plugin built for Django, 
-the renowned high-level Python web framework, with flexibility, extensibility, 
-and ease-of-use at its core.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'django-markdownx' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-django-markdownx
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{pypi_name}}
- 
-Requires:       python3dist(django)
-Requires:       python3dist(markdown)
-Requires:       python3dist(pillow)
-Requires:       python3dist(pip)
 
-%description -n python3-%{pypi_name}
-Django MarkdownX is a comprehensive Markdown plugin built for Django, 
-the renowned high-level Python web framework, with flexibility, extensibility, 
-and ease-of-use at its core.
+%description -n python3-django-markdownx %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n django_markdownx-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
 
-rm -rf markdownx/static/.DS_Store
-rm -rf markdownx/static/markdownx/.DS_Store
-rm -rf markdownx/static/markdownx/admin/.DS_Store
-rm -rf markdownx/templates/.DS_Store
-rm -rf markdownx/templates/markdownx/.DS_Store
+%generate_buildrequires
+%pyproject_buildrequires
 
-chmod 0644 README.rst
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%find_lang django
-%files -n python3-%{pypi_name} -f django.lang
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/markdownx
-%exclude %{python3_sitelib}/markdownx/locale
-%{python3_sitelib}/django_markdownx-%{version}-py%{python3_version}.egg-info
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-django-markdownx -f %{pyproject_files}
 
 %changelog
 %autochangelog

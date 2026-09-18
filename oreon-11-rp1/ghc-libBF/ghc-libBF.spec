@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        0.6.8
+Version:        0.6.9
 Release:        %autorelease
 Summary:        A binding to the libBF library
 

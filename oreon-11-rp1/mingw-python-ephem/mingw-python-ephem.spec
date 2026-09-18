@@ -6,8 +6,8 @@
 
 Name:          mingw-python-%{pypi_name}
 Summary:       MinGW Windows Python %{pypi_name}
-Version:       4.2
-Release:       3%{?dist}
+Version:       4.2.1
+Release:       1%{?dist}
 BuildArch:     noarch
 
 License:       MIT

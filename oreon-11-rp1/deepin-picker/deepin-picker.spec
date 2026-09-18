@@ -1,7 +1,7 @@
 %global source0_hash cb8de7282a8d3b81681980ab3f20d2b8d5a8a4d509eeb0702f140b3138b2f3a7
 
 Name:           deepin-picker
-Version:        5.0.28
+Version:        6.0.12
 Release:        %autorelease
 Summary:        A color picker tool for deepin
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

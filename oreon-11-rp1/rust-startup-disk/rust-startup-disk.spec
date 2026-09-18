@@ -7,7 +7,7 @@
 %global app_id org.startup_disk.StartupDisk
 
 Name:           rust-startup-disk
-Version:        0.1.6
+Version:        0.1.7
 Release:        %autorelease
 Summary:        Interface to choose the startup volume on Apple Silicon systems
 

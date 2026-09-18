@@ -1,75 +1,63 @@
-%global source0_hash 9b00eea581491f95967cf4009d9525da3fd17a5d8750efb061c206b732bf5570
+%global source0_hash none
 
-%global srcname b4
-
-%if 0%{?fedora} || 0%{?el10}
-%bcond_without attest
-%else
-# some attestation dependencies not in EPEL
-%bcond_with attest
-%endif
-
-Name:           python-%{srcname}
-Version:        0.14.2
+Name:           python-b4
+Version:        0.16.0
 Release:        %autorelease
-Summary:        A helper tool to work with public-inbox and patch series
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A tool to work with public-inbox and patch archives
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
-URL:            https://git.kernel.org/pub/scm/utils/%{srcname}/%{srcname}.git
-Source0:        https://mirrors.edge.kernel.org/pub/software/devel/%{srcname}/%{srcname}-%{version}.tar.xz
-Source1:        https://mirrors.edge.kernel.org/pub/software/devel/%{srcname}/%{srcname}-%{version}.tar.sign
-# https://git.kernel.org/pub/scm/utils/b4/b4.git/plain/.keys/openpgp/linuxfoundation.org/konstantin/default
-Source2:        gpgkey-DE0E66E32F1FDD0902666B96E63EDCA9329DD07E.asc
+URL:            https://git.kernel.org/pub/scm/utils/b4/b4.git/
+Source:         %{pypi_source b4}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildRequires:  gnupg2
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python3dist(pytest)
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-B4 is a helper utility to work with patches made available via a public-inbox
-archive like lore.kernel.org. It is written to make it easier to participate in
-a patch-based workflows, like those used in the Linux kernel development.}
+This is package 'b4' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n %{srcname}
+%package -n     python3-b4
 Summary:        %{summary}
-Provides:       python%{python3_pkgversion}-%{srcname} = %{version}-%{release}
 
-%description -n %{srcname} %{_description}
+%description -n python3-b4 %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-b4 completion,tui
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n b4-%{version}
 
-xz -dc '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
-%autosetup -p1 -n %{srcname}-%{version}
-
-# Disable attestation (only applicable to EPEL)
-%if %{without attest}
-sed -Ei -e '/^# These are optional, needed for attestation/d' \
-    -e "/^ *'?(dnspython|dkimpy|patatt)/d" requirements.in
-%endif
 
 %generate_buildrequires
-%pyproject_buildrequires -r requirements.in
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x completion,tui
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
-install -m644 -Dt %{buildroot}%{_mandir}/man5/ src/b4/man/b4.5
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n %{srcname} -f %{pyproject_files}
-%doc README.rst
-%{_bindir}/%{srcname}
-%{_mandir}/man5/%{srcname}.5.*
+
+%files -n python3-b4 -f %{pyproject_files}
+%{_bindir}/b4
 
 %changelog
 %autochangelog

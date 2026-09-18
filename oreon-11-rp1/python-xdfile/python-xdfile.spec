@@ -1,71 +1,57 @@
-%global source0_hash 074f592c10a4541570f7a4b9b1125d30a9575c96b2edb925509d1cc97f196a77
+%global source0_hash none
 
-%global srcname xd
-%global pypi_name xdfile
-%global date 20250519
-%global commit 31b2fec79773d62c67db9618ccb6ab1dad82a939
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
-Name:           python-%{pypi_name}
-Version:        1.9.0~%{date}git%{shortcommit}
+Name:           python-xd
+Version:        0.1.8
 Release:        %autorelease
-Summary:        Python parser for .xd crossword format
+# Fill in the actual package summary to submit package to Fedora
+Summary:        a list of useful commands which makes life easier
 
-License:        MIT
-URL:            https://github.com/century-arcade/xd
-Source:         %{url}/archive/%{commit}/%{srcname}-%{commit}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/damnever/xd
+Source:         %{pypi_source xd}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  sed
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package provides a simple parser for .xd -- a corpus-oriented format,
-modeled after the simplicity and intuitiveness of the markdown format. It
-supports 99.99% of published crosswords, and is intended to be convenient for
-bulk analysis of crosswords by both humans and machines, from the present and
-into the future.}
+This is package 'xd' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-xd
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-xd %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n xd-%{version}
 
-%autosetup -p1 -n %{srcname}-%{commit}
-
-# remove bundled library
-rm -r crossword
-
-# remove unnecessary shebangs
-sed -i 's:^#!/usr/bin/env python.*$::' xdfile/*.py
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# remove sample script
-rm %{buildroot}%{_bindir}/sample
 
 %check
-# remove broken test
-# https://github.com/century-arcade/xd/issues/72
-rm xdfile/tests/test_xdfile.py
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md doc/xd-format.md
+
+%files -n python3-xd -f %{pyproject_files}
+%{_bindir}/xd
 
 %changelog
 %autochangelog

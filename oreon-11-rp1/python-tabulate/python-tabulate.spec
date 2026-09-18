@@ -1,89 +1,63 @@
-%global source0_hash 0095b12bf5966de529c0feb1fa08671671b3368eec77d7ef7ab114be2c068b3c
-
-# python-pandas creates a cyclic dependency on python-Bottleneck;
-# we need to be able to break it during the new Python bootstrap
-%bcond bootstrap 0
-%bcond pandas_tests %{without bootstrap}
+%global source0_hash none
 
 Name:           python-tabulate
-Version:        0.9.0
+Version:        0.10.0
 Release:        %autorelease
-Summary:        Pretty-print tabular data in Python, a library and a command-line utility
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Pretty-print tabular data
 
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/astanin/python-tabulate
-Source0:        %{pypi_source tabulate}
-# Hand-written for Fedora based on --help output using groff_man(7) format
-Source1:        tabulate.1
+Source:         %{pypi_source tabulate}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-# Additional test deps; see tox.ini, not in the sdist
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(numpy)
-%if ! 0%{?el9} && %{with pandas_tests}
-# The pandas backport is not finished yet in EPEL 9. See BZ 2032550.
-# The BR is needed only for Pandas integration tests.
-BuildRequires:  python3dist(pandas)
-%endif
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The main use cases of the library are:
+This is package 'tabulate' generated automatically by pyp2spec.}
 
-• printing small tables without hassle: just one function call, formatting is
-  guided by the data itself
-• authoring tabular data for lightweight plain-text markup: multiple output
-  formats suitable for further editing or transformation
-• readable presentation of mixed textual and numeric data: smart column
-  alignment, configurable number formatting, alignment by a decimal point}
+%description %_description
 
-%description %{_description}
-
-%package -n python3-tabulate
+%package -n     python3-tabulate
 Summary:        %{summary}
 
-Recommends:     python3-tabulate+widechars
+%description -n python3-tabulate %_description
 
-%description -n python3-tabulate %{_description}
-
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
 %pyproject_extras_subpkg -n python3-tabulate widechars
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n tabulate-%{version}
+%prep
+%autosetup -p1 -n tabulate-%{version}
+
 
 %generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
 %pyproject_buildrequires -x widechars
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l tabulate
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-install -t '%{buildroot}%{_mandir}/man1' -D -m 0644 -p '%{SOURCE1}'
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-# Failing tests test_wrap_multiword_non_wide* in current Pythons
-# https://github.com/astanin/python-tabulate/issues/389
-k="${k-}${k+ and }not test_wrap_multiword_non_wide"
-k="${k-}${k+ and }not test_wrap_multiword_non_wide_with_hyphens"
-
-%pytest --doctest-modules --ignore benchmark.py -k "${k-}"
 
 %files -n python3-tabulate -f %{pyproject_files}
-%doc CHANGELOG
-%doc README.md
-
 %{_bindir}/tabulate
-%{_mandir}/man1/tabulate.1*
 
 %changelog
 %autochangelog

@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        3.1.9
+Version:        3.2.1
 Release:        %autorelease
 Summary:        WAI application for static serving
 

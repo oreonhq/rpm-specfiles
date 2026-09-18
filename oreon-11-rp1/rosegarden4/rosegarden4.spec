@@ -1,10 +1,10 @@
 %global source0_hash 75fe52b005899471cc4b0e4954be5d35ee1ce8f41659ab8ef48a26178aa5c36d
 
-%global major 25.06
+%global major 26.06
 
 Name:          rosegarden4
 Version:       %{major}
-Release:       2%{?dist}
+Release:       1%{?dist}
 Summary:       MIDI, audio and notation editor
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:       GPL-2.0-or-later

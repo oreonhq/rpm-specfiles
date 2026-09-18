@@ -1,69 +1,60 @@
-%global source0_hash 1c39ffb3dfc71547f8af88bb247bb9feffc12545b032a882cd245295ac49e845
+%global source0_hash none
 
 Name:           python-aiohappyeyeballs
-Version:        2.6.1
+Version:        2.7.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Happy Eyeballs for asyncio
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        PSF-2.0
 URL:            https://github.com/aio-libs/aiohappyeyeballs
-# The GitHub archive contains CHANGELOG.md and other ancillary files that the
-# PyPI sdist lacks.
-Source:         %{url}/archive/v%{version}/aiohappyeyeballs-%{version}.tar.gz
-
-# Downstream-only: remove pytest options for coverage analysis
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-Patch:          0001-Downstream-only-remove-pytest-options-for-coverage-a.patch
-# chore(deps-dev): bump pytest-asyncio from 0.26.0 to 1.1.0
-# https://github.com/aio-libs/aiohappyeyeballs/pull/181
-# Cherry-picked to v2.6.1, without changes to poetry.lock.
-Patch:          0001-chore-deps-dev-bump-pytest-asyncio-from-0.26.0-to-1..patch
-
+Source:         %{pypi_source aiohappyeyeballs}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
 
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist pytest-asyncio}
 
-%global common_description %{expand:
-This library exists to allow connecting with Happy Eyeballs (RFC 8305) when you
-already have a list of addrinfo and not a DNS name.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'aiohappyeyeballs' generated automatically by pyp2spec.}
 
-The stdlib version of loop.create_connection() will only work when you pass in
-an unresolved name which is not a good fit when using DNS caching or resolving
-names via another method such as zeroconf.}
+Patch:          0001-Downstream-only-remove-pytest-options-for-coverage-a.patch
+Patch:          0001-chore-deps-dev-bump-pytest-asyncio-from-0.26.0-to-1..patch
 
-%description %{common_description}
+%description %_description
 
 %package -n     python3-aiohappyeyeballs
 Summary:        %{summary}
 
-%description -n python3-aiohappyeyeballs %{common_description}
+%description -n python3-aiohappyeyeballs %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n aiohappyeyeballs-%{version} -p1
+%autosetup -p1 -n aiohappyeyeballs-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -L aiohappyeyeballs
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-aiohappyeyeballs -f %{pyproject_files}
-%license LICENSE
-%doc CHANGELOG.md
-%doc README.md
 
 %changelog
 %autochangelog

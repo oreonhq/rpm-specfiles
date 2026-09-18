@@ -1,131 +1,62 @@
-%global source0_hash eed4d63b06973d0130c60900ae42c774538b24e4d66de5c696fde9810b90fa82
+%global source0_hash none
 
-%global sources_gpg 0
-%global sources_gpg_sign 0xf8675126e2411e7748dd46662fc2093e4682645f
+Name:           python-gnocchiclient
+Version:        7.2.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python client library for Gnocchi
 
-%global pypi_name gnocchiclient
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            http://gnocchi.osci.io/gnocchiclient
+Source:         %{pypi_source gnocchiclient}
 
-%{!?upstream_version: %global upstream_version %{version}%{?milestone}}
-# we are excluding some BRs from automatic generator
-%global excluded_brs doc8 bandit pre-commit hacking flake8-import-order
-# Exclude sphinx from BRs if docs are disabled
-%if ! 0%{?with_doc}
-%global excluded_brs %{excluded_brs} sphinx openstackdocstheme
-%endif
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-# NOTE(jpena): doc build fails with recent cliff versions, and hardcodes
-# a call to unversioned python in
-# https://github.com/gnocchixyz/python-gnocchiclient/blob/master/doc/source/conf.py#L54
-%global with_doc 0
 
-%global common_desc \
-This is a client library for Gnocchi built on the Gnocchi API. It \
-provides a Python API (the gnocchiclient module) and a command-line tool.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'gnocchiclient' generated automatically by pyp2spec.}
 
-Name:             python-gnocchiclient
-Version:          7.1.0
-Release:          7%{?dist}
-Summary:          Python API and CLI for OpenStack Gnocchi
+%description %_description
 
-License:          Apache-2.0
-URL:              https://github.com/openstack/%{name}
-Source0:          https://pypi.io/packages/source/g/%{pypi_name}/%{pypi_name}-%{upstream_version}.tar.gz
-# Required for tarball sources verification
-%if 0%{?sources_gpg} == 1
-Source101:        https://tarballs.openstack.org/%{name}/%{pypi_name}-%{upstream_version}.tar.gz.asc
-Source102:        https://releases.openstack.org/_static/%{sources_gpg_sign}.txt
-%endif
-BuildArch:        noarch
+%package -n     python3-gnocchiclient
+Summary:        %{summary}
 
-# Required for tarball sources verification
-%if 0%{?sources_gpg} == 1
-BuildRequires:  /usr/bin/gpgv2
-%endif
+%description -n python3-gnocchiclient %_description
 
-%description
-%{common_desc}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-gnocchiclient doc,openstack,test
 
-%package -n python3-%{pypi_name}
-Summary:          Python API and CLI for OpenStack Gnocchi
-
-BuildRequires:    python3-devel
-BuildRequires:    pyproject-rpm-macros
-%description -n python3-%{pypi_name}
-%{common_desc}
-
-%if 0%{?with_doc}
-%package -n python-%{pypi_name}-doc
-Summary:          Documentation for OpenStack Gnocchi API Client
-Group:            Documentation
-
-%description      doc
-%{common_desc}
-
-This package contains auto-generated documentation.
-%endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n gnocchiclient-%{version}
 
-# Required for tarball sources verification
-%if 0%{?sources_gpg} == 1
-%{gpgverify}  --keyring=%{SOURCE102} --signature=%{SOURCE101} --data=%{SOURCE0}
-%endif
-%autosetup -n %{pypi_name}-%{upstream_version}
 
-sed -i /^[[:space:]]*-c{env:.*_CONSTRAINTS_FILE.*/d tox.ini
-sed -i "s/^deps = -c{env:.*_CONSTRAINTS_FILE.*/deps =/" tox.ini
-sed -i /^minversion.*/d tox.ini
-sed -i /^requires.*virtualenv.*/d tox.ini
-sed -i '/\.\[test,openstack\]/,+2d' tox.ini
-sed -i '/\.*\[testenv\]deps/,+1d' tox.ini
-sed -i '/\.\[test,doc\]/d' tox.ini
-
-# Exclude some bad-known BRs
-for pkg in %{excluded_brs}; do
-  for reqfile in doc/requirements.txt test-requirements.txt; do
-    if [ -f $reqfile ]; then
-      sed -i /^${pkg}.*/d $reqfile
-    fi
-  done
-done
-
-# Automatic BR generation
 %generate_buildrequires
-%if 0%{?with_doc}
-  %pyproject_buildrequires -t -e %{default_toxenv},docs
-%else
-  %pyproject_buildrequires -t -e %{default_toxenv}
-%endif
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,openstack,test
+
 
 %build
 %pyproject_wheel
 
-%if 0%{?with_doc}
-%tox -e docs
-
-# Fix hidden-file-or-dir warnings
-rm -rf doc/build/html/.doctrees doc/build/html/.buildinfo
-%endif
 
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Create a versioned binary for backwards compatibility until everything is pure py3
-ln -s gnocchi %{buildroot}%{_bindir}/gnocchi-3
 
-%files -n python3-%{pypi_name}
-%doc README.rst
-%license LICENSE
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-gnocchiclient -f %{pyproject_files}
 %{_bindir}/gnocchi
-%{_bindir}/gnocchi-3
-%{python3_sitelib}/gnocchiclient
-%{python3_sitelib}/*.dist-info
-
-%if 0%{?with_doc}
-%files -n python-%{pypi_name}-doc
-%doc doc/build/html
-%endif
 
 %changelog
 %autochangelog

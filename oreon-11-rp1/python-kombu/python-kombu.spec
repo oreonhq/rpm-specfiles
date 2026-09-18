@@ -1,93 +1,62 @@
-%global source0_hash 345614c51ab6b54cdb5504e2e00cbb4789f1787520c282e5b3d666e475a375da
+%global source0_hash none
 
-%bcond_without tests
-%global srcname kombu
-# Packaging unstable?
-# %%global prerel b3
-%global general_version 5.6.2
-%global upstream_version %{general_version}%{?prerel}
-
-Name:           python-%{srcname}
-Version:        %{general_version}%{?prerel:~%{prerel}}
+Name:           python-kombu
+Version:        5.6.2
 Release:        %autorelease
-Epoch:          1
-Summary:        An AMQP Messaging Framework for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Messaging library for Python.
 
-# utils/functional.py contains a header that says Python
-# Automatically converted from old format: BSD and Python - review is highly recommended.
-License:        LicenseRef-Callaway-BSD AND LicenseRef-Callaway-Python
-URL:            http://kombu.readthedocs.org/
-Source0:        https://github.com/celery/kombu/archive/v%{upstream_version}/%{srcname}-%{upstream_version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://github.com/celery/kombu
+Source:         %{pypi_source kombu}
 
-BuildArch: noarch
-
-%description
-AMQP is the Advanced Message Queuing Protocol, an open standard protocol
-for message orientation, queuing, routing, reliability and security.
-
-One of the most popular implementations of AMQP is RabbitMQ.
-
-The aim of Kombu is to make messaging in Python as easy as possible by
-providing an idiomatic high-level interface for the AMQP protocol, and
-also provide proven and tested solutions to common messaging problems.
-
-%package -n python3-%{srcname}
-Summary:        %{summary}
-Requires:       python3-amqp
-Requires:       python3-vine
-
+BuildArch:      noarch
 BuildRequires:  python3-devel
-%if %{with tests}
-BuildRequires:  python3-amqp
-BuildRequires:  python3-pymongo
-BuildRequires:  python3-vine
-BuildRequires:  python3-sqlalchemy
-BuildRequires:  python3-boto3
-BuildRequires:  python3-pytest
-BuildRequires:  python3-pyro
-BuildRequires:  python3-pycurl
-BuildRequires:  python3-azure-mgmt-servicebus
-BuildRequires:  python3-azure-mgmt-storage
-BuildRequires:  python3-brotli
-BuildRequires:  python3-hypothesis
-BuildRequires:  python3-pytest-freezegun
-BuildRequires:  python3-azure-identity
-%endif
 
-%description -n python3-%{srcname}
-AMQP is the Advanced Message Queuing Protocol, an open standard protocol
-for message orientation, queuing, routing, reliability and security.
 
-One of the most popular implementations of AMQP is RabbitMQ.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'kombu' generated automatically by pyp2spec.}
 
-The aim of Kombu is to make messaging in Python as easy as possible by
-providing an idiomatic high-level interface for the AMQP protocol, and
-also provide proven and tested solutions to common messaging problems.
+%description %_description
+
+%package -n     python3-kombu
+Summary:        %{summary}
+
+%description -n python3-kombu %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-kombu azureservicebus,azurestoragequeues,confluentkafka,consul,gcpubsub,librabbitmq,mongodb,msgpack,pyro,qpid,redis,slmq,sqlalchemy,sqs,yaml,zookeeper
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n kombu-%{version}
 
-%autosetup -n %{srcname}-%{upstream_version} -p1
-# Fedora has tzdata present, and doesn't need nor package this fallback
-sed -i 's/tzdata.*$//' requirements/default.txt
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x azureservicebus,azurestoragequeues,confluentkafka,consul,gcpubsub,librabbitmq,mongodb,msgpack,pyro,qpid,redis,slmq,sqlalchemy,sqs,yaml,zookeeper
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-%pytest --ignore=t/unit/transport/test_gcpubsub.py
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc AUTHORS FAQ READ* THANKS TODO examples/
+
+%files -n python3-kombu -f %{pyproject_files}
 
 %changelog
 %autochangelog

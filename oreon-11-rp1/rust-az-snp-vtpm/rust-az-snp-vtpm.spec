@@ -13,7 +13,7 @@
 %global supported_arches x86_64
 
 Name:           rust-az-snp-vtpm
-Version:        0.7.4
+Version:        0.8.2
 Release:        %autorelease
 Summary:        VTPM based SEV-SNP attestation for Azure Confidential VMs
 

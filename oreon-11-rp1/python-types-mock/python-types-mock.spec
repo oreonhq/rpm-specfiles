@@ -1,54 +1,57 @@
-%global source0_hash 5281a645d72e827d70043e3cc144fe33b1c003db084f789dc203aa90e812a5a4
+%global source0_hash none
 
-%global pypi_name types-mock
-%global pypi_version 5.1.0.20240425
-
-Name:           python-%{pypi_name}
-Version:        %{pypi_version}
-Release:        5%{?dist}
+Name:           python-types-mock
+Version:        5.2.0.20260518
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Typing stubs for mock
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/python/typeshed
-Source0:        %{pypi_source}
-Source1:        https://raw.githubusercontent.com/python/typeshed/main/LICENSE
+Source:         %{pypi_source types_mock}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is a PEP 561 type stub package for the mock package. It can be used by
-type-checking tools like mypy, pyright, pytype, PyCharm, etc. to check code
-that uses mock.}
+This is package 'types-mock' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-types-mock
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %{_description}
+%description -n python3-types-mock %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n types_mock-%{version}
 
-%autosetup -n %{pypi_name}-%{pypi_version}
-rm -rf %{pypi_name}.egg-info
-cp %{SOURCE1} LICENSE
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l mock-stubs
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{pypi_name}
-%{python3_sitelib}/mock-stubs
-%{python3_sitelib}/types_mock-%{version}.dist-info
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-types-mock -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -3,8 +3,8 @@
 %global		_hardened_build 1
 
 Name:		libdkimpp
-Version:	2.0.0
-Release:	22%{?dist}
+Version:	2.4.1
+Release:	1%{?dist}
 Summary:	Lightweight and portable DKIM (RFC4871) library
 
 License:	LGPL-3.0-or-later

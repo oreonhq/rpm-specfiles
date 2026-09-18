@@ -3,7 +3,7 @@
 %global giturl  https://github.com/executablebooks/sphinx-book-theme
 
 Name:           python-sphinx-book-theme
-Version:        1.2.0
+Version:        1.4.0
 Release:        %autorelease
 Summary:        Interactive book theme for Sphinx
 

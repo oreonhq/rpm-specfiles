@@ -1,70 +1,59 @@
-%global source0_hash f7c305a75cc4e3a331d248e996f25783ba784b88d5a9b9f73c53eacaa6d76985
+%global source0_hash none
 
-%global pypi_name inject
+Name:           python-inject
+Version:        5.5.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python dependency injection framework.
 
-%global pkg_description %{expand:Dependency injection the python way, the good way.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0
+URL:            https://github.com/ivankorobkov/python-inject
+Source:         %{pypi_source inject}
 
-Key features:
-  - Fast.
-  - Thread-safe.
-  - Simple to use.
-  - Does not steal class constructors.
-  - Does not try to manage your application object graph.
-  - Transparently integrates into tests.
-  - Supports type hinting in Python 3.5+.
-  - Autoparams leveraging type annotations.
-}
- 
-Name: python-%{pypi_name}
-Summary: Dependency injection, the Python way
-License: Apache-2.0
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-Version: 5.2.1
-Release: 11%{?dist}
 
-URL: https://github.com/ivankorobkov/python-%{pypi_name}
-Source0: %pypi_source
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'inject' generated automatically by pyp2spec.}
 
-# Fix tests failing on Python 3.14
 Patch0: 0000-asyncio.patch
 
-BuildRequires: python3-devel
-BuildRequires: python3dist(setuptools)
-BuildRequires: python3dist(pytest)
+%description %_description
 
-BuildArch: noarch
+%package -n     python3-inject
+Summary:        %{summary}
 
-%description
-%{pkg_description}
+%description -n python3-inject %_description
 
-%package -n python3-%{pypi_name}
-Summary: %{summary}
-BuildArch: noarch
-
-%description -n python3-%{pypi_name}
-%{pkg_description}
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n inject-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc CHANGES.md README.md
+
+%files -n python3-inject -f %{pyproject_files}
 
 %changelog
 %autochangelog

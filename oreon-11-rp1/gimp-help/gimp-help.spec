@@ -9,7 +9,7 @@
 
 Summary: Help files for GIMP
 Name: gimp-help
-Version: 3.0.2
+Version: 3_2_0
 Release: %autorelease
 License: GFDL-1.2-invariants-only
 URL: https://docs.gimp.org/

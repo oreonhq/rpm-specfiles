@@ -1,55 +1,62 @@
-%global source0_hash d205c2599029d2e3c95d3666013899d10300d380eb87580a0e8182003c31f7b3
+%global source0_hash none
 
-%global module pamqp
-Name:		python-%{module}
-Version:	3.3.0
-Release:	7%{?dist}
-License:	BSD-3-Clause
-Summary:	AMQP 0-9-1 library
-URL:		https://github.com/gmr/%{module}
-Source0:	%{url}/archive/refs/tags/%{version}.tar.gz#/%{module}-%{version}.tar.gz
-BuildArch:	noarch
+Name:           python-pamqp
+Version:        4.0.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        RabbitMQ Focused AMQP low-level library
 
-%description
-pamqp is a low level AMQP 0-9-1 frame encoding and decoding library for Python3.
-pamqp is not a end-user client library for talking to RabbitMQ but rather is
-used by client libraries for marshaling and unmarshaling AMQP frames.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://github.com/gmr/pamqp
+Source:         %{pypi_source pamqp}
 
-%package -n python3-%{module}
-Summary:	%{summary}
-# python3-devel
-BuildRequires:	pkgconfig(python3)
-# python3-wheel
-BuildRequires:	%{py3_dist wheel}
-# python3-pytest
-BuildRequires:	%{py3_dist pytest}
-%{?python_provide:%python_provide python3-%{module}}
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description -n python3-%{module}
-pamqp is a low level AMQP 0-9-1 frame encoding and decoding library for Python3.
-pamqp is not a end-user client library for talking to RabbitMQ but rather is
-used by client libraries for marshaling and unmarshaling AMQP frames.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pamqp' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-pamqp
+Summary:        %{summary}
+
+%description -n python3-pamqp %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pamqp codegen
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pamqp-%{version}
 
-%autosetup -n %{module}-%{version}
+
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x codegen
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{module}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{pytest}
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{module} -f %{pyproject_files}
-%doc README.rst
-%license LICENSE
+
+%files -n python3-pamqp -f %{pyproject_files}
 
 %changelog
 %autochangelog

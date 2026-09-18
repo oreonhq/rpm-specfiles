@@ -5,7 +5,7 @@
 %global api_version 1.0
 
 Name:           mingw-gstreamer1
-Version:        1.28.2
+Version:        1.29.2
 Release:        1%{?dist}
 Summary:        MinGW Windows Streaming-Media Framework Runtime
 

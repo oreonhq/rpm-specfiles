@@ -7,7 +7,7 @@
 %global crate botan-src
 
 Name:           rust-botan-src
-Version:        0.30701.2
+Version:        0.31300.1
 Release:        %autorelease
 Summary:        Sources of Botan cryptography library
 

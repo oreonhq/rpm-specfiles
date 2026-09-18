@@ -7,7 +7,7 @@
 %global crate hickory-client
 
 Name:           rust-hickory-client
-Version:        0.24.4
+Version:        0.25.2
 Release:        %autorelease
 Summary:        Hickory DNS is a safe and secure DNS library. This is the Client libr...
 

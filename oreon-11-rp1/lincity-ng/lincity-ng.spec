@@ -7,7 +7,7 @@
 %global baserelease 2
 
 Name:		lincity-ng
-Version:	2.14.2
+Version:	2.15.0
 Release:	1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:	GPL-2.0-or-later

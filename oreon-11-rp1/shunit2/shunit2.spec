@@ -3,8 +3,8 @@
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 Name:           shunit2
-Version:        2.1.6
-Release:        31%{?dist}
+Version:        2.1.8
+Release:        1%{?dist}
 Summary:        A xUnit based unit testing for Unix shell scripts
 
 # Automatically converted from old format: LGPLv2 - review is highly recommended.

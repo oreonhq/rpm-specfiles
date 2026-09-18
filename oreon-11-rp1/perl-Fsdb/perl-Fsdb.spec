@@ -2,9 +2,9 @@
 
 Summary: A set of commands for manipulating flat-text databases from the shell
 Name: perl-Fsdb
-Version: 3.9
+Version: 3.17
 Epoch: 2
-Release: 5%{?dist}
+Release: 1%{?dist}
 License: GPL-2.0-only
 URL: http://www.isi.edu/~johnh/SOFTWARE/FSDB/
 Source0: http://www.isi.edu/~johnh/SOFTWARE/FSDB/Fsdb-%{version}.tar.gz

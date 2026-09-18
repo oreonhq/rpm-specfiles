@@ -1,26 +1,24 @@
-%global source0_hash ba8c95b2d975a360249ffa5768e1e6f44d87d10ef7754070d3b321102724a2f1
+%global source0_hash none
 
 Name:           python-pytest-lsp
-Version:        1.0.0
+Version:        1.0.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        A pytest plugin for end-to-end testing of language servers
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/swyddfa/lsp-devtools
-Source:         %{url}/releases/download/pytest-lsp-v%{version}/pytest_lsp-%{version}.tar.gz
+Source:         %{pypi_source pytest_lsp}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-pytest-lsp is a pytest plugin for writing end-to-end tests for language servers.
-
-It works by running the language server in a subprocess and communicating with
-it over stdio, just like a real language client. This also means pytest-lsp can
-be used to test language servers written in any language - not just Python.
-
-pytest-lsp relies on the pygls library for its language server protocol
-implementation.}
+This is package 'pytest-lsp' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -29,23 +27,29 @@ Summary:        %{summary}
 
 %description -n python3-pytest-lsp %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n pytest_lsp-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l pytest_lsp
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v || :
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pytest-lsp -f %{pyproject_files}
 

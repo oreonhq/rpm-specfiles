@@ -1,106 +1,62 @@
-%global source0_hash 78c48f8da414b457c5e9a3a7fe3bc6e6b2276c4550085760ed1c50d62ff494e1
+%global source0_hash none
 
-# Avoid dependency loops:
-#     fsspec -> distributed -> dask -> fsspec
-#     fsspec -> zarr -> fsspec
-%bcond bootstrap 0
-
-%global srcname fsspec
-
-Name:           python-%{srcname}
-Version:        2026.2.0
+Name:           python-fsspec
+Version:        2026.7.0
 Release:        %autorelease
-Summary:        Specification for Pythonic file system interfaces
+# Fill in the actual package summary to submit package to Fedora
+Summary:        File-system specification
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/fsspec/filesystem_spec
-Source:         %{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source fsspec}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-asyncio)
-BuildRequires:  python3dist(pytest-mock)
-BuildRequires:  python3dist(pytest-rerunfailures)
-BuildRequires:  python3dist(cloudpickle)
-%if %{without bootstrap}
-BuildRequires:  python3dist(zarr)
-BuildRequires:  python3dist(notebook)
-%endif
-BuildRequires:  python3dist(jinja2)
-BuildRequires:  python3dist(lz4)
-BuildRequires:  python3dist(numpy)
-BuildRequires:  python3dist(python-snappy)
-BuildRequires:  python3dist(zstandard)
-BuildRequires:  fuse
-BuildRequires:  git-core
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Filesystem Spec is a project to unify various projects and classes to work with
-remote filesystems and file-system-like abstractions using a standard pythonic
-interface.}
+This is package 'fsspec' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n     python3-%{srcname}
+%package -n     python3-fsspec
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-fsspec %_description
 
-%pyproject_extras_subpkg -n python3-%{srcname} arrow
-%pyproject_extras_subpkg -n python3-%{srcname} dask
-%pyproject_extras_subpkg -n python3-%{srcname} entrypoints
-%pyproject_extras_subpkg -n python3-%{srcname} fuse
-%pyproject_extras_subpkg -n python3-%{srcname} gcs
-%pyproject_extras_subpkg -n python3-%{srcname} git
-%pyproject_extras_subpkg -n python3-%{srcname} github
-%pyproject_extras_subpkg -n python3-%{srcname} gs
-%pyproject_extras_subpkg -n python3-%{srcname} hdfs
-%pyproject_extras_subpkg -n python3-%{srcname} http
-%pyproject_extras_subpkg -n python3-%{srcname} libarchive
-%pyproject_extras_subpkg -n python3-%{srcname} sftp
-%pyproject_extras_subpkg -n python3-%{srcname} smb
-%pyproject_extras_subpkg -n python3-%{srcname} ssh
-%pyproject_extras_subpkg -n python3-%{srcname} tqdm
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-fsspec abfs,adl,arrow,dask,dev,doc,dropbox,entrypoints,full,fuse,gcs,git,github,gs,gui,hdfs,http,libarchive,oci,s3,sftp,smb,ssh,test,test-downstream,test-full,tqdm
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n fsspec-%{version}
 
-%autosetup -n filesystem_spec-%{version} -p1
 
 %generate_buildrequires
-# Skipped extras:
-# - abfs and adl: Don't have adlfs
-# - dropbox: Don't have dropboxdrivefs
-# - gui: Don't have panel
-# - oci: Don't have ocifs
-# - s3: Don't have s3fs
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%pyproject_buildrequires -x arrow,%{?!with_bootstrap:dask,}entrypoints,fuse,git,github,hdfs,http,libarchive,sftp,smb,ssh,tqdm
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x abfs,adl,arrow,dask,dev,doc,dropbox,entrypoints,full,fuse,gcs,git,github,gs,gui,hdfs,http,libarchive,oci,s3,sftp,smb,ssh,test,test-downstream,test-full,tqdm
+
 
 %build
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# fuse tests fail on koji builders due to missing kernel modules
-# test_async_cat_file_ranges uses the network; https://github.com/fsspec/filesystem_spec/pull/1734/files#r1893434370
-# test_gist.py and test_github.py tests require network
-%{pytest} -vra \
-  --deselect=fsspec/tests/test_fuse.py::test_basic \
-  --deselect=fsspec/tests/test_fuse.py::test_chmod \
-  --deselect=fsspec/tests/test_fuse.py::test_seek_rw \
-  --deselect=fsspec/implementations/tests/test_reference.py::test_async_cat_file_ranges \
-  --ignore=fsspec/implementations/tests/test_gist.py \
-  --ignore=fsspec/implementations/tests/test_github.py
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-fsspec -f %{pyproject_files}
 
 %changelog
 %autochangelog

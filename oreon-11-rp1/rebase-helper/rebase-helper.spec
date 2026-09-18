@@ -1,7 +1,7 @@
 %global source0_hash e976bf0348464d9781ebef8b7381d00cd9354503bda355176f3d2f8b85ba0dcd
 
 Name:           rebase-helper
-Version:        0.29.6
+Version:        0.29.7
 Release:        %autorelease
 Summary:        The tool that helps you to rebase your package to the latest version
 

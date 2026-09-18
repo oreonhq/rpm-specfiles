@@ -3,7 +3,7 @@
 %global commit 2c9bfe3c1132e8c97d54b92987532276ba80c4fd
 
 Name:           wgrib2
-Version:        3.7.0
+Version:        3.8.0
 Release:        %autorelease
 Summary:        Manipulate, inventory and decode GRIB2 files
 

@@ -1,7 +1,7 @@
 %global source0_hash c897bbfa9848688982c6d5c30529fc29d68df0b9ff22ffa73bad89db73a7ce49
 
 Name:        iverilog
-Version:     13.0
+Version:     13_0
 %define uver 13_0
 Release:     %autorelease
 Summary:     Icarus Verilog is a verilog compiler and simulator

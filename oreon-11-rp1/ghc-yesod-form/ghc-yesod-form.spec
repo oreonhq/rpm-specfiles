@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        1.7.9
+Version:        1.7.11
 Release:        %autorelease
 Summary:        Form handling support for Yesod Web Framework
 

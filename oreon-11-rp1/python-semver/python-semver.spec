@@ -1,55 +1,61 @@
-%global source0_hash afc7d8c584a5ed0a11033af086e8af226a9c0b206f313e0301f8dd7b6b589602
+%global source0_hash none
 
-%global modname semver
+Name:           python-semver
+Version:        3.1.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python helper for Semantic Versioning _https://semver.org_
 
-Name:           python-%{modname}
-Version:        3.0.4
-Release:        5%{?dist}
-Summary:        Python helper for Semantic Versioning
-
-License:        BSD-3-Clause
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/python-semver/python-semver
-Source0:        %{pypi_source semver}
+Source:         %{pypi_source semver}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-# test requirements
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-cov)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A Python module for semantic versioning. Simplifies comparing versions.}
+This is package 'semver' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n     python3-%{modname}
+%package -n     python3-semver
 Summary:        %{summary}
 
-%description -n python3-%{modname}
-%{_description}
+%description -n python3-semver %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-semver native
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n semver-%{version}
 
-%autosetup -n %{modname}-%{version} -p 1
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x native
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files 'semver'
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{modname} -f %{pyproject_files}
-%license LICENSE.txt
-%doc README.rst CHANGELOG.rst
+
+%files -n python3-semver -f %{pyproject_files}
 %{_bindir}/pysemver
 
 %changelog

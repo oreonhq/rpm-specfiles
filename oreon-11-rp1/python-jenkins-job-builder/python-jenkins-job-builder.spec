@@ -1,58 +1,56 @@
-%global source0_hash ecfa420e97b728b469b7e47f36efaac5d0f12ca595a938823cade3fa735aba6f
-
-%global pypi_name jenkins_job_builder
+%global source0_hash none
 
 Name:           python-jenkins-job-builder
-Version:        6.4.4
+Version:        6.5.0
 Release:        %autorelease
-# Someone thought that 2.0.0.0b3 < 2.0.0
-Epoch:          1
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Manage Jenkins jobs with YAML
-License:        Apache-2.0
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://jenkins-job-builder.readthedocs.io/en/latest/
-Source:         %{pypi_source}
+Source:         %{pypi_source jenkins_job_builder}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-# test-requirements.txt
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-mock)
-BuildRequires:  python3dist(testtools) >= 1.4
 
-# Explicitly require a version of python3-jenkins that includes the patch from
-# https://src.fedoraproject.org/rpms/python-jenkins/pull-request/1
-Requires:       python3dist(python-jenkins) >= 1.8
 
-%description
-Jenkins Job Builder takes simple descriptions of Jenkins jobs in YAML format
-and uses them to configure Jenkins. You can keep your job descriptions in
-human readable text format in a version control system to make changes and
-auditing easier. It also has a flexible template system, so creating many
-similarly configured jobs is easy.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'jenkins-job-builder' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-jenkins-job-builder
+Summary:        %{summary}
+
+%description -n python3-jenkins-job-builder %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n jenkins_job_builder-%{version}
 
-%autosetup -n %{pypi_name}-%{version}%{?pre} -p1
-rm -vr *.egg-info/
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
-export PBR_VERSION=%{version}
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files jenkins_jobs
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -f %{pyproject_files}
-%license LICENSE
+
+%files -n python3-jenkins-job-builder -f %{pyproject_files}
 %{_bindir}/jenkins-jobs
 
 %changelog

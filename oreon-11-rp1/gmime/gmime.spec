@@ -1,8 +1,8 @@
 %global source0_hash 7149686a71ca42a1390869b6074815106b061aaeaaa8f2ef8c12c191d9a79f6a
 
 Name:           gmime
-Version:        2.6.23
-Release:        26%{?dist}
+Version:        3.2.7
+Release:        1%{?dist}
 Summary:        Library for creating and parsing MIME messages
 
 # Files in examples/, src/ and tests/ are GPLv2+

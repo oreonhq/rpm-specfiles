@@ -7,7 +7,7 @@
 %global crate rustyline
 
 Name:           rust-rustyline
-Version:        17.0.2
+Version:        18.0.1
 Release:        %autorelease
 Summary:        Readline implementation based on Antirez's Linenoise
 

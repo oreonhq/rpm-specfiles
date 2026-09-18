@@ -1,8 +1,8 @@
 %global source0_hash 8e47a4e18a88d47b14e8eb61a5f298687624a38f9decee9988d8b51a20514c45
 
 Name:       xclipboard
-Version:    1.1.5
-Release:    4%{?dist}
+Version:    1.1.6
+Release:    1%{?dist}
 Summary:    Utility to collect and display text selections
 
 License:    MIT-open-group

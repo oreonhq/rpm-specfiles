@@ -7,7 +7,7 @@
 %global crate jid
 
 Name:           rust-jid
-Version:        0.12.1
+Version:        0.12.3
 Release:        %autorelease
 Summary:        Jid struct for Jabber IDs
 

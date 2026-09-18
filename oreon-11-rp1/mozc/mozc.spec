@@ -7,8 +7,8 @@
 %bcond_without	qt
 
 Name:		mozc
-Version:	2.29.5111.102
-Release:	18%{?dist}
+Version:	3.34.6239
+Release:	1%{?dist}
 Summary:	A Japanese Input Method Editor (IME) designed for multi-platform
 
 License:	BSD-3-Clause AND Apache-2.0 AND Unicode-DFS-2015 AND NAIST-2003

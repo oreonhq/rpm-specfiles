@@ -1,7 +1,7 @@
 %global source0_hash 3900c0e9b8440e3187058ee051c7137b4af3c0f1c3315d2de621aedb3753fd44
 
 Name:           python-uncertainties
-Version:        3.2.3
+Version:        3.2.4
 Release:        %autorelease
 Summary:        Transparent calculations with uncertainties on the quantities involved
 

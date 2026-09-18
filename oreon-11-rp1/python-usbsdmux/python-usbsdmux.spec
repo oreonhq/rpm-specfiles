@@ -1,80 +1,64 @@
-%global source0_hash a04747b1fce007458b7ec15ffec5298e442a21aac50ff6e89fbd7a1f7bb60f2a
-
-%global srcname usbsdmux
+%global source0_hash none
 
 Name:           python-usbsdmux
-Version:        25.08
+Version:        25.8
 Release:        %autorelease
-Summary:        USB-SD-Mux control software and library
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Tool to control an USB-SD-Mux from the command line
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-2.1-or-later
-URL:            https://github.com/linux-automation/usbsdmux/
-Source0:        %{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
-Source1:        99-usbsdmux.rules
+URL:            https://github.com/linux-automation/usbsdmux
+Source:         %{pypi_source usbsdmux}
 
 BuildArch:      noarch
-
-BuildRequires:  help2man
-Buildrequires:  python3-pytest
-Buildrequires:  python3-pytest-mock
 BuildRequires:  python3-devel
-BuildRequires:  systemd-rpm-macros
-BuildRequires:  sed
 
-%{?python_enable_dependency_generator}
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-usbsdmux is used to control a special piece of hardware called the USB-SD-Mux.
-It can be used via the command line or as a Python library
-}
+This is package 'usbsdmux' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-usbsdmux
 Summary:        %{summary}
-Requires:       systemd-udev
 
-Provides:       %{srcname} = %{version}-%{release}
+%description -n python3-usbsdmux %_description
 
-Recommends:     python3-paho-mqtt
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-usbsdmux mqtt
 
-%description -n python3-%{srcname} %_description
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n usbsdmux-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-
-# Remove the python shebang from non-executable files.
-sed -i '1{\@^#!.*/usr/bin/env python@d}' usbsdmux/*.py
 
 %generate_buildrequires
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x mqtt
+
 
 %build
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-install -p -m 644 -D %{SOURCE1} %{buildroot}%{_udevrulesdir}/99-usbsdmux.rules
-mkdir -p %{buildroot}%{_mandir}/man1
-for BBIN in usbsdmux usbsdmux-configure ; do
-    help2man --no-discard-stderr %{buildroot}%{_bindir}/$BBIN > %{buildroot}%{_mandir}/man1/$BBIN.1
-done
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files -l usbsdmux
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSES/LGPL-2.1-or-later.txt
-%doc AUTHORS README.rst contrib
-%{_bindir}/usbsdmux*
-%{_mandir}/man1/usbsdmux*1*
-%{_udevrulesdir}/99-usbsdmux.rules
+
+%files -n python3-usbsdmux -f %{pyproject_files}
+%{_bindir}/usbsdmux
+%{_bindir}/usbsdmux-configure
 
 %changelog
 %autochangelog

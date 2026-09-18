@@ -2,7 +2,7 @@
 
 Name:           iaito
 Summary:        GUI for radare2 reverse engineering framework
-Version:        5.9.9
+Version:        6.2.2
 # %%global      upversion       %%{version}-beta
 URL:            https://radare.org/n/iaito.html
 %global         urlvcs          https://github.com/radareorg/iaito

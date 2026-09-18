@@ -7,7 +7,7 @@
 %global crate codepage
 
 Name:           rust-codepage
-Version:        0.1.2
+Version:        0.1.3
 Release:        %autorelease
 Summary:        Mapping between Windows code page numbers and encoding_rs character encodings
 

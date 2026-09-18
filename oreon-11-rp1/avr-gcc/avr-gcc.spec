@@ -5,7 +5,7 @@
 Name:           %{target}-gcc
 #FIXME:11.2 fails with Werror-format-security https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100431
 #revert -Wno-format-security once fix is available
-Version:        15.2.0
+Version:        16.2.0
 Release:        1%{?dist}
 Epoch:          1
 Summary:        Cross Compiling GNU GCC targeted at %{target}

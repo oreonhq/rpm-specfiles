@@ -1,59 +1,61 @@
-%global source0_hash c56d86f110866becad6690c7518f7036c20831c0f82fc87eba8fdb943132f04b
+%global source0_hash none
 
-%{?python_enable_dependency_generator}
-%global srcname fuzzyfinder
+Name:           python-fuzzyfinder
+Version:        2.3.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Fuzzy Finder implemented in Python.
 
-Name:           python-%{srcname}
-Version:        2.1.0
-Release:        31%{?dist}
-Summary:        Fuzzy Finder implemented in Python
-
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/amjith/fuzzyfinder
-Source0:        %{pypi_source}
+Source:         %{pypi_source fuzzyfinder}
 
 BuildArch:      noarch
-
-%global _description \
-%{summary}. Matches partial string entries from a list\
-of strings. Works similar to fuzzy finder in SublimeText and\
-Vim’s Ctrl-P plugin.
-
-%description
-%{_description}
-
-%package -n python3-%{srcname}
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-pytest
 
-%description -n python3-%{srcname} %{_description}
 
-Python 3 version.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'fuzzyfinder' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-fuzzyfinder
+Summary:        %{summary}
+
+%description -n python3-fuzzyfinder %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-fuzzyfinder dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n fuzzyfinder-%{version}
 
-%autosetup -n %{srcname}-%{version}
-rm -rf %{srcname}.egg-info/
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-PYTHONPATH=%{buildroot}%{python3_sitelib} py.test-3 -v
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname}
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/%{srcname}-*.egg-info/
-%{python3_sitelib}/%{srcname}/
+
+%files -n python3-fuzzyfinder -f %{pyproject_files}
 
 %changelog
 %autochangelog

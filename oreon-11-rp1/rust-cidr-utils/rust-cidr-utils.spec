@@ -7,7 +7,7 @@
 %global crate cidr-utils
 
 Name:           rust-cidr-utils
-Version:        0.6.2
+Version:        0.7.1
 Release:        %autorelease
 Summary:        Functions for working with IPv4 CIDRs and IPv6 CIDRs
 

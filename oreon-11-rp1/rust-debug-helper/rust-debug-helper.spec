@@ -7,7 +7,7 @@
 %global crate debug-helper
 
 Name:           rust-debug-helper
-Version:        0.3.13
+Version:        0.3.14
 Release:        %autorelease
 Summary:        Declarative macros to help you implement the Debug trait manually
 

@@ -2,8 +2,8 @@
 
 Name: systemd-swap
 Summary: Creating hybrid swap space from zram swaps, swap files and swap partitions
-Version: 3.3.0
-Release: 19%{?dist}
+Version: 4.4.0
+Release: 1%{?dist}
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License: GPL-3.0-or-later
 URL: https://github.com/Nefelim4ag/%{name}

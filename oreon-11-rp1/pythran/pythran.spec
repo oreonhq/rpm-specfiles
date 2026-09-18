@@ -1,7 +1,7 @@
 %global source0_hash cdbab54e8f28321b8f8f0ea8d12de1669c3294f67c13332c7f5bf92cf0a8833a
 
 Name:           pythran
-Version:        0.18.1
+Version:        0.19.0
 Release:        %autorelease
 Summary:        Ahead of Time Python compiler for numeric kernels
 

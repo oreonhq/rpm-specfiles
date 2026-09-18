@@ -7,7 +7,7 @@
 %global crate dcv-color-primitives
 
 Name:           rust-dcv-color-primitives
-Version:        0.6.1
+Version:        1.0.0
 Release:        %autorelease
 Summary:        a library to perform image color model conversion
 

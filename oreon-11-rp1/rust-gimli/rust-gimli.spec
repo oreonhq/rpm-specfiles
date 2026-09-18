@@ -7,7 +7,7 @@
 %global crate gimli
 
 Name:           rust-gimli
-Version:        0.32.3
+Version:        0.34.0
 Release:        %autorelease
 Summary:        Library for reading and writing the DWARF debugging format
 

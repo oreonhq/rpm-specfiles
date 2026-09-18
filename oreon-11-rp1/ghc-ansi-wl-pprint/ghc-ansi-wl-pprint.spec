@@ -13,8 +13,8 @@
 %global subpkgs %{prettyprintercompatansiwlpprint}
 
 Name:           ghc-%{pkg_name}
-Version:        1.0.2
-Release:        7%{?dist}
+Version:        1.1.1
+Release:        1%{?dist}
 Summary:        The Wadler/Leijen Pretty Printer for colored ANSI terminal output
 
 License:        BSD-3-Clause

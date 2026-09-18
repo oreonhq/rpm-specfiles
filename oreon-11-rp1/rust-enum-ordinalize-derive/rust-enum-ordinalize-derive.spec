@@ -7,7 +7,7 @@
 %global crate enum-ordinalize-derive
 
 Name:           rust-enum-ordinalize-derive
-Version:        4.3.2
+Version:        4.4.2
 Release:        %autorelease
 Summary:        Enums can get and construct from ordinal values with a procedural macro
 

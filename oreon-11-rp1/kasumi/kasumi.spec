@@ -6,8 +6,8 @@
 # https://github.com/uim/uim/issues/166
 
 Name:    kasumi
-Version: 2.5
-Release: 50%{?dist}
+Version: 2.7
+Release: 1%{?dist}
 
 License: GPL-2.0-or-later
 URL:     http://kasumi.sourceforge.jp/

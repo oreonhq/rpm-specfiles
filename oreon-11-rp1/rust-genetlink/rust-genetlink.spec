@@ -7,7 +7,7 @@
 %global crate genetlink
 
 Name:           rust-genetlink
-Version:        0.2.6
+Version:        0.3.0
 Release:        %autorelease
 Summary:        communicate with generic netlink
 

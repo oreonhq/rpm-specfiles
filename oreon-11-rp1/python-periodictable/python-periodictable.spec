@@ -28,7 +28,7 @@ the International Tables for Crystallography, Volume C, and so
 may give different results from other packages.}
 
 Name:           python-%{pname}
-Version:        2.0.2
+Version:        2.1.0
 Release:        %autorelease
 Summary:        Extensible periodic table of the elements
 License:        BSD-3-Clause AND LicenseRef-Fedora-Public-Domain

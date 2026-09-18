@@ -7,7 +7,7 @@ Name:                  rtl-wmbus
 %global the_binary     rtl_wmbus
 
 %if %{with_tag}
-%global tag            0.0.0
+%global tag            1.1.0
 Version:               %{tag}
 %else
 %global date           20240118
@@ -17,7 +17,7 @@ Version:               0
 
 %forgemeta
 
-Release:               24%{?dist}
+Release:               1%{?dist}
 Summary:               Software defined receiver for wireless M-Bus with RTL-SDR
 # Automatically converted from old format: BSD - review is highly recommended.
 License:               LicenseRef-Callaway-BSD

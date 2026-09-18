@@ -10,7 +10,7 @@
 %global crate uu_ln
 
 Name:           rust-uu_ln
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        ln ~ (uutils) create a (file system) link to TARGET
 

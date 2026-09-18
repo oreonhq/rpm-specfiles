@@ -1,7 +1,7 @@
 %global source0_hash 1c4bb10185a67592164eb870c717b8bdd03f290c8d68f9a8c658335ff5ac8b91
 
 Name:    testssl
-Version: 3.2.3
+Version: 3.2.4
 Release: %autorelease
 
 Summary: Testing TLS/SSL encryption

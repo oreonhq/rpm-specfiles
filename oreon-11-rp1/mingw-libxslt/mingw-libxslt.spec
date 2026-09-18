@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-libxslt
-Version:        1.1.43
-Release:        5%{?dist}
+Version:        1.1.45
+Release:        1%{?dist}
 Summary:        MinGW Windows Library providing the Gnome XSLT engine
 
 License:        MIT

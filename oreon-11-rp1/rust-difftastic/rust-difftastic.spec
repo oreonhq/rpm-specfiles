@@ -6,7 +6,7 @@
 %global crate difftastic
 
 Name:           rust-difftastic
-Version:        0.67.0
+Version:        0.70.0
 Release:        %autorelease
 Summary:        Structural diff that understands syntax
 

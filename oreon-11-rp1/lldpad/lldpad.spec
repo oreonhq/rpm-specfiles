@@ -8,8 +8,8 @@
 %global checkout 85e5583
 
 Name:               lldpad
-Version:            1.1.0
-Release:            16.git%{checkout}%{?dist}
+Version:            1.1.1
+Release:            1.git%{checkout}%{?dist}
 Summary:            Intel LLDP Agent
 License:            GPL-2.0-only
 URL:                http://open-lldp.org/

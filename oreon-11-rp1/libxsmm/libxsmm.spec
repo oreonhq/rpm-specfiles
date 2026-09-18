@@ -22,8 +22,8 @@
 %global optflags %optflags -std=gnu17
 
 Name:		libxsmm
-Version:	1.17
-Release:	8%{?dist}
+Version:	2.1.0
+Release:	1%{?dist}
 Summary:	Small dense or sparse matrix multiplications and convolutions for x86_64
 License:	BSD-3-Clause
 URL:		https://github.com/hfp/libxsmm

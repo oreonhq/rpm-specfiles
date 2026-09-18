@@ -7,7 +7,7 @@
 %global crate gix-actor
 
 Name:           rust-gix-actor
-Version:        0.37.1
+Version:        0.42.0
 Release:        %autorelease
 Summary:        A way to identify git actors
 

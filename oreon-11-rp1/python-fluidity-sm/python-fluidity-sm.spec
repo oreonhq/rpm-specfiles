@@ -1,8 +1,8 @@
 %global source0_hash b578e9fb4e8f728102357764b19e2b4ea4a926b357ccb657805c8ba4ef1ec997
 
 Name:		python-fluidity-sm
-Version:	0.2.0
-Release:	42%{?dist}
+Version:	0.2.1
+Release:	1%{?dist}
 Summary:	State machine implementation for Python objects
 License:	MIT
 URL:		https://github.com/nsi-iff/fluidity

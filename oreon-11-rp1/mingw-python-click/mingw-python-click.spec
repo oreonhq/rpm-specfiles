@@ -7,8 +7,8 @@
 
 Name:          mingw-python-%{pypi_name}
 Summary:       MinGW Windows Python %{pypi_name} library
-Version:       8.3.1
-Release:       2%{?dist}
+Version:       8.5.0
+Release:       1%{?dist}
 BuildArch:     noarch
 
 License:       BSD-3-Clause

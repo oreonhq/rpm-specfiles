@@ -6,8 +6,8 @@
 %global dock_obsolete_vr 1.3.7-2
 
 Name:           %{project}
-Version:        4.21.0
-Release:        8%{?dist}
+Version:        4.22.1
+Release:        1%{?dist}
 
 Summary:        Improved builder for Docker images
 # Automatically converted from old format: BSD - review is highly recommended.

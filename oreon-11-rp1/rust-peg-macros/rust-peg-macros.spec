@@ -10,7 +10,7 @@
 %global crate peg-macros
 
 Name:           rust-peg-macros
-Version:        0.8.5
+Version:        0.8.6
 Release:        %autorelease
 Summary:        Procedural macros for rust-peg
 

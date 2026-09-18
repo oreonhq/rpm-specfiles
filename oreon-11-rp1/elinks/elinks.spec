@@ -4,8 +4,8 @@
 
 Name:      elinks
 Summary:   A text-mode Web browser
-Version:   0.19.0
-Release:   2%{?dist}
+Version:   0.20.0
+Release:   1%{?dist}
 License:   GPL-2.0-only
 URL:       https://github.com/rkd77/elinks
 Source:        https://github.com/rkd77/elinks/releases/download/v%{version}/elinks-%{version}.tar.xz

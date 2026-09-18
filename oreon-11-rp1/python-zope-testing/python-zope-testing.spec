@@ -1,68 +1,62 @@
-%global source0_hash 7b34133a8f4a7135f3732fa5ba31d9968e9b9029881157d2a24493356d7fd54a
-
-%global _without_tests 1
-%global modname zope.testing
-
-# The upstream tarball got renamed with an underscore
-# but the package name still has a dot in it.
-
-# Break circular dependency on python-zope-testrunner
-%bcond tests 1
+%global source0_hash none
 
 Name:           python-zope-testing
-Version:        6.0
+Version:        6.2
 Release:        %autorelease
-Summary:        Zope Testing Framework
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Zope testing helpers
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ZPL-2.1
-URL:            https://pypi.io/project/%{modname}
-Source0:        https://pypi.io/packages/source/z/%{modname}/zope_testing-%{version}.tar.gz
+URL:            https://github.com/zopefoundation/zope.testing
+Source:         %{pypi_source zope_testing}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-This package provides a number of testing frameworks. It includes a
-flexible test runner, and supports both doctest and unittest.
 
-%package -n python%{python3_pkgversion}-zope-testing
-Summary:        Zope Testing Framework
-%{?python_provide:%python_provide python%{python3_pkgversion}-zope-testing}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'zope-testing' generated automatically by pyp2spec.}
 
-%description -n python%{python3_pkgversion}-zope-testing
-This package provides a number of testing frameworks. It includes a
-flexible test runner, and supports both doctest and unittest.
+%description %_description
+
+%package -n     python3-zope-testing
+Summary:        %{summary}
+
+%description -n python3-zope-testing %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-zope-testing docs,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n zope_testing-%{version}
 
-rm -rf %{modname}.egg-info
-
-# Allow newer version of setuptools
-sed -i 's/"setuptools [<=]= .*"/"setuptools"/' pyproject.toml
-sed -i 's/setuptools [<=]= .*/setuptools/' tox.ini
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-t}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files zope
-# __init__.py* are not needed since .pth file is used
-rm -f %{buildroot}%{python3_sitelib}/zope/__init__.py*
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%py3_check_import zope.testing
-%if %{with tests}
-%tox
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-zope-testing -f %{pyproject_files}
-%doc CHANGES.rst README.rst src/zope/testing/*.txt
-%license COPYRIGHT.txt LICENSE.txt
-%exclude %{python3_sitelib}/zope/testing/*.txt
+
+%files -n python3-zope-testing -f %{pyproject_files}
 
 %changelog
 %autochangelog

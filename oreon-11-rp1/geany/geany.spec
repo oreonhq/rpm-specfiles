@@ -6,8 +6,8 @@
 %undefine  py_auto_byte_compile
 
 Name:      geany
-Version:   2.1
-Release:   4%{?dist}
+Version:   2.1.0
+Release:   1%{?dist}
 Summary:   A fast and lightweight IDE using GTK3
 
 # Automatically converted from old format: GPLv2+ and MIT - review is highly recommended.

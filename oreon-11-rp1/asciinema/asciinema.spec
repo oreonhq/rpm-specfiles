@@ -1,7 +1,7 @@
 %global source0_hash f44feaa1bc150e7964635dc4714fd86089a968587fed81dccf860ee7b64617ca
 
 Name:           asciinema
-Version:        3.0.0
+Version:        3.2.1
 Release:        %autorelease
 Summary:        Terminal session recorder, streamer and player
 

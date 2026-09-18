@@ -1,10 +1,13 @@
-%global source0_hash ea1f80a79cedc42289e0b8e973276df04fb94f56e0ae3efc5385fb28547cf5cb
+%global source0_hash none
 
 Name:           python-mkdocs-git-committers-plugin-2
-Version:        2.4.1
+Version:        2.5.0
 Release:        %autorelease
-Summary:        MkDocs plugin to create a list of contributors on the page
+# Fill in the actual package summary to submit package to Fedora
+Summary:        An MkDocs plugin to create a list of contributors on the page. The git-committers plugin will seed the template context with a list of GitHub or GitLab committers and other useful GIT info such as last modified date
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/ojacques/mkdocs-git-committers-plugin-2/
 Source:         %{pypi_source mkdocs_git_committers_plugin_2}
@@ -12,11 +15,10 @@ Source:         %{pypi_source mkdocs_git_committers_plugin_2}
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package provides an MkDocs plugin to create a list of contributors on the
-page. The git-committers plugin will seed the template context with a list of
-GitHub or GitLab committers and other useful GIT info such as last modified
-date.}
+This is package 'mkdocs-git-committers-plugin-2' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -25,26 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-mkdocs-git-committers-plugin-2 %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n mkdocs_git_committers_plugin_2-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l mkdocs_git_committers_plugin_2
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-mkdocs-git-committers-plugin-2 -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

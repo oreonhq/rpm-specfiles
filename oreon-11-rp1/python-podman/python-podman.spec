@@ -1,104 +1,61 @@
-%global source0_hash 4c596cb0f17085e590f8ac497e103f3db3215f9554ef24e33316e89467d8aade
+%global source0_hash none
 
-# RHEL 8 envs has slightly different python deps
-# and also doesn't support dynamic (build)requires.
-%if %{defined rhel} && 0%{?rhel} == 8
-%define rhel8_py 1
-%endif
+Name:           python-podman
+Version:        5.8.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Bindings for Podman RESTful API
 
-%global pypi_name podman
-%global desc %{pypi_name} is a library of bindings to use the RESTful API for Podman.
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/containers/podman-py
+Source:         %{pypi_source podman}
 
-%global pypi_dist 4
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-Name: python-%{pypi_name}
-%if %{defined copr_username}
-Epoch: 102
-%else
-Epoch: 3
-%endif
-# DO NOT TOUCH the Version string!
-# The TRUE source of this specfile is:
-# https://github.com/containers/podman/blob/main/rpm/python-podman.spec
-# If that's what you're reading, Version must be 0, and will be updated by Packit for
-# copr and koji builds.
-# If you're reading this on dist-git, the version is automatically filled in by Packit.
-Version: 5.6.0
-License: Apache-2.0
-Release: %autorelease
-Summary: RESTful API for Podman
-URL: https://github.com/containers/%{pypi_name}-py
-# Tarball fetched from upstream
-Source0:        https://github.com/containers/podman-py/archive/refs/tags/v5.6.0.tar.gz#/python-podman-5.6.0.tar.gz
 
-BuildArch: noarch
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'podman' generated automatically by pyp2spec.}
 
-%description
-%desc
+%description %_description
 
-%package -n python%{python3_pkgversion}-%{pypi_name}
-BuildRequires: git-core
-BuildRequires: python%{python3_pkgversion}-devel
-%if %{defined rhel8_py}
-BuildRequires: python%{python3_pkgversion}-rpm-macros
-BuildRequires: python%{python3_pkgversion}-pytoml
-BuildRequires: python%{python3_pkgversion}-requests
-Requires: python%{python3_pkgversion}-pytoml
-Requires: python%{python3_pkgversion}-requests
-%else
-BuildRequires: pyproject-rpm-macros
-%endif
-Provides: %{pypi_name}-py = %{epoch}:%{version}-%{release}
-Provides: python%{python3_pkgversion}dist(%{pypi_name}) = %{pypi_dist}
-Provides: python%{python3_version}dist(%{pypi_name}) = %{pypi_dist}
-Obsoletes: python%{python3_pkgversion}-%{pypi_name}-api <= 0.0.0-1
-Provides: python%{python3_pkgversion}-%{pypi_name}-api = %{epoch}:%{version}-%{release}
-Summary: %{summary}
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
+%package -n     python3-podman
+Summary:        %{summary}
 
-%description -n python%{python3_pkgversion}-%{pypi_name}
-%desc
+%description -n python3-podman %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-podman docs,progress-bar,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git -n %{pypi_name}-py-%{version}
+%autosetup -p1 -n podman-%{version}
 
-%if !%{defined rhel8_py}
+
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-t}
-%endif
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,progress-bar,test
+
 
 %build
-export PBR_VERSION="0.0.0"
-%if %{defined rhel8_py}
-%py3_build
-%else
 %pyproject_wheel
-%endif
+
 
 %install
-export PBR_VERSION="0.0.0"
-%if %{defined rhel8_py}
-%py3_install
-%else
 %pyproject_install
-%pyproject_save_files %{pypi_name}
-%endif
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
+%_pyproject_check_import_allow_no_modules -t
 
-%if %{defined rhel8_py}
-%files -n python%{python3_pkgversion}-%{pypi_name}
-%dir %{python3_sitelib}/%{pypi_name}-*-py%{python3_version}.egg-info
-%{python3_sitelib}/%{pypi_name}-*-py%{python3_version}.egg-info/*
-%dir %{python3_sitelib}/%{pypi_name}
-%{python3_sitelib}/%{pypi_name}/*
-%else
-%pyproject_extras_subpkg -n python%{python3_pkgversion}-%{pypi_name} progress_bar
-%files -n python%{python3_pkgversion}-%{pypi_name} -f %{pyproject_files}
-%endif
-%license LICENSE
-%doc README.md
+
+%files -n python3-podman -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.6.0-1

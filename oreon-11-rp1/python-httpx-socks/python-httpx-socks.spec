@@ -1,76 +1,62 @@
-%global source0_hash 6e0c809cbb43fd0bd97028d87cbc382b5af9e14e839d001716c60f9a2bed352e
-
-# Break a circular test dependency on python-tiny-proxy
-%bcond bootstrap 0
-%bcond tests %{expr:%{without bootstrap} && 0%{?fedora} > 39}
-
-%global _description %{expand:
-The httpx-socks package provides proxy transports for httpx client. SOCKS4(a),
-SOCKS5(h), HTTP (tunneling) proxy supported. It uses python-socks for core
-proxy functionality.}
-
-%global forgeurl https://github.com/romis2012/httpx-socks
+%global source0_hash none
 
 Name:           python-httpx-socks
-Version:        0.11.0
-Release:        %{autorelease}
-Summary:        Proxy (HTTP, SOCKS) transports for httpx
+Version:        0.13.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Proxy _HTTP, SOCKS_ transports for httpx
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-%forgemeta
-URL:            %{forgeurl}
-Source:         %{forgesource}
+URL:            https://github.com/romis2012/httpx-socks
+Source:         %{pypi_source httpx_socks}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'httpx-socks' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-httpx-socks
+%package -n     python3-httpx-socks
 Summary:        %{summary}
 
 %description -n python3-httpx-socks %_description
 
-%pyproject_extras_subpkg -n python3-httpx-socks asyncio trio anyio
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-httpx-socks anyio,asyncio,trio
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n httpx_socks-%{version}
 
-%autosetup -n httpx-socks-%{version}
-%forgesetup
-
-# loosen pinned deps
-sed -r -i 's/("httpx>=.*),<.*"/\1"/' pyproject.toml
-
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-sed -r \
-    -e 's/^(pytest-cov|coveralls|flake8)\b/# &/' \
-    -e 's/(==|,<).*//' \
-    requirements-dev.txt |
-  tee requirements-dev-filtered.txt
-
-# Comment out to remove /usr/bin/env shebangs
-# Can use something similar to correct/remove /usr/bin/python shebangs also
-# find . -type f -name "*.py" -exec sed -i '/^#![  ]*\/usr\/bin\/env.*$/ d' {} 2>/dev/null ';'
 
 %generate_buildrequires
-%pyproject_buildrequires -x asyncio,trio,anyio %{?with_tests:requirements-dev-filtered.txt}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x anyio,asyncio,trio
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l httpx_socks
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%if %{with tests}
-%pytest -v
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-httpx-socks -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

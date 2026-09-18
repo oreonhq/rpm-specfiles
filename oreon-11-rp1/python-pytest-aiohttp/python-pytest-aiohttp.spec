@@ -1,60 +1,61 @@
-%global source0_hash 147de8cb164f3fc9d7196967f109ab3c0b93ea3463ab50631e56438eab7b5adc
+%global source0_hash none
 
-# Enable tests by default.
-%bcond_without tests
-
-%global pypi_name pytest-aiohttp
-
-Name:           python-%{pypi_name}
-Version:        1.1.0
-Release:        6%{?dist}
+Name:           python-pytest-aiohttp
+Version:        1.1.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Pytest plugin for aiohttp support
 
-License:        Apache-2.0
-URL:            https://github.com/aio-libs/pytest-aiohttp/
-Source0:        %{pypi_source pytest_aiohttp}
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/aio-libs/pytest-aiohttp
+Source:         %{pypi_source pytest_aiohttp}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-The library allows to use aiohttp pytest plugin without need for implicitly
-loading it like pytest_plugins = 'aiohttp.pytest_plugin'.
 
-%package -n python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pytest-aiohttp' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-pytest-aiohttp
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-%{?python_provide:%python_provide python3-%{pypi_name}}
+%description -n python3-pytest-aiohttp %_description
 
-%description -n python3-%{pypi_name}
-The library allows to use aiohttp pytest plugin without need for implicitly
-loading it like pytest_plugins = 'aiohttp.pytest_plugin'.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pytest-aiohttp testing
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_aiohttp-%{version}
 
-%autosetup -n pytest_aiohttp-%{version} -p1
 
 %generate_buildrequires
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x testing
+
 
 %build
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_wheel
 
+
 %install
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_install
-%pyproject_save_files pytest_aiohttp
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-%pytest -W ignore::DeprecationWarning
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}  -f %{pyproject_files}
-%doc CHANGES.rst README.rst
-%license LICENSE
+
+%files -n python3-pytest-aiohttp -f %{pyproject_files}
 
 %changelog
 %autochangelog

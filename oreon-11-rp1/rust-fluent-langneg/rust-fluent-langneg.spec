@@ -7,7 +7,7 @@
 %global crate fluent-langneg
 
 Name:           rust-fluent-langneg
-Version:        0.13.0
+Version:        0.14.2
 Release:        %autorelease
 Summary:        Library for language and locale negotiation
 

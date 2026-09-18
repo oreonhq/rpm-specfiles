@@ -1,7 +1,7 @@
 %global source0_hash ab24ef5feb004f06db2ffe62c16e3aded5ec492108d935ded12b20ec276cbd15
 
 Name:           pyp2spec
-Version:        0.13.0
+Version:        0.16.0
 Release:        %autorelease
 Summary:        Generate Fedora RPM spec files for Python projects
 

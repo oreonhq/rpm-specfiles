@@ -1,61 +1,55 @@
-%global source0_hash 916271dcf55fc3fd150354b6dbbf76d75a1a5e77cbefca3c3603a8b9c51f9529
+%global source0_hash none
 
-# https://rogerbinns.github.io/apsw/about.html#apsw-and-sqlite-versions
-%global sqlite_version 3.51.2
+Name:           python-apsw
+Version:        3.53.4.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Another Python SQLite Wrapper
 
-Name:               python-apsw
-Version:            %{sqlite_version}.0
-Release:            %autorelease
-Summary:            Another Python SQLite Wrapper
-License:            any-OSI
-URL:                https://github.com/rogerbinns/apsw
-Source:             %{pypi_source apsw}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        any-OSI
+URL:            https://rogerbinns.github.io/apsw/changes.html
+Source:         %{pypi_source apsw}
 
-BuildRequires:      gcc
-BuildRequires:      python3-devel
-BuildRequires:      sqlite-devel >= %{sqlite_version}
+BuildRequires:  python3-devel
+BuildRequires:  gcc
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-APSW is a Python wrapper for the SQLite embedded relational database
-engine. In contrast to other wrappers such as pysqlite it focuses on
-being a minimal layer over SQLite attempting just to translate the
-complete SQLite API into Python.}
+This is package 'apsw' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-apsw
-Summary:            Another Python SQLite Wrapper
+%package -n     python3-apsw
+Summary:        %{summary}
 
 %description -n python3-apsw %_description
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n apsw-%{version}
 
-%autosetup -n apsw-%{version} -p1
-
-# The PyPI sdist includes configuration file with the fetch option enabled,
-# which would try to download the SQLite amalgamation during the build.  To
-# avoid that, and to enable extension loading, we'll overwrite that
-# configuration with our own.
-cat > setup.apsw << EOF
-[build]
-enable = load_extension
-EOF
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
-# Build the wheel and the test extension, which is used during %%check
-%pyproject_wheel -C--global-option=build_test_extension
+%pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l apsw
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%{py3_test_envvars} %{python3} -m apsw.tests -v
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-apsw -f %{pyproject_files}
 %{_bindir}/apsw

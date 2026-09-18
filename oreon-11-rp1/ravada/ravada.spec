@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 %global __requires_exclude ^perl\\((redirection)
 
 Name:           ravada
-Version:        2.4.1
+Version:        2.4.6
 Release:        %autorelease
 Summary:        Remote Virtual Desktops Manager
 # AGPL-3.0-only: main program

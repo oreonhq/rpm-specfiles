@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           maven-dependency-plugin
-Version:        3.6.1
+Version:        3.11.0
 Release:        %autorelease
 Summary:        Plugin to manipulate, copy and unpack local and remote artifacts
 License:        Apache-2.0
@@ -45,7 +45,7 @@ BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-build-api)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.6.1-16
+Obsoletes:      %{name}-javadoc < 3.11.0-16
 
 %description
 The dependency plugin provides the capability to manipulate

@@ -7,7 +7,7 @@
 %global crate directories
 
 Name:           rust-directories
-Version:        5.0.1
+Version:        6.0.0
 Release:        %autorelease
 Summary:        A tiny mid-level library that provides platform-specific standard loc...
 

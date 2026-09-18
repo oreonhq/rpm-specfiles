@@ -2,8 +2,8 @@
 
 %global __python /usr/bin/python3
 Name:           pykakasi
-Version:        2.3.0
-Release:        8%{?dist}
+Version:        2.3.0b1
+Release:        1%{?dist}
 Summary:        Lightweight converter from Japanese Kana-kanji sentences into Kana-Roman
 
 License:        GPL-3.0-or-later AND BSD-3-Clause

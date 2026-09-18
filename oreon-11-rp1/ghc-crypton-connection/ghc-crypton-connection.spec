@@ -12,9 +12,9 @@
 %global subpkgs %{cryptonsocks}
 
 Name:           ghc-%{pkg_name}
-Version:        0.4.5
+Version:        0.4.6
 # can only be reset when subpkg bumped
-Release:        6%{?dist}
+Release:        1%{?dist}
 Summary:        Simple and easy network connection API
 
 License:        BSD-3-Clause

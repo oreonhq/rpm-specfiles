@@ -7,7 +7,7 @@
 %global crate gix-error
 
 Name:           rust-gix-error
-Version:        0.2.5
+Version:        0.3.2
 Release:        %autorelease
 Summary:        A crate of the gitoxide project to provide common errors and error-ha...
 

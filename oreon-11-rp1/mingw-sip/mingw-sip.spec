@@ -4,7 +4,7 @@
 
 Name:           mingw-%{pypi_name}
 Summary:        MinGW Windows SIP6
-Version:        6.15.1
+Version:        6.16.1
 Release:        1%{?dist}
 
 License:        BSD-2-Clause

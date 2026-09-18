@@ -1,9 +1,9 @@
 %global source0_hash 6e11776e640798a1ac4168d53877f105bb3e8cf93b443c160841e3acdab63939
 
-%global xfceversion 4.20
+%global xfceversion 4.21
 
 Name:           xfce4-settings
-Version:        4.20.2
+Version:        4.21.0
 Release:        %autorelease
 Summary:        Settings Manager for Xfce
 

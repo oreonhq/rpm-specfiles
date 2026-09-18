@@ -7,7 +7,7 @@
 %global crate fundu-core
 
 Name:           rust-fundu-core
-Version:        0.3.1
+Version:        0.4.1
 Release:        %autorelease
 Summary:        Core driving the implementation of fundu
 

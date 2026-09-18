@@ -24,8 +24,8 @@ ExcludeArch: %{ix86}
 %global apiversion 1
 
 Name:		libint2
-Version:	2.9.0
-Release:	5%{?dist}
+Version:	2.13.1
+Release:	1%{?dist}
 Summary:	A library for efficient evaluation of electron repulsion integrals
 # Generator itself is GPLv2+, generated library packaged in Fedora is LGPLv3
 License:	LGPL-3.0-only

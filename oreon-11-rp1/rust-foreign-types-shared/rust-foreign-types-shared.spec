@@ -7,7 +7,7 @@
 %global crate foreign-types-shared
 
 Name:           rust-foreign-types-shared
-Version:        0.1.1
+Version:        0.3.1
 Release:        %autorelease
 Summary:        An internal crate used by foreign-types
 

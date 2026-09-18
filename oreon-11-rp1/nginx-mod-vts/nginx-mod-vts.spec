@@ -4,8 +4,8 @@
 %global origname nginx-module-%{nginx_modname}
 
 Name:           nginx-mod-vts
-Version:        0.2.4
-Release:        6%{?dist}
+Version:        0.2.7
+Release:        1%{?dist}
 Summary:        Nginx virtual host traffic status module
 
 # Automatically converted from old format: BSD - review is highly recommended.

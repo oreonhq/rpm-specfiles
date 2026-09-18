@@ -32,8 +32,8 @@
 %global with_tests   0%{?_with_tests:1}
 
 Name:           php-%{pk_vendor}-%{pk_name}%{major}
-Version:        2.0.7
-Release:        16%{?dist}
+Version:        3.7.0
+Release:        1%{?dist}
 Summary:        php wrapper for smbclient and libsmbclient-php
 
 License:        MIT

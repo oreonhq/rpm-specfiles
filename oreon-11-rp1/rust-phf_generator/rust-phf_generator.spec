@@ -7,7 +7,7 @@
 %global crate phf_generator
 
 Name:           rust-phf_generator
-Version:        0.11.3
+Version:        0.14.0
 Release:        %autorelease
 Summary:        PHF generation logic
 

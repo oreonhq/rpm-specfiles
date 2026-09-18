@@ -7,7 +7,7 @@
 %global crate compact_str
 
 Name:           rust-compact_str
-Version:        0.7.1
+Version:        0.10.0
 Release:        %autorelease
 Summary:        A memory efficient string type that transparently stores strings on t...
 

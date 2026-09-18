@@ -1,7 +1,7 @@
 %global source0_hash 9658ff222ed7b387d3cb76c3e3d90d1862b885c13b26aa9ff652e133f5d018f1
 
 Name:           pgbadger
-Version:        13.1
+Version:        13.2
 Release:        %autorelease
 Summary:        PostgreSQL log analyzer with fully detailed reports and graphs
 

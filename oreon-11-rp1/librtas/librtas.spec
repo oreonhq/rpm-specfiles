@@ -2,8 +2,8 @@
 
 Summary: Libraries to provide access to RTAS calls and RTAS events
 Name:    librtas
-Version: 2.0.6
-Release: 6%{?dist}
+Version: 2.0.7
+Release: 1%{?dist}
 URL:     https://github.com/ibm-power-utilities/librtas
 License: LGPL-2.0-or-later
 

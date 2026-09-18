@@ -1,83 +1,61 @@
-%global source0_hash 24cae2af832b6a611a01d7dc35f42d266c1d6c75a426b869d8cb241b78233369
+%global source0_hash none
 
-%global srcname	Flask-Admin
-%global pkgname flask-admin
-%global sum Simple and extensible admin interface framework for Flask
+Name:           python-flask-admin
+Version:        2.2.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Simple and extensible admin interface framework for Flask
 
-Name:		python-%{pkgname}
-Version:	1.6.1
-Release:	12%{?dist}
-Summary:	%{sum}
-# Automatically converted from old format: BSD - review is highly recommended.
-License:	LicenseRef-Callaway-BSD
-URL:		https://github.com/flask-admin/flask-admin/
-Source0:	https://files.pythonhosted.org/packages/source/F/%{srcname}/%{srcname}-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/pallets-eco/flask-admin/
+Source:         %{pypi_source flask_admin}
 
-BuildArch:	noarch
-BuildRequires:	python%{python3_pkgversion}-devel
-BuildRequires:	python%{python3_pkgversion}-setuptools
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%global _description\
-Flask-Admin is advanced, extensible and simple to use administrative interface\
-building extension for Flask framework.\
-\
-It comes with batteries included: model scaffolding for SQLAlchemy,\
-MongoEngine, MongoDB and Peewee ORMs, simple file management interface\
-and a lot of usage samples.\
-\
-You're not limited by the default functionality - instead of providing simple\
-scaffolding for the ORM models, Flask-Admin provides tools that can be used to\
-construct administrative interfaces of any complexity, using a consistent look\
-and feel.\
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'flask-admin' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python%{python3_pkgversion}-%{pkgname}
-Summary:	%{sum}
-Requires:	python%{python3_pkgversion}-flask
-Requires:	python%{python3_pkgversion}-wtforms
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{pkgname}}
+%package -n     python3-flask-admin
+Summary:        %{summary}
 
-%description -n python%{python3_pkgversion}-%{pkgname} %_description
+%description -n python3-flask-admin %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-flask-admin all,azure-blob-storage,export,geoalchemy,images,mongoengine,peewee,pymongo,rediscli,s3,sqlalchemy,sqlalchemy-lite,sqlalchemy-with-utils,translation
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n flask_admin-%{version}
 
-%autosetup -n %{srcname}-%{version}
-for f in \
-	flask_admin/contrib/pymongo/typefmt.py \
-	flask_admin/tests/mock.py \
-	flask_admin/tests/fileadmin/files/dummy.txt \
-; do
-	echo "#Empty file" > $f
-done
 
-rm -rf examples
-rm flask_admin/translations/README.md
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,azure-blob-storage,export,geoalchemy,images,mongoengine,peewee,pymongo,rediscli,s3,sqlalchemy,sqlalchemy-lite,sqlalchemy-with-utils,translation
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Tests are not included as they require mongod running
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{pkgname}
-%doc README.rst
-%license LICENSE
-%dir %{python3_sitelib}/flask_admin
-%{python3_sitelib}/flask_admin/translations
-%{python3_sitelib}/flask_admin/static
-%{python3_sitelib}/flask_admin/*.py*
-%{python3_sitelib}/flask_admin/__pycache__/
-%{python3_sitelib}/flask_admin/tests/
-%{python3_sitelib}/flask_admin/contrib/
-%{python3_sitelib}/flask_admin/model/
-%{python3_sitelib}/flask_admin/templates/
-%{python3_sitelib}/flask_admin/form/
-%{python3_sitelib}/*.egg-info/
+
+%files -n python3-flask-admin -f %{pyproject_files}
 
 %changelog
 %autochangelog

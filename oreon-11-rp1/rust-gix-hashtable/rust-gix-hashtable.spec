@@ -7,7 +7,7 @@
 %global crate gix-hashtable
 
 Name:           rust-gix-hashtable
-Version:        0.11.0
+Version:        0.16.0
 Release:        %autorelease
 Summary:        A crate that provides hashtable based data structures optimized to ut...
 

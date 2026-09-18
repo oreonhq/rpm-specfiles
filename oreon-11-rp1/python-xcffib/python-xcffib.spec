@@ -1,62 +1,61 @@
-%global source0_hash e27e1bad25452824736d967d4db8a32b366606d682a5b963185f629598c5f5dd
+%global source0_hash none
 
-%global srcname xcffib
+Name:           python-xcffib
+Version:        1.12.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        xcffib is the XCB binding for python
 
-Summary:   A drop in replacement for xpyb, an XCB python binding
-Name:      python-xcffib
-Version:   1.11.2
-Release:   %autorelease
-Source0:   %{pypi_source}
-License:   Apache-2.0
-URL:       https://github.com/tych0/xcffib
-BuildArch: noarch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            http://github.com/tych0/xcffib
+Source:         %{pypi_source xcffib}
 
-BuildRequires:  libxcb-devel
-BuildRequires:  python%{python3_pkgversion}-devel
-# For tests
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  xeyes
-BuildRequires:  xorg-x11-server-Xvfb
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-xcffib is intended to be a (mostly) drop-in replacement for xpyb.  xpyb
-has an inactive upstream, several memory leaks, is python2 only and doesn't
-have pypy support. xcffib is a binding which uses cffi, which mitigates
-some of the issues described above. xcffib also builds bindings for 27 of
-the 29 (xprint and xkb are missing) X extensions in 1.10.
 
-%package -n python%{python3_pkgversion}-xcffib
-Summary: A drop in replacement for xpyb, an XCB python binding
-Requires:  python%{python3_pkgversion}-cffi
-Requires:  libxcb
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'xcffib' generated automatically by pyp2spec.}
 
-%description -n python%{python3_pkgversion}-xcffib
-xcffib is intended to be a (mostly) drop-in replacement for xpyb.  xpyb
-has an inactive upstream, several memory leaks, is python2 only and doesn't
-have pypy support. xcffib is a binding which uses cffi, which mitigates
-some of the issues described above. xcffib also builds bindings for 27 of
-the 29 (xprint and xkb are missing) X extensions in 1.10.
+%description %_description
+
+%package -n     python3-xcffib
+Summary:        %{summary}
+
+%description -n python3-xcffib %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-xcffib dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n xcffib-%{version}
 
-%setup -q -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-xcffib -f %{pyproject_files}
 
 %changelog
 %autochangelog

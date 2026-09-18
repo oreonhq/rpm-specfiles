@@ -7,7 +7,7 @@
 %global crate ecb
 
 Name:           rust-ecb
-Version:        0.1.2
+Version:        0.2.1
 Release:        %autorelease
 Summary:        Electronic Codebook (ECB) block cipher mode of operation
 

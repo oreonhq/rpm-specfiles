@@ -7,7 +7,7 @@
 %global crate gix-imara-diff
 
 Name:           rust-gix-imara-diff
-Version:        0.2.4
+Version:        0.2.5
 Release:        %autorelease
 Summary:        A high performance library for computing diffs, maintained as a modif...
 

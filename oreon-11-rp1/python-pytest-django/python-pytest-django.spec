@@ -1,73 +1,63 @@
-%global source0_hash df94ec819a83c8979c8f6de13d9cdfbe76e8c21d39473cfe2b40c9fc9be3c758
+%global source0_hash none
 
-%global pypi_name pytest-django
-
-Name:           python-%{pypi_name}
-Version:        4.12.0
+Name:           python-pytest-django
+Version:        4.14.0
 Release:        %autorelease
-Summary:        A Django plugin for pytest
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Django plugin for pytest.
 
-License:        BSD-3-Clause
-URL:            https://pytest-django.readthedocs.io/
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/pytest-dev/pytest-django
 Source:         %{pypi_source pytest_django}
-# temporarily lower pytest requirement for self-test, bumped in
-# https://github.com/pytest-dev/pytest-django/pull/1263
-Patch:          pytest_django-lower-pytest-req.diff
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-pytest-django allows you to test your Django project/applications with the
-pytest testing tool.}
+This is package 'pytest-django' generated automatically by pyp2spec.}
+
+Patch:          pytest_django-lower-pytest-req.diff
 
 %description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-pytest-django
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
+%description -n python3-pytest-django %_description
 
-%description -n python3-%{pypi_name}
-pytest-django allows you to test your Django project/applications with the
-pytest testing tool.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pytest-django django,docs
 
-%package -n python-%{pypi_name}-doc
-Summary:        Documentation for %{name}
-
-BuildRequires:  python3-sphinx
-BuildRequires:  python3-sphinx_rtd_theme
-
-%description -n python-%{pypi_name}-doc
-Documentation for %{name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_django-%{version}
 
-%autosetup -n pytest_django-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x django,docs
+
 
 %build
 %pyproject_wheel
-PYTHONPATH=${PWD} sphinx-build-3 docs html
-rm -rf html/.{doctrees,buildinfo}
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l pytest_django
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-export DJANGO_SETTINGS_MODULE=pytest_django_test.settings_sqlite
-PYTHONPATH=${PWD} %pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.rst
 
-%files -n python-%{pypi_name}-doc
-%doc html
-%license LICENSE
+%files -n python3-pytest-django -f %{pyproject_files}
 
 %changelog
 %autochangelog

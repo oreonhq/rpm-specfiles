@@ -3,8 +3,8 @@
 %global         _tarname SuperTux-v%{version}-Source
 
 Name:           supertux
-Version:        0.6.3
-Release:        18%{?dist}
+Version:        0.7.0-rev.1
+Release:        1%{?dist}
 Summary:        Jump'n run like game
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

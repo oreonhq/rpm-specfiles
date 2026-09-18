@@ -7,7 +7,7 @@
 %global crate dialoguer
 
 Name:           rust-dialoguer
-Version:        0.11.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        Command line prompting library
 

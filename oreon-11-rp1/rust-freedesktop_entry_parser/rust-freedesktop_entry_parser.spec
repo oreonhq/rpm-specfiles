@@ -7,7 +7,7 @@
 %global crate freedesktop_entry_parser
 
 Name:           rust-freedesktop_entry_parser
-Version:        1.3.0
+Version:        2.0.1
 Release:        %autorelease
 Summary:        Library for parsing FreeDesktop entry files
 

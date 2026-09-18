@@ -10,8 +10,8 @@
 %global debug_package %{nil}
 
 Name:           mono-cecil
-Version:        0.10.4
-Release:        15%{?dist}
+Version:        0.11.6
+Release:        1%{?dist}
 Summary:        Library to generate and inspect programs and libraries in the ECMA CIL form
 License:        MIT
 URL:            http://www.mono-project.com/Cecil

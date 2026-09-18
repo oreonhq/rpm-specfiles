@@ -1,7 +1,7 @@
 %global source0_hash 695032a717dfe34aead191f525b4bbaf403d535bd021c468cc4d1edc60b4c258
 
 Name:     phosh-tour
-Version:  0.53.0
+Version:  0.57.0
 Release:  %autorelease
 Summary:  Simple introduction to Phosh
 License:  GPL-3.0-or-later

@@ -7,7 +7,7 @@
 %global crate colored
 
 Name:           rust-colored
-Version:        2.2.0
+Version:        3.1.1
 Release:        %autorelease
 Summary:        The most simple way to add colors in your terminal
 

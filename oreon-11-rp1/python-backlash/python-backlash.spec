@@ -1,63 +1,62 @@
-%global source0_hash 4d88e5ed0cf0b280a2928321136a47b929549f6b80d431eadbcc554368d6f216
+%global source0_hash none
 
-%{?python_enable_dependency_generator}
-%global modname backlash
+Name:           python-backlash
+Version:        0.5.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Interactive in-browser debugger and error reporting middleware for WSGI and ASGI applications
 
-Name:               python-backlash
-Version:            0.4.0
-Release:            6%{?dist}
-Summary:            Standalone WebOb port of the Werkzeug Debugger
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/TurboGears/backlash
+Source:         %{pypi_source backlash}
 
-License:            MIT
-URL:                https://pypi.io/project/backlash
-Source0:            %pypi_source backlash
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildArch:          noarch
 
-%global _description\
-backlash is a standalone version of the Werkzeug Debugger based on WebOb\
-adapted to support for Python3.\
-\
-backlash has born as a future replacement for WebError in upcoming TurboGears2\
-versions.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'backlash' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-backlash
-Summary:            Standalone WebOb port of the Werkzeug Debugger with Python3 support meant to replace WebError in TurboGears2
-%{?python_provide:%python_provide python3-backslash}
-Requires:           open-sans-fonts
+%package -n     python3-backlash
+Summary:        %{summary}
 
 %description -n python3-backlash %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-backlash testing
+
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n backlash-%{version}
 
-%autosetup -n %{modname}-%{version}
-
-# Remove bundled egg-info in case it exists
-rm -rf %{modname}.egg-info
-
-# Fix license tag
-#sed -i 's/license = "MIT"/license = { text = "MIT" }/' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-x tests}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x testing
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-ln -sfv /usr/share/fonts/open-sans/OpenSans-Regular.ttf %{buildroot}/%{python3_sitelib}/%{modname}/statics/opensans.ttf
-%pyproject_save_files backlash
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-backlash -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
 
 %changelog
 %autochangelog

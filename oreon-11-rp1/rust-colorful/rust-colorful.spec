@@ -7,7 +7,7 @@
 %global crate colorful
 
 Name:           rust-colorful
-Version:        0.2.2
+Version:        0.3.2
 Release:        %autorelease
 Summary:        Make your terminal output colorful
 

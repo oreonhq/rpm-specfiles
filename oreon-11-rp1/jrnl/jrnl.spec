@@ -1,7 +1,7 @@
 %global source0_hash 3b4076924ec26a9d3290144f911359d30ab03e85386532be52318573dfddb912
 
 Name:           jrnl
-Version:        4.3
+Version:        4.6
 Release:        %autorelease
 Summary:        Collect your thoughts and notes without leaving the command line
 

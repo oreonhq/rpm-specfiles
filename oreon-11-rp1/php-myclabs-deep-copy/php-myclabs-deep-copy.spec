@@ -19,8 +19,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-myclabs-deep-copy%{major}
-Version:        1.13.4
-Release:        2%{?dist}
+Version:        1.14.0
+Release:        1%{?dist}
 
 Summary:        Create deep copies (clones) of your objects
 

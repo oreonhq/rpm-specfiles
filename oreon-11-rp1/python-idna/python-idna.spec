@@ -1,66 +1,63 @@
-%global source0_hash 795dafcc9c04ed0c1fb032c2aa73654d8e8c5023a7df64a53f39190ada629902
+%global source0_hash none
 
-%global srcname idna
-
-Name:           python-%{srcname}
-Version:        3.11
+Name:           python-idna
+Version:        3.20
 Release:        %autorelease
-Summary:        Internationalized Domain Names in Applications (IDNA)
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Internationalized Domain Names in Applications _IDNA_
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/kjd/idna
-Source0:        https://pypi.io/packages/source/i/%{srcname}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source idna}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
 
-%description
-A library to support the Internationalised Domain Names in Applications (IDNA)
-protocol as specified in RFC 5891 <http://tools.ietf.org/html/rfc5891>.  This
-version of the protocol is often referred to as "IDNA2008" and can produce
-different results from the earlier standard from 2003.
 
-The library is also intended to act as a suitable drop-in replacement for the
-"encodings.idna" module that comes with the Python standard library but
-currently only supports the older 2003 specification.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'idna' generated automatically by pyp2spec.}
 
-%package -n python3-%{srcname}
-Summary:        Internationalized Domain Names in Applications (IDNA)
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
+%description %_description
 
-%description -n python3-%{srcname}
-A library to support the Internationalised Domain Names in Applications (IDNA)
-protocol as specified in RFC 5891 <http://tools.ietf.org/html/rfc5891>.  This
-version of the protocol is often referred to as "IDNA2008" and can produce
-different results from the earlier standard from 2003.
+%package -n     python3-idna
+Summary:        %{summary}
 
-The library is also intended to act as a suitable drop-in replacement for the
-"encodings.idna" module that comes with the Python standard library but
-currently only supports the older 2003 specification.
+%description -n python3-idna %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-idna all
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{srcname}-%{version}
-# Remove bundled egg-info
-rm -rf %{srcname}.egg-info
+%autosetup -p1 -n idna-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %pyproject_files
-%license LICENSE.md
-%doc README.rst
+
+%files -n python3-idna -f %{pyproject_files}
+%{_bindir}/idna
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.11-1

@@ -1,64 +1,57 @@
-%global source0_hash e837dff49006129406ad084d0279a1724e4e84e4ebc16ff554fdc9182d66590c
+%global source0_hash none
 
-# TODO: Add tests
-
-%global pypi_name cloudscraper
-
-Name:           python-%{pypi_name}
-Version:        1.2.62
+Name:           python-cloudscraper
+Version:        1.2.71
 Release:        %autorelease
-Summary:        Python module to bypass Cloudflare's anti-bot page
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Python module to bypass Cloudflare_s anti-bot page.
 
-License:        MIT 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
 URL:            https://github.com/venomous/cloudscraper
-Source0:        %{url}/archive/%{version}/%{pypi_name}-%{version}.tar.gz
-BuildArch:      noarch
+Source:         %{pypi_source cloudscraper}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A simple Python module to bypass Cloudflare's anti-bot page (also known as "I'm
-Under Attack Mode", or IUAM), implemented with Requests. Cloudflare changes
-their techniques periodically, so I will update this repo frequently.
+This is package 'cloudscraper' generated automatically by pyp2spec.}
 
-This can be useful if you wish to scrape or crawl a website protected with
-Cloudflare. Cloudflare's anti-bot page currently just checks if the client
-supports Javascript, though they may add additional techniques in the future.
+%description %_description
 
-Due to Cloudflare continually changing and hardening their protection page,
-cloudscraper requires a JavaScript Engine/interpreter to solve Javascript
-challenges. This allows the script to easily impersonate a regular web browser
-without explicitly deobfuscating and parsing Cloudflare's Javascript.}
-
-%description %{_description}
-
-%package -n     python3-%{pypi_name}
+%package -n     python3-cloudscraper
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %{_description}
+%description -n python3-cloudscraper %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n cloudscraper-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files %{pypi_name}
 
 %check
-%pyproject_check_import -e cloudscraper.captcha.anticaptcha -e cloudscraper.captcha.capmonster -e cloudscraper.captcha.deathbycaptcha -e cloudscraper.interpreters.js2py -e cloudscraper.interpreters.v8
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.md
+
+%files -n python3-cloudscraper -f %{pyproject_files}
 
 %changelog
 %autochangelog

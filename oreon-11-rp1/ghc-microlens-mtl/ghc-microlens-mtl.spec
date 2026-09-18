@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.2.1.0
+Version:        0.2.1.1
 Release:        %autorelease
 Summary:        Microlens support for Reader/Writer/State from mtl
 

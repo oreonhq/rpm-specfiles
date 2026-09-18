@@ -3,7 +3,7 @@
 %global octpkg dicom
 
 Name:           octave-%{octpkg}
-Version:        0.6.1
+Version:        0.7.3
 Release:        %autorelease
 Summary:        Dicom processing for Octave
 License:        GPL-3.0-or-later

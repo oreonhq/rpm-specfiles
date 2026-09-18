@@ -5,7 +5,7 @@
 %bcond check_jsonschema 0
 
 Name:           bids-schema
-Version:        1.2.1
+Version:        1.2.7
 Release:        %autorelease
 Summary:        BIDS schema description
 

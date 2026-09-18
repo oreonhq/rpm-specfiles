@@ -4,7 +4,7 @@
 %global smp_mflags -j16
 
 Name:		rocksndiamonds
-Version:	4.4.1.3
+Version:	4.4.2.4
 Release:	1%{?dist}
 License:	GPL-1.0-or-later
 Summary:	Underground digging game

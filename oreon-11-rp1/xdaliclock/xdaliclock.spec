@@ -2,8 +2,8 @@
 
 Summary: A clock for the X Window System
 Name: xdaliclock
-Version: 2.43
-Release: 24%{?dist}
+Version: 2.49
+Release: 1%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 URL: http://www.jwz.org/xdaliclock/

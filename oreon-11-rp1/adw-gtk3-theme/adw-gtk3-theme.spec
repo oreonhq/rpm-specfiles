@@ -1,7 +1,7 @@
 %global source0_hash c396e4f0df3eea081186ae13321345f21b9934691b4b4d75b4956f00cbd033d1
 
 Name:           adw-gtk3-theme
-Version:        6.4
+Version:        6.5
 Release:        %autorelease
 Summary:        The theme from libadwaita ported to GTK-3
 BuildArch:      noarch

@@ -1,89 +1,63 @@
-%global source0_hash 40abf9fc402e13467f96fa5b284c0c0e4184e8b8976a76dfc3175db4ddde8ef4
+%global source0_hash none
 
-%global srcname catkin_lint
-
-Name:           python-%{srcname}
-Version:        1.6.22
-Release:        14%{?dist}
+Name:           python-catkin-lint
+Version:        1.6.25
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Check catkin packages for common errors
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://pypi.python.org/pypi/%{srcname}
-Source0:        https://github.com/fkie/%{srcname}/archive/%{version}/%{srcname}-%{version}.tar.gz
-# https://github.com/fkie/catkin_lint/pull/111
-# https://github.com/fkie/catkin_lint/issues/110
-# https://bugzilla.redhat.com/show_bug.cgi?id=2259550
-# Handle ntpath.isabs change in Python 3.13
-Patch:          0001-Handle-changed-ntpath.isabs-behaviour-in-Python-3.13.patch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/fkie/catkin_lint
+Source:         %{pypi_source catkin_lint}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-catkin_lint checks package configurations for the catkin build system of ROS.
-It runs a static analysis of the package.xml and CMakeLists.txt files in your
-package, and it will detect and report a number of common problems.
 
-%package -n python%{python3_pkgversion}-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'catkin-lint' generated automatically by pyp2spec.}
+
+Patch:          0001-Handle-changed-ntpath.isabs-behaviour-in-Python-3.13.patch
+
+%description %_description
+
+%package -n     python3-catkin-lint
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-catkin_pkg
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-lxml
-BuildRequires:  python%{python3_pkgversion}-nose2
-BuildRequires:  python%{python3_pkgversion}-rosdistro
-BuildRequires:  python%{python3_pkgversion}-rospkg
-BuildRequires:  python%{python3_pkgversion}-setuptools
-BuildRequires:  python%{python3_pkgversion}-setuptools_scm
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
 
-%if %{undefined __pythondist_requires}
-Requires:       python%{python3_pkgversion}-catkin_pkg
-Requires:       python%{python3_pkgversion}-lxml
-%endif
+%description -n python3-catkin-lint %_description
 
-%if !0%{?rhel} || 0%{?rhel} >= 8
-Recommends:     python%{python3_pkgversion}-rosdep
-Recommends:     python%{python3_pkgversion}-rosdistro
-Recommends:     python%{python3_pkgversion}-rospkg
-%endif
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-catkin-lint ros
 
-%description -n python%{python3_pkgversion}-%{srcname}
-catkin_lint checks package configurations for the catkin build system of ROS.
-It runs a static analysis of the package.xml and CMakeLists.txt files in your
-package, and it will detect and report a number of common problems.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n catkin_lint-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x ros
+
 
 %build
-SETUPTOOLS_SCM_PRETEND_VERSION=%{version} \
-  %py3_build
-mv build/scripts-%{python3_version}/%{srcname} build/scripts-%{python3_version}/%{srcname}-%{python3_version}
-ln -s %{srcname}-%{python3_version} build/scripts-%{python3_version}/%{srcname}-3
-ln -s %{srcname}-%{python3_version} build/scripts-%{python3_version}/%{srcname}
+%pyproject_wheel
+
 
 %install
-SETUPTOOLS_SCM_PRETEND_VERSION=%{version} \
-  %py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-install -p -D -m0644 shell/bash/%{srcname} %{buildroot}%{_sysconfdir}/bash_completion.d/%{srcname}
 
 %check
-%{__python3} -m nose2 test
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname}
-%license LICENSE
-%doc changelog.txt README.rst
-%{python3_sitelib}/%{srcname}/
-%{python3_sitelib}/%{srcname}-%{version}-py%{python3_version}.egg-info/
-%{_bindir}/%{srcname}
-%{_bindir}/%{srcname}-3
-%{_bindir}/%{srcname}-%{python3_version}
-%{_datadir}/bash-completion/completions/%{srcname}
-%{_datadir}/fish/vendor_completions.d/%{srcname}.fish
-%{_sysconfdir}/bash_completion.d/%{srcname}
+
+%files -n python3-catkin-lint -f %{pyproject_files}
 
 %changelog
 %autochangelog

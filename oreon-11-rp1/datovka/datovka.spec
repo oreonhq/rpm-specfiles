@@ -1,7 +1,7 @@
 %global source0_hash a64be01e7eb420bd530911e311d882f0341b2e4d4a5989b31a95b7d9c602e9bb
 
 Name: datovka
-Version: 4.28.0
+Version: 4.29.5
 Release: 1%{?dist}
 Summary: A free graphical interface for Czech Databox (Datové schránky)
 

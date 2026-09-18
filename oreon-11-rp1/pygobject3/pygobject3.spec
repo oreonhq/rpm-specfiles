@@ -8,7 +8,7 @@
 %global major_minor_version %(echo %{version} | cut -d "." -f 1-2)
 
 Name:           pygobject3
-Version:        3.56.1
+Version:        3.58.0
 Release:        %autorelease
 Summary:        Python bindings for GObject Introspection
 

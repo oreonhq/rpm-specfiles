@@ -7,7 +7,7 @@
 %global crate convert_case
 
 Name:           rust-convert_case
-Version:        0.11.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        Convert strings into any case
 

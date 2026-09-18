@@ -1,67 +1,62 @@
-%global source0_hash 2538321e754b546fef82ec2f853c328a4d5d56334dd3ac15b618f9b803282537
-
-%bcond_without tests
-
-%global desc %{expand:
-Python library for parsing and manipulating RPM spec files.
-Main focus is on modifying existing spec files, any change should result
-in a minimal diff.}
-
-%global base_version 0.41.1
-%global package_version %{base_version}%{?prerelease:~%{prerelease}}
-%global pypi_version    %{base_version}%{?prerelease}
+%global source0_hash none
 
 Name:           python-specfile
-Version:        %{package_version}
-Release:        1%{?dist}
+Version:        0.41.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A library for parsing and manipulating RPM spec files.
 
-Summary:        A library for parsing and manipulating RPM spec files
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/packit/specfile
-
-Source0:        %{pypi_source specfile %{pypi_version}}
+Source:         %{pypi_source specfile}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-%if %{with tests}
-BuildRequires:  git-core
-%endif
 
-Recommends:     oreon-rpm-config
 
-%description
-%{desc}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'specfile' generated automatically by pyp2spec.}
 
-%package -n python%{python3_pkgversion}-specfile
+%description %_description
+
+%package -n     python3-specfile
 Summary:        %{summary}
 
-%description -n python%{python3_pkgversion}-specfile
-%{desc}
+%description -n python3-specfile %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-specfile testing
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n specfile-%{pypi_version}
+%autosetup -p1 -n specfile-%{version}
 
-sed -i 's/setuptools_scm\[toml\]>=7/setuptools_scm[toml]/' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests: -x testing}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x testing
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files specfile
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-%pytest --verbose tests/unit tests/integration
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-specfile -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-specfile -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -2,10 +2,10 @@
 
 # SPDX-License-Identifier: MIT
 %global forgeurl https://github.com/stipub/stixfonts/
-Version: 2.13b171
+Version: 2.14
 %forgemeta
 
-Release: 10%{?dist}
+Release: 1%{?dist}
 URL:     http://www.stixfonts.org/
 
 %global foundry           STIX

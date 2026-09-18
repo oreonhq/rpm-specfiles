@@ -11,7 +11,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        0.2.5
+Version:        0.2.5.1
 Release:        %autorelease
 Summary:        Combinator library for splitting lists
 

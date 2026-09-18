@@ -1,46 +1,62 @@
-%global source0_hash bf48c58f1d5c961ebcb8302953ace3a83201db530f8c03c16701e13bef85b841
+%global source0_hash none
 
 Name:           python-matplotlib-inline
-Version:        0.2.1
-Release:        2%{?dist}
+Version:        0.2.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Inline Matplotlib backend for Jupyter
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
 URL:            https://github.com/ipython/matplotlib-inline
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source:         %{pypi_source matplotlib_inline}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
 
-%description
-Inline Matplotlib backend for Jupyter
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'matplotlib-inline' generated automatically by pyp2spec.}
+
+%description %_description
 
 %package -n     python3-matplotlib-inline
 Summary:        %{summary}
 
-%description -n python3-matplotlib-inline
-Inline Matplotlib backend for Jupyter
+%description -n python3-matplotlib-inline %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-matplotlib-inline test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n matplotlib_inline-%{version}
 
-%autosetup -n matplotlib-inline-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files matplotlib_inline
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-matplotlib-inline -f %{pyproject_files}
-%license LICENSE
-%doc README.md
 
 %changelog
 %autochangelog

@@ -1,8 +1,8 @@
 %global source0_hash 0c163f39a33746aec14a12ebe30f13e0f210e3b383979e7597512eabddca64b6
 
 Name:           xdg-desktop-portal-xapp
-Version:        1.1.3
-Release:        2%{?dist}
+Version:        1.1.4-unstable
+Release:        1%{?dist}
 Summary:        Backend implementation for xdg-desktop-portal using Xapp
 
 License:        LGPL-2.1-or-later

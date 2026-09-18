@@ -1,105 +1,62 @@
-%global source0_hash 839676675e87e73694518b5574fd0f24c9d97b46bea16df7b8c05ea1a51071ea
-
-# python-uvloop fails to build with Python 3.14: AttributeError: module
-# 'asyncio' has no attribute 'AbstractChildWatcher'
-# https://bugzilla.redhat.com/show_bug.cgi?id=2326210
-# python-uvloop fails to build with Python 3.13: error: implicit declaration of
-# function ‘_Py_RestoreSignals’
-# https://bugzilla.redhat.com/show_bug.cgi?id=2256747
-# python-uvloop: FTBFS in Fedora rawhide/f42
-# https://bugzilla.redhat.com/show_bug.cgi?id=2341233
-%if %{defined fedora}
-%bcond uvloop %[ %{?fedora} < 43 ]
-%else
-%bcond uvloop 1
-%endif
+%global source0_hash none
 
 Name:           python-uvicorn
-Version:        0.40.0
+Version:        0.53.0
 Release:        %autorelease
-Summary:        The lightning-fast ASGI server
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The lightning-fast ASGI server.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://www.uvicorn.org
+URL:            https://uvicorn.dev/
 Source:         %{pypi_source uvicorn}
+
 BuildArch:      noarch
-
-BuildRequires:  tomcli
-
-%global common_description %{expand:
-Uvicorn is an ASGI web server implementation for Python.  Until recently Python
-has lacked a minimal low-level server/application interface for async
-frameworks.  The ASGI specification fills this gap, and means we are now able
-to start building a common set of tooling usable across all async frameworks.
-Uvicorn supports HTTP/1.1 and WebSockets.}
-
-%description %{common_description}
-
-%package -n python3-uvicorn
-Summary:        %{summary}
 BuildRequires:  python3-devel
-# See "Testing" and "Explicit optionals" in pyproject.toml. We list these
-# manually because we must omit strict version pins as well as dependencies for
-# type-checking, linting, coverage analysis, etc.
-BuildRequires:  python3-pytest
-BuildRequires:  python3-pytest-mock
-BuildRequires:  python3-pytest-xdist+psutil
-BuildRequires:  python3-trustme
-BuildRequires:  python3-cryptography
-BuildRequires:  python3-httpx
-BuildRequires:  python3-a2wsgi
-BuildRequires:  python3-wsproto
-BuildRequires:  python3-websockets
 
-%description -n python3-uvicorn %{common_description}
 
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'uvicorn' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-uvicorn
+Summary:        %{summary}
+
+%description -n python3-uvicorn %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
 %pyproject_extras_subpkg -n python3-uvicorn standard
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p 1 -n uvicorn-%{version}
-%if %{without uvloop}
-# Note that by removing uvloop from the standard extra but still shipping the
-# metapackage, dependent packages may FTBFS in %%check or (if inadequately
-# tested) fail at runtime, rather than FTBFS in RPM dependency resolution.
-tomcli set pyproject.toml lists delitem \
-    project.optional-dependencies.standard 'uvloop.*'
-%endif
-# Do not treat warnings as errors; it is too strict for downstream packaging
-tomcli set pyproject.toml lists delitem \
-    tool.pytest.ini_options.filterwarnings 'error'
+%prep
+%autosetup -p1 -n uvicorn-%{version}
+
 
 %generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
 %pyproject_buildrequires -x standard
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l uvicorn
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Websocket-related failures should be fixed in 0.35.0,
-# https://github.com/encode/uvicorn/issues/1908, but there are some remaining
-# test failures. TODO: Investigate and/or report these.
-#
-# _ test_send_binary_data_to_server_bigger_than_default_on_websockets[httptools-max=defaults sent=defaults+1] _
-# […]
-# >                   with pytest.raises(websockets.exceptions.ConnectionClosedError):
-# E                   Failed: DID NOT RAISE <class 'websockets.exceptions.ConnectionClosedError'>
-#
-# tests/protocols/test_websocket.py:734: Failed
-# _ test_send_binary_data_to_server_bigger_than_default_on_websockets[h11-max=defaults sent=defaults+1] _
-#
-# Only two parameterizations of this test fail, but it is easier to skip the
-# whole thing.
-k="${k-}${k+ and }not test_send_binary_data_to_server_bigger_than_default_on_websockets"
+%_pyproject_check_import_allow_no_modules -t
 
-%pytest --verbose -rs -k "${k-}"
 
 %files -n python3-uvicorn -f %{pyproject_files}
-%doc README.md
 %{_bindir}/uvicorn
 
 %changelog

@@ -1,8 +1,8 @@
 %global source0_hash f26052308850c406b15adb8d86acd3962ef10af22b427bb1a5cff4eec96f82e9
 
 Name:           xpad
-Version:        5.8.0
-Release:        12%{?dist}
+Version:        5.9.0
+Release:        1%{?dist}
 Summary:        Sticky notepad for GTK
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

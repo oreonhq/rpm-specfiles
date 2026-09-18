@@ -1,61 +1,64 @@
-%global source0_hash 73eceba9ffe1408f8cf030b12e7268521cfe55655822e4a13d68dffac2dcaab8
+%global source0_hash none
 
 Name:           python-pytest-subprocess
-Version:        1.5.3
+Version:        1.6.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        A plugin to fake subprocess for pytest
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/aklajnert/pytest-subprocess
-Source0:        %{url}/archive/%{version}/pytest-subprocess-%{version}.tar.gz
-
-# Fix compatibilty with Py 3.14
-Patch:          https://github.com/aklajnert/pytest-subprocess/commit/be30d9a94ba45afb600717e3fcd95b8b2ff2c60e.patch
+Source:         %{pypi_source pytest_subprocess}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:	python3dist(anyio)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The plugin adds the fake_subprocess fixture. It can be used it to register
-subprocess results so you won't need to rely on the real processes.
-The plugin hooks on the subprocess.Popen(), which is the base for other
-subprocess functions. That makes the subprocess.run(), subprocess.call(),
-subprocess.check_call() and subprocess.check_output() methods also functional.}
+This is package 'pytest-subprocess' generated automatically by pyp2spec.}
+
+Patch:          https://github.com/aklajnert/pytest-subprocess/commit/be30d9a94ba45afb600717e3fcd95b8b2ff2c60e.patch
 
 %description %_description
 
-%package -n python3-pytest-subprocess
+%package -n     python3-pytest-subprocess
 Summary:        %{summary}
 
 %description -n python3-pytest-subprocess %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pytest-subprocess dev,docs,test
+
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_subprocess-%{version}
 
-%autosetup -p1 -n pytest-subprocess-%{version}
-# avoid unneeded test dependencies
-sed -Ei '/\bcoverage\b/d' setup.py
-
-# Don't turn warning into errors when running tests
-# https://github.com/aklajnert/pytest-subprocess/issues/146
-sed -i '/error/d' pytest.ini
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pytest_subprocess
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pytest-subprocess -f %{pyproject_files}
-%doc README.rst HISTORY.rst
 
 %changelog
 %autochangelog

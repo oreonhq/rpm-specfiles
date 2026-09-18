@@ -1,8 +1,8 @@
 %global source0_hash 3466e60f975573168e9880505c7b44a4d51eb507a8a7dda9e68b672071c20da6
 
 Name:           pcsc-tools
-Version:        1.7.0
-Release:        8%{?dist}
+Version:        1.7.5
+Release:        1%{?dist}
 Summary:        Tools to be used with smart cards and PC/SC
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

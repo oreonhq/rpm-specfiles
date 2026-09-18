@@ -16,9 +16,9 @@
 %bcond tests 0
 
 Name:           %{pkg_name}
-Version:        0.50
+Version:        0.51.1
 # can only be reset when all subpkgs bumped
-Release:        37%{?dist}
+Release:        1%{?dist}
 Summary:        A minimalistic text-based status bar
 
 License:        BSD-3-Clause

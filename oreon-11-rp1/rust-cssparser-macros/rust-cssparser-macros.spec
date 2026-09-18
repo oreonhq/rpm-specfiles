@@ -7,7 +7,7 @@
 %global crate cssparser-macros
 
 Name:           rust-cssparser-macros
-Version:        0.6.1
+Version:        0.7.1
 Release:        %autorelease
 Summary:        Procedural macros for cssparser
 

@@ -1,64 +1,59 @@
-%global source0_hash 243ea1b0962b0b6b1e717ac0e69dac9636e61ec65b37260c317b2360c6e30ca7
+%global source0_hash none
 
-%global srcname ansible-pylibssh
-%global _summary Python bindings specific to Ansible use case for libssh
-
-Name:           python-%{srcname}
-Version:        1.3.0
+Name:           python-ansible-pylibssh
+Version:        1.4.0
 Release:        %autorelease
-Summary:        %{_summary}
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python bindings for libssh client specific to Ansible use case
 
-License:        LGPL-2.1-or-later
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/ansible/pylibssh
-Source0:        %{pypi_source}
-# Downstream patch to disable coverage tests
-Patch0:         python-ansible-pylibssh-nocov.patch
-# Force build inplace so that debuginfo can be generated
-Patch1:         python-ansible-pylibssh-debug.patch
+Source:         %{pypi_source ansible_pylibssh}
 
+BuildRequires:  python3-devel
 BuildRequires:  gcc
-BuildRequires:  libssh-devel
-BuildRequires:  python%{python3_pkgversion}-devel
-# For tests
-BuildRequires:  /usr/bin/ssh
-BuildRequires:  /usr/bin/ssh-keygen
-# Use package instead of /usr/sbin/sshd to deal with sbin merge
-BuildRequires:  openssh-server
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Python bindings to client functionality of libssh specific to Ansible use
-case.}
+This is package 'ansible-pylibssh' generated automatically by pyp2spec.}
+
+Patch0:         python-ansible-pylibssh-nocov.patch
+Patch1:         python-ansible-pylibssh-debug.patch
 
 %description %_description
 
-%package -n python%{python3_pkgversion}-%{srcname}
-Summary:        %{_summary}
+%package -n     python3-ansible-pylibssh
+Summary:        %{summary}
 
-%description -n python%{python3_pkgversion}-%{srcname} %_description
+%description -n python3-ansible-pylibssh %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n ansible_pylibssh-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -e just-pytest
+%pyproject_buildrequires
+
 
 %build
-export PYTHONPATH=bin
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l '*pylibssh*'
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Fails - need to disable cython coverage
-%tox
-# -- -- --deselect tests/unit/scp_test.py::test_get --deselect tests/unit/scp_test.py::test_put
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
-%doc AUTHORS.rst README.rst
+
+%files -n python3-ansible-pylibssh -f %{pyproject_files}
 
 %changelog
 %autochangelog

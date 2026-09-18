@@ -8,7 +8,7 @@
 %global xfceversion 4.16
 
 Name:           xfce4-screenshooter
-Version:        1.11.2
+Version:        1.11.3
 Release:        %autorelease
 Summary:        Screenshot utility for the Xfce desktop
 

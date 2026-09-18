@@ -1,8 +1,8 @@
 %global source0_hash 1c195ad2d4b5d3918f53d23f59db8bb766bd3e2b3fa3de5da5ebdb1bcc1c3c61
 
 Name:		domoticz
-Version:	2025.2
-Release:	4%{?dist}
+Version:	2026.3
+Release:	1%{?dist}
 Summary:	Open source Home Automation System
 
 License:	GPL-3.0-or-later AND Apache-2.0 AND BSL-1.0 AND LicenseRef-Callaway-BSD AND LicenseRef-Callaway-MIT

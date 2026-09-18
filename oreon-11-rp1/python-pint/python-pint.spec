@@ -1,118 +1,59 @@
-%global source0_hash 85a45d1da8fe9c9f7477fed8aef59ad2b939af3d6611507e1a9cbdacdcd3450a
-
-%bcond xarray 1
-# Not yet packaged: python-uncertainties
-%bcond uncertainties 0
-# Requires babel <= 2.8; F42 has 2.16.0
-%bcond babel 0
-# Not yet packaged: python-pint-pandas
-%bcond pandas 0
-# Not yet packaged: python-mip
-%bcond mip 0
-# Requires dask < 2025.3.0 but F43 and Rawhide are at 2025.9.1
-# See: https://github.com/dask/dask-ml/issues/1016
-%bcond dask 0
+%global source0_hash none
 
 Name:           python-pint
-Version:        0.25.2
+Version:        0.26.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Physical quantities module
 
-License:        BSD-3-Clause
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/hgrecco/pint
 Source:         %{pypi_source pint}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-# To manipulate pyproject.toml
-BuildRequires:  tomcli
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Pint is a Python package to define, operate and manipulate physical quantities:
-the product of a numerical value and a unit of measurement. It allows
-arithmetic operations between them and conversions from and to different units.
+This is package 'pint' generated automatically by pyp2spec.}
 
-It is distributed with a comprehensive list of physical units, prefixes and
-constants.}
+%description %_description
 
-%description %{_description}
-
-%package -n python3-pint
+%package -n     python3-pint
 Summary:        %{summary}
 
-%description -n python3-pint %{_description}
+%description -n python3-pint %_description
 
-%pyproject_extras_subpkg -n python3-pint numpy
-%if %{with xarray}
-%pyproject_extras_subpkg -n python3-pint xarray
-%endif
-%if %{with dask}
-%pyproject_extras_subpkg -n python3-pint dask
-%endif
-%if %{with uncertainties}
-%pyproject_extras_subpkg -n python3-pint uncertainties
-%endif
-%if %{with babel}
-%pyproject_extras_subpkg -n python3-pint babel
-%endif
-%if %{with pandas}
-%pyproject_extras_subpkg -n python3-pint pandas
-%endif
-%if %{with mip}
-%pyproject_extras_subpkg -n python3-pint mip
-%endif
-%pyproject_extras_subpkg -n python3-pint matplotlib
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pint all,babel,codspeed,dask,docs,matplotlib,numpy,optype,pandas,scipy,test,test-all,test-mpl,uncertainties,xarray
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pint-%{version}
 
-%autosetup -n pint-%{version} -p1
-
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-tomcli set pyproject.toml lists delitem project.optional-dependencies.test \
-    pytest-cov
-
-# This module is executable in the source, and it might make sense for upstream
-# to run it directly as a script during development, but this package will
-# install it in site-packages without the executable bit set, so it doesn’t
-# make sense for it to have a shebang. Package users will run it via the
-# generated pint-convert entry point instead.
-sed -r -i '1{/^#!/d}' pint/pint_convert.py
 
 %generate_buildrequires
-%{pyproject_buildrequires \
-    -x numpy \
-%if %{with uncertainties}
-    -x uncertainties \
-%endif
-%if %{with babel}
-    -x babel \
-%endif
-%if %{with pandas}
-    -x pandas \
-%endif
-%if %{with xarray}
-    -x xarray \
-%endif
-%if %{with dask}
-    -x dask \
-%endif
-%if %{with mip}
-    -x mip \
-%endif
-    -x matplotlib \
-    -x test-all }
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,babel,codspeed,dask,docs,matplotlib,numpy,optype,pandas,scipy,test,test-all,test-mpl,uncertainties,xarray
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l pint
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# -rs: print reasons for skipped tests
-%pytest -rs
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pint -f %{pyproject_files}
 %{_bindir}/pint-convert

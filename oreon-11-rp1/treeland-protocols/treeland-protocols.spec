@@ -1,7 +1,7 @@
 %global source0_hash 3fa6342c0d42f8cf4c1313a833011971ac555d9221dae2dcd362a3fe0ba250bb
 
 Name:           treeland-protocols
-Version:        0.5.4
+Version:        0.6.0
 Release:        %autorelease
 Summary:        Wayland protocol extensions for treeland
 License:        Apache-2.0 OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only

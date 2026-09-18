@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           plexus-languages
-Version:        1.2.0
+Version:        1.6.0
 Release:        %autorelease
 Summary:        Plexus Languages
 License:        Apache-2.0
@@ -27,7 +27,7 @@ BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.ow2.asm:asm)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.2.0-15
+Obsoletes:      %{name}-javadoc < 1.6.0-15
 
 %description
 Plexus Languages is a set of Plexus components that maintain shared

@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:		endless-sky
-Version:	0.11.0
+Version:	0.11.2
 Release:	1%{?dist}
 Summary:	Space exploration, trading, and combat game
 

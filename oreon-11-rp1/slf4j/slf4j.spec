@@ -32,7 +32,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 Name:           slf4j
-Version:        1.7.36
+Version:        2.0.19
 Release:        %autorelease
 Summary:        Simple Logging Facade for Java
 # the log4j-over-slf4j and jcl-over-slf4j submodules are ASL 2.0, rest is MIT
@@ -54,8 +54,8 @@ BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.7.36-13
-Obsoletes:      %{name}-manual < 1.7.36-13
+Obsoletes:      %{name}-javadoc < 2.0.19-13
+Obsoletes:      %{name}-manual < 2.0.19-13
 
 %description
 The Simple Logging Facade for Java or (SLF4J) is intended to serve

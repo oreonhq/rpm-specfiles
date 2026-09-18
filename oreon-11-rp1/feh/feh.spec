@@ -1,8 +1,8 @@
 %global source0_hash 43d8e6742ec273ef3084bde82c5ead5a074348d9bfce28f1b0f8504623ca9b74
 
 Name:           feh
-Version:        3.11.1
-Release:        2%{?dist}
+Version:        3.13.1
+Release:        1%{?dist}
 Summary:        Fast command line image viewer using Imlib2
 License:        MIT
 URL:            https://feh.finalrewind.org

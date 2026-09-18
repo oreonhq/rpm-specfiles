@@ -1,124 +1,60 @@
-%global source0_hash 9eaf90267c7e83e225af89fea65c370afbf65f458220d3946a9e3049e1eca491
+%global source0_hash none
 
 Name:           python-pybtex
-Version:        0.25.1
+Version:        0.26.1
 Release:        %autorelease
-Summary:        BibTeX-compatible bibliography processor written in Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A BibTeX-compatible bibliography processor in Python
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://pybtex.org/
-VCS:            git:https://bitbucket.org/pybtex-devs/pybtex.git
-Source:         %pypi_source pybtex
+Source:         %{pypi_source pybtex}
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x doc,test
-BuildOption(install): -l pybtex
+BuildRequires:  python3-devel
 
-BuildRequires:  make
-BuildRequires:  python3-docs
 
-%global common_desc %{expand:Pybtex is a BibTeX-compatible bibliography processor written in Python.
-Pybtex aims to be 100%% compatible with BibTeX.  It accepts the same command
-line options, fully supports BibTeX’s .bst styles and produces byte-identical
-output.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pybtex' generated automatically by pyp2spec.}
 
-Additionally:
-- Pybtex is Unicode-aware.
-- Pybtex supports bibliography formats other than BibTeX.
-- It is possible to write formatting styles in Python.
-- As a bonus, Pythonic styles can produce HTML, Markdown and other markup
-  besides the usual LaTeX.
-Pybtex also includes a Python API for managing bibliographies from Python.}
+%description %_description
 
-%description
-%common_desc
+%package -n     python3-pybtex
+Summary:        %{summary}
 
-%package -n python3-pybtex
-Summary:        BibTeX-compatible bibliography processor written in Python
+%description -n python3-pybtex %_description
 
-%description -n python3-pybtex
-%common_desc
-
-%package doc
-# The content is MIT.  Other licenses are due to files copied in by Sphinx.
-# _static/basic.css: BSD-2-Clause
-# _static/doctools.js: BSD-2-Clause
-# _static/documentation_options.js: BSD-2-Clause
-# _static/file.png: BSD-2-Clause
-# _static/language_data.js: BSD-2-Clause
-# _static/minus.png: BSD-2-Clause
-# _static/plus.png: BSD-2-Clause
-# _static/searchtools.js: BSD-2-Clause
-# _static/sphinx_highlight.js: BSD-2-Clause
-# genindex.html: BSD-2-Clause
-# search.html: BSD-2-Clause
-# searchindex.js: BSD-2-Clause
-License:        MIT AND BSD-2-Clause
-Summary:        Documentation for python-pybtex
-
-%description doc
-Documentation for python-pybtex.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pybtex-%{version}
 
-%autosetup -n pybtex-%{version}
 
-%conf
-# Remove useless shebang
-sed -i '\@/usr/bin/env python@d' pybtex/cmdline.py
+%generate_buildrequires
+%pyproject_buildrequires
 
-# Fix shebangs
-%py3_shebang_fix docs/generate_manpages.py \
-           pybtex/bibtex/runner.py \
-           pybtex/charwidths/make_charwidths.py \
-           pybtex/database/{convert,format}/__main__.py \
-           pybtex/__main__.py \
-           setup.py
 
-# Use local objects.inv for intersphinx
-sed -e "s|\('https://docs\.python\.org/3/', \)None|\1'%{_docdir}/python3-docs/html/objects.inv'|" \
-    -i docs/source/conf.py
+%build
+%pyproject_wheel
 
-%build -a
-# Build documentation
-# Workaround for pygments 2.13.  See bz 2127371.
-cat >> pybtex.egg-info/entry_points.txt << EOF
 
-[pygments.styles]
-pybtex = pybtex_doctools.pygments:PybtexStyle
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-[pygments.lexers]
-bibtex-pybtex = pybtex_doctools.pygments:BibTeXLexer
-bst-pybtex = pybtex_doctools.pygments:BSTLexer
-EOF
-
-PYTHONPATH=$PWD:$PWD/build/lib:$PWD/docs/pybtex_doctools make -C docs html man
-rm -f docs/build/html/.buildinfo
-
-%install -a
-mkdir -p %{buildroot}%{_mandir}/man1
-cp -p docs/build/man/*.1 %{buildroot}%{_mandir}/man1
-echo ".so man1/pybtex.1" > %{buildroot}%{_mandir}/man1/pybtex-convert.1
-echo ".so man1/pybtex.1" > %{buildroot}%{_mandir}/man1/pybtex-format.1
-
-pushd %{buildroot}%{python3_sitelib}
-rm -fr custom_fixers tests
-chmod a+x pybtex/bibtex/runner.py pybtex/charwidths/make_charwidths.py \
-      pybtex/database/{convert,format}/__main__.py pybtex/__main__.py
-popd
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pybtex -f %{pyproject_files}
-%doc README
-%{_bindir}/pybtex*
-%{_mandir}/man1/pybtex*
-
-%files doc
-%doc CHANGES docs/build/html
+%{_bindir}/pybtex
+%{_bindir}/pybtex-convert
+%{_bindir}/pybtex-format
 
 %changelog
 %autochangelog

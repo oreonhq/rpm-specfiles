@@ -24,8 +24,8 @@
 %endif
 
 Name:           mapserver
-Version:        8.6.0
-Release:        3%{?dist}
+Version:        8.6.6
+Release:        1%{?dist}
 Summary:        Platform for publishing spatial data and interactive mapping applications to the web
 %global dashver %(echo %version | sed 's|\\.|-|g')
 

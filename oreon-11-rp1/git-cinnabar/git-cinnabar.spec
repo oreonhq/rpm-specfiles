@@ -6,7 +6,7 @@
 %global _python_bytecompile_extra 0
 
 Name:           git-cinnabar
-Version:        0.5.11
+Version:        0.7.5
 Release:        %autorelease
 Summary:        Git remote helper to interact with mercurial repositories
 

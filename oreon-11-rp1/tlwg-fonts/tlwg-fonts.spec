@@ -9,8 +9,8 @@ BuildArch: noarch
 BuildRequires: make
 BuildRequires: fontforge >= 20071110
 
-Version: 0.7.3
-Release: 14%{?dist}
+Version: 0.7.4
+Release: 1%{?dist}
 License: GPL-2.0-or-later AND Bitstream-Vera
 URL:     https://linux.thai.net/projects/fonts-tlwg
 
@@ -24,7 +24,7 @@ URL:     https://linux.thai.net/projects/fonts-tlwg
 
 %global obsoletes_thai()\
 %define familyname %1 \
-Obsoletes:       thai-scalable-%{familyname}-fonts < 0.7.3-7 \
+Obsoletes:       thai-scalable-%{familyname}-fonts < 0.7.4-7 \
 Provides:        thai-scalable-%{familyname}-fonts = %{version}-%{release} \
 
 %global fontfamily1       Garuda
@@ -179,7 +179,7 @@ This package provides the Laksaman family of Thai fonts.
 %global fontfamily13       Waree
 %global fontsummary13      Thai Waree fonts
 %global fontpkgheader13    %{expand:
-Obsoletes: thai-scalable-fonts-common < 0.7.3-7
+Obsoletes: thai-scalable-fonts-common < 0.7.4-7
 Provides:  thai-scalable-fonts-common = %{version}-%{release}
 %obsoletes_thai waree
 }

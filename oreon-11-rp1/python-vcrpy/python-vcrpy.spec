@@ -1,89 +1,62 @@
-%global source0_hash 58e3053e33b423f3594031cb758c3f4d1df931307f1e67928e30cf352df7709f
+%global source0_hash none
 
-# Enable tests by default.
-%bcond_without  tests
+Name:           python-vcrpy
+Version:        8.3.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Automatically mock your HTTP interactions to simplify and speed up testing
 
-%global modname vcrpy
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/kevin1024/vcrpy
+Source:         %{pypi_source vcrpy}
 
-Name:               python-%{modname}
-Version:            8.1.1
-Release:            2%{?dist}
-Summary:            Automatically mock your HTTP interactions to simplify and speed up testing
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-License:            MIT
-URL:                https://pypi.io/project/%{modname}
-Source0:            %pypi_source %{modname}
 
-BuildArch:          noarch
-
-BuildRequires:      python3-devel
-
-%if %{with tests}
-BuildRequires:      python3dist(pytest)
-
-# For checking imports.
-# https://vcrpy.readthedocs.io/en/latest/installation.html
-BuildRequires:      python3dist(aiohttp)
-BuildRequires:      python3dist(boto3)
-BuildRequires:      python3dist(httplib2)
-BuildRequires:      python3dist(httpx)
-BuildRequires:      python3dist(requests)
-BuildRequires:      python3dist(tornado)
-%endif
-
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Simplify and speed up testing HTTP by recording all HTTP interactions and
-saving them to "cassette" files, which are yaml files containing the contents
-of your requests and responses.  Then when you run your tests again, they all
-just hit the text files instead of the internet.  This speeds up your tests and
-lets you work offline.
+This is package 'vcrpy' generated automatically by pyp2spec.}
 
-If the server you are testing against ever changes its API, all you need to do
-is delete your existing cassette files, and run your tests again.  All of the
-mocked responses will be updated with the new API.}
+%description %_description
 
-%description %{_description}
+%package -n     python3-vcrpy
+Summary:        %{summary}
 
-%package -n python3-%{modname}
-Summary:            %{summary}
+%description -n python3-vcrpy %_description
 
-%description -n python3-%{modname} %{_description}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-vcrpy tests,tests-niquests
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n vcrpy-%{version}
 
-%autosetup -n %{modname}-%{version} -p1
-
-# asyncio.iscoroutinefunction() is deprecated in Python 3.14 and will be removed
-# in Python 3.16. Use inspect.iscoroutinefunction() instead
-# Also sent upstream: https://github.com/kevin1024/vcrpy/pull/910
-sed -i "s/from asyncio/from inspect/" vcr/cassette.py
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x tests,tests-niquests
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files vcr
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%if %{with tests}
-# These tests make lots of outgoing connections, so we can't run them in
-# the fedora buildsystem.
-rm -rf tests/integration
-# This test tries to contact google.com and fails in the fedora build system
-rm -rf tests/unit/test_stubs.py
-# Skip two tests that require DNS resolution
-%pytest -k 'not test_get_vcr_with_matcher and not test_testcase_playback'
-%endif
 
-%files -n python3-%{modname} -f %{pyproject_files}
-%doc README.rst
+%files -n python3-vcrpy -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -6,7 +6,7 @@
 %global upstream_name task
 
 Name:           task2
-Version:        2.6.2
+Version:        3.5.0
 Release:        %autorelease
 Summary:        Taskwarrior - a command-line TODO list manager
 License:        MIT

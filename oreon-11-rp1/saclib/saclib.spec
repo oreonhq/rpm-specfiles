@@ -1,8 +1,8 @@
 %global source0_hash e8e3acb253c64394f35c8e17942f764cae34df731f3fe3d749b6a2ae1fb8203b
 
 Name:           saclib
-Version:        2.2.8
-Release:        11%{?dist}
+Version:        2.2.8..
+Release:        1%{?dist}
 Summary:        Computer algebra library
 
 License:        ISC

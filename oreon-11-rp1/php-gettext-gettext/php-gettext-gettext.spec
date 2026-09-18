@@ -4,8 +4,8 @@
 %global gh_project   Gettext
 
 Name:       php-gettext-gettext
-Version:    5.7.0
-Release:    9%{?dist}
+Version:    5.7.3
+Release:    1%{?dist}
 BuildArch:  noarch
 
 License:    MIT

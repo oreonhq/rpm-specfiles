@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           tinyexr
-Version:        1.0.7
+Version:        3.2.0
 Release:        %autorelease
 Summary:        Small library to load and save OpenEXR images
  

@@ -7,7 +7,7 @@
 %global crate fake
 
 Name:           rust-fake
-Version:        4.4.0
+Version:        5.1.0
 Release:        %autorelease
 Summary:        Easy to use library for generating fake data
 

@@ -7,7 +7,7 @@
 %global crate float-cmp
 
 Name:           rust-float-cmp
-Version:        0.9.0
+Version:        0.10.0
 Release:        %autorelease
 Summary:        Floating point approximate comparison traits
 

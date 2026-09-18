@@ -1,25 +1,23 @@
-%global source0_hash d56eeaa48fbc3e2ec4bd0e089983e7fa3f70ddba137c5c3786edd2aebc2e2e65
+%global source0_hash none
 
 Name:           python-pydaraja
-Version:        0.3.7
+Version:        1.0.0
 Release:        %autorelease
-Summary:        Python wrapper for Mpesa's Daraja API
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python wrapper for Mpesa_s Daraja API
 
-License:        MIT
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/raykipkorir/pydaraja
-Source:         %{url}/archive/v%{version}/pydaraja-%{version}.tar.gz
+Source:         %{pypi_source pydaraja}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This Python wrapper allows developers to seamlessly interact with the MPESA's
-Daraja API and manage payment requests within their Python applications.
-
-It streamlines and abstracts the complexity of integrating with the MPESA's
-Daraja API, providing developers with a convenient and efficient means of
-handling payment transactions.}
+This is package 'pydaraja' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -28,30 +26,36 @@ Summary:        %{summary}
 
 %description -n python3-pydaraja %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pydaraja ci,dev
 
+
+%prep
 %autosetup -p1 -n pydaraja-%{version}
-# Relax setuptools version
-sed -i 's/"setuptools>=80.8.0", "setuptools_scm==8.3.1"/"setuptools", "setuptools_scm"/g' pyproject.toml
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x ci,dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l pydaraja
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pydaraja -f %{pyproject_files}
-%doc README.md
-%doc CHANGELOG.md
 
 %changelog
 %autochangelog

@@ -1,7 +1,7 @@
 %global source0_hash c9498a31d6462b3eda82ff0988e95109b3853d88cc7c393a5008736e7da527e0
 
 Name:           tree-sitter-cmake
-Version:        0.7.2
+Version:        0.7.5
 Release:        %{autorelease}
 License:        MIT
 URL:            https://github.com/uyha/%{name}

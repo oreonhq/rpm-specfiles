@@ -19,7 +19,7 @@
 %endif
 
 Name: grout
-Version: 0.14.3
+Version: 0.17.1
 Summary: Graph router based on DPDK
 License: BSD-3-Clause
 Group: System Environment/Daemons

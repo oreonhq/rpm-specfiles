@@ -7,7 +7,7 @@
 %global crate toml-test-data
 
 Name:           rust-toml-test-data
-Version:        2.13.0
+Version:        2.14.1
 Release:        %autorelease
 Summary:        TOML test cases
 

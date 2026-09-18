@@ -28,8 +28,8 @@
 
 Summary:	Small libc implementation
 Name:		dietlibc
-Version:	0.34
-Release:	22%{?dist}
+Version:	0.35
+Release:	1%{?dist}
 License:	GPL-2.0-only
 URL:		http://www.fefe.de/dietlibc/
 %if !0%{?prerelease:1}

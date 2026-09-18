@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    kmouth
-Version: 26.04.3
+Version: 26.08.1
 Release: 1%{?dist}
 Summary: A program that speaks for you 
 

@@ -7,7 +7,7 @@
 %define _legacy_common_support 1
 
 Name:           dillo
-Version:        3.2.0
+Version:        3.3.0
 Release:        %autorelease
 Summary:        A multi-platform graphical web browser
 

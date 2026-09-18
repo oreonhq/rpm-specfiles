@@ -1,7 +1,7 @@
 %global source0_hash f97e775ffb5981c63f8adfbe958fcebf9147c13f0e7e96407dddfdf33b3f7702
 
 Name: gnuastro
-Version: 0.23
+Version: 0.24
 Release: %autorelease
 Summary: GNU Astronomy Utilities
 

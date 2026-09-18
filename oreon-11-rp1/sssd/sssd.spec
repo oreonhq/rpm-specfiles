@@ -21,15 +21,15 @@
 %global samba_package_version %(rpm -q samba-devel --queryformat %{version})
 
 Name: sssd
-Version: 2.12.0
-Release: 2%{?dist}
+Version: 2.13.1
+Release: 1%{?dist}
 Summary: System Security Services Daemon
 License: GPL-3.0-or-later
 URL: https://github.com/SSSD/sssd/
-Source0:        https://github.com/SSSD/sssd//releases/download/2.12.0/sssd-2.12.0.tar.gz
+Source0:        https://github.com/SSSD/sssd//releases/download/2.13.1/sssd-2.12.0.tar.gz
 Source1: sssd.sysusers
 %if %{verify_signature}
-Source2:        https://github.com/SSSD/sssd//releases/download/2.12.0/sssd-2.12.0.tar.gz.asc
+Source2:        https://github.com/SSSD/sssd//releases/download/2.13.1/sssd-2.12.0.tar.gz.asc
 Source3: pubkey.asc
 %endif
 

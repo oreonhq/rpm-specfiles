@@ -1,21 +1,24 @@
-%global source0_hash 9f29e6a3dabdb75f2b39c949772c0ed26eab15308006669f3478cdab0d867c78
+%global source0_hash none
 
 Name:           python-findpython
-Version:        0.7.1
+Version:        0.8.0
 Release:        %autorelease
-
+# Fill in the actual package summary to submit package to Fedora
 Summary:        A utility to find python versions on your system
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/frostming/findpython
 Source:         %{pypi_source findpython}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Findpython searches for python executables available on the system.}
+This is package 'findpython' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -24,27 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-findpython %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n findpython-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -L findpython
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-findpython -f %{pyproject_files}
-%doc README.md
-%license LICENSE
 %{_bindir}/findpython
 
 %changelog

@@ -1,7 +1,7 @@
 %global source0_hash none
 
 %global forgeurl https://github.com/uber/h3
-Version:        4.4.1
+Version:        4.5.0
 %forgemeta
 
 Name:           h3

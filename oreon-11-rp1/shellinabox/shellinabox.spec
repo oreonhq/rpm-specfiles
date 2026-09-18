@@ -3,8 +3,8 @@
 %global username shellinabox
 
 Name:           shellinabox
-Version:        2.20
-Release:        28%{?dist}
+Version:        2.21
+Release:        1%{?dist}
 Summary:        Web based AJAX terminal emulator
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only

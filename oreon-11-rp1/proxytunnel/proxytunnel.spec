@@ -1,8 +1,8 @@
 %global source0_hash b8740375c4f0f635fd22b197389d4268daeb70829648e15050fd4db2b41ef898
 
 Name:           proxytunnel
-Version:        1.10.20200907
-Release:        15%{?dist}
+Version:        1.13.0
+Release:        1%{?dist}
 Summary:        Tool to tunnel a connection through an standard HTTP(S) proxy
 
 # Automatically converted from old format: GPLv2+ and BSD and MIT - review is highly recommended.

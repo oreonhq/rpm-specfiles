@@ -3,7 +3,7 @@
 %global srcname UxPlay
 
 Name:           uxplay
-Version:        1.73.3
+Version:        1.75
 Release:        %autorelease
 Summary:        AirPlay Unix mirroring server
 

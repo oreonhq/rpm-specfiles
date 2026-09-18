@@ -1,58 +1,57 @@
-%global source0_hash 211d7cfc1a7a43e75c4d24ee0e8e0f4f61d522f1a21575303ae85333dea687bf
+%global source0_hash none
 
 Name:           python-multipart
-Version:        1.3.1
+Version:        2.0.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Parser for multipart/form-data
-License:        MIT
-URL:            https://github.com/defnull/multipart
-Source:         %{pypi_source multipart}
-BuildArch:      noarch
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://multipart.readthedocs.io/
+Source:         %{pypi_source multipart}
+
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This module provides a fast incremental non-blocking parser for
-multipart/form-data [HTML5, RFC7578], as well as blocking alternatives for
-easier use in WSGI or CGI applications.}
+This is package 'multipart' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-multipart
+%package -n     python3-multipart
 Summary:        %{summary}
-BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-%if %{defined fc43}
-# This package originally used the same import namespace:
-Conflicts:      python3-python-multipart
-# Upstream for the other package switched the primary import name to “import
-# python_multipart,” leaving “import multipart” as a compatibility shim that
-# redirects to *this* multipart package if and only if it is installed. From
-# Fedora 44, our python3-python-multipart no longer installs that compatibility
-# shim (even though upstream still offers it) and therefore the Conflicts may
-# be removed.
-%endif
 
 %description -n python3-multipart %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n multipart-%{version} -p 1
+%prep
+%autosetup -p1 -n multipart-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l multipart
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-multipart -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

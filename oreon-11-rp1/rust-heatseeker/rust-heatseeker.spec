@@ -6,7 +6,7 @@
 %global crate heatseeker
 
 Name:           rust-heatseeker
-Version:        1.7.3
+Version:        1.10.1
 Release:        %autorelease
 Summary:        Fast, robust, and portable fuzzy finder
 

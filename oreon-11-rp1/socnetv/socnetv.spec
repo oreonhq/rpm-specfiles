@@ -3,8 +3,8 @@
 %global debug_package %{nil}
 
 Name:		socnetv
-Version:	3.2
-Release:	4%{?dist}
+Version:	3.7
+Release:	1%{?dist}
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License:	GPL-3.0-only
 Summary:	A Social Networks Analyser and Visualiser

@@ -1,7 +1,7 @@
 %global source0_hash cd40b25fc0259fda2f456d7a1e29c067c58c11cd7d96fbf71b546da069d92239
 
 Name:           tree-sitter-elixir
-Version:        0.3.4
+Version:        0.3.5
 Release:        %{autorelease}
 License:        Apache-2.0
 URL:            https://github.com/elixir-lang/%{name}

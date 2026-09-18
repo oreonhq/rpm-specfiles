@@ -7,7 +7,7 @@
 %global crate manyhow
 
 Name:           rust-manyhow
-Version:        0.11.4
+Version:        0.14.0
 Release:        %autorelease
 Summary:        Proc macro error handling à la anyhow x proc-macro-error
 

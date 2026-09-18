@@ -4,8 +4,8 @@
 %global sover 3.1
 
 Name:           OpenImageIO
-Version:        3.1.12.0
-Release:        2%{?dist}
+Version:        3.1.17.0
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Library for reading and writing images
 

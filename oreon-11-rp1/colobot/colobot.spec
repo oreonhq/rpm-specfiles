@@ -3,8 +3,8 @@
 Name: colobot
 %global orgname info.colobot.Colobot
 
-Version: 0.2.2
-Release: 7%{?dist}
+Version: 0.2.2-alpha-alpha
+Release: 1%{?dist}
 Summary: A video game that teaches programming in a fun way
 
 License: GPL-3.0-only

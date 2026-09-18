@@ -2,8 +2,8 @@
 
 Summary:        Very fast network log-on cracker
 Name:           hydra
-Version:        9.6
-Release:        2%{?dist}
+Version:        9.7
+Release:        1%{?dist}
 License:        AGPL-3.0-only
 URL:            https://github.com/vanhauser-thc/thc-hydra
 VCS:            git:https://github.com/vanhauser-thc/thc-hydra

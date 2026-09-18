@@ -1,55 +1,63 @@
-%global source0_hash b6e62db6576b1a3a0d536a9716773978d86e1bf0cc694fdd9b81e688f1d0c13d
-
-%global srcname Pyphen
-%global modname pyphen
+%global source0_hash none
 
 Name:           python-pyphen
-Version:        0.13.2
-Release:        15%{?dist}
+Version:        0.18.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Pure Python module to hyphenate text
-# Automatically converted from old format: GPLv2+ or LGPLv2+ or MPLv1.1 - review is highly recommended.
-License:        GPL-2.0-or-later OR LicenseRef-Callaway-LGPLv2+ OR LicenseRef-Callaway-MPLv1.1
-URL:            https://github.com/Kozea/Pyphen
-Source0:        https://github.com/Kozea/%{srcname}/archive/%{version}.tar.gz#/%{srcname}-%{version}.tar.gz
-Patch1:         %{name}-strip-optional-dependencies.patch
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://www.courtbouillon.org/pyphen
+Source:         %{pypi_source pyphen}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildRequires:  pyproject-rpm-macros
 
-%description
-Pyphen is a pure Python module to hyphenate text using existing
-hyphenation dictionaries, e.g., from Libreoffice language packs.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pyphen' generated automatically by pyp2spec.}
 
-%package -n python3-pyphen
-Summary:        Pure Python module to hyphenate text
+Patch1:         %{name}-strip-optional-dependencies.patch
 
-%description -n python3-pyphen
-Pyphen is a pure Python module to hyphenate text using existing
-hyphenation dictionaries, e.g., from Libreoffice language packs.
+%description %_description
+
+%package -n     python3-pyphen
+Summary:        %{summary}
+
+%description -n python3-pyphen %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pyphen doc,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pyphen-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires -r -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-pyphen
-%license LICENSE COPYING.GPL COPYING.LGPL COPYING.MPL
-%doc README.rst
-%{python3_sitelib}/%{modname}/
-%{python3_sitelib}/%{modname}-%{version}.dist-info/
+
+%files -n python3-pyphen -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -18,8 +18,8 @@
 %global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:           evince
-Version:        48.1
-Release:        2%{?dist}
+Version:        48.4
+Release:        1%{?dist}
 Summary:        Document viewer
 
 License:        GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND X11 AND MIT AND Afmparse

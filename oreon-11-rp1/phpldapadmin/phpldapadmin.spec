@@ -2,8 +2,8 @@
 
 Name: phpldapadmin
 Summary: Web-based tool for managing LDAP servers
-Version: 1.2.6.7
-Release: 4%{?dist}
+Version: 2.3.11
+Release: 1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 URL: https://www.phpldapadmin.org
@@ -12,7 +12,7 @@ Source: https://github.com/leenooks/phpLDAPadmin/refs/tags/%{version}.tar.gz
 
 Patch0: phpldapadmin-1.2.6-config.patch
 
-# From https://sources.debian.org/src/phpldapadmin/1.2.6.7-3/debian/patches/
+# From https://sources.debian.org/src/phpldapadmin/2.3.11-3/debian/patches/
 Patch1: Fix-dynamic-property-PHP-8.2.patch
 Patch2: Update-the-VERSION-file.patch
 Patch3: 0004-Replace-E_STRICT-by-E_DEPRECATED.patch

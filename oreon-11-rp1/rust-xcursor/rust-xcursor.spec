@@ -7,7 +7,7 @@
 %global crate xcursor
 
 Name:           rust-xcursor
-Version:        0.3.10
+Version:        0.3.11
 Release:        %autorelease
 Summary:        Library for loading XCursor themes
 

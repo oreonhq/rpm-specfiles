@@ -1,22 +1,23 @@
-%global source0_hash 5560fd5ba08655f29ff6ad1df1e15dc05abc9d976fcbcec8d2b5167f49b70222
+%global source0_hash none
 
 Name:           python-pyjwkest
-Version:        1.4.2
-Release:        12%{?dist}
+Version:        1.4.4
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Python implementation of JWT, JWE, JWS and JWK
 
-# pyjwkest: Apache-2.0
-# src/jwkest/aes_gcm.py: MIT
-# src/jwkest/PBKDF2.py: MIT
-License:        Apache-2.0 AND MIT
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/IdentityPython/pyjwkest
 Source:         %{pypi_source pyjwkest}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%global _description %{expand: 
-Python implementation of JWT, JWE, JWS and JWK, which is used by pyoidc.}
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pyjwkest' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -25,26 +26,29 @@ Summary:        %{summary}
 
 %description -n python3-pyjwkest %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n pyjwkest-%{version}
-# The project does not need future anymore
-# https://github.com/IdentityPython/pyjwkest/issues/102
-sed -i 's/, "future"//' setup.py
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files 'jwkest' +auto
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import -t
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pyjwkest -f %{pyproject_files}
 

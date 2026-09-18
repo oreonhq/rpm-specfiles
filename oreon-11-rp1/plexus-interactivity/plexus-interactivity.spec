@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           plexus-interactivity
-Version:        1.3
+Version:        1.6.0
 Release:        %autorelease
 Summary:        Plexus Interactivity Handler Component
 License:        MIT
@@ -27,7 +27,7 @@ BuildRequires:  mvn(org.jline:jline-reader)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-api)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.3-5
+Obsoletes:      %{name}-javadoc < 1.6.0-5
 
 %description
 Plexus component that handles interactive user input from different

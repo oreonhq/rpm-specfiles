@@ -2,8 +2,8 @@
 
 Name: routino
 Summary: Router for OpenStreetMap Data
-Version: 3.4.3
-Release: 3%{?dist}
+Version: 3.4.4
+Release: 1%{?dist}
 License: AGPL-3.0-or-later AND MIT
 URL: http://www.routino.org/
 Source0: http://www.routino.org/download/routino-%{version}.tgz

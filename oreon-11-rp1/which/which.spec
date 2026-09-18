@@ -4,8 +4,8 @@
 
 Summary: Displays where a particular program in your path is located
 Name: which
-Version: 2.23
-Release: 4%{?dist}
+Version: 2.25
+Release: 1%{?dist}
 License: GPL-3.0-only
 Source0:        https://mirrors.kernel.org/gnu/which/%{name}-%{version}.tar.gz
 Source1: which2.sh

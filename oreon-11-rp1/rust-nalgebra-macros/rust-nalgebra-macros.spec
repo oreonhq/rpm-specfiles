@@ -7,7 +7,7 @@
 %global crate nalgebra-macros
 
 Name:           rust-nalgebra-macros
-Version:        0.2.2
+Version:        0.3.0
 Release:        %autorelease
 Summary:        Procedural macros for nalgebra
 

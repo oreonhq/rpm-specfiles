@@ -1,57 +1,62 @@
-%global source0_hash 3bb933abc457254fd6dc5268368dc3d36079a1921ee71a59a87356898254ec6d
+%global source0_hash none
 
-%global forgeurl https://github.com/rstcheck/rstcheck
+Name:           python-rstcheck
+Version:        6.3.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Checks syntax of reStructuredText and code blocks nested within it
 
-Name:       python-rstcheck
-Version:    6.2.5
-Release:    %autorelease
-Summary:    Checks syntax of reStructuredText and code blocks nested within it
-%forgemeta
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/rstcheck/rstcheck
+Source:         %{pypi_source rstcheck}
 
-License:    MIT
-URL:        %forgeurl
-Source0:    %forgesource
-
-BuildArch:  noarch
-%description
-Checks syntax of reStructuredText and code blocks nested within it.
-
-%package -n python3-rstcheck
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-pytest
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'rstcheck' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-rstcheck
 Summary:        %{summary}
 
-%description -n python3-rstcheck
-Checks syntax of reStructuredText and code blocks nested within it.
+%description -n python3-rstcheck %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-rstcheck dev,docs,sphinx,testing,toml,type-check
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n rstcheck-%{version}
 
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%forgesetup
 
 %generate_buildrequires
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs,sphinx,testing,toml,type-check
+
 
 %build
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_wheel
 
-%install
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%pyproject_install
 
-%pyproject_save_files rstcheck
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# intermittently fails to find some data files for tests
-# TODO: needs debugging
-%pytest -v -k "not test_all_good_examples and not test_all_bad_examples[test_file2] and not test_all_bad_examples_recurively and not test_error_without_config_file and not test_file_1_is_bad_without_config"
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-rstcheck -f %{pyproject_files}
-%doc README.rst AUTHORS.rst
 %{_bindir}/rstcheck
 
 %changelog

@@ -1,7 +1,7 @@
 %global source0_hash 6cb30d095f705f05d9d6cb0bdcabdc5938644134e8f7e6f0cf7326c7c0e13b64
 
 Name:           deepin-system-monitor
-Version:        6.5.37
+Version:        6.5.47
 Release:        %autorelease
 Summary:        A more user-friendly system monitor
 License:        GPL-3.0-or-later

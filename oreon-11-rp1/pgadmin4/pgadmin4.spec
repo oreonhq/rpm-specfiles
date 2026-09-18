@@ -8,7 +8,7 @@
 Name:           pgadmin4
 # NOTE: Also regenerate requires as indicated below when updating!
 # Verify Patch4 on next update
-Version:        9.13
+Version:        9.18
 Release:        1%{?dist}
 Summary:        Administration tool for PostgreSQL
 

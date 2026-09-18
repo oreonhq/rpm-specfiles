@@ -5,7 +5,7 @@
 %global installdir /var/lib/dist-git
 
 Name:           dist-git
-Version:        1.19
+Version:        1.20-1
 Release:        1%{?dist}
 Summary:        Package source version control system
 

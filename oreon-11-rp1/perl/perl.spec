@@ -1,6 +1,6 @@
 %global source0_hash 0a585eeb9e363c0f80482ddb3571625250c2c86aeb408853e8ea50805cfb14bb
 
-%global perl_version    5.42.2
+%global perl_version    5.44.0
 %global perl_epoch      4
 %global perl_arch_stem -thread-multi
 %global perl_archname %{_arch}-%{_os}%{perl_arch_stem}
@@ -126,7 +126,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Epoch:          %{perl_epoch}
 Version:        %{perl_version}
 # release number must be even higher, because dual-lived modules will be broken otherwise
-Release:        525%{?dist}
+Release:        1%{?dist}
 Summary:        Practical Extraction and Report Language
 Url:            https://www.perl.org/
 Source0:        https://www.cpan.org/src/5.0/perl-%{perl_version}.tar.xz

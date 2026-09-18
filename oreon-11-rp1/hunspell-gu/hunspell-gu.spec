@@ -8,7 +8,7 @@
 
 Name: hunspell-gu
 Summary: Gujarati hunspell dictionaries
-Version: 25.2.3
+Version: 26.8.0.3
 Release: 1%{?dist}
 License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
 URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/gu_IN

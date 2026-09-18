@@ -1,55 +1,62 @@
-%global source0_hash db1c709ca343cc1cd5b6c8b1a5387298eceed02306a6040760db538c885e3838
+%global source0_hash none
 
-%global pypi_name requests-cache
-%global mod_name requests_cache
-
-Name:           python-%{pypi_name}
-Version:        1.2.0
+Name:           python-requests-cache
+Version:        1.3.3
 Release:        %autorelease
-Summary:        Persistent cache for requests library
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A persistent cache for python requests
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://github.com/reclosedev/requests-cache
-Source0:        https://files.pythonhosted.org/packages/source/r/%{pypi_name}/requests_cache-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-2-Clause
+URL:            https://github.com/requests-cache/requests-cache
+Source:         %{pypi_source requests_cache}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-sphinx
 
-%description
-requests-cache is a persistent HTTP cache that provides an easy way
-to get better performance with the python requests library.
 
-%package -n     python3-%{pypi_name}
-Summary:        Persistent cache for requests library
-Requires:       python3-requests
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'requests-cache' generated automatically by pyp2spec.}
 
-%description -n python3-%{pypi_name}
-requests-cache is a persistent HTTP cache that provides an easy way
-to get better performance with the python requests library.
+%description %_description
 
-%generate_buildrequires
-%pyproject_buildrequires
+%package -n     python3-requests-cache
+Summary:        %{summary}
+
+%description -n python3-requests-cache %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-requests-cache all,dynamodb,mongodb,redis,security,yaml
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n requests_cache-%{version}
 
-%autosetup -n requests_cache-%{version}
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,dynamodb,mongodb,redis,security,yaml
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{mod_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import -t
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
-%license LICENSE
+
+%files -n python3-requests-cache -f %{pyproject_files}
 
 %changelog
 %autochangelog

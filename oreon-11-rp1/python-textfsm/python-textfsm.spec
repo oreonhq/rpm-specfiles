@@ -1,70 +1,58 @@
-%global source0_hash b11e4ac4d7e4793449deff3fb90c8ba85e223343670eec0ae5c5c8e94f479f34
+%global source0_hash none
 
-%global pypi_name textfsm
+Name:           python-textfsm
+Version:        2.1.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python module for parsing semi-structured text into python tables.
 
-Name:           python-%{pypi_name}
-Version:        1.1.3
-Release:        12%{?dist}
-Summary:        Python module for parsing semi-structured text into python tables
-
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
-License:        Apache-2.0
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/google/textfsm
-Source0:        https://github.com/google/textfsm/archive/v%{version}.tar.gz
-# https://bugzilla.redhat.com/show_bug.cgi?id=2291946
-# with apologies to the Sex Pistols, drop 'future' dep from setup.py
-# because it's never used
-# not upstreamed because upstream has a *much* larger fix pending for
-# 2.0.0: https://github.com/google/textfsm/pull/121
-Patch:          textfsm-1.1.3-no-future.patch
+Source:         %{pypi_source textfsm}
+
 BuildArch:      noarch
-
-%description
-Python module which implements a template based state machine for parsing
-semi-formatted text. Originally developed to allow programmatic access to
-information returned from the command line interface (CLI) of networking
-devices.
-
-%package -n     python3-%{pypi_name}
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{pypi_name}}
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-six
-BuildRequires:  python3-pytest
-Requires:       python3-six
 
-%description -n python3-%{pypi_name}
-Python module which implements a template based state machine for parsing
-semi-formatted text. Originally developed to allow programmatic access to
-information returned from the command line interface (CLI) of networking
-devices.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'textfsm' generated automatically by pyp2spec.}
+
+Patch:          textfsm-1.1.3-no-future.patch
+
+%description %_description
+
+%package -n     python3-textfsm
+Summary:        %{summary}
+
+%description -n python3-textfsm %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n textfsm-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p1
-# Fix version in __init__.py, this was fixed in the repo in
-# https://github.com/google/textfsm/commit/ca3755dcb8b1b043857d63f1d1352d62030f0d2d
- # (post-1.1.3 release)
-sed -i 's/1.1.2/1.1.3/' textfsm/__init__.py
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%license COPYING
-%exclude %{python3_sitelib}/testdata
-%{python3_sitelib}/%{pypi_name}
-%{python3_sitelib}/%{pypi_name}-%{version}-py%{python3_version}.egg-info
+
+%files -n python3-textfsm -f %{pyproject_files}
 %{_bindir}/textfsm
 
 %changelog

@@ -3,8 +3,8 @@
 %global pkgname django-ajax-selects
 
 Name:           python-django-ajax-selects
-Version:        2.2.0
-Release:        16%{?dist}
+Version:        3.0.3
+Release:        1%{?dist}
 Summary:        Enables editing of ForeignKey, ManyToMany and simple text fields
 
 # Automatically converted from old format: MIT or GPL+ - review is highly recommended.

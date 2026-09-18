@@ -6,7 +6,7 @@
 %global crate dolby_vision
 
 Name:           rust-dolby_vision
-Version:        3.3.2
+Version:        3.4.0
 Release:        %autorelease
 Summary:        Dolby Vision metadata parsing and writing
 

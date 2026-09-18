@@ -4,8 +4,8 @@
 %bcond_with utils
 
 Name:		mISDN
-Version:	2.0.22
-Release:	18%{?dist}
+Version:	2.1.0
+Release:	1%{?dist}
 Summary:	Userspace part of Modular ISDN stack
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

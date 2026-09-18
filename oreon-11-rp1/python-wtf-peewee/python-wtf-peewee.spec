@@ -1,57 +1,56 @@
-%global source0_hash 2d06ce5a0eb9acf4d22d154ae6fbea99db11b1768381c619e78a2ac60a561915
+%global source0_hash none
 
-%global srcname wtf-peewee
+Name:           python-wtf-peewee
+Version:        3.2.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        wtforms integration for peewee
 
-Name:		python-wtf-peewee
-Version:	3.0.5
-Release:	11%{?dist}
-Summary:	WTForms integration for peewee models
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/coleifer/wtf-peewee
+Source:         %{pypi_source wtf_peewee}
 
-License:	MIT
-URL:		https://github.com/coleifer/wtf-peewee/
-Source0:	https://pypi.python.org/packages/source/w/%{srcname}/%{srcname}-%{version}.tar.gz
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildArch:	noarch
 
-BuildRequires:	python3-devel
-BuildRequires:	pyproject-rpm-macros
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'wtf-peewee' generated automatically by pyp2spec.}
 
-%description
-Wtf-peewee, based on the code found in wtforms.ext, provides a bridge between
-peewee models and wtforms, mapping model fields to form fields.
+%description %_description
 
-%package -n python3-%{srcname}
-Summary:        WTForms integration for peewee models
+%package -n     python3-wtf-peewee
+Summary:        %{summary}
 
-%description -n python3-%{srcname}
-Wtf-peewee, based on the code found in wtforms.ext, provides a bridge between
-peewee models and wtforms, mapping model fields to form fields.
+%description -n python3-wtf-peewee %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n wtf_peewee-%{version}
 
-%setup -q -n %{srcname}-%{version}
-
-# Remove shebang and executable bits from runtests.py
-chmod -x runtests.py
-sed -i '1d' runtests.py
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files wtfpeewee
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{python3} runtests.py
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %pyproject_files
-%doc README.md
-%license LICENSE
+
+%files -n python3-wtf-peewee -f %{pyproject_files}
 
 %changelog
 %autochangelog

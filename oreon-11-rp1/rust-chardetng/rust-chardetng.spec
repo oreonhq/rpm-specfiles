@@ -7,7 +7,7 @@
 %global crate chardetng
 
 Name:           rust-chardetng
-Version:        0.1.17
+Version:        1.0.0
 Release:        %autorelease
 Summary:        Character encoding detector for legacy Web content
 

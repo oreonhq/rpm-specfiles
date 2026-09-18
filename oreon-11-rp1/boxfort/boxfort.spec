@@ -1,7 +1,7 @@
 %global source0_hash 47fde5ce6fbbd7166268e97edc0fc22ed2bf0bf4d93b81ee30d664a8c35a155c
 
 %global forgeurl https://github.com/Snaipe/BoxFort
-Version:        0.1.5
+Version:        0.1.8
 %forgemeta
 
 Name:           boxfort

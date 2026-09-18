@@ -1,8 +1,8 @@
 %global source0_hash c8e2614ad237d0b9548bd6dea031ac6732cb08a19e7aa84ecf052e2fdca90c25
 
 Name:           ppc64-diag
-Version:        2.7.10
-Release:        7%{?dist}
+Version:        2.7.11
+Release:        1%{?dist}
 Summary:        PowerLinux Platform Diagnostics
 URL:            https://github.com/power-ras/%{name}
 License:        GPL-2.0-only

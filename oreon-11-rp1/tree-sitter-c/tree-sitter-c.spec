@@ -1,7 +1,7 @@
 %global source0_hash 25dd4bb3dec770769a407e0fc803f424ce02c494a56ce95fedc525316dcf9b48
 
 Name:           tree-sitter-c
-Version:        0.24.1
+Version:        0.24.2
 Release:        %{autorelease}
 License:        MIT
 URL:            https://github.com/tree-sitter/%{name}

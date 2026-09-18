@@ -10,8 +10,8 @@
 
 Summary:        OpenBGPD Routing Daemon
 Name:           openbgpd
-Version:        9.0
-Release:        2%{?with_snapshot:.git%{gitdate}}%{?dist}
+Version:        9.2
+Release:        1%{?with_snapshot:.git%{gitdate}}%{?dist}
 # OpenBGPD itself is ISC but uses other source codes, breakdown:
 # BSD-2-Clause: include/sys/tree.h
 # BSD-3-Clause: compat/{fmt_scaled,setproctitle,sha2,vis}.c and include/{sha2_openbsd,util,vis,sys/queue}.h

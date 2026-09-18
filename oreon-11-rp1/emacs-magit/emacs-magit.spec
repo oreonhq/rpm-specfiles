@@ -4,7 +4,7 @@
 %define pkgname Magit
 
 Name:           emacs-%{pkg}
-Version:        4.2.0
+Version:        4.7.1
 Release:        %autorelease
 Summary:        Emacs interface to the most common Git operations
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

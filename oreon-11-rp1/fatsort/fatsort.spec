@@ -2,7 +2,7 @@
 
 %define _legacy_common_support 1
 Name:           fatsort
-Version:        1.6.5.640
+Version:        1.7.679
 Release:        %autorelease
 Summary:        FAT sorter for FAT16 and FAT32 filesystems
 

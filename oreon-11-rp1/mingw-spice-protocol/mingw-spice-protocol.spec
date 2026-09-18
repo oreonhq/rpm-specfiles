@@ -1,8 +1,8 @@
 %global source0_hash 04ffba610d9fd441cfc47dfaa135d70096e60b1046d2119d8db2f8ea0d17d912
 
 Name:           mingw-spice-protocol
-Version:        0.14.4
-Release:        12%{?dist}
+Version:        0.14.5
+Release:        1%{?dist}
 Summary:        Spice protocol header files
 # Main headers are BSD, controller / foreign menu are LGPL
 # Automatically converted from old format: BSD and LGPLv2+ - review is highly recommended.

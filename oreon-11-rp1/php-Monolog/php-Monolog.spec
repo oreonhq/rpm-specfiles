@@ -13,7 +13,7 @@
 
 %global github_owner     Seldaek
 %global github_name      monolog
-%global github_version   1.27.1
+%global github_version   3.12.0
 %global github_commit    904713c5929655dc9b97288b69cfeedad610c9a1
 
 %global composer_vendor  monolog
@@ -43,7 +43,7 @@
 
 Name:      php-Monolog
 Version:   %{github_version}
-Release:   10%{?dist}
+Release:   1%{?dist}
 Summary:   Sends your logs to files, sockets, inboxes, databases and various web services
 
 License:   MIT

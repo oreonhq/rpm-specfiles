@@ -7,7 +7,7 @@
 %global crate rfd
 
 Name:           rust-rfd
-Version:        0.15.4
+Version:        0.17.2
 Release:        %autorelease
 Summary:        Rusty File Dialog
 

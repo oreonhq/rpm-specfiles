@@ -14,14 +14,14 @@
 
 Name: audacity
 
-Version: 3.7.7
-Release: 5%{?dist}
+Version: 4.0.0
+Release: 1%{?dist}
 Summary: Multitrack audio editor
 License: GPL-2.0-or-later AND GPL-3.0-only AND CC-BY-3.0
 URL:     https://www.audacityteam.org/
 
 Source0: https://github.com/audacity/audacity/releases/download/Audacity-%{version}/%{name}-sources-%{version}.tar.gz
-# Temporary, 3.7.7 didn't release a manual
+# Temporary, 4.0.0 didn't release a manual
 #Source1: https://github.com/audacity/audacity/releases/download/Audacity-%{version}/%{name}-manual-%{version}.tar.gz
 Source1: https://github.com/audacity/audacity/releases/download/Audacity-3.7.6/%{name}-manual-3.7.6.tar.gz
 

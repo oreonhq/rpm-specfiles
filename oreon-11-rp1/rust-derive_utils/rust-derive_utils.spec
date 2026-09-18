@@ -7,7 +7,7 @@
 %global crate derive_utils
 
 Name:           rust-derive_utils
-Version:        0.15.0
+Version:        0.16.0
 Release:        %autorelease
 Summary:        Procedural macro helper for easily writing derive macros for enums
 

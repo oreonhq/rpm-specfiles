@@ -1,56 +1,56 @@
-%global source0_hash d46eff542a1a1ddcf3d5d23a2cd4cbd476d3298f5e73fe7741963e5c6a90a5cd
+%global source0_hash none
 
-# Created by pyp2rpm-3.3.5
-%global pypi_name rstr
-%global _description %{expand:
-rstr is a helper module for easily generating random strings of various types.
-It could be useful for fuzz testing, generating dummy data, or other
-applications.}
-
-Name:           python-%{pypi_name}
-Version:        3.1.0
-Release:        17%{?dist}
+Name:           python-rstr
+Version:        3.2.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Generate random strings in Python
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://files.pythonhosted.org/packages/source/r/rstr/%{name}-%{version}.tar.gz
-Source0:        %{pypi_source}
-BuildArch:      noarch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/leapfrogonline/rstr
+Source:         %{pypi_source rstr}
 
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-pytest
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'rstr' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python%{python3_pkgversion}-%{pypi_name}
+%package -n     python3-rstr
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{pypi_name}}
 
-%description -n python%{python3_pkgversion}-%{pypi_name} %_description
+%description -n python3-rstr %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n rstr-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files rstr
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
+
+%files -n python3-rstr -f %{pyproject_files}
 
 %changelog
 %autochangelog

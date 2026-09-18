@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 %global singleapplication_shortcommit %(c=%{singleapplication_commit}; echo ${c:0:7})
 
 Name: kdiskmark
-Version: 3.2.0
+Version: 3.3.0
 Release: %autorelease
 Summary: Simple open-source disk benchmark tool for Linux distros
 

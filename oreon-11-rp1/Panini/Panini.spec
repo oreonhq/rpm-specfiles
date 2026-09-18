@@ -3,7 +3,7 @@
 %global  src_name  panini
 
 Name:       Panini
-Version:    0.74.0
+Version:    0.75.0
 Release:    %autorelease
 Summary:    A tool for creating perspective views from panoramic and wide angle images
 License:    GPL-3.0-or-later
@@ -31,7 +31,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -n %{src_name}-%{version}
 sed -i.backup "s|PREFIX = /usr|PREFIX = %{buildroot}%{_prefix}|" panini.pro
-sed -e 's|0.73.0|0.74.0|g' -i panini.pro
+sed -e 's|0.73.0|0.75.0|g' -i panini.pro
 chmod -x src/*cpp src/*h
 
 for txt in *.txt ; do

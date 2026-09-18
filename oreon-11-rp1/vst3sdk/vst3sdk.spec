@@ -1,7 +1,7 @@
 %global source0_hash 001ef3dccf89505ee624766c8140c6c845fbd214460e02ea16145db29f1e2ed6
 
 Name:           vst3sdk
-Version:        3.8.0
+Version:        3.8.1_build_84
 Release:        %autorelease
 Summary:        VST 3 Plug-In SDK
 

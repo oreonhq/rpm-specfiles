@@ -1,8 +1,8 @@
 %global source0_hash aa97dcd2a8576ae18de6c16c19744aae1573a3da7541af4b98a91930a30a3178
 
 Name:           screenfetch
-Version:        3.9.1
-Release:        15%{?dist}
+Version:        3.9.9
+Release:        1%{?dist}
 Summary:        A "Bash Screenshot Information Tool"
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

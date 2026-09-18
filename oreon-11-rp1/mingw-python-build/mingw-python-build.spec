@@ -11,8 +11,8 @@
 
 Name:           mingw-python-%{pypi_name}
 Summary:        MinGW Python %{pypi_name} library
-Version:        1.4.0
-Release:        2%{?dist}
+Version:        1.6.1
+Release:        1%{?dist}
 BuildArch:      noarch
 
 License:        MIT
@@ -72,7 +72,7 @@ mkdir %{distinfo}
 cat > %{distinfo}/METADATA << EOF
 Metadata-Version: 2.2
 Name: %{pypi_name}
-Version: 1.4.0
+Version: 1.6.1
 EOF
 %else
 %global distinfo %{pypi_name}-%{version}.dist-info

@@ -1,10 +1,10 @@
 %global source0_hash 009b525e570cd79b3e59880877871e258071fecdef6c397d7533f3920faa9a7e
 
-%global tag 1.10.2-1
+%global tag 2.0.1-1
 
 Name:		xdrawchem
-Version:	1.10.2
-Release:	16%{?dist}
+Version:	2.0.1
+Release:	1%{?dist}
 Summary:	2D chemical structures drawing tool
 URL:            https://www.woodsidelabs.com/chemistry/%{name}.php
 Source0:        https://github.com/bryanherger/%{name}/archive/%{tag}/%{name}-%{tag}.tar.gz

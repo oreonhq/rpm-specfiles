@@ -7,7 +7,7 @@
 %global crate equator-macro
 
 Name:           rust-equator-macro
-Version:        0.4.2
+Version:        0.6.0
 Release:        %autorelease
 Summary:        Composable assertion library
 

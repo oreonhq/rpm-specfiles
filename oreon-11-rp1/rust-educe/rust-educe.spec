@@ -7,7 +7,7 @@
 %global crate educe
 
 Name:           rust-educe
-Version:        0.6.0
+Version:        0.8.1
 Release:        %autorelease
 Summary:        Procedural macros to help you implement Rust-built-in traits quickly
 

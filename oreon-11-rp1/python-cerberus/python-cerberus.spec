@@ -1,68 +1,57 @@
-%global source0_hash d1b21b3954b2498d9a79edf16b3170a3ac1021df88d197dc2ce5928ba519237c
+%global source0_hash none
 
-%global srcname  Cerberus
-%global slugname cerberus
-%global pkgname  python-cerberus
-%global forgeurl https://github.com/pyeve/cerberus
+Name:           python-cerberus
+Version:        1.3.8
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Lightweight, extensible schema and data validation tool for Pythondictionaries.
 
-%global common_description %{expand:
-Cerberus is a lightweight and extensible data validation library for Python.
-
-Cerberus provides type checking and other base functionality out of the box
-and is designed to be non-blocking and easily extensible, allowing for custom
-validation. It has no dependancies and is thoroughly tested.
-}
-
-%bcond_without tests
-
-Name:           %{pkgname}
-Version:        1.3.4
-%forgemeta
-# Remove -b4 when upgrading to a newer version:
-Release:        %autorelease -b4
-Summary:        Lightweight, extensible data validation library for Python
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ISC
-URL:            %{forgeurl}
-Source0:        %{pypi_source}
+URL:            https://github.com/pyeve/cerberus
+Source:         %{pypi_source cerberus}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
 
-%if %{with tests}
-BuildRequires:  python3dist(pytest)
-%endif
 
-%description %{common_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cerberus' generated automatically by pyp2spec.}
 
-%package -n python3-%{slugname}
-Summary: %{summary}
+%description %_description
 
-%description -n python3-%{slugname} %{common_description}
+%package -n     python3-cerberus
+Summary:        %{summary}
+
+%description -n python3-cerberus %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n cerberus-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires -r %{?with_tests:-x test}
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{slugname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-%pytest -vv %{slugname}/tests
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{slugname} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst AUTHORS CHANGES.rst
+
+%files -n python3-cerberus -f %{pyproject_files}
 
 %changelog
 %autochangelog

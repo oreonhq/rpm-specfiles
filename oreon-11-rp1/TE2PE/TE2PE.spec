@@ -1,7 +1,7 @@
 %global source0_hash 6d9f089c5caeb02b3b1edacafa264c9459123f537e8e69207861864ae6b4bbe5
 
 Name:           TE2PE
-Version:        0.1.1
+Version:        0.1.3
 Release:        %autorelease
 Summary:        Primitive TE to PE32 converter 
 

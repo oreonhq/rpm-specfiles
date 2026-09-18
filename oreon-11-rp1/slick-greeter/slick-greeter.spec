@@ -4,8 +4,8 @@
 
 Summary:	A slick-looking LightDM greeter
 Name:		slick-greeter
-Version:	2.2.6
-Release:	2%{?dist}
+Version:	2.2.7
+Release:	1%{?dist}
 License:	GPL-3.0-or-later
 URL:		https://github.com/linuxmint/%{name}
 Source0:	%{url}/archive/%{version}/%{name}-%{version}.tar.gz

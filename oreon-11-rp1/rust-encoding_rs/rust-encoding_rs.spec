@@ -7,7 +7,7 @@
 %global crate encoding_rs
 
 Name:           rust-encoding_rs
-Version:        0.8.35
+Version:        0.8.41
 Release:        %autorelease
 Summary:        A Gecko-oriented implementation of the Encoding Standard
 

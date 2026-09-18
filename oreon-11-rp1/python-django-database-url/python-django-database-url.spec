@@ -1,53 +1,57 @@
-%global source0_hash 4a8f575bdda4060654b1d941b571e80e53127c7844a54009b00afb3431df036c
+%global source0_hash none
 
-%global srcname dj_database_url
+Name:           python-dj-database-url
+Version:        3.1.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Use Database URLs in your Django Application.
 
-Name:           python-django-database-url
-Version:        0.5.0
-Release:        31%{?dist}
-Summary:        Use Database URLs in your Django Application
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://github.com/kennethreitz/dj-database-url
-Source0:        https://github.com/kennethreitz/dj-database-url/archive/v%{version}.tar.gz#/dj-database-url-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://jazzband.co/projects/dj-database-url
+Source:         %{pypi_source dj_database_url}
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This simple Django utility allows you to utilize the 12factor inspired
-DATABASE_URL environment variable to configure your Django application.}
+This is package 'dj-database-url' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-django-database-url
-Summary:        %summary
-Requires:       python3-django
-Obsoletes:      python-django-database-url < 0.4.2-4
-Obsoletes:      python2-django-database-url < 0.4.2-4
+%package -n     python3-dj-database-url
+Summary:        %{summary}
 
-%description -n python3-django-database-url %_description
+%description -n python3-dj-database-url %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n dj_database_url-%{version}
 
-%autosetup -n dj-database-url-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%{py3_test_envvars} %{python3} test_dj_database_url.py
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-django-database-url -f %{pyproject_files}
-%doc README.rst
+
+%files -n python3-dj-database-url -f %{pyproject_files}
 
 %changelog
 %autochangelog

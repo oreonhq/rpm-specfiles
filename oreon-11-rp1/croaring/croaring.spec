@@ -1,7 +1,7 @@
 %global source0_hash none
 
 %global forgeurl https://github.com/RoaringBitmap/CRoaring
-Version:        4.3.0
+Version:        5.2.2
 %forgemeta
 
 %global sover 18

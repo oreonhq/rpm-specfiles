@@ -11,7 +11,7 @@ of the library is to be the most memory efficient possible, even at low load
 factor, while keeping reasonable performances.}
 
 Name:           tsl-%{srcname}
-Version:        0.6.2
+Version:        0.7.0
 Release:        %autorelease
 Summary:        C++ implementation of a memory efficient hash map and hash set 
 

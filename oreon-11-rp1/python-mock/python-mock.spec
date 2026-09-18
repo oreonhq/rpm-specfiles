@@ -3,7 +3,7 @@
 %bcond_without tests
 
 Name:           python-mock
-Version:        4.0.3
+Version:        5.2.0
 Release:        %autorelease
 Summary:        Deprecated, use unittest.mock from the standard library instead
 

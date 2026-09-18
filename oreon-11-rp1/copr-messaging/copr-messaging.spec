@@ -9,8 +9,8 @@ Package also provides several convenience methods for working with \
 copr messages.
 
 Name:       copr-messaging
-Version:    1.2
-Release:    4%{?dist}
+Version:    1.3-1
+Release:    1%{?dist}
 Summary:    Abstraction for Copr messaging listeners/publishers
 
 License:    GPL-2.0-or-later

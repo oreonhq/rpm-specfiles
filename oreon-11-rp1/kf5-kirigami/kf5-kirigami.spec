@@ -14,8 +14,8 @@
 ExcludeArch: %{ix86}
 
 Name:    kf5-%{framework}
-Version: 1.1.0
-Release: 28%{?dist}
+Version: 6.30.0
+Release: 1%{?dist}
 Summary: QtQuick plugins to build user interfaces based on the KDE UX guidelines
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
@@ -37,7 +37,7 @@ BuildRequires: qt5-qtdeclarative-devel
 BuildRequires: qt5-qtsvg-devel
 
 # upgrade path from OBS packages
-Obsoletes: kirigami < 1.1.0
+Obsoletes: kirigami < 6.30.0
 Provides:  kirigami = %{version}-%{release}
 
 %if 0%{?tests}
@@ -55,7 +55,7 @@ Requires:      qt5-qtquickcontrols%{?_isa}
 %package        devel
 Summary:        Development files for %{name}
 # upgrade path from OBS packages
-Obsoletes:      kirigami-devel < 1.1.0
+Obsoletes:      kirigami-devel < 6.30.0
 Provides:       kirigami-devel = %{version}-%{release}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 %description    devel

@@ -21,7 +21,7 @@
 %global _firewalld_dir %{_prefix}/lib/firewalld
 
 Name:           et
-Version:        6.2.11
+Version:        7.0.0
 Release:        %autorelease
 Summary:        Remote shell that survives IP roaming and disconnect
 

@@ -1,8 +1,8 @@
 %global source0_hash 94b05d8c19eed87fdb0cf4f2344e6f86ad674bb226e0462498b3e95de37bfa4a
 
 Name:           xmlstreambuffer
-Version:        2.1.0
-Release:        11%{?dist}
+Version:        2.1.0-M1-M1
+Release:        1%{?dist}
 Summary:        Stream Based Representation for XML Infoset
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
@@ -10,7 +10,7 @@ URL:            https://github.com/eclipse-ee4j/metro-xmlstreambuffer
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/eclipse-ee4j/metro-xmlstreambuffer/archive/refs/tags/2.1.0.tar.gz#/metro-xmlstreambuffer-2.1.0.tar.gz
+Source0:        https://github.com/eclipse-ee4j/metro-xmlstreambuffer/archive/refs/tags/2.1.0-M1.tar.gz#/metro-xmlstreambuffer-2.1.0.tar.gz
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(jakarta.activation:jakarta.activation-api)

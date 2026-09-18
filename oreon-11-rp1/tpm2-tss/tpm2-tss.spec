@@ -6,13 +6,13 @@
 %endif
 
 Name:          tpm2-tss
-Version:       4.1.3
-Release:       9%{?candidate:.%{candidate}}%{?dist}
+Version:       4.2.0
+Release:       1%{?candidate:.%{candidate}}%{?dist}
 Summary:       TPM2.0 Software Stack
 
 License:       BSD-2-Clause
 URL:           https://github.com/tpm2-software/tpm2-tss
-Source0:        https://github.com/tpm2-software/tpm2-tss/releases/download/4.1.3/tpm2-tss-4.1.3.tar.gz
+Source0:        https://github.com/tpm2-software/tpm2-tss/releases/download/4.2.0/tpm2-tss-4.1.3.tar.gz
 Source1:       tpm2-tss-systemd-sysusers.conf
 # doxygen crash
 Patch0:        tpm2-tss-3.0.0-doxygen.patch

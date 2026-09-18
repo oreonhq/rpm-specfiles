@@ -3,8 +3,8 @@
 %global appid org.gajim.Gajim
 
 Name:     gajim
-Version:  1.7.3
-Release:  14%{?dist}
+Version:  2.6.0
+Release:  1%{?dist}
 Summary:  Jabber client written in PyGTK
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License:  GPL-3.0-only

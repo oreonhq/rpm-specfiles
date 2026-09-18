@@ -1,8 +1,8 @@
 %global source0_hash 3c1f0ef71d887717e890a195811569535991863fa21da0c23c176d58f1732ebe
 
 Name:           python-varlink
-Version:        31.0.0
-Release:        18%{?dist}
+Version:        32.1.0
+Release:        1%{?dist}
 Summary:        Python implementation of Varlink
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0

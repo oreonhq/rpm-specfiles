@@ -2,8 +2,8 @@
 
 Summary:        A MOD music file player library
 Name:           libmikmod
-Version:        3.3.13
-Release:        3%{?dist}
+Version:        3.3.14
+Release:        1%{?dist}
 # Automatically converted from old format: GPLv2 and LGPLv2+ - review is highly recommended.
 License:        GPL-2.0-only AND LicenseRef-Callaway-LGPLv2+
 URL:            http://mikmod.sourceforge.net/

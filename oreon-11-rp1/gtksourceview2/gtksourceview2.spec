@@ -7,8 +7,8 @@
 
 Summary:	A library for viewing source files
 Name:		gtksourceview2
-Version:	2.11.2
-Release:	46%{?dist}
+Version:	5.21.0
+Release:	1%{?dist}
 
 # Overall		LGPL-2.0-or-later
 # data/language-specs/php.lang		GPL-2.0-or-later

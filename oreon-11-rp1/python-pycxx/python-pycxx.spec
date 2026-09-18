@@ -14,8 +14,8 @@
 %endif
 
 Name:           python-%{modname}
-Version:        7.1.10
-Release:        10%{?dist}
+Version:        7.2.0
+Release:        1%{?dist}
 Summary:        Write Python extensions in C++
 
 License:        BSD-3-Clause

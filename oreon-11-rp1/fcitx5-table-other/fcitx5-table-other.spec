@@ -1,7 +1,7 @@
 %global source0_hash c548ebe8a62dde02041625d1846c4e1d52b529fedd3069d8e6a6b2bd2ddb8ccf
 
 Name:       fcitx5-table-other
-Version:    5.1.6
+Version:    5.1.8
 Release:    %autorelease
 Summary:    Other tables for Fcitx5
 # Automatically converted from old format: GPLv3 - review is highly recommended.

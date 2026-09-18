@@ -1,45 +1,65 @@
-%global source0_hash 7cf584792863d997deb3163989e41fb37d5a9fb360e663f45dbb68c4222529ce
+%global source0_hash none
 
-%global pypi_name eth_tester
-%global pre_release_tag beta.1
+Name:           python-eth-tester
+Version:        0.14.0~b1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        eth-tester: Tools for testing Ethereum applications.
 
-Name:          python-eth-tester
-Version:       0.12.1
-Release:       %autorelease -e %{pre_release_tag}
-BuildArch:     noarch
-Summary:       Tool suite for testing Ethereum applications
-License:       MIT
-URL:           https://github.com/ethereum/eth-tester
-VCS:           git:%{url}.git
-Source0:       %{url}/archive/v%{version}-%{pre_release_tag}/%{name}-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/ApeWorX/eth-tester
+Source:         %{pypi_source eth_tester 0.14.0b1}
+
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'eth-tester' generated automatically by pyp2spec.}
+
 Patch1:        python-eth-tester-0001-Relax-deps.patch
 Patch2:        python-eth-tester-0002-Revert-bump-towncrier-version-pins.patch
-BuildRequires: python3-pytest
-BuildRequires: python3-pytest-xdist
-BuildSystem:   pyproject
-BuildOption(prep): -n eth-tester-%{version}-%{pre_release_tag}
-BuildOption(generate_buildrequires): -t
-BuildOption(install): -l %{pypi_name}
 
-%description
-%{summary}.
+%description %_description
 
-%package -n python3-eth-tester
-Summary: %{summary}
+%package -n     python3-eth-tester
+Summary:        %{summary}
 
-%description -n python3-eth-tester
-%{summary}.
+%description -n python3-eth-tester %_description
 
-%prep -a
-# FIXME return as soon as we package py-evm
-rm -rf tests/backends
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-eth-tester py-evm,pyevm
 
-%check -a
-# FIXME return as soon as we package py-evm
-PYTHONPATH=$(pwd) %pytest -k 'not test_install_local_wheel'
+
+%prep
+%autosetup -p1 -n eth_tester-0.14.0b1
+
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x py-evm,pyevm
+
+
+%build
+%pyproject_wheel
+
+
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-eth-tester -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

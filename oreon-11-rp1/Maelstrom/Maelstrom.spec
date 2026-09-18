@@ -1,7 +1,7 @@
 %global source0_hash 93680322f4b04d4727ea8e0b461f259b604dc69e7465cb91d2b9aad378a9a036
 
 Name:           Maelstrom
-Version:        3.0.7
+Version:        4.0.2
 Release:        %autorelease
 Summary:        A space combat game
 

@@ -1,40 +1,27 @@
-%global source0_hash 4b98b9951303fba2b77649969539d501500cd0b0e5accc27e03b16c25a76f3e6
+%global source0_hash none
 
 Name:           python-pydocket
-Version:        0.17.9
+Version:        0.25.2
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        A distributed background task system for Python functions
 
-# The entire source code for pydocket is licensed under MIT, with exception of:
-#
-# * Apache-2.0:
-#   - This comes from ./src/docket/_prometheus_exporter.py, a vendored
-#   OpenTelemetry Prometheus Exporter that is providing a minimal imlementation
-#   of PrometheusMetricReader.
-License:        MIT AND Apache-2.0
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
 URL:            https://docket.lol/
 Source:         %{pypi_source pydocket}
 
-# Remove some unrecognized arguments for pytest (coverage, xdist, etc...)
-Patch:          remove-pytest-unrecognized-arguments.diff
-# Fix unpack in lua script for execution
-Patch:          fix-lua-unpack.diff
-
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  tomcli
-# Test depedencies
-BuildRequires:  python3-pytest
-BuildRequires:  python3-pytest-asyncio
-# Needed for the `worker_id` fixture that pytest-xdist brings
-BuildRequires:  python3-pytest-xdist
-BuildRequires:  python3-docker
-BuildRequires:  python3-fakeredis
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Docket is a distributed background task system for Python functions with a
-focus on the scheduling of future work as seamlessly and efficiently as
-immediate work.}
+This is package 'pydocket' generated automatically by pyp2spec.}
+
+Patch:          remove-pytest-unrecognized-arguments.diff
+Patch:          fix-lua-unpack.diff
 
 %description %_description
 
@@ -43,39 +30,36 @@ Summary:        %{summary}
 
 %description -n python3-pydocket %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pydocket metrics
 
+
+%prep
 %autosetup -p1 -n pydocket-%{version}
 
-# Croniter is available in Fedora repositories starting from version 5, but the
-# project requires >=6. While this is a major version change, it seems that the
-# changes from 5.x to 6.x have not affected this project.
-tomcli set pyproject.toml arrays replace project.dependencies "croniter>=([0-9]+)" "croniter>=5"
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x metrics
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l docket
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-# We need to set this to `memory` otherwise the tests will try to use docker to
-# spawn multiple redis containers.
-export REDIS_VERSION=memory
-# Depends on opentelemetry-sdk, which is not packaged in Fedora (and is an
-# optional for this package).
-%pytest --ignore tests/instrumentation/test_tracing.py -k "not test_exports_metrics_as_prometheus_metrics and not test_json_logging_format"
 
 %files -n python3-pydocket -f %{pyproject_files}
-%doc README.md
-%doc SECURITY.md
 %{_bindir}/docket
 
 %changelog

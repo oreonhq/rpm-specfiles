@@ -7,7 +7,7 @@
 %global crate lru-slab
 
 Name:           rust-lru-slab
-Version:        0.1.2
+Version:        0.1.3
 Release:        %autorelease
 Summary:        Pre-allocated storage with constant-time LRU tracking
 

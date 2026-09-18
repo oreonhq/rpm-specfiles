@@ -1,7 +1,7 @@
 %global source0_hash 6b4b55f562a0f9492655fcb7686ecc335a2a4dacc1de9f9a057a32f3867a9d9e
 
 Name:           ptex
-Version:        2.5.1
+Version:        2.5.4
 Release:        %autorelease
 Summary:        Per-Face Texture Mapping for Production Rendering
 

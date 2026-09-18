@@ -1,64 +1,63 @@
-%global source0_hash ba62d34dbcf487e8368f6c19762a19e1c5f06af7e705f6c583c0632b35bccf7d
+%global source0_hash none
 
 Name:           python-qcengine
-Version:        0.30.0
+Version:        0.51.0
 Release:        %autorelease
-Summary:        A compute wrapper for Quantum Chemistry
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A compute wrapper for Quantum Chemistry, ingesting and producing QCSchema for a variety of QC programs.
 
-License:        BSD-3-Clause
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/MolSSI/QCEngine
 Source:         %{pypi_source qcengine}
-Patch0:         https://github.com/MolSSI/QCEngine/pull/451.patch
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# for testing
-BuildRequires:  python3-pytest
-# https://kojipkgs.fedoraproject.org//work/tasks/9840/108019840/build.log
-BuildRequires:  python3-msgpack
 
-# For running the tests
-#BuildRequires:  xtb # requires xtb-python which is not available in Fedora and whose development appears to be ceased
-BuildRequires:  psi4
-BuildRequires:  mrchem
-#BuildRequires: python3-dftd4 # Package still in review https://bugzilla.redhat.com/show_bug.cgi?id=2310392
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Quantum chemistry program executor and IO standardizer (QCSchema) for quantum
-chemistry.}
+This is package 'qcengine' generated automatically by pyp2spec.}
 
-%description
-%{_description}
+Patch0:         https://github.com/MolSSI/QCEngine/pull/451.patch
+
+%description %_description
 
 %package -n     python3-qcengine
 Summary:        %{summary}
 
-%description -n python3-qcengine
-%{_description}
+%description -n python3-qcengine %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-qcengine docs,lint,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n qcengine-%{version}
 
-%setup -n qcengine-%{version}
-%patch 0 -p1 -b .psi4
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,lint,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files qcengine
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-qcengine -f %{pyproject_files}
-%license LICENSE
-%doc README.md
 %{_bindir}/qcengine
 
 %changelog

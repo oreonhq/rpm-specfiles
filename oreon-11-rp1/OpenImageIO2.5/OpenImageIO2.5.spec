@@ -1,11 +1,11 @@
 %global source0_hash none
 
 %undefine __cmake_in_source_build
-%global sover 2.5
+%global sover 3.1
 
 Name:           OpenImageIO2.5
-Version:        2.5.19.1
-Release:        10%{?dist}
+Version:        3.1.17.0
+Release:        1%{?dist}
 Summary:        Library for reading and writing images
 
 License:        BSD-3-Clause AND MIT

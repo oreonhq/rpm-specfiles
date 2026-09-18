@@ -4,8 +4,8 @@
 
 Summary: Dynamic analysis tools to detect memory or thread bugs and profile
 Name: %{?scl_prefix}valgrind
-Version: 3.26.0
-Release: 5%{?dist}
+Version: 3.27.1
+Release: 1%{?dist}
 Epoch: 1
 
 # This ignores licenses that are only found in the test or perf sources

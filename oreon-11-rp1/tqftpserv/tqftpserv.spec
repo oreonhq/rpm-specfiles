@@ -1,7 +1,7 @@
 %global source0_hash 7232cfdc76de42e20d4efa45a0206ab95513fb31c63148452d44c745a462789d
 
 Name:           tqftpserv
-Version:        1.1.1
+Version:        1.2
 Release:        %autorelease
 Summary:        Trivial File Transfer Protocol server over AF_QIPCRTR
 

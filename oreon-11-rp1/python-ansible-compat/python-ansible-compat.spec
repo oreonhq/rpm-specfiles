@@ -1,99 +1,57 @@
-%global source0_hash 36fbb6225cc830011e43a4d5d3c5f90f8eb5af60b6e3448274e897fce82eae69
+%global source0_hash none
 
-%global srcname ansible-compat
-%global pkgname python-ansible-compat
+Name:           python-ansible-compat
+Version:        26.8.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Ansible compatibility goodies
 
-%bcond_without tests
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/ansible/ansible-compat
+Source:         %{pypi_source ansible_compat}
 
-Name:    %{pkgname}
-Version: 25.12.0
-Release: %autorelease
-Summary: Ansible python helper functions
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-URL:       https://github.com/ansible/ansible-compat
-Source0:   %{url}/archive/refs/tags/v%{version}.tar.gz#/%{srcname}-%{version}.tar.gz
 
-License:   MIT
-BuildArch: noarch
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'ansible-compat' generated automatically by pyp2spec.}
 
-BuildRequires: pyproject-rpm-macros
-BuildRequires: ansible-core
+%description %_description
 
-%if %{with tests}
-BuildRequires: python3dist(flaky)
-BuildRequires: python3dist(pytest)
-BuildRequires: python3dist(pytest-mock)
-%endif
+%package -n     python3-ansible-compat
+Summary:        %{summary}
 
-%global common_description %{expand:
-A python package containing functions that help interacting with
-various versions of Ansible}
+%description -n python3-ansible-compat %_description
 
-%description %{common_description}
-
-%package -n python-%{srcname}-doc
-Summary: %summary
-
-%description -n python-%{srcname}-doc
-Documentation for python-ansible-compat
-
-%package -n python3-%{srcname}
-Summary: %summary
-
-%description -n python3-%{srcname} %{common_description}
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n ansible_compat-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-sed -i 's/--instafail//g' pyproject.toml
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
-%if %{with doc}
-PYTHONPATH=src sphinx-build-3 docs html
-rm -rf html/.{doctrees,buildinfo}
-%endif
 
 %install
 %pyproject_install
-%pyproject_save_files ansible_compat
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-%pytest -vv test -k \
-    %{shrink:
-        '
-        not test_prepare_environment_with_collections
-        and not test_prerun_reqs_v1
-        and not test_prerun_reqs_v2
-        and not test_install_collection_from_disk
-        and not test_load_plugins
-        and not test_require_collection
-        and not test_install_collection
-        and not test_install_collection_git
-        and not test_runtime_example
-        and not test_runtime_has_playbook
-        and not test_runtime_plugins
-        and not test_runtime_scan_path
-        and not test_upgrade_collection
-        '
-    }
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
 
-%if %{with doc}
-%files -n python-%{srcname}-doc
-%license LICENSE
-%doc *.rst
-%doc html/
-%endif
+%files -n python3-ansible-compat -f %{pyproject_files}
 
 %changelog
 %autochangelog

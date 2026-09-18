@@ -1,8 +1,8 @@
 %global source0_hash 5ebbd5934305cd07339696c75f6edb43f6b4a91bcc82fca898e1ebc9c960a03b
 
 Name: tgbot-cpp
-Version: 1.6
-Release: 7%{?dist}
+Version: 1.13
+Release: 1%{?dist}
 
 Summary: C++ library for Telegram bot API
 License: MIT

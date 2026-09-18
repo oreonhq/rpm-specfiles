@@ -1,7 +1,7 @@
 %global source0_hash 62b44d9589cf256262240cb49667ef5ce63d36f9de50578321f148329d539a2d
 
 Name:           input-remapper
-Version:        2.2.0
+Version:        2.2.1
 Release:        %autorelease
 Summary:        An easy to use tool to change the behaviour of your input devices
 

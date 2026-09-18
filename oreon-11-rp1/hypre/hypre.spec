@@ -22,7 +22,7 @@
 %global soversion %{somajor}.1
 
 Name:           hypre
-Version:        2.32.0
+Version:        3.2.0
 Release:        %autorelease
 Summary:        High performance matrix preconditioners
 License:        Apache-2.0 OR MIT

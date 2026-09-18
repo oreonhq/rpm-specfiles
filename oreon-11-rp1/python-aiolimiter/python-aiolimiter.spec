@@ -1,70 +1,59 @@
-%global source0_hash faa4d74d9354352f6db2c98c1dca2a7bbc2ea50e51fe5899c9b9b257b1eff2ee
-
-%bcond tests 1
+%global source0_hash none
 
 Name:           python-aiolimiter
-Version:        1.2.1
+Version:        1.3.0
 Release:        %autorelease
-Summary:        An efficient implementation of a rate limiter for asyncio
+# Fill in the actual package summary to submit package to Fedora
+Summary:        asyncio rate limiter, a leaky bucket implementation
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/mjpieters/aiolimiter
-Source:         %{url}/archive/v%{version}/aiolimiter-%{version}.tar.gz
-
-# https://github.com/mjpieters/aiolimiter/pull/312
-Patch: 0001-tests-Prefer-tomllib-where-available.patch
+Source:         %{pypi_source aiolimiter}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%if %{with tests}
-BuildRequires:  python3-pytest
-BuildRequires:  python3-pytest-asyncio
-BuildRequires:  python3-pytest-cov
-%if 0%{?rhel} && 0%{?rhel} < 10
-BuildRequires:  python3-toml
-%endif
-%endif
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-An efficient implementation of a rate limiter for asyncio.
+This is package 'aiolimiter' generated automatically by pyp2spec.}
 
-This project implements the Leaky bucket algorithm, giving you precise
-control over the rate a code section can be entered.}
+Patch: 0001-tests-Prefer-tomllib-where-available.patch
 
 %description %_description
 
-%package -n python3-aiolimiter
+%package -n     python3-aiolimiter
 Summary:        %{summary}
 
 %description -n python3-aiolimiter %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n aiolimiter-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files aiolimiter
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%if %{with tests}
-%pytest tests
-%endif
 
 %files -n python3-aiolimiter -f %{pyproject_files}
-%license LICENSE.txt
-%doc CHANGELOG.md
-%doc README.md
 
 %changelog
 %autochangelog

@@ -6,11 +6,11 @@ Name:          libdnet
 License:       LicenseRef-Callaway-BSD
 
 %global forgeurl https://github.com/ofalk/%{name}
-Version:       1.18.0
+Version:       1.18.2
 %global tag libdnet-%{version}
 %forgemeta
 
-Release:       9%{?dist}
+Release:       1%{?dist}
 URL:           %{forgeurl}
 Source:        %{forgesource}
 

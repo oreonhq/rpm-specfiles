@@ -24,7 +24,7 @@
 %global major        5
 
 Name:           php-%{pk_vendor}-%{pk_project}
-Version:        5.0.1
+Version:        6.0.0
 Release:        1%{?dist}
 Summary:        Map nested JSON structures onto PHP classes, version %{major}
 

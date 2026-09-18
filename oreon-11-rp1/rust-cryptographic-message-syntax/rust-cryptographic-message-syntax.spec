@@ -7,7 +7,7 @@
 %global crate cryptographic-message-syntax
 
 Name:           rust-cryptographic-message-syntax
-Version:        0.26.0
+Version:        0.28.0
 Release:        %autorelease
 Summary:        Pure Rust implementation of Crypographic Message Syntax (RFC 5652)
 

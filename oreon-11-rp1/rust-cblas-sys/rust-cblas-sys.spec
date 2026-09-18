@@ -7,7 +7,7 @@
 %global crate cblas-sys
 
 Name:           rust-cblas-sys
-Version:        0.1.4
+Version:        0.3.0
 Release:        %autorelease
 Summary:        The package provides bindings to CBLAS (C).
 

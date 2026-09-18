@@ -1,7 +1,7 @@
 %global source0_hash 3285997f57b2d72dc70e9856cb302cddd8de07b0cebf5c90a60ecd20a053cd79
 
 Name:           litecli
-Version:        1.15.0
+Version:        1.17.1
 Release:        %autorelease
 Summary:        CLI for SQLite Databases with auto-completion and syntax highlighting
 License:        BSD-3-Clause

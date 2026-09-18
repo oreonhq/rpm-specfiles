@@ -3,7 +3,7 @@
 %global srcname ocrmypdf
 
 Name:           %{srcname}
-Version:        16.12.0
+Version:        17.12.1
 Release:        %autorelease
 Summary:        Add an OCR text layer to scanned PDF files
 

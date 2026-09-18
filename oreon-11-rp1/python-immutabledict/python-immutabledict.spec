@@ -1,60 +1,57 @@
-%global source0_hash 5fa714cb14516cd4d6d02b073bf8e394f0098da07bd5eb910586624e6b8ae50e
-
-%bcond check 0
+%global source0_hash none
 
 Name:           python-immutabledict
-Version:        4.2.1
+Version:        4.3.1
 Release:        %autorelease
-Summary:        Drop-in replacement for dictionaries where immutability is desired
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Immutable wrapper around dictionaries _a fork of frozendict_
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/corenting/immutabledict
-Source0:        %{url}/archive/v%{version}/immutabledict-%{version}.tar.gz
+Source:         %{pypi_source immutabledict}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-%if %{with check}
-BuildRequires:  python3-pytest
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Implements the complete mapping interface and can be used as a drop-in
-replacement for dictionaries where immutability is desired. The immutabledict
-constructor mimics dict, and all of the expected interfaces (iter, len, repr,
-hash, getitem) are provided.}
+This is package 'immutabledict' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-immutabledict
+%package -n     python3-immutabledict
 Summary:        %{summary}
 
-%description -n python3-immutabledict %{_description}
+%description -n python3-immutabledict %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n immutabledict-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files immutabledict
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with check}
+
 %check
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-immutabledict -f %{pyproject_files}
-# Explicit license until poetry adds proper metadata
-# https://github.com/python-poetry/poetry/issues/1350
-%license LICENSE
-%doc README.md
 
 %changelog
 %autochangelog

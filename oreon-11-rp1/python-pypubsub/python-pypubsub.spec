@@ -1,67 +1,57 @@
-%global source0_hash 0df83daa1cb0021bab858ff6812d836c9712dea59a5172be1888bb554c3a89a2
-
-%global pypi_name pypubsub
-%global src_name Pypubsub
+%global source0_hash none
 
 Name:           python-pypubsub
-Version:        4.0.3
-Release:        30%{?dist}
+Version:        4.0.7
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Python Publish-Subscribe Package
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
 URL:            https://github.com/schollii/pypubsub
-Source0:        https://github.com/schollii/pypubsub/archive/v%{version}.tar.gz#/%{src_name}-%{version}.tar.gz
+Source:         %{pypi_source pypubsub}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
-%description
-PyPubSub provides a publish - subscribe API that facilitates the development of
-event-based / message-based applications. PyPubSub supports sending and
-receiving messages between objects of an application. It is centered on the
-notion of a topic; senders publish messages of a given topic, and listeners
-subscribe to messages of a given topic. The package also supports a variety of
-advanced features that facilitate debugging and maintaining pypubsub topics and
-messages in larger applications.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pypubsub' generated automatically by pyp2spec.}
+
+%description %_description
 
 %package -n     python3-pypubsub
 Summary:        %{summary}
 
-%description -n python3-pypubsub
-PyPubSub provides a publish - subscribe API that facilitates the development of
-event-based / message-based applications. PyPubSub supports sending and
-receiving messages between objects of an application. It is centered on the
-notion of a topic; senders publish messages of a given topic, and listeners
-subscribe to messages of a given topic. The package also supports a variety of
-advanced features that facilitate debugging and maintaining pypubsub topics and
-messages in larger applications.
+%description -n python3-pypubsub %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pypubsub-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pubsub
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-pushd tests/suite
-PYTHONPATH=%{buildroot}%{python3_sitelib} PYTHONDONTWRITEBYTECODE=1 py.test-%{python3_version}
-popd
 
 %files -n python3-pypubsub -f %{pyproject_files}
-%doc README.rst src/pubsub/RELEASE_NOTES.txt
-%license src/pubsub/LICENSE_BSD_Simple.txt
 
 %changelog
 %autochangelog

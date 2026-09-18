@@ -1,55 +1,56 @@
-%global source0_hash fe2d158e1fb7458ac5a3aaf9ff418d8ffdbb38edd45e6d5889d58525373a6d21
+%global source0_hash none
 
-%global srcname zuul-sphinx
+Name:           python-zuul-sphinx
+Version:        0.8.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Sphinx extension for documenting Zuul jobs
 
-Name:           python-%{srcname}
-Version:        0.4.1
-Release:        24%{?dist}
-Summary:        Sphinx extension for Zuul jobs
-
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
-License:        Apache-2.0
-URL:            https://zuul-ci.org
-Source0:        https://opendev.org/zuul/zuul-sphinx/archive/%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://docs.openstack.org/infra/zuul-sphinx/
+Source:         %{pypi_source zuul_sphinx}
 
 BuildArch:      noarch
-
-%description
-A Sphinx extension for documenting Zuul jobs.
-
-%package -n     python3-%{srcname}
-Summary:        %{summary}
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-pbr
-Requires:       python3-pbr
-Requires:       python3-sphinx
-Requires:       python3-PyYAML
-%{?python_provide:%python_provide python3-%{srcname}}
 
-%description -n python3-%{srcname}
-A Sphinx extension for documenting Zuul jobs.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'zuul-sphinx' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-zuul-sphinx
+Summary:        %{summary}
+
+%description -n python3-zuul-sphinx %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n zuul_sphinx-%{version}
 
-%setup -qn %{srcname}
-# Remove bundled eggs
-rm -rf *requirements.txt %{srcname}.egg-info
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-export PBR_VERSION=%{version}
-%py3_build
+%pyproject_wheel
+
 
 %install
-export PBR_VERSION=%{version}
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{srcname}
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/zuul_sphinx-%{version}-py3*.egg-info/
-%{python3_sitelib}/zuul_sphinx/
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-zuul-sphinx -f %{pyproject_files}
 
 %changelog
 %autochangelog

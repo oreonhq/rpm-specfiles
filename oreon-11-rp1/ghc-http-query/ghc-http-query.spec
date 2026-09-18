@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.1.3
+Version:        0.1.3.1
 Release:        %autorelease
 Summary:        Simple http queries
 

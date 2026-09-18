@@ -9,7 +9,7 @@
 %global giturl  https://github.com/ERGO-Code/HiGHS
 
 Name:           coin-or-HiGHS
-Version:        1.13.1
+Version:        1.15.1
 Release:        %autorelease
 Summary:        Linear optimization software
 

@@ -1,8 +1,8 @@
 %global source0_hash 63a69abcc1a2e0fb629cdb29e90a3f85c5e8f9c809040234da2d2934ecfb3254
 
 Name:           xdffileio
-Version:        0.3
-Release:        24%{?dist}
+Version:        1.0
+Release:        1%{?dist}
 Summary:        Unified interface to read/write EEG file format in realtime
 
 License:        LGPL-3.0-or-later

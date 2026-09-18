@@ -10,7 +10,7 @@
 # testsuite missing deps: test-framework test-framework-quickcheck2
 
 Name:           ghc-%{pkg_name}
-Version:        4.5.1
+Version:        4.8.1
 Release:        %autorelease
 Summary:        K-induction for Copilot
 

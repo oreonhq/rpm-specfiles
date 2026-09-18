@@ -10,7 +10,7 @@
 %bcond_without vendored_js
 
 Name:           appstream-generator
-Version:        0.10.1
+Version:        1.0.0
 Release:        1%{?dist}
 Summary:        Fast AppStream metadata generator
 

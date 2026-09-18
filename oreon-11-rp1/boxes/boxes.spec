@@ -15,7 +15,7 @@ ExcludeArch: %{ix86}
 %global cfgfile %{_datadir}/%{name}/%{name}
 
 Name:           boxes
-Version:        2.3.1
+Version:        2.3.2
 Release:        %autorelease
 Summary:        Command line ASCII boxes unlimited!
 

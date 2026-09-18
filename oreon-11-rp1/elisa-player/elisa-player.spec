@@ -10,7 +10,7 @@
 ExcludeArch: %{ix86}
 
 Name:       elisa-player
-Version:    26.08.0
+Version:    26.08.1
 Release:    1%{?dist}
 Summary:    Elisa music player
 

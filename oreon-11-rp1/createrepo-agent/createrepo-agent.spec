@@ -1,7 +1,7 @@
 %global source0_hash 8e4f89e69f18b984cbe8b0318cebe03d9cf53e6c8c7d612dc908e1d02e2cdf1c
 
 Name:           createrepo-agent
-Version:        0.5.1
+Version:        0.6.0
 Release:        1%{?dist}
 Summary:        Rapidly and repeatedly generate RPM repository metadata
 

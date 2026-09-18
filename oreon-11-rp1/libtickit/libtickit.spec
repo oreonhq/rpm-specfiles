@@ -7,8 +7,8 @@
 %bcond_without unibilium
 
 Name:           lib%{libname}
-Version:        0.4.5
-Release:        3%{?dist}
+Version:        0.4.6
+Release:        1%{?dist}
 Summary:        Terminal Interface Construction Kit
 
 License:        MIT

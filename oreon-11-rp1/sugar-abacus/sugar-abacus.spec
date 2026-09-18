@@ -1,8 +1,8 @@
 %global source0_hash 5245abce021d8cc8fea6ae81feeab3b2f4e3b5662c166fc6b8497897eb0078e1
 
 Name:           sugar-abacus
-Version:        61
-Release:        16%{?dist}
+Version:        62
+Release:        1%{?dist}
 Summary:        A simple abacus activity for Sugar
 
 License:        LGPL-3.0-or-later

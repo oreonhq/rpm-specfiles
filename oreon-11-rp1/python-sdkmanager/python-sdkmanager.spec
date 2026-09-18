@@ -1,10 +1,13 @@
-%global source0_hash e08b402a4b8d19aa6c983c8cfc3328de5c5d2fdfaf96f55a2b67610e0297d599
+%global source0_hash none
 
 Name:           python-sdkmanager
-Version:        0.6.10
+Version:        0.7.1
 Release:        %autorelease
-Summary:        Android SDK manager written in Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Android SDK Manager
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        AGPL-3.0-or-later
 URL:            https://gitlab.com/fdroid/sdkmanager
 Source:         %{pypi_source sdkmanager}
@@ -12,46 +15,48 @@ Source:         %{pypi_source sdkmanager}
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%global _description %{expand:
-A drop-in replacement for sdkmanager from the Android SDK
-written in Python. It implements the exact API of the
-sdkmanager command line.  It only deviates from that API
-if it can be done while being 100 percent compatible.
 
-The project also attempts to maintain the same terminal
-output so it can be compatible with things that scrape
-sdkmanager output.}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sdkmanager' generated automatically by pyp2spec.}
 
 %description %_description
 
 %package -n     python3-sdkmanager
-Summary:        Android SDK manager written in Python
+Summary:        %{summary}
 
 %description -n python3-sdkmanager %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sdkmanager test
 
-%autosetup -n sdkmanager-%{version}
+
+%prep
+%autosetup -p1 -n sdkmanager-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
-sed -i '/env python3/d' sdkmanager.py
-chmod -x sdkmanager.py
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files sdkmanager
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-# Tests require internet access
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-sdkmanager -f %{pyproject_files}
-%{_bindir}/sdkmanager
 
 %changelog
 %autochangelog

@@ -1,8 +1,8 @@
 %global source0_hash cc2087a964a82d2e50e8161cf458481ededebb7021e4660410cf53248a4c83a3
 
 Name:           libHX
-Version:        3.22
-Release:        26%{?dist}
+Version:        5.4
+Release:        1%{?dist}
 Summary:        Useful collection of routines for C and C++ programming
 
 # Automatically converted from old format: LGPLv2 or LGPLv3 - review is highly recommended.

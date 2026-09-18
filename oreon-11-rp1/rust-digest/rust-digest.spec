@@ -7,7 +7,7 @@
 %global crate digest
 
 Name:           rust-digest
-Version:        0.10.7
+Version:        0.11.3
 Release:        %autorelease
 Summary:        Traits for cryptographic hash functions and message authentication codes
 

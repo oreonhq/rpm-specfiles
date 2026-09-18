@@ -1,8 +1,8 @@
 %global source0_hash 178f32ccf01c050b5cd9e736282583de9a6445fd98e00388df792207629bbdd0
 
 Name:           khard
-Version:        0.20.0
-Release:        5%{?dist}
+Version:        0.21.0
+Release:        1%{?dist}
 Summary:        An address book for the Linux console
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

@@ -4,8 +4,8 @@
 %global debug_package %{nil}
 
 Name:           plog
-Version:        1.1.10
-Release:        7%{?dist}
+Version:        1.1.11
+Release:        1%{?dist}
 Summary:        Portable, simple and extensible C++ logging library
 
 License:        MIT

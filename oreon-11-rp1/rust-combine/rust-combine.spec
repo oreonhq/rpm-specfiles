@@ -7,7 +7,7 @@
 %global crate combine
 
 Name:           rust-combine
-Version:        4.6.7
+Version:        4.6.8
 Release:        %autorelease
 Summary:        Fast parser combinators on arbitrary streams with zero-copy support.
 

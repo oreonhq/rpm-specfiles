@@ -3,7 +3,7 @@
 %global         majorminor      1.0
 
 Name:           gstreamer1-doc
-Version:        1.28.3
+Version:        1.29.2
 Release:        1%{?dist}
 BuildArch:      noarch
 Summary:        GStreamer documentation

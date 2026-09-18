@@ -7,7 +7,7 @@
 %global crate gix-refspec
 
 Name:           rust-gix-refspec
-Version:        0.35.0
+Version:        0.45.1
 Release:        %autorelease
 Summary:        A crate of the gitoxide project for parsing and representing refspecs
 

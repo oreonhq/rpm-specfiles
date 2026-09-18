@@ -1,55 +1,57 @@
-%global source0_hash 2c7a8b9b750ba6260f1e5a061456d61320a80579c6a43d42183417da89c7d5d6
+%global source0_hash none
 
-%global srcname pyasyncore
-%global modname asyncore
+Name:           python-pyasyncore
+Version:        1.0.5
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Make asyncore available for Python 3.12 onwards
 
-Name:           python-%{srcname}
-Version:        1.0.4
-Release:        %{autorelease}
-Summary:        Make %{modname} available for Python 3.12 onwards
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        PSF-2.0
+URL:            https://github.com/simonrob/pyasyncore
+Source:         %{pypi_source pyasyncore}
 
-License:        Python-2.0.1
-URL:            https://github.com/simonrob/%{srcname}
-Source:         https://files.pythonhosted.org/packages/source/p/%{srcname}/%{srcname}-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package contains the asyncore module as found in Python versions
-prior to 3.12. It is provided so that existing code relying on import
-asyncore is able to continue being used without significant
-refactoring.}
+This is package 'pyasyncore' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-pyasyncore
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-pyasyncore %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pyasyncore-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
-# these should not be executable
-chmod ugo-x README.md LICENSE
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{modname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# there are no tests upstream
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-pyasyncore -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,7 +1,7 @@
 %global source0_hash 34f5b569d547ee76f99d26e2c73927eaa38f8449644114d2d1a5b33dc9cdf0c8
 
 Name:       php-gettext-languages
-Version:    2.12.1
+Version:    2.12.2
 Release:    1%{?dist}
 BuildArch:  noarch
 

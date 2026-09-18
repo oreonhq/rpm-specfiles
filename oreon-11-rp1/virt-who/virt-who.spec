@@ -21,7 +21,7 @@
 %global git_tag %{name}-%{version}-%{release_number}
 
 Name:           virt-who
-Version:        1.31.26
+Version:        1.32.1-1
 Release:        %{release_number}%{?dist}.11
 
 Summary:        Agent for reporting virtual guest IDs to subscription-manager

@@ -1,8 +1,8 @@
 %global source0_hash 4e4a891988316271974ff4e9585ed1ef729a123d22c08bd473129179dc857feb
 
 Name:		SDL2_net
-Version:	2.2.0
-Release:	10%{?dist}
+Version:	3.2.0
+Release:	1%{?dist}
 Summary:	SDL portable network library
 License:	zlib
 URL:		http://www.libsdl.org/projects/SDL_net/

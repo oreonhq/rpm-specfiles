@@ -3,8 +3,8 @@
 %global apiver 0
 
 Name:           capypdf
-Version:        0.11.0
-Release:        8%{?dist}
+Version:        0.21.0
+Release:        1%{?dist}
 Summary:        Fully color-managed PDF generation library
 
 License:        Apache-2.0

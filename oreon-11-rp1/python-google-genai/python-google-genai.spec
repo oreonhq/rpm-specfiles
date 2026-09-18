@@ -1,39 +1,26 @@
-%global source0_hash 0491af33c375f099777ae207d9621f044e27091fafad4c50e617eba32165e82f
+%global source0_hash none
 
 Name:           python-google-genai
-Version:        1.56.0
+Version:        2.24.0
 Release:        %autorelease
-Summary:        Google GenAI Python SDK
+# Fill in the actual package summary to submit package to Fedora
+Summary:        GenAI Python SDK
 
-# JS and CSS in documentation are MIT
-# everything else is Apache-2.0
-License:        Apache-2.0 AND MIT
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0
 URL:            https://github.com/googleapis/python-genai
 Source:         %{pypi_source google_genai}
-# https://github.com/googleapis/python-genai/pull/1902
-Patch1:         0001-add-build-backend-to-key-to-be-complient-with-PEP517.patch      
-
-BuildSystem:    pyproject
-BuildOption(install):  -l google
-# local-tokenizer requires recent protobug
-# https://bugzilla.redhat.com/show_bug.cgi?id=1831350
-BuildOption(generate_buildrequires): -x aiohttp
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# required to run dynamic buildrequires
-BuildRequires:  python3-pkginfo
-# checks
-BuildRequires:  python3-sentencepiece
-# soft deps
-Recommends:     python3-sentencepiece
+
 
 # Fill in the actual package description to submit package to Fedora
-%global _description %{expand: 
-Google Gen AI Python SDK provides an interface
-for developers to integrate Google''s generative models into their Python
-applications. It supports the Gemini Developer API and Vertex AI APIs
-}
+%global _description %{expand:
+This is package 'google-genai' generated automatically by pyp2spec.}
+
+Patch1:         0001-add-build-backend-to-key-to-be-complient-with-PEP517.patch
 
 %description %_description
 
@@ -42,18 +29,36 @@ Summary:        %{summary}
 
 %description -n python3-google-genai %_description
 
-# local-tokenizer cannot be build now - see above
-%pyproject_extras_subpkg -n python3-google-genai aiohttp
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-google-genai aiohttp,local-tokenizer,pyopenssl
 
-%prep -a
-# relax from aiohttp<3.13.3 - we already have 3.13.3 in Fedora
-sed -i '1,$s/^aiohttp = \["aiohttp<3.13.3"\]/aiohttp = ["aiohttp"]/' pyproject.toml
+
+%prep
+%autosetup -p1 -n google_genai-%{version}
+
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x aiohttp,local-tokenizer,pyopenssl
+
+
+%build
+%pyproject_wheel
+
+
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import -e google.genai.local_tokenizer
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-google-genai -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

@@ -2,8 +2,8 @@
 
 %define _hardened_build 1
 Name:           bochs
-Version:        3.0
-Release:        2%{?dist}
+Version:        3.1
+Release:        1%{?dist}
 Summary:        Portable x86 PC emulator
 License:        LGPL-2.0-or-later
 URL:            http://bochs.sourceforge.net/

@@ -7,7 +7,7 @@
 %global crate gvdb
 
 Name:           rust-gvdb
-Version:        0.9.0
+Version:        0.10.1
 Release:        %autorelease
 Summary:        Implementation of the glib gvdb file format
 

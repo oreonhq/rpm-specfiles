@@ -2,8 +2,8 @@
 
 Summary:	Waveform Viewer
 Name:		gtkwave
-Version:	3.3.126
-Release:	2%{?dist}
+Version:	3.3.128
+Release:	1%{?dist}
 License:	GPL-2.0-or-later
 URL:		http://gtkwave.sourceforge.net/
 Source0:	http://gtkwave.sourceforge.net/gtkwave-gtk3-%{version}.tar.gz

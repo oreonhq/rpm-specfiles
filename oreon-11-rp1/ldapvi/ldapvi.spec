@@ -1,8 +1,8 @@
 %global source0_hash 6f62e92d20ff2ac0d06125024a914b8622e5b8a0a0c2d390bf3e7990cbd2e153
 
 Name:           ldapvi
-Version:        1.7
-Release:        54%{?dist}
+Version:        1.8
+Release:        1%{?dist}
 Summary:        An interactive LDAP client
 
 License:        GPL-2.0-or-later

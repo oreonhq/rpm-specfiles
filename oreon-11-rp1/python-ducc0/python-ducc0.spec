@@ -1,71 +1,57 @@
-%global source0_hash 345a6141a2a5843e141cedb8c4fec80037020515a2c73d3abe487baca37c6048
+%global source0_hash none
 
-%global srcname ducc0
-
-Name:           python-%{srcname}
-Version:        0.40.0
+Name:           python-ducc0
+Version:        0.41.0
 Release:        %autorelease
-Summary:        Programming tools for numerical computation
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Distinctly useful code collection: contains efficient algorithms for Fast Fourier _and related_ transforms, spherical harmonic transforms involving very general spherical grids, gridding/degridding tools for radio interferometry, 4pi spherical convolution operators and much more.
 
-License:        GPL-2.0-or-later AND (GPL-2.0-or-later OR BSD-3-Clause)
-URL:            https://pypi.python.org/pypi/%{srcname}
-Source0:        %{pypi_source ducc0}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-2.0-or-later
+URL:            ...
+Source:         %{pypi_source ducc0}
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch:    %{ix86}
-
-BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
-BuildRequires:  python3-nanobind-devel
-BuildRequires:  python3dist(pytest)
+BuildRequires:  gcc
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is a collection of basic programming tools for numerical computation,
-including Fast Fourier Transforms, Spherical Harmonic Transforms,
-non-equispaced Fourier transforms, as well as some concrete applications
-like 4pi convolution on the sphere and gridding/degridding of radio
-interferometry data.
-The code is written in C++17, but provides a simple and comprehensive
-Python interface.}
+This is package 'ducc0' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{srcname}
+%package -n     python3-ducc0
 Summary:        %{summary}
 
-# Importable module is named ducc
-%py_provides python3-ducc
+%description -n python3-ducc0 %_description
 
-%description -n python3-%{srcname} %_description
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n ducc0-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-# Remove egg files from source
-rm -rf %{srcname}.egg-info
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
-export DUCC0_OPTIMIZATION="portable-debug"
-export DUCC0_CFLAGS="%{build_cxxflags}"
-export DUCC0_LFLAGS="%{build_ldflags}"
-export SKBUILD_CMAKE_VERBOSE=true
-export DUCC0_USE_NANOBIND=true
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files ducc0
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest -q python/test
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-ducc0 -f %{pyproject_files}
 
 %changelog
 %autochangelog

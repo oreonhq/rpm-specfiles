@@ -7,7 +7,7 @@
 %global crate sha1
 
 Name:           rust-sha1
-Version:        0.10.7
+Version:        0.11.0
 Release:        %autorelease
 Summary:        SHA-1 hash function
 

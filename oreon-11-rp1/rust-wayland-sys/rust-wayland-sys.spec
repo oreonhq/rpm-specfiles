@@ -7,7 +7,7 @@
 %global crate wayland-sys
 
 Name:           rust-wayland-sys
-Version:        0.31.8
+Version:        0.31.11
 Release:        %autorelease
 Summary:        FFI bindings to the various libwayland-*.so libraries
 

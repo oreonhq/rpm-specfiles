@@ -10,7 +10,7 @@
 %endif
 
 Name:           sdl2-compat
-Version:        2.32.68
+Version:        2.32.72
 Release:        1%{?dist}
 SourceLicense:  Zlib and Apache-2.0 and MIT and BSD-3-Clause
 Summary:        SDL 2.0 runtime compatibility library using SDL 3.0

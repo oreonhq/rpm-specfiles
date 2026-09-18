@@ -11,7 +11,7 @@
 %global crate gitui
 
 Name:           rust-gitui
-Version:        0.28.0
+Version:        0.28.1
 Release:        %autorelease
 Summary:        Blazing fast terminal-ui for git
 

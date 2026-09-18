@@ -10,7 +10,7 @@
 # testsuite missing deps: tasty-golden tasty-smallcheck
 
 Name:           ghc-%{pkg_name}
-Version:        1.23.1
+Version:        1.24.0
 Release:        %autorelease
 Summary:        Library for manipulating Haskell source
 

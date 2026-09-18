@@ -49,8 +49,8 @@ Requires: mod_fcgid
 %{?!rt_upgrade_dir:%global rt_upgrade_dir %{_sysconfdir}/%{name}/upgrade}
 
 Name:		rt
-Version:	5.0.7
-Release:	5%{?dist}
+Version:	6.0.3
+Release:	1%{?dist}
 Summary:	Request tracker
 
 License:	GPL-2.0-or-later

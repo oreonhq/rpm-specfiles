@@ -5,7 +5,7 @@
 %bcond_with docs
 
 Name:           ngtcp2
-Version:        1.21.0
+Version:        1.25.0
 Release:        %autorelease
 Summary:        Implementation of RFC 9000 QUIC protocol
 

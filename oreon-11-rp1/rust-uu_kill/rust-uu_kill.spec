@@ -10,7 +10,7 @@
 %global crate uu_kill
 
 Name:           rust-uu_kill
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        kill ~ (uutils) send a signal to a process
 

@@ -7,7 +7,7 @@
 %global crate hf-hub
 
 Name:           rust-hf-hub
-Version:        0.4.3
+Version:        1.0.0
 Release:        %autorelease
 Summary:        A limited re-implementation of the huggingface_hub python package in Rust
 

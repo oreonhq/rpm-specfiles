@@ -1,8 +1,8 @@
 %global source0_hash ecdc66f0182a38164b8bdc79502c575df3d2c4453bae5bff225c4e5ce9dbef6c
 
 Name:           mpv-mpris
-Version:        1.2
-Release:        2%{?dist}
+Version:        1.3
+Release:        1%{?dist}
 Summary:        MPRIS plugin for mpv
 
 License:        MIT

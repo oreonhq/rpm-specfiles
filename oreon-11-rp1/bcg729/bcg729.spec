@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:          bcg729
-Version:       1.1.1
-Release:       15%{?dist}
+Version:       1.1.2
+Release:       1%{?dist}
 Summary:       Opensource implementation of the G.729 codec
 
 License:       GPL-3.0-or-later

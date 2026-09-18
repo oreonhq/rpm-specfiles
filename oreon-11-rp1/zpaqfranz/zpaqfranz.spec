@@ -16,7 +16,7 @@
 
 Name:           zpaqfranz
 Epoch:          1
-Version:        64.7
+Version:        64.8
 Release:        1%{?dist}
 Summary:        Advanced multiversioned archiver with hardware acceleration
 # LICENSE:  MIT text

@@ -3,8 +3,8 @@
 %global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:           file-roller
-Version:        44.6
-Release:        2%{?dist}
+Version:        44.7
+Release:        1%{?dist}
 Summary:        Tool for viewing and creating archives
 
 License:        GPL-2.0-or-later

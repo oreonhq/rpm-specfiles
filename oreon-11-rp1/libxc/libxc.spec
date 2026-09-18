@@ -17,8 +17,8 @@
 
 Name:           libxc
 Summary:        Library of exchange and correlation functionals for density-functional theory
-Version:        7.0.0
-Release:        10%{?dist}
+Version:        7.1.2
+Release:        1%{?dist}
 License:        MPL-2.0
 Source0:        https://gitlab.com/libxc/libxc/-/archive/%{version}/%{name}-%{version}.tar.gz
 # Don't rebuild libxc for pylibxc

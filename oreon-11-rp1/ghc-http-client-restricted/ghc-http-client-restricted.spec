@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.1.0
+Version:        0.1.1
 Release:        %autorelease
 Summary:        Restricting the servers that http-client will use
 

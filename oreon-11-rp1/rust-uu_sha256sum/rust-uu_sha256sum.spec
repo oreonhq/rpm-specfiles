@@ -10,7 +10,7 @@
 %global crate uu_sha256sum
 
 Name:           rust-uu_sha256sum
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        sha256sum ~ (uutils) Print or check the SHA256 checksums
 

@@ -16,7 +16,7 @@
 
 %global github_owner    nikic
 %global github_name     PHP-Parser
-%global github_version  1.4.1
+%global github_version  5.9.0
 %global github_commit   f78af2c9c86107aa1a34cd1dbb5bbe9eeb0d9f51
 %global github_short    %(c=%{github_commit}; echo ${c:0:7})
 
@@ -27,7 +27,7 @@
 
 Name:          php-%{lib_name_old}
 Version:       %{github_version}
-Release:       26%{?dist}
+Release:       1%{?dist}
 Summary:       A PHP parser written in PHP - version 1
 
 # Automatically converted from old format: BSD - review is highly recommended.
@@ -47,7 +47,7 @@ BuildRequires: php(language) >= %{php_min_ver}
 %if %{with tests}
 BuildRequires: %{_bindir}/phpunit
 %endif
-# For tests: phpcompatinfo (computed from version 1.4.1)
+# For tests: phpcompatinfo (computed from version 5.9.0)
 BuildRequires: php-ctype
 BuildRequires: php-filter
 BuildRequires: php-pcre
@@ -59,7 +59,7 @@ BuildRequires: php-xmlwriter
 # composer.json
 Requires:      php(language) >= %{php_min_ver}
 Requires:      php-tokenizer
-# phpcompatinfo (computed from version 1.4.1)
+# phpcompatinfo (computed from version 5.9.0)
 Requires:      php-filter
 Requires:      php-pcre
 Requires:      php-spl

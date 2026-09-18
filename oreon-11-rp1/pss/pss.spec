@@ -1,8 +1,8 @@
 %global source0_hash d3896c0fc05cb08105f47d7b9f58dcffc72a87fe466effafe58baec1bcb0b021
 
 Name:           pss
-Version:        1.40
-Release:        39%{?dist}
+Version:        1.45
+Release:        1%{?dist}
 Summary:        A power-tool for searching inside source code files
 
 # psslib/colorama is BSD-3-Clause

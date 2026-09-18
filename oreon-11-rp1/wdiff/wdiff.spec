@@ -3,7 +3,7 @@
 %bcond rebuild_mans 1
 
 Name:           wdiff
-Version:        1.2.2
+Version:        1.2.3
 Release:        %autorelease
 Summary:        Compare files on a word per word basis
 

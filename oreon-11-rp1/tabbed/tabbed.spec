@@ -6,8 +6,8 @@
 %endif
 
 Name:           tabbed
-Version:        0.7
-Release:        8%{?dist}
+Version:        0.9
+Release:        1%{?dist}
 Summary:        Simple Xembed container manager
 
 %global         _tabbedsourcedir %{_usrsrc}/tabbed-user-%{version}-%{release}

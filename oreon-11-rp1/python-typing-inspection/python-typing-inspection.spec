@@ -1,44 +1,57 @@
-%global source0_hash ba561c48a67c5958007083d386c3295464928b01faa735ab8547c5692e87f464
+%global source0_hash none
 
 Name:           python-typing-inspection
-Version:        0.4.2
+Version:        0.4.4
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Runtime typing introspection tools
 
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/pydantic/typing-inspection
 Source:         %{pypi_source typing_inspection}
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -g tests
-BuildOption(install):   -l typing_inspection
-
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildRequires:  tomcli
 
-%global common_description %{expand:
-This module provides tools to inspect type annotations at runtime.}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'typing-inspection' generated automatically by pyp2spec.}
 
-%description %{common_description}
+%description %_description
 
-%package -n python3-typing-inspection
+%package -n     python3-typing-inspection
 Summary:        %{summary}
 
-%description -n python3-typing-inspection %{common_description}
+%description -n python3-typing-inspection %_description
 
-%prep -a
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-tomcli set pyproject.toml lists delitem dependency-groups.tests \
-    '(coverage|pytest-cov)\b.*'
 
-%check -a
-%pytest
+%prep
+%autosetup -p1 -n typing_inspection-%{version}
+
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+
+%build
+%pyproject_wheel
+
+
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-typing-inspection -f %{pyproject_files}
-%doc HISTORY.md
-%doc README.md
 
 %changelog
 %autochangelog

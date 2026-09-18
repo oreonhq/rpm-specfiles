@@ -2,8 +2,8 @@
 
 Name:		asunder
 Summary:	A graphical Audio CD ripper and encoder
-Version:	3.0.1
-Release:	9%{?dist}
+Version:	3.0.2
+Release:	1%{?dist}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:	GPL-2.0-only
 URL:		http://littlesvr.ca/asunder

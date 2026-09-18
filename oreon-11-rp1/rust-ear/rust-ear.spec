@@ -7,7 +7,7 @@
 %global crate ear
 
 Name:           rust-ear
-Version:        0.4.0
+Version:        0.6.0
 Release:        %autorelease
 Summary:        EAT Attestation Results implementation
 

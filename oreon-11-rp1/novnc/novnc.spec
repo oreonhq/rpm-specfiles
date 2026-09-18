@@ -1,8 +1,8 @@
 %global source0_hash 6a73e41f98388a5348b7902f54b02d177cb73b7e5eb0a7a0dcf688cc2c79b42a
 
 Name:           novnc
-Version:        1.5.0
-Release:        4%{?dist}
+Version:        1.7.0
+Release:        1%{?dist}
 Summary:        VNC client using HTML5 (Web Sockets, Canvas) with encryption support
 Requires:       python3-websockify
 Requires:       which

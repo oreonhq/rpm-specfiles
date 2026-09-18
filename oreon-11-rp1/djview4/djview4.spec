@@ -2,8 +2,8 @@
 
 Summary:       DjVu viewer
 Name:          djview4
-Version:       4.12
-Release:       16%{?dist}
+Version:       4.12.3
+Release:       1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:       GPL-2.0-or-later
 URL:           http://djvu.sourceforge.net/djview4.html

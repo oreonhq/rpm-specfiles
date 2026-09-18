@@ -3,8 +3,8 @@
 %global srcname flent
 
 Name:             flent
-Version:          2.2.0
-Release:          8%{?dist}
+Version:          2.3.0
+Release:          1%{?dist}
 Summary:          FLExible Network Tester for bufferbloat testing and more
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

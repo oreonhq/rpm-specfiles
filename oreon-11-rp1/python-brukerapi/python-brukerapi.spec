@@ -1,7 +1,7 @@
 %global source0_hash ba814c469a4606938924fe8b6e8d5503df9b9d12227954ec3e076ffa38f4023d
 
 Name:           python-brukerapi
-Version:        0.2.3
+Version:        0.4.6
 Release:        %autorelease
 Summary:        Python package providing I/O interface for Bruker data sets
 

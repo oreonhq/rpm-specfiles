@@ -1,51 +1,57 @@
-%global source0_hash 6905a3cd17804edfac7875b5f6c9142a218c7caef78693c2dbbbfbac186d88b2
+%global source0_hash none
 
-%global srcname pathable
-
-Name:           python-%{srcname}
-Version:        0.4.4
+Name:           python-pathable
+Version:        0.6.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Object-oriented paths
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://pypi.python.org/pypi/%{srcname}
-Source:         %{pypi_source}
+URL:            https://github.com/p1c2u/pathable
+Source:         %{pypi_source pathable}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A python library which provides traverse resources like paths and
-access resources on demand with separate accessor layer.}
+This is package 'pathable' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{srcname}
+%package -n     python3-pathable
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-pathable %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pathable-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
+
+%files -n python3-pathable -f %{pyproject_files}
 
 %changelog
 %autochangelog

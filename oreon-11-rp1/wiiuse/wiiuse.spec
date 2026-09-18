@@ -5,8 +5,8 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           wiiuse
-Version:        0.15.5
-Release:        17%{?dist}
+Version:        0.15.7
+Release:        1%{?dist}
 Summary:        The wiiuse library is used to access and control multiple Nintendo Wiimotes
 License:        GPL-3.0-or-later
 URL:            https://github.com/rpavlik/wiiuse

@@ -1,8 +1,8 @@
 %global source0_hash e9e0b33efa8fa20d817dd78dfd9e4cdb3967c8a5d3cb5a783be1ee81c4a89c7c
 
 Name:          python-jsonrpclib
-Version:       0.4.3.2
-Release:       17%{?dist}
+Version:       1.2.0
+Release:       1%{?dist}
 Summary:       JSON-RPC v2.0 client library for Python
 
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

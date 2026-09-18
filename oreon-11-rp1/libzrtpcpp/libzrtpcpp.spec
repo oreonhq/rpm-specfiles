@@ -1,8 +1,8 @@
 %global source0_hash 7ed70e903082bfa6045e3b2be2f4396cb57d985d59f567ec06ca5b93d894ba42
 
 Name:           libzrtpcpp
-Version:        4.6.6
-Release:        24%{?dist}
+Version:        4.7.0
+Release:        1%{?dist}
 Summary:        ZRTP support library for the GNU ccRTP stack
 
 License:        GPL-3.0-or-later

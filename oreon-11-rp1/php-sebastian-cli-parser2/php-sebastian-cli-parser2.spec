@@ -26,8 +26,8 @@
 %global ns_project   CliParser
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        2.0.1
-Release:        5%{?dist}
+Version:        3.0.1
+Release:        1%{?dist}
 Summary:        Library for parsing CLI options, version %{major}
 
 License:        BSD-3-Clause

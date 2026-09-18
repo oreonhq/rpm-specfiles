@@ -1,8 +1,8 @@
 %global source0_hash 9bed8fa143182818650361f49257755bf891f143161066aaa7bca8c6cce9f632
 
 Name:           xwax
-Version:        1.9
-Release:        8%{?dist}
+Version:        1.10
+Release:        1%{?dist}
 Summary:        Open source vinyl emulation software for Linux
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only

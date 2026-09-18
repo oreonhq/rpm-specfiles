@@ -17,8 +17,8 @@
 %bcond_with cross
 
 Name:    arm-trusted-firmware
-Version: 2.14.1
-Release: 2%{?candidate:.%{candidate}}%{?dist}
+Version: 2.15.0
+Release: 1%{?candidate:.%{candidate}}%{?dist}
 Summary: ARM Trusted Firmware
 License: BSD-3-clause
 URL:     https://github.com/TrustedFirmware-A/trusted-firmware-a

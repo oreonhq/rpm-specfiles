@@ -1,50 +1,61 @@
-%global source0_hash 2530b40270be9e5e8c5f570d15a934c5dc9737ce3f3ba54307b371655e48e7e4
+%global source0_hash none
 
-%global srcname cycler
-%global sum Cycle through lists in various ways (used by matplotlib)
-%global desc General purpose library used by matplotlib to cycle through lists for colors,\
-marker styles, etc
-
-Name:           python-%{srcname}
-Version:        0.11.0
+Name:           python-cycler
+Version:        0.12.1
 Release:        %autorelease
-Summary:        %{sum}
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Composable style cycles
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-Source0:        %pypi_source
-URL:            https://github.com/matplotlib/cycler.git
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://matplotlib.org/cycler/
+Source:         %{pypi_source cycler}
 
 BuildArch:      noarch
-
-%description
-%{desc}
-
-%package -n python3-%{srcname}
-Summary:        %{sum}
 BuildRequires:  python3-devel
 
-%description -n python3-%{srcname}
-%{desc}
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cycler' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-cycler
+Summary:        %{summary}
+
+%description -n python3-cycler %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-cycler docs,tests
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n cycler-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,tests
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
-%license LICENSE
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-cycler -f %{pyproject_files}
 
 %changelog
 %autochangelog

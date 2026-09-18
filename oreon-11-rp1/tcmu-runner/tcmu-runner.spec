@@ -6,8 +6,8 @@ Name:           tcmu-runner
 # Automatically converted from old format: LGPLV2+ or ASL 2.0 - review is highly recommended.
 License:        LGPL-2.1-or-later OR Apache-2.0
 Summary:        A daemon that supports LIO userspace backends
-Version:        1.5.4
-Release:        14%{?dist}
+Version:        1.6.2
+Release:        1%{?dist}
 URL:            https://github.com/open-iscsi/tcmu-runner
 Source:         https://github.com/open-iscsi/tcmu-runner/archive/v%{version}.tar.gz
 Patch0:         read_conf.patch

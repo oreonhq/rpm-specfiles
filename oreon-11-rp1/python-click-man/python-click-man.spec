@@ -1,54 +1,58 @@
-%global source0_hash d255c14ecee52afa915228f7dc87603ddb571c3d7d1a2eb219244e440fa88bbb
+%global source0_hash none
 
-%global pypi_name click-man
-
-Name:           python-%{pypi_name}
-Version:        0.4.1
+Name:           python-click-man
+Version:        0.5.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Generate man pages for click based CLI applications
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/click-contrib/click-man
-Source0:        %pypi_source
+Source:         %{pypi_source click_man}
+
 BuildArch:      noarch
- 
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
 
-%description
-Automatically produces UNIX-style manual pages for Python applications that
-use Click for option handling.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'click-man' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-click-man
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{pypi_name}}
-# pkg_resources is used for entrypoint handling
-Requires:       python3dist(setuptools)
- 
 
-%description -n python3-%{pypi_name}
-Automatically produces UNIX-style manual pages for Python applications that
-use Click for option handling.
+%description -n python3-click-man %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n click_man-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{pypi_name}
-%license LICENSE
-%doc README.md
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-click-man -f %{pyproject_files}
 %{_bindir}/click-man
-%{python3_sitelib}/click_man
-%{python3_sitelib}/click_man-%{version}-py%{python3_version}.egg-info
 
 %changelog
 %autochangelog

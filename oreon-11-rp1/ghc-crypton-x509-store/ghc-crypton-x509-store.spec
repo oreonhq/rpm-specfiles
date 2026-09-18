@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        1.6.14
+Version:        1.9.0
 Release:        %autorelease
 Summary:        X.509 collection accessing and storing methods
 

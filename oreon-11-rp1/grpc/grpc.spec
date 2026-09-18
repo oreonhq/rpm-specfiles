@@ -119,7 +119,7 @@
 # documentation. Instead, we have just dropped all documentation.
 
 Name:           grpc
-Version:        1.48.4
+Version:        1.84.0
 Release:        %autorelease
 Summary:        RPC library and framework
 
@@ -131,7 +131,7 @@ Summary:        RPC library and framework
 # CMakeLists.txt: gRPC_CPP_SOVERSION
 # See https://github.com/abseil/abseil-cpp/issues/950#issuecomment-843169602
 # regarding unusual C++ SOVERSION style (not a single number).
-%global cpp_so_version 1.48
+%global cpp_so_version 1.84
 
 # The entire source is Apache-2.0 except the following:
 #
@@ -397,12 +397,12 @@ Patch:          %{forgeurl}/pull/31671.patch
 #
 # https://github.com/grpc/grpc/pull/33492
 #
-# Backported to 1.48.4.
+# Backported to 1.84.0.
 Patch:          grpc-1.48.4-wrap_socket.patch
 # [Test] Do not use importlib find_module API, removed in Python 3.12
 # https://github.com/grpc/grpc/pull/33506
 #
-# Backported to 1.48.4.
+# Backported to 1.84.0.
 Patch:          grpc-1.48.4-find_module.patch
 # Backport several #include directives
 # These were included in https://github.com/grpc/grpc/pull/30952
@@ -431,7 +431,7 @@ Patch:          grpc-1.48.4-abseil-cpp-includes.patch
 # CVE-2023-32732 grpc: denial of service [fedora-all]
 # https://bugzilla.redhat.com/show_bug.cgi?id=2214470
 #
-# Backported to 1.48.4.
+# Backported to 1.84.0.
 Patch:          0001-http2-Dont-drop-connections-on-metadata-limit-exceed.patch
 # [Python] Specify noexcept for cdef functions (#34242)
 #
@@ -681,8 +681,8 @@ Provides:       bundled(utf8_range)
 #   - The “validate” package conflicts with one belonging to python-configobj
 #     (in F38+), and it is the latter package that owns
 #     https://pypi.org/project/validate/.
-Obsoletes:      python3-grpcio-admin < 1.48.4-7
-Obsoletes:      python3-grpcio-csds < 1.48.4-7
+Obsoletes:      python3-grpcio-admin < 1.84.0-7
+Obsoletes:      python3-grpcio-csds < 1.84.0-7
 
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_provides_for_importable_modules
 %py_provides python3-grpc

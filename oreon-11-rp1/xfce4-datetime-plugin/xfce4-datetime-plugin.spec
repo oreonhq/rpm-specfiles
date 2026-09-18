@@ -5,8 +5,8 @@
 %global xfceversion 4.16
 
 Name:           xfce4-datetime-plugin
-Version:        0.8.2
-Release:        10%{?dist}
+Version:        0.8.3
+Release:        1%{?dist}
 Summary:        Date/time plugin for the Xfce panel
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

@@ -1,7 +1,7 @@
 %global source0_hash 3fdbae6517b4602d8c250169951a56144d5495970642ac099051dfa4c3b39c96
 
 Name:		intel-qpl
-Version:	1.8.0
+Version:	1.9.0
 Release:	%autorelease
 Summary:	Intel Query Processing Library
 

@@ -1,76 +1,57 @@
-%global source0_hash add8643c32f738014d252d2bdebb478623b04802e8396d5903905db36474d3ff
+%global source0_hash none
 
-%global pypi_name mysqlclient
-%bcond_with mysqldb
+Name:           python-mysqlclient
+Version:        2.3.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python interface to MySQL
 
-Name:           python-%{pypi_name}
-Version:        2.2.5
-Release:        7%{?dist}
-Summary:        MySQL/mariaDB database connector for Python
-
-License:        GPL-2.0-only
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-2.0-or-later
 URL:            https://github.com/PyMySQL/mysqlclient
-Source0:        %{pypi_source}
-
-BuildRequires:  gcc
-BuildRequires:  mariadb-connector-c-devel
-
-%description
-MySQLdb is an interface to the popular MySQL database server that provides
-the Python database API.
-
-%package -n     python3-%{pypi_name}
-Summary:        %{summary}
-
-Provides: python3-mysql = %{version}-%{release}
-Obsoletes: python3-mysql < 2.0.0-1
+Source:         %{pypi_source mysqlclient}
 
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-%if %{with mysqldb}
-BuildRequires:  python3-pytest
-%endif
+BuildRequires:  gcc
 
-%description -n python3-%{pypi_name}
-MySQLdb is an interface to the popular MySQL database server that provides
-the Python database API.
 
-%package -n python-%{pypi_name}-doc
-Summary:        Documentation for %{name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'mysqlclient' generated automatically by pyp2spec.}
 
-BuildRequires:  python3-sphinx
-BuildRequires:  python3-sphinx_rtd_theme
-%description -n python-%{pypi_name}-doc
-Documentation for %{name}.
+%description %_description
+
+%package -n     python3-mysqlclient
+Summary:        %{summary}
+
+%description -n python3-mysqlclient %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n mysqlclient-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-rm -rf %{pypi_name}.egg-info
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
-PYTHONPATH=${PWD} sphinx-build-3 doc html
-rm -rf html/.{doctrees,buildinfo}
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with mysqldb}
+
 %check
-PYTHONPATH=%{buildroot}%{python3_sitelib} pytest-%{python3_version} -v tests
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%doc README.md HISTORY.rst
-%license LICENSE
-%{python3_sitearch}/MySQLdb/
-%{python3_sitearch}/%{pypi_name}-%{version}-py*.egg-info/
 
-%files -n python-%{pypi_name}-doc
-%doc html
-%license LICENSE
+%files -n python3-mysqlclient -f %{pyproject_files}
 
 %changelog
 %autochangelog

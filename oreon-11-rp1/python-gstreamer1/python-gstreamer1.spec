@@ -3,7 +3,7 @@
 %global gstreamer1_version 1.8.0
 
 Name:           python-gstreamer1
-Version:        1.28.1
+Version:        1.28.7
 Release:        1%{?dist}
 Summary:        Python bindings for GStreamer
 

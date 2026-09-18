@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_qt5_plugindir}/.*\\.so$
 
 Name:           qt5-qtpbfimageformat
-Version:        3.1
-Release:        6%{?dist}
+Version:        5.2
+Release:        1%{?dist}
 Summary:        Qt image plugin for displaying Mapbox vector tiles
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

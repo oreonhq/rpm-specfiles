@@ -8,9 +8,9 @@
 #global shortcommit %%(c=%{commit}; echo ${c:0:7})
 
 Name:           moose
-Version:        3.1.5
+Version:        4.1.0
 %global codename chamcham
-Release:        32%{?dist}%{?prerelease:.%{prerelease}}%{?commit:.git%{shortcommit}}
+Release:        1%{?dist}%{?prerelease:.%{prerelease}}%{?commit:.git%{shortcommit}}
 Summary:        Multiscale Neuroscience and Systems Biology Simulator
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License:        GPL-3.0-only

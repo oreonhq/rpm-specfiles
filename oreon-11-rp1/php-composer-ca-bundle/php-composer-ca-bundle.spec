@@ -18,8 +18,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-composer-ca-bundle
-Version:        1.5.10
-Release:        2%{?dist}
+Version:        1.5.14
+Release:        1%{?dist}
 Summary:        Lets you find a path to the system CA
 
 License:        MIT

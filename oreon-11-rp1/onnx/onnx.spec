@@ -1,8 +1,8 @@
 %global source0_hash 8d5e983c36037003615e5a02d36b18fc286541bf52de1a78f6cf9f32005a820e
 
 Name:       onnx
-Version:    1.17.0
-Release:    12%{?dist}
+Version:    1.22.0
+Release:    1%{?dist}
 Summary:    Open standard for machine learning interoperability
 License:    Apache-2.0
 

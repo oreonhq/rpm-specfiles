@@ -6,7 +6,7 @@
 %global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           sysprof
-Version:        50.0
+Version:        51.0
 Release:        %autorelease
 Summary:        A system-wide Linux profiler
 

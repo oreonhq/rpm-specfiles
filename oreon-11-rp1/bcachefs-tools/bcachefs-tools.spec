@@ -17,7 +17,7 @@
 %global make_opts VERSION="%{version}" %{?with_fuse:BCACHEFS_FUSE=1} BUILD_VERBOSE=1 PREFIX=%{_prefix} ROOT_SBINDIR=%{_sbindir}
 
 Name:           bcachefs-tools
-Version:        1.37.3
+Version:        1.39.6
 Release:        1%{?dist}
 Summary:        Userspace tools for bcachefs
 

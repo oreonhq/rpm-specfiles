@@ -1,7 +1,7 @@
 %global source0_hash 42eca08e4d4cd83285cd506425ac2addc644d24c2e2f8e49eeb772ce74b8da54
 
 Name:       clpeak
-Version:    1.1.6
+Version:    2.1.4
 Release:    1%{?dist}
 Summary:    Find peak OpenCL capacities like bandwidth & compute
 License:    Apache-2.0

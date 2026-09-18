@@ -24,7 +24,7 @@ ExcludeArch: s390x
 %global short_url https://github.com/libretro
 
 Name:           %{appname}%{?p_suffix}
-Version:        1.22.0
+Version:        1.22.2
 %global major_ver 1.22
 Release:        %autorelease
 Summary:        Cross-platform, sophisticated frontend for the libretro API %{?sum_suffix}

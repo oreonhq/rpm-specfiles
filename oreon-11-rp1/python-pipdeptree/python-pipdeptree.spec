@@ -1,67 +1,57 @@
-%global source0_hash 60aa625068115a2879e4d5d3966cd9734a665e600797d1c6c2145e514f9d10b9
+%global source0_hash none
 
-%global srcname pipdeptree
-
-%global _description\
-pipdeptree is a command line utility for displaying the installed python\
-packages in form of a dependency tree. It works for packages installed\
-globally on a machine as well as in a virtualenv.
-
-Name:           python-%{srcname}
-Version:        2.30.0
+Name:           python-pipdeptree
+Version:        4.2.5
 Release:        %autorelease
-Summary:        Command line utility to show dependency tree of packages
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Command line utility to show dependency tree of packages.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/naiquevin/pipdeptree
-Source0:        https://github.com/naiquevin/pipdeptree/archive/%{version}/%{srcname}-%{version}.tar.gz
-BuildArch:      noarch
+URL:            https://github.com/tox-dev/pipdeptree
+Source:         %{pypi_source pipdeptree}
 
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros >= 0-41
+BuildRequires:  gcc
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pipdeptree' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{srcname}
+%package -n     python3-pipdeptree
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-pipdeptree %_description
 
-%pyproject_extras_subpkg -n python3-%{srcname} graphviz
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pipdeptree-%{version}
 
-%autosetup -n %{srcname}-%{version}
-# Remove unneeded testing deps
-sed -i "/diff-cover/d;/covdefaults/d;/pytest-cov/d" pyproject.toml
-# Remove version limits from dependencies
-sed -i 's/"virtualenv.*",/"virtualenv",/' pyproject.toml
-sed -i 's/"graphviz.*",/"graphviz",/' pyproject.toml
-sed -i 's/"pytest>.*",/"pytest",/' pyproject.toml
-sed -i 's/"pytest-mock>.*",/"pytest-mock",/' pyproject.toml
 
 %generate_buildrequires
-export SETUPTOOLS_SCM_PRETEND_VERSION="%{version}"
-%pyproject_buildrequires -x test,graphviz
+%pyproject_buildrequires
+
 
 %build
-export SETUPTOOLS_SCM_PRETEND_VERSION="%{version}"
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# test_console expects /usr/bin/pipdeptree to exists
-# test_custom_interpreter doesn't work
-%pytest -vvv -k "not test_console and not test_custom_interpreter"
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %pyproject_files
-%license LICENSE
-%doc README.md
+
+%files -n python3-pipdeptree -f %{pyproject_files}
 %{_bindir}/pipdeptree
 
 %changelog

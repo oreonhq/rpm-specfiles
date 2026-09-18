@@ -1,76 +1,65 @@
-%global source0_hash 9803deb16a6ecd88075686c4445ff6c78986d3ae676a4cc6cc3e4d324bc45c56
+%global source0_hash none
 
-%global srcname url-normalize
+Name:           python-url-normalize
+Version:        3.0.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        URL normalization for Python
 
-Name: python-%{srcname}
-Version: 1.4.3
-Release: 11%{?dist}
-Summary: Python URI normalizator
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/niksite/url-normalize
+Source:         %{pypi_source url_normalize}
 
-License: MIT
-Url: https://github.com/niksite/url-normalize
-Source0: %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-# https://github.com/niksite/url-normalize/pull/28
-Patch0:         https://github.com/niksite/url-normalize/pull/28.patch#/python-url-normalize-poetry-core.patch
 
-BuildArch: noarch
-BuildRequires: python3-devel
-# needed for check
-BuildRequires: python3dist(pytest)
-
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
+This is package 'url-normalize' generated automatically by pyp2spec.}
 
-URI Normalization function
- * Take care of IDN domains.
- * Always provide the URI scheme in lowercase characters.
- * Always provide the host, if any, in lowercase characters.
- * Only perform percent-encoding where it is essential.
- * Always use uppercase A-through-F characters when percent-encoding.
- * Prevent dot-segments appearing in non-relative URI paths.
- * For schemes that define a default authority, use an empty authority if the
-   default is desired.
- * For schemes that define an empty path to be equivalent to a path of "/",
-   use "/".
- * For schemes that define a port, use an empty port if the default is desired
- * All portions of the URI must be utf-8 encoded NFC from Unicode strings
-
-Inspired by Sam Ruby's urlnorm.py:
-    http://intertwingly.net/blog/2004/08/04/Urlnorm
-This fork author: Nikolay Panov (<pythonista@npanov.com>)
-}
+Patch0:         https://github.com/niksite/url-normalize/pull/28.patch#/python-url-normalize-poetry-core.patch
 
 %description %_description
 
-%generate_buildrequires
-%pyproject_buildrequires
+%package -n     python3-url-normalize
+Summary:        %{summary}
 
-%package -n python3-%{srcname}
-Summary: %{summary}
+%description -n python3-url-normalize %_description
 
-%description -n python3-%{srcname} %_description
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-url-normalize dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n url_normalize-%{version}
 
-%autosetup -p 1 -n %{srcname}-%{version}
 
-# supplied tox.ini causes check to fail, will use pytest instead
-rm tox.ini
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files url_normalize
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc README.md
+
+%files -n python3-url-normalize -f %{pyproject_files}
+%{_bindir}/url-normalize
 
 %changelog
 %autochangelog

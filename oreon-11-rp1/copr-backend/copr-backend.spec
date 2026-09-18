@@ -7,8 +7,8 @@
 %global copr_common_version 1.2.1
 
 Name:       copr-backend
-Version:    2.11.hotfix
-Release:    3%{?dist}
+Version:    2.14-1
+Release:    1%{?dist}
 Summary:    Backend for Copr
 
 License:    GPL-2.0-or-later

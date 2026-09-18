@@ -1,56 +1,57 @@
-%global source0_hash f09edd5e2a40e4d66f918f083a792cc9cc4bed5d820b037fd42db9ad67793e90
+%global source0_hash none
 
-%global srcname simpleeval
+Name:           python-simpleeval
+Version:        1.0.8
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A simple, safe single expression evaluator library.
 
-Name:           python-%{srcname}
-Version:        1.0.3
-Release:        7%{?dist}
-Summary:        An expression evaluator library for Python
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/danthedeckie/simpleeval
-Source0:        %{url}/archive/%{version}.tar.gz#/%{srcname}-%{version}.tar.gz
-BuildArch:      noarch
+Source:         %{pypi_source simpleeval}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%description
-An short, easy to use, safe and reasonably extensible expression evaluator.
-Designed for things like in a website where you want to allow the user to
-generate a string, or a number from some other input, without allowing full
-eval() or other unsafe or needlessly complex linguistics.
 
-%package -n     python3-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'simpleeval' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-simpleeval
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
 
-%description -n python3-%{srcname}
-An short, easy to use, safe and reasonably extensible expression evaluator.
-Designed for things like in a website where you want to allow the user to
-generate a string, or a number from some other input, without allowing full
-eval() or other unsafe or needlessly complex linguistics.
+%description -n python3-simpleeval %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n simpleeval-%{version}
 
-%setup -q -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{__python3} test_simpleeval.py
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENCE
-%doc README.rst
+
+%files -n python3-simpleeval -f %{pyproject_files}
 
 %changelog
 %autochangelog

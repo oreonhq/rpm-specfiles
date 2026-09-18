@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:       virtualbox-guest-additions
-Version:    7.2.6
+Version:    7.2.18
 Release:    1%{?dist}
 Summary:    VirtualBox Guest Additions
 License:    GPL-3.0-only AND (GPL-3.0-only OR CDDL-1.0)

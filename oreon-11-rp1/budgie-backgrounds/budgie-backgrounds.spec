@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           budgie-backgrounds
-Version:        3.0
-Release:        7%{?dist}
+Version:        4.1
+Release:        1%{?dist}
 Summary:        Default set of background images for the Budgie Desktop
 
 License:        CC0-1.0

@@ -8,7 +8,7 @@
 %global crate config
 
 Name:           rust-config
-Version:        0.15.13
+Version:        0.15.25
 Release:        %autorelease
 Summary:        Layered configuration system for Rust applications
 

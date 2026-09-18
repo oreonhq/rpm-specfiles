@@ -18,7 +18,7 @@ panning and zooming windows, star catalog access, cuts, star pick/fwhm,
 thumbnails, etc.}
 
 Name:           ginga
-Version:        5.5.1
+Version:        7.4.0
 Release:        %autorelease
 Summary:        %{sum}
 # License breakdown

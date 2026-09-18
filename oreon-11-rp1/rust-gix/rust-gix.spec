@@ -7,7 +7,7 @@
 %global crate gix
 
 Name:           rust-gix
-Version:        0.77.0
+Version:        0.87.1
 Release:        %autorelease
 Summary:        Interact with git repositories just like git would
 

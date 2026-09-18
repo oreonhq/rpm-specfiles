@@ -10,7 +10,7 @@
 # testsuite missing deps: yesod-test
 
 Name:           ghc-%{pkg_name}
-Version:        1.6.1.2
+Version:        1.6.1.3
 Release:        %autorelease
 Summary:        Static file serving subsite for Yesod Web Framework
 

@@ -6,8 +6,8 @@
 %global _vpath_builddir build
 
 Name:		scap-security-guide
-Version:	0.1.80
-Release:	2%{?dist}
+Version:	0.1.82
+Release:	1%{?dist}
 Summary:	Security guidance and baselines in SCAP formats
 License:	BSD-3-Clause
 URL:		https://github.com/ComplianceAsCode/content/

@@ -1,15 +1,15 @@
 %global source0_hash 63bfd147c82277bfcf2314ad2b01ca4e4bf06e1d5516e01ee39232661f4d5144
 
 Name:           headsetcontrol
-Version:        3.0.0
-Release:        6%{?dist}
+Version:        4.1.0
+Release:        1%{?dist}
 Summary:        A tool to control certain aspects of USB-connected headsets on Linux
 # The entire source code is GPLv3+ except cmake_modules/Findhidapi.cmake which is Boost
 # Automatically converted from old format: GPLv3+ and Boost - review is highly recommended.
 License:        GPL-3.0-or-later AND BSL-1.0 
 URL:            https://github.com/Sapd/HeadsetControl
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-Patch0:         3.0.0_build_fix.patch
+Patch0:         4.1.0_build_fix.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake

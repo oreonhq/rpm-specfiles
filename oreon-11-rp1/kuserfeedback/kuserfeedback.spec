@@ -4,8 +4,8 @@
 
 Name:    kuserfeedback
 Summary: Framework for collecting user feedback for apps via telemetry and surveys
-Version: 1.3.0
-Release: 9%{?dist}
+Version: 6.30.0
+Release: 1%{?dist}
 
 License: MIT
 URL:     https://invent.kde.org/libraries/%{name}

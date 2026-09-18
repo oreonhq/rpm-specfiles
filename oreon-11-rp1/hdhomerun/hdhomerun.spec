@@ -14,8 +14,8 @@
 %endif
 
 Name:           hdhomerun
-Version:        20250506
-Release:        3%{?dist}
+Version:        20260326
+Release:        1%{?dist}
 Summary:        Silicon Dust HDHomeRun configuration utility
 
 License:        LGPL-2.1-or-later

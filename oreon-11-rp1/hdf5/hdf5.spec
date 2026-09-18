@@ -11,7 +11,7 @@
 #global snaprel -beta
 
 Name: hdf5
-Version: 1.14.6
+Version: 2.2.0
 Release: %autorelease
 Summary: A general purpose library and file format for storing scientific data
 License: BSD-3-Clause

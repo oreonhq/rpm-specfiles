@@ -1,51 +1,64 @@
-%global source0_hash 3239df9f44da632f96012472805d40a23281a991027ce11d2f45a6f24ac4c3da
+%global source0_hash none
 
-%global common_description %{expand:
-websocket-client is a WebSocket client for Python.  It provides access to low
-level APIs for WebSockets.  websocket-client implements version hybi-13 of the
-WebSocket protocol.  This client does not currently support the
-permessage-deflate extension from RFC 7692.}
+Name:           python-websocket-client
+Version:        1.9.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        WebSocket client for Python with low level API options
 
-Name:               python-websocket-client
-Version:            1.8.0
-Release:            8%{?dist}
-Summary:            WebSocket client for python
-License:            Apache-2.0
-URL:                https://github.com/websocket-client/websocket-client
-BuildArch:          noarch
-Source:             %{pypi_source websocket_client}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0
+URL:            https://github.com/websocket-client/websocket-client/
+Source:         %{pypi_source websocket_client}
 
-# https://github.com/websocket-client/websocket-client/pull/998
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'websocket-client' generated automatically by pyp2spec.}
+
 Patch:              0001-Include-pytest-in-test-extra.patch
 
-%description %{common_description}
+%description %_description
 
-%package -n python3-websocket-client
-Summary:            %{summary}
-BuildRequires:      python3-devel
+%package -n     python3-websocket-client
+Summary:        %{summary}
 
-%description -n python3-websocket-client %{common_description}
+%description -n python3-websocket-client %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-websocket-client docs,optional,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n websocket_client-%{version}
 
-%autosetup -p 1 -n websocket_client-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,optional,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l websocket
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v websocket/tests
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-websocket-client -f %{pyproject_files}
-%doc README.md ChangeLog
 %{_bindir}/wsdump
 
 %changelog

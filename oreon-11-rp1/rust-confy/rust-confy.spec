@@ -7,7 +7,7 @@
 %global crate confy
 
 Name:           rust-confy
-Version:        0.4.0
+Version:        2.0.0
 Release:        %autorelease
 Summary:        Boilerplate-free configuration management
 

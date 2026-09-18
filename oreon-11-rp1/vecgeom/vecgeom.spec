@@ -3,7 +3,7 @@
 %bcond check 0
 
 %global forgeurl https://gitlab.cern.ch/VecGeom/VecGeom
-Version:        2.0.0
+Version:        2.1.1
 %global tag v%{version}
 %forgemeta
 

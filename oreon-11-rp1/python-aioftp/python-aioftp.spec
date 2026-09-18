@@ -1,63 +1,61 @@
-%global source0_hash ecd8cc9687bbb5e1b4dddc155aa1f3ea873d6e9f9e968221378daf04c2e4f763
+%global source0_hash none
 
-%global pypi_name aioftp
-%bcond_with network
+Name:           python-aioftp
+Version:        0.28.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        ftp client/server for asyncio
 
-Name:           python-%{pypi_name}
-Version:        0.26.2
-Release:        5%{?dist}
-Summary:        FTP client/server for asyncio
-
-License:        Apache-2.0
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/aio-libs/aioftp
-Source0:        %{pypi_source}
-BuildArch:      noarch
+Source:         %{pypi_source aioftp}
 
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-FTP client/server for asyncio.}
+This is package 'aioftp' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-aioftp
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
+%description -n python3-aioftp %_description
 
-%if %{with network}
-BuildRequires:  %{py3_dist async-timeout}
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist pytest-asyncio}
-BuildRequires:  %{py3_dist pytest-cov}
-BuildRequires:  %{py3_dist siosocks}
-BuildRequires:  %{py3_dist trustme}
-%endif
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-aioftp dev,socks
 
-%description -n python3-%{pypi_name} %_description
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n aioftp-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,socks
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files %{pypi_name}
 
-%if %{with network}
 %check
-%pytest -v tests
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license license.txt
-%doc README.rst
+
+%files -n python3-aioftp -f %{pyproject_files}
 
 %changelog
 %autochangelog

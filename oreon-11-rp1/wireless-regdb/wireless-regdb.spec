@@ -3,7 +3,7 @@
 %global         _firmwarepath    /usr/lib/firmware
 
 Name:           wireless-regdb
-Version:        2026.02.04
+Version:        2026.09.03
 Release:        1%{?dist}
 Summary:        Regulatory database for 802.11 wireless networking
 

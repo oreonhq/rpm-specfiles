@@ -7,7 +7,7 @@
 %global crate dot-parser-macros
 
 Name:           rust-dot-parser-macros
-Version:        0.5.1
+Version:        0.6.1
 Release:        %autorelease
 Summary:        This crate contains companion proc macros for the dot_parser crate.
 

@@ -1,86 +1,62 @@
-%global source0_hash 3100f3058e01117560e99bdb064ce9dd636f17c28dfab02d2bfe31e05469ae3a
-
-# Not packaged: python-skia-pathops
-%bcond pathops 0
+%global source0_hash none
 
 Name:           python-ufo2ft
-Version:        3.7.1
+Version:        3.9.0
 Release:        %autorelease
-Summary:        A bridge from UFOs to FontTool objects
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A bridge between UFOs and FontTools.
 
-# The entire source is (SPDX) MIT, except:
-#   - Lib/ufo2ft/filters/propagateAnchors.py is Apache-2.0
-License:        MIT AND Apache-2.0
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
 URL:            https://github.com/googlefonts/ufo2ft
 Source:         %{pypi_source ufo2ft}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
-BuildArch: noarch
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-ufo2ft (“UFO to FontTools”) is a fork of ufo2fdk whose goal is to generate
-OpenType font binaries from UFOs (Unified Font Object) without the FDK
-dependency.}
+This is package 'ufo2ft' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-ufo2ft
+%package -n     python3-ufo2ft
 Summary:        %{summary}
 
 %description -n python3-ufo2ft %_description
 
-%pyproject_extras_subpkg -n python3-ufo2ft cffsubr compreffor
-%if %{with pathops}
-%pyproject_extras_subpkg -n python3-ufo2ft pathops
-%endif
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-ufo2ft cffsubr,compreffor,dev,pathops,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n ufo2ft-%{version}
 
-%autosetup -n ufo2ft-%{version} -p 1
-
-# The file requirements.txt contains some additional test dependencies beyond
-# those in the “test” extra, but pins exact versions. Remove the pins and use
-# the result to generate BuildRequires.
-sed -r -e 's/==[^;]+//' \
-%if %{without pathops}
-    -e 's/^skia-pathops\b/# &/' \
-%endif
-    requirements.txt |
-  tee requirements-unpinned.txt
 
 %generate_buildrequires
-%{pyproject_buildrequires \
-    -x cffsubr \
-    -x compreffor \
-    %{?with_pathops:-x pathops} \
-    -x test \
-    requirements-unpinned.txt}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x cffsubr,compreffor,dev,pathops,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l ufo2ft
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{without pathops}
-k="${k-}${k+ and }not (IntegrationTest and test_removeOverlaps_pathops)"
-k="${k-}${k+ and }not (IntegrationTest and test_removeOverlaps_CFF_pathops)"
-k="${k-}${k+ and }not (TTFPreProcessorTest and test_custom_filters_as_argument)"
-k="${k-}${k+ and }not (TTFInterpolatablePreProcessorTest and test_custom_filters_as_argument)"
-%endif
-# Test can fail when updates are not synchronized, but is not essential
-# https://github.com/googlefonts/ufo2ft/issues/877
-k="${k-}${k+ and }not (test_kern_zyyy_zinh)"
+%_pyproject_check_import_allow_no_modules -t
 
-%pytest -k "${k-}" tests -rs
 
 %files -n python3-ufo2ft -f %{pyproject_files}
-%doc README.rst
- 
 
 %changelog
 %autochangelog

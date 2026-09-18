@@ -3,8 +3,8 @@
 %global _hardened_build 1
 
 Name:           hxtools
-Version:        20150304
-Release:        24%{?dist}
+Version:        20251011
+Release:        1%{?dist}
 Summary:        A collection of several tools
 # fd0ssh: LGPLv2 or LGPLv3
 # git-forest: GPLv2+

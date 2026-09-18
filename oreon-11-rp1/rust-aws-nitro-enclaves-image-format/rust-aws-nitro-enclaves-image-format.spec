@@ -7,7 +7,7 @@
 %global crate aws-nitro-enclaves-image-format
 
 Name:           rust-aws-nitro-enclaves-image-format
-Version:        0.3.0
+Version:        0.7.0
 Release:        %autorelease
 Summary:        Library provides the definition of the enclave image format
 

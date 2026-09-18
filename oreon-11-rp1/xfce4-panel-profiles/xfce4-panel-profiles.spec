@@ -4,7 +4,7 @@
 %global app_org_name org.xfce.PanelProfiles
 
 Name:		xfce4-panel-profiles
-Version:	1.0.14
+Version:	1.0.15
 Release:	%autorelease
 Summary:	A simple application to manage Xfce panel layouts
 

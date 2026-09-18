@@ -7,7 +7,7 @@
 %global crate libbpf-rs
 
 Name:           rust-libbpf-rs
-Version:        0.25.0
+Version:        0.27.1
 Release:        %autorelease
 Summary:        Libbpf-rs is a safe, idiomatic, and opinionated wrapper around libbpf-sys
 

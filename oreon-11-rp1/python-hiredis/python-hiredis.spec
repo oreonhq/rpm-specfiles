@@ -1,34 +1,27 @@
-%global source0_hash 782b366d1b649b809447191522141750ad5ab03dea4679ee8121f7099f5074fa
+%global source0_hash none
 
 Name:           python-hiredis
-Version:        3.3.0
+Version:        3.4.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Python wrapper for hiredis
 
-License:        BSD-2-Clause
-URL:            https://github.com/redis/hiredis-py
-Source:         %{url}/archive/v%{version}/python-hiredis-%{version}.tar.gz
-# Drop vendor sources for hiredis and use the system one.
-# Upstream issues (reported by OpenSUSE package mainteners):
-# - https://github.com/redis/hiredis-py/issues/158
-# - https://github.com/redis/hiredis-py/pull/159
-# - https://github.com/redis/hiredis-py/pull/161
-Patch0:         use-system-hiredis.patch
-# Do not use load_module as it is deprecated from py34 and will be removed in py315
-# https://github.com/redis/hiredis-py/pull/218
-Patch1:         do-not-use-load_module.patch
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/redis/hiredis-py/releases
+Source:         %{pypi_source hiredis}
 
-BuildRequires: python3-devel
-BuildRequires: hiredis-devel
-BuildRequires: gcc
-BuildRequires: python3dist(pytest)
+BuildRequires:  python3-devel
+BuildRequires:  gcc
 
-Requires: hiredis
 
 # Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Python extension that wraps protocol parsing code in hiredis.
-It primarily speeds up parsing of multi bulk replies.}
+This is package 'hiredis' generated automatically by pyp2spec.}
+
+Patch0:         use-system-hiredis.patch
+Patch1:         do-not-use-load_module.patch
 
 %description %_description
 
@@ -37,29 +30,31 @@ Summary:        %{summary}
 
 %description -n python3-hiredis %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n hiredis-py-%{version}
-# Use system hiredis
-rm -r vendor/hiredis
+%prep
+%autosetup -p1 -n hiredis-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files hiredis
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest --import-mode append
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-hiredis -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

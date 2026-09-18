@@ -7,7 +7,7 @@
 %global crate gix-packetline
 
 Name:           rust-gix-packetline
-Version:        0.20.0
+Version:        0.22.2
 Release:        %autorelease
 Summary:        A crate of the gitoxide project implementing the pkt-line serializati...
 

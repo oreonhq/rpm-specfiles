@@ -1,54 +1,57 @@
-%global source0_hash 094669fec4cf3cc39bcc476d7f909f6d4b9e998d877a0f1b8a81bc99d656b451
+%global source0_hash none
 
-# Created by pyp2rpm-3.3.5
-%global pypi_name bracex
+Name:           python-bracex
+Version:        3.0.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Bash style brace expander.
 
-Name:           python-%{pypi_name}
-Version:        2.5
-Release:        7%{?dist}
-Summary:        Bash style brace expander
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/facelessuser/bracex
-Source0:        https://github.com/facelessuser/bracex/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source:         %{pypi_source bracex}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(setuptools)
 
-%description
-Bracex is a brace expanding library (à la Bash) for Python.
-Brace expanding is used to generate arbitrary strings.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'bracex' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-bracex
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-Bracex is a brace expanding library (à la Bash) for Python.
-Brace expanding is used to generate arbitrary strings.
+%description -n python3-bracex %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n bracex-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -vv
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE.md docs/src/markdown/about/license.md
-%doc README.md
+
+%files -n python3-bracex -f %{pyproject_files}
 
 %changelog
 %autochangelog

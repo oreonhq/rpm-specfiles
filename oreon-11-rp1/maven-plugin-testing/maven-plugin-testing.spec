@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           maven-plugin-testing
-Version:        3.3.0
+Version:        3.5.1
 Release:        %autorelease
 Summary:        Maven Plugin Testing
 License:        Apache-2.0
@@ -35,7 +35,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-archiver)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.3.0-55
+Obsoletes:      %{name}-javadoc < 3.5.1-55
 
 %description
 The Maven Plugin Testing contains the necessary modules

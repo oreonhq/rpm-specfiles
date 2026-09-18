@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        1.6.8
+Version:        1.9.0
 Release:        %autorelease
 Summary:        Handle per-operating-system X.509 accessors and storage
 

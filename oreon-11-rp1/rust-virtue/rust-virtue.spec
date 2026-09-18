@@ -7,7 +7,7 @@
 %global crate virtue
 
 Name:           rust-virtue
-Version:        0.0.18
+Version:        0.0.19
 Release:        %autorelease
 Summary:        A sinless derive macro helper
 

@@ -5,8 +5,8 @@
 %global snapshotdate 20190610
 
 Name:           vim-ctrlp
-Version:        1.80
-Release:        14.%{snapshotdate}git%{shortcommit}%{?dist}
+Version:        1.81
+Release:        1.%{snapshotdate}git%{shortcommit}%{?dist}
 Summary:        Full path fuzzy file, buffer, mru, tag, ... finder for Vim
 
 License:        Vim

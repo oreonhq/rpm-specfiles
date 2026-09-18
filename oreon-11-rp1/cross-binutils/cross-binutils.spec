@@ -67,8 +67,8 @@
 %define default_generate_notes 0
 
 Name: %{cross}-binutils
-Version: 2.45
-Release: 3%{?dist}
+Version: 2.47
+Release: 1%{?dist}
 Summary: A GNU collection of cross-compilation binary utilities
 License: GPL-3.0-or-later AND (GPL-3.0-or-later WITH Bison-exception-2.2) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND BSD-3-Clause AND GFDL-1.3-or-later AND GPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later
 URL: https://sourceware.org/binutils
@@ -153,7 +153,7 @@ Patch15: binutils-riscv-testsuite-fixes.patch
 Patch18: binutils-fix-ar-test.patch
 
 # Purpose:  Fix a seg fault in the AArch64 linker when building u-boot.
-# Lifetime: Fixed in 2.45
+# Lifetime: Fixed in 2.47
 Patch19: binutils-aarch64-small-plt0.patch
 
 #----------------------------------------------------------------------------

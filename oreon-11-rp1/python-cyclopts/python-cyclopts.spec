@@ -1,74 +1,27 @@
-%global source0_hash 89a30fe3c0cabc1618951f065a1d989e398179e310efbfcc685460a0f724354b
-
-%global extras mkdocs,trio,toml,yaml
+%global source0_hash none
 
 Name:           python-cyclopts
-Version:        4.6.0
+Version:        4.25.3
 Release:        %autorelease
-Summary:        Intuitive, easy CLIs based on type hints
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Intuitive, easy CLIs based on type hints.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/BrianPugh/cyclopts
-# We are using the github tarball due to the lack of tests being present in the
-# pypi sources.
-Source:         %{url}/archive/v%{version}/cyclopts-%{version}.tar.gz
-
-# Sources needed for intersphinx to build the manpages properly.
-# Pydantic:          MIT
-Source1:        https://docs.pydantic.dev/latest/objects.inv#/objects-pydantic.inv
-# Python:            Python-2.0.1
-Source2:        https://docs.python.org/3/objects.inv#/objects-python.inv
-# Rich:              MIT
-Source3:        https://rich.readthedocs.io/en/stable/objects.inv#/objects-rich.inv
-# Typing Extensions: PSF-2.0
-Source4:        https://typing-extensions.readthedocs.io/en/latest/objects.inv#/objects-typing-extensions.inv
-# Pytest:            MIT
-Source5:        https://docs.pytest.org/en/latest/objects.inv#/objects-pytest.inv
-
-# The modifications applied to this patch are meant to make `make man` works during the build steps.
-# - Changes to this patch:
-#     * Created a new stub-class `GitRepo` that provides an `working_dir`
-#     property to bypass the behavior of GitPython, due to the lack of the
-#     `.git` folder in the sources. The code is always checking for the root
-#     directory in order to link the source files against it
-#
-#     * Patched `git_commit` to use `__version__` instead of the commit hash
-#     since we are pulling the version from github.
-#
-#     * Removed the sphinx_rtd_dark_mode, as we care only about the builds for
-#     man pages, not html/pdf or anything else.
-#
-#     * Removed the html_logo and html_favicon variables as we don't want the
-#     assets folder to be present in the sources.
-Patch:          patch-docs-conf-for-downstream-build.diff
-# Change from `autoexception` to `autoclass` the exception classes that are
-# inherinting from `Exception` directly instead of `CycloptsError`, due to
-# sphinx not being able to call `autodoc` on it.
-Patch1:         exclude-init-members-from-exception-class.diff
+Source:         %{pypi_source cyclopts}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-# Docs dependencies
-BuildRequires:  make
-BuildRequires:  python3-sphinx
-BuildRequires:  python3-myst-parser
-BuildRequires:  python3-sphinx_rtd_theme
-BuildRequires:  python3-sphinx-autodoc-typehints
-BuildRequires:  python3-sphinx-copybutton
-BuildRequires:  python3-linkify-it-py
 
-# Test dependencies
-BuildRequires:  python3-pytest
-BuildRequires:  python3-sphinx
-BuildRequires:  python3-syrupy
-BuildRequires:  python3-pydantic
-BuildRequires:  python3-pytest-mock
-
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Cyclopts is a modern, easy-to-use command-line interface (CLI) framework that
-aims to provide an intuitive & efficient developer experience.}
+This is package 'cyclopts' generated automatically by pyp2spec.}
+
+Patch:          patch-docs-conf-for-downstream-build.diff
+Patch1:         exclude-init-members-from-exception-class.diff
 
 %description %_description
 
@@ -77,56 +30,37 @@ Summary:        %{summary}
 
 %description -n python3-cyclopts %_description
 
-%pyproject_extras_subpkg -n python3-cyclopts %{extras}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-cyclopts debug,dev,docs,mkdocs,toml,trio,yaml
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n cyclopts-%{version}
 
-# Use local objects.inv for intersphinx
-sed -E -i \
-  -e 's|("https://docs\.pydantic\.dev/latest/",[[:space:]]*)None|\1"%{SOURCE1}"|' \
-  -e 's|("https://docs\.python\.org/3",[[:space:]]*)None|\1"%{SOURCE2}"|' \
-  -e 's|("https://rich\.readthedocs\.io/en/stable/",[[:space:]]*)None|\1"%{SOURCE3}"|' \
-  -e 's|("https://typing-extensions\.readthedocs\.io/en/latest/",[[:space:]]*)None|\1"%{SOURCE4}"|' \
-  -e 's|("https://docs\.pytest\.org/en/latest",[[:space:]]*)None|\1"%{SOURCE5}"|' \
-  docs/source/conf.py
-
-# We don't want any binary blobs to be present in the final sources.
-rm -rf assets
 
 %generate_buildrequires
-# Let hatch-vcs/setuptools_scm determine version outside of SCM
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%pyproject_buildrequires -x %{extras}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x debug,dev,docs,mkdocs,toml,trio,yaml
+
 
 %build
-# Let hatch-vcs/setuptools_scm determine version outside of SCM
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_wheel
 
-# Override the SPHINXBUILD variable in the Makefile so we use bare sphinx-build
-# instead of calling `uv run sphinx-build`
-export SPHINXBUILD=sphinx-build
-
-pushd docs
-make man
-popd
 
 %install
 %pyproject_install
-%pyproject_save_files -l cyclopts
-install -D -m 644 docs/build/man/cyclopts.1 %{buildroot}%{_mandir}/man1/cyclopts.1
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest --snapshot-update
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-cyclopts -f %{pyproject_files}
-%{_mandir}/man1/cyclopts.1*
 %{_bindir}/cyclopts
-%doc README.md
 
 %changelog
 %autochangelog

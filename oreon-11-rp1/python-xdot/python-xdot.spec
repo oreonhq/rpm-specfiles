@@ -1,16 +1,16 @@
 %global source0_hash 724c5977bffd775b680e80b49b65fe8b5a8cf92376aa4bbac6f7b05dd9bf002e
 
 Name:           python-xdot
-Version:        1.1
-Release:        24%{?dist}
+Version:        1.6
+Release:        1%{?dist}
 Summary:        Interactive viewer for Graphviz dot files
 
 # The file declares itself to be LGPLv3 or later at the top, but
 # near the bottom is a large dict "brewer_colors" which is under
 # "Apache-Style Software License for ColorBrewer software and ColorBrewer Color
-# Schemes, Version 1.1"
+# Schemes, Version 1.6"
 
-# Automatically converted from old format: LGPLv3+ and ASL 1.1 - review is highly recommended.
+# Automatically converted from old format: LGPLv3+ and ASL 1.6 - review is highly recommended.
 License:        LGPL-3.0-or-later AND Apache-1.1
 URL:            https://pypi.python.org/pypi/xdot
 Source0:        https://github.com/jrfonseca/xdot.py/archive/%{version}.tar.gz#/xdot-%{version}.tar.gz

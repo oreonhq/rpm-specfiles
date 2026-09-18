@@ -1,7 +1,7 @@
 %global source0_hash beb4670c0fdf9705b209a3799f8e779540a8445ab4d13c2a45243898734d83cf
 
 Name:     stevia
-Version:  0.53.0
+Version:  0.57.0
 Release:  %autorelease
 Summary:  On screen keyboard (OSK) Phosh
 License:  GPL-3.0-or-later

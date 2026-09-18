@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           plexus-build-api
-Version:        1.2.0
+Version:        1.3.0
 Release:        %autorelease
 Summary:        Plexus Build API
 License:        Apache-2.0
@@ -27,7 +27,7 @@ BuildRequires:  mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-build-api)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.2.0-17
+Obsoletes:      %{name}-javadoc < 1.3.0-17
 
 %description
 Plexus Build API

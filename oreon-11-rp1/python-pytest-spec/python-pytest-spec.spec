@@ -1,61 +1,62 @@
-%global source0_hash 66b1400a63c2903ffdd838569f6dd2c2acc24ade695b554d8e5fe1c756af83a2
+%global source0_hash none
 
-# Created by pyp2rpm-3.1.2
-%global pypi_name pytest-spec
-%global modname pytest_spec
-%global desc Pytest plugin to display test execution output like a SPECIFICATION.\
-Available features:\
-- Format output to look like specification.\
-- Group tests by classes and files\
-- Failed, passed and skipped are marked and colored.\
-- Remove test_ and underscores for every test.
+Name:           python-pytest-spec
+Version:        6.1.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Library pytest-spec is a pytest plugin to display test execution output like a SPECIFICATION.
 
-Name:           python-%{pypi_name}
-Version:        5.2.0
-Release:        3%{?dist}
-Summary:        Pytest plugin to display test execution output like a SPECIFICATION
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
 URL:            https://github.com/pchomik/pytest-spec
-Source0:        %{url}/archive/%{version}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source pytest_spec}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-%{desc}
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pytest-spec' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-pytest-spec
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
-BuildRequires:  pyproject-rpm-macros
-%{?python_provide:%python_provide python3-%{pypi_name}}
+%description -n python3-pytest-spec %_description
 
-%description -n python3-%{pypi_name}
-%{desc}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pytest-spec test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_spec-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-# Guidelines don't allow to run linting operations
-rm -rf setup.cfg
+
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{modname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v test/*
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc CHANGES.txt README.md
-%license LICENSE.txt
+
+%files -n python3-pytest-spec -f %{pyproject_files}
 
 %changelog
 %autochangelog

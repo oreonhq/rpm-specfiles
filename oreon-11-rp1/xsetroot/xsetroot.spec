@@ -1,7 +1,7 @@
 %global source0_hash 6081b45a9eb4426e045d259d1e144b32417fb635e5b96aa90647365ac96638d1
 
 Name:       xsetroot
-Version:    1.1.3
+Version:    1.1.4
 Release:    %autorelease
 Summary:    Root window parameter setting utility for X
 License:    MIT-open-group

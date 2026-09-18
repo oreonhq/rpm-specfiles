@@ -1,7 +1,7 @@
 %global source0_hash 188b94d99072727e8abd1439359611c18ea6983c2c535eaef726bbc2144c933d
 
 Name:           sslscan
-Version:        2.2.1
+Version:        2.2.3
 %global         bundled_openssl_version    3.5.4
 Release:        %autorelease
 Summary:        Security assessment tool for SSL/TLS

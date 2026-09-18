@@ -2,8 +2,8 @@
 
 Name:		wfview
 URL:		https://gitlab.com/eliggett/wfview/
-Version:	1.64
-Release:	7%{?dist}
+Version:	2.23
+Release:	1%{?dist}
 License:	GPL-3.0-only
 BuildRequires:	make
 BuildRequires:	gcc-c++

@@ -1,61 +1,62 @@
-%global source0_hash 185f87adef5bcc288449d98fb4fba07cea78bc036455dd44c5fc4a2fe78fed2c
+%global source0_hash none
 
 Name:           python-importlib-resources
-Version:        6.5.2
+Version:        7.1.0
 Release:        %autorelease
-Summary:        Backport of the importlib.resources module
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Read resources from Python packages
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/python/importlib_resources
 Source:         %{pypi_source importlib_resources}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-%if 0%{?epel} == 9
-# Change the build backend in EPEL9 because `setuptools>=61.2` is needed for PEP621
-BuildRequires:  tomcli
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-importlib_resources is a backport of Python standard library importlib.resources
-module for older Pythons.
-
-The key goal of this module is to replace parts of pkg_resources with a solution in
-Python's stdlib that relies on well-defined APIs. This makes reading resources
-included in packages easier, with more stable and consistent semantics.}
+This is package 'importlib-resources' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-importlib-resources
+%package -n     python3-importlib-resources
 Summary:        %{summary}
+
 %description -n python3-importlib-resources %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-importlib-resources check,cover,doc,enabler,test,type
 
-%autosetup -n importlib_resources-%{version}
-%if 0%{?epel} == 9
-tomcli set pyproject.toml lists str "build-system.requires" "hatchling" "hatch-vcs"
-tomcli set pyproject.toml str "build-system.build-backend" "hatchling.build"
-tomcli set pyproject.toml str "tool.hatch.version.source" "vcs"
-%endif
+
+%prep
+%autosetup -p1 -n importlib_resources-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x check,cover,doc,enabler,test,type
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files importlib_resources
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest %{?el9:--import-mode prepend}
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-importlib-resources -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
 
 %changelog
 %autochangelog

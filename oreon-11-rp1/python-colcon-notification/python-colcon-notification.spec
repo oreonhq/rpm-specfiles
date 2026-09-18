@@ -1,61 +1,64 @@
-%global source0_hash f82c6e3bcd558a9fbf4bf0b1cd0dab6a1f50c056b7b4db85c56878797d0489c2
+%global source0_hash none
 
-%global srcname colcon-notification
+Name:           python-colcon-notification
+Version:        0.3.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Extension for colcon to provide status notifications.
 
-Name:           python-%{srcname}
-Version:        0.3.0
-Release:        8%{?dist}
-Summary:        Extension for colcon to provide status notifications
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://colcon.readthedocs.io
-Source0:        https://github.com/colcon/%{srcname}/archive/%{version}/%{srcname}-%{version}.tar.gz
-
-# Taken from sources - disables install of data files per platform
-Patch0:         %{name}-0.2.8-data-files.patch
+URL:            https://github.com/colcon/colcon-notification/
+Source:         %{pypi_source colcon_notification}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-An extension for colcon-core to provide status notifications.
 
-%package -n python%{python3_pkgversion}-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'colcon-notification' generated automatically by pyp2spec.}
+
+Patch0:         %{name}-0.2.8-data-files.patch
+
+%description %_description
+
+%package -n     python3-colcon-notification
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-colcon-core >= 0.3.7
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  python%{python3_pkgversion}-setuptools >= 30.3.0
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
 
-%if %{undefined __pythondist_requires}
-Requires:       python%{python3_pkgversion}-colcon-core >= 0.3.7
-Requires:       python%{python3_pkgversion}-notify2
-%endif
+%description -n python3-colcon-notification %_description
 
-%description -n python%{python3_pkgversion}-%{srcname}
-An extension for colcon-core to provide status notifications.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-colcon-notification test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n colcon_notification-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
-BUILD_DEBIAN_PACKAGE=1 \
-    %py3_build
+%pyproject_wheel
+
 
 %install
-BUILD_DEBIAN_PACKAGE=1 \
-    %py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -m 'not linter' test
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname}
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/colcon_notification/
-%{python3_sitelib}/colcon_notification-%{version}-py%{python3_version}.egg-info/
+
+%files -n python3-colcon-notification -f %{pyproject_files}
 
 %changelog
 %autochangelog

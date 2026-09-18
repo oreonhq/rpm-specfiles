@@ -1,7 +1,7 @@
 %global source0_hash 98a80a58a15ea664dfa62e1e5ae51c737f9555ef114e483f3b3c2674d9c51495
 
 Name:           nudoku
-Version:        6.0.0
+Version:        8.0.1
 Release:        %autorelease
 Summary:        Ncurses based Sudoku game
 License:        GPL-3.0-only

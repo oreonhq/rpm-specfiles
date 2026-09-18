@@ -1,72 +1,57 @@
-%global source0_hash 082433502dd922bf738de0d8bcc4fdcbf0979ff44c42bd40f5af8a282f6fa107
+%global source0_hash none
 
-%bcond check 0
+Name:           python-threadpoolctl
+Version:        3.7.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        threadpoolctl
 
-%global srcname threadpoolctl
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://github.com/joblib/threadpoolctl
+Source:         %{pypi_source threadpoolctl}
 
-Name: python-%{srcname}
-Version: 3.5.0
-Release: %autorelease
-Summary: Thread-pool Controls
-License: BSD-3-Clause
-
-URL: https://github.com/joblib/threadpoolctl
-Source0: %{pypi_source}
-
-BuildArch: noarch
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Python helpers to limit the number of threads used in the 
-threadpool-backed of common native libraries used for scientific computing 
-and data science (e.g. BLAS and OpenMP).
-Fine control of the underlying thread-pool size can be useful in 
-workloads that involve nested parallelism so as to mitigate 
-oversubscription issues.}     
+This is package 'threadpoolctl' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
-Summary: %{summary}
-# Testing
-%if %{with check}
-BuildRequires: python3dist(pytest)
-BuildRequires: python3dist(scipy)
-BuildRequires: python3dist(cython)
-%endif
+%package -n     python3-threadpoolctl
+Summary:        %{summary}
 
-%description -n python3-%{srcname}
-%_description
+%description -n python3-threadpoolctl %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n threadpoolctl-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files threadpoolctl
 
 %check
-%if %{with check}
-# test_architecture has a hardcoded list of architectures,
-# instead of playing Whac-A-Mole by adding new and new, we skip it
-%pytest -v -k 'not test_architecture and not test_command_line' \
- --deselect "tests/test_threadpoolctl.py::test_controller_info_actualized" 
+%_pyproject_check_import_allow_no_modules -t
 
-%else
-%pyproject_check_import -t
-%endif
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md multiple_openmp.md
+%files -n python3-threadpoolctl -f %{pyproject_files}
 
 %changelog
 %autochangelog

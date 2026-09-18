@@ -6,8 +6,8 @@
 
 Summary: imake source code configuration and build system
 Name: imake
-Version: 1.0.10
-Release: 6%{?dist}
+Version: 1.0.11
+Release: 1%{?dist}
 License: MIT-open-group AND HPND
 URL: http://www.x.org
 

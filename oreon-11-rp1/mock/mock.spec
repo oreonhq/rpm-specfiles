@@ -20,7 +20,7 @@
 
 Summary: Builds packages inside chroots
 Name: mock
-Version: 6.7
+Version: 6.8-1
 Release: 1%{?dist}
 License: GPL-2.0-or-later
 # Source is created by

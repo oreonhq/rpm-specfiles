@@ -7,7 +7,7 @@
 %global crate ed25519-dalek
 
 Name:           rust-ed25519-dalek
-Version:        2.2.0
+Version:        3.0.0
 Release:        %autorelease
 Summary:        Fast and efficient ed25519 EdDSA key generations, signing, and verifi...
 

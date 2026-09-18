@@ -13,7 +13,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-%{base_name}
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 Summary: Plasma and Qt widget style and window decorations for Plasma
 

@@ -12,8 +12,8 @@
 %global dxfrw_includedir %(%___build_pre; pkg-config --cflags-only-I libdxfrw | sed 's|-I||g')
 
 Name:			librecad
-Version:		2.2.1.2
-Release:		2%{?dist}
+Version:		2.2.1.5
+Release:		1%{?dist}
 Summary:		Computer Assisted Design (CAD) Application
 License:		GPL-2.0-only AND GPL-2.0-or-later
 URL:			http://librecad.org/

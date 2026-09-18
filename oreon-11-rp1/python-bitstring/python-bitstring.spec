@@ -1,58 +1,57 @@
-%global source0_hash a11bf7d5b4d13d809d2ed7ed3a20b71994447ad203fb5f20f1fd073948e95086
+%global source0_hash none
 
-%global srcname bitstring
+Name:           python-bitstring
+Version:        4.4.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Simple construction, analysis and modification of binary data.
 
-Name:           python-%{srcname}
-Version:        4.1.4
-Release:        11%{?dist}
-Summary:        Simple construction, analysis and modification of binary data
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/scott-griffiths/bitstring
-Source0:        https://github.com/scott-griffiths/bitstring/archive/%{srcname}-%{version}/%{srcname}-%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source bitstring}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-bitstring is a pure Python module designed to help make the creation and
-analysis of binary data as simple and natural as possible.
-
-Bitstrings can be constructed from integers (big and little endian), hex,
-octal, binary, strings or files. They can be sliced, joined, reversed,
-inserted into, overwritten, etc. with simple functions or slice notation.
-They can also be read from, searched and replaced, and navigated in, similar
-to a file or stream.}
+This is package 'bitstring' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python%{python3_pkgversion}-%{srcname}
+%package -n     python3-bitstring
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-devel
+
+%description -n python3-bitstring %_description
+
+
+%prep
+%autosetup -p1 -n bitstring-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
-%description -n python%{python3_pkgversion}-%{srcname} %_description
-
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n %{srcname}-%{srcname}-%{version}
-
-sed -i '1{s|^#!\(/usr\)\?/bin/\(env \)\?python\d\?$||}' %{srcname}/__init__.py
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files bitstring
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{__python3} -m unittest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
-%doc README.md release_notes.txt
+
+%files -n python3-bitstring -f %{pyproject_files}
 
 %changelog
 %autochangelog

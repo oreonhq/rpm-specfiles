@@ -26,8 +26,8 @@
 %global major        2
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        2.5.2
-Release:        10%{?gh_date:.%{gh_date}git%{gh_short}}%{?dist}
+Version:        3.7.3
+Release:        1%{?gh_date:.%{gh_date}git%{gh_short}}%{?dist}
 Summary:        A set of abstractions extracted out of the Symfony, version %{major}
 
 License:        MIT

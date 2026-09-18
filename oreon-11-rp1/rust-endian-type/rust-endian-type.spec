@@ -7,7 +7,7 @@
 %global crate endian-type
 
 Name:           rust-endian-type
-Version:        0.1.2
+Version:        0.2.0
 Release:        %autorelease
 Summary:        Type safe wrappers for types with a defined byte order
 

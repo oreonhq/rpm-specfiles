@@ -1,8 +1,8 @@
 %global source0_hash f07fcec6f01edc4bb18373067494fdcb718186aed720b97ec6c7a5d67b218f69
 
 Name: libcap
-Version: 2.77
-Release: 3%{?dist}
+Version: 2.78
+Release: 1%{?dist}
 Summary: Library for getting and setting POSIX.1e capabilities
 URL: https://sites.google.com/site/fullycapable/
 License: BSD-3-Clause OR GPL-2.0-only

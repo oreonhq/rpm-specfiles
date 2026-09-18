@@ -16,8 +16,8 @@
 %global with_tests   %{?_without_tests:0}%{!?_withou_tests:1}
 
 Name:           php-phpunit-Version
-Version:        2.0.1
-Release:        22%{?dist}
+Version:        5.0.0
+Release:        1%{?dist}
 Summary:        Managing the version number of Git-hosted PHP projects
 
 License:        BSD-3-Clause

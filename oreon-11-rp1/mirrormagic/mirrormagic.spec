@@ -1,8 +1,8 @@
 %global source0_hash c79ad19d461c080011e12f5b9e6b1d3de4b8325e452ef4bb6e8a63a62ce9ffec
 
 Name:           mirrormagic
-Version:        3.0.0
-Release:        22%{?dist}
+Version:        3.3.1
+Release:        1%{?dist}
 Summary:        Puzzle game where you steer a beam of light using mirrors
 License:        GPL-1.0-or-later
 URL:            http://www.artsoft.org/mirrormagic/

@@ -3,8 +3,8 @@
 %global debug_package %{nil}
 
 Name:		pinta
-Version:	1.7.1
-Release:	12%{?dist}
+Version:	3.1.2
+Release:	1%{?dist}
 Summary:	An easy to use drawing and image editing program
 
 # the code is licensed under the MIT license while the icons are licensed as CC-BY

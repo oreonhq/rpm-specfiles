@@ -7,7 +7,7 @@
 %global crate apple-xar
 
 Name:           rust-apple-xar
-Version:        0.18.0
+Version:        0.20.0
 Release:        %autorelease
 Summary:        XAR archive reading and writing
 

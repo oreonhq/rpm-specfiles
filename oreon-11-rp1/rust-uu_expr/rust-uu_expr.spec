@@ -10,7 +10,7 @@
 %global crate uu_expr
 
 Name:           rust-uu_expr
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        expr ~ (uutils) display the value of EXPRESSION
 

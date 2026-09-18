@@ -1,7 +1,7 @@
 %global source0_hash ebd02c3c6a755d63102779c2c2430a4aab32d22bed0d73d6353974c1e5ad18a8
 
 Name:       swaylock
-Version:    1.8.5
+Version:    1.8.6
 Release:    %{autorelease}
 Summary:    Screen locker for Wayland
 

@@ -1,61 +1,62 @@
-%global source0_hash 8ae0e5421e08de4e433853a4609a06a1835f4bc2a3ce13b54f36713a897474ba
+%global source0_hash none
 
-%global package_name pyfakefs
+Name:           python-pyfakefs
+Version:        6.2.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Implements a fake file system that mocks the Python file system modules.
 
-Name:           python-%{package_name}
-Version:        5.10.2
-Release:        2%{?dist}
-Summary:        pyfakefs implements a fake file system that mocks the Python file system modules.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            http://pyfakefs.org
-Source0:        https://pypi.io/packages/source/p/%{package_name}/%{package_name}-%{version}.tar.gz
+URL:            https://github.com/pytest-dev/pyfakefs
+Source:         %{pypi_source pyfakefs}
+
 BuildArch:      noarch
-
-%description
-pyfakefs implements a fake file system that mocks the Python file system
-modules.
-Using pyfakefs, your tests operate on a fake file system in memory without
-touching the real disk. The software under test requires no modification to
-work with pyfakefs.
-
-%package -n python3-%{package_name}
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{package_name}}
-
-BuildRequires:  git-core
 BuildRequires:  python3-devel
-# For import check
-BuildRequires:  python3-pytest
 
-Requires:       python3-pytest
 
-%description -n python3-%{package_name}
-pyfakefs implements a fake file system that mocks the Python file system
-modules.
-Using pyfakefs, your tests operate on a fake file system in memory without
-touching the real disk. The software under test requires no modification to
-work with pyfakefs.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pyfakefs' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-pyfakefs
+Summary:        %{summary}
+
+%description -n python3-pyfakefs %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pyfakefs doc
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pyfakefs-%{version}
 
-%autosetup -n %{package_name}-%{version} -S git
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{package_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{package_name} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-pyfakefs -f %{pyproject_files}
 
 %changelog
 %autochangelog

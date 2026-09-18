@@ -13,7 +13,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        1.1.3
+Version:        1.1.4
 Release:        %autorelease
 Summary:        ANSI terminal backend for the prettyprinter package
 

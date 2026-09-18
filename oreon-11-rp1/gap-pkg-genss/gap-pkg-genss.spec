@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/genss
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.6.9
+Version:        1.6.10
 Release:        %autorelease
 Summary:        Randomized Schreier-Sims algorithm
 

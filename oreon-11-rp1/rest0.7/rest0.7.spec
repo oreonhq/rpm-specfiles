@@ -1,8 +1,8 @@
 %global source0_hash 0513aad38e5d3cedd4ae3c551634e3be1b9baaa79775e53b2dba9456f15b01c9
 
 Name:          rest0.7
-Version:       0.8.1
-Release:       10%{?dist}
+Version:       0.9.1
+Release:       1%{?dist}
 Summary:       A library for access to RESTful web services
 
 # Automatically converted from old format: LGPLv2 - review is highly recommended.

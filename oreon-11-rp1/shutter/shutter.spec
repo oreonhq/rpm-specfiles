@@ -10,10 +10,10 @@
 
 Name:       shutter
 %if 0%{?usesnapshot}
-Version:    0.99.6
-Release:    0.5%{?snapshottag}%{?dist}
+Version:    0.99.7
+Release:    1.5%{?snapshottag}%{?dist}
 %else
-Version:    0.99.6
+Version:    0.99.7
 Release:    3%{?dist}
 %endif
 

@@ -1,102 +1,58 @@
-%global source0_hash a28cac23d0ea74c689a12ea4921a2a5411acdbc0018b33b7afaa442b46f47db1
-
-%if 0%{?el9}
-# likely some issue with a combination of sphinx and the theme used
-# writing output... [ 12%] advanced
-# Theme error:
-# An error happened in rendering the page advanced.
-# Reason: UndefinedError("'styles' is undefined")
-%bcond_with doc
-%else
-%bcond_without doc
-%endif
-
-%global srcname mistune
-
-%global common_description %{expand:
-The fastest markdown parser in pure Python, inspired by marked.}
+%global source0_hash none
 
 Name:           python-mistune
-Version:        3.1.3
+Version:        3.3.4
 Release:        %autorelease
-Summary:        Markdown parser for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A sane and fast Markdown parser with useful plugins and renderers
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/lepture/mistune
-Source0:        %url/archive/v%{version}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source mistune}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# Upstream uses tox to call nose. Instead, we'll just call pytest directly.
-BuildRequires:  python3dist(pytest)
 
-%description %{common_description}
 
-%package -n python3-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'mistune' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-mistune
 Summary:        %{summary}
 
-# Allow upgrades from Fedora 37 with python3-mistune08 to Fedora 38 with python3-mistune
-# as python3-nbconvert requires mistune 2 on Fedora 38+.
-# See https://bugzilla.redhat.com/2177923
-# See https://bugzilla.redhat.com/2342812
-# If the Fedora 37 python3-mistune08 package is ever bumped, this needs to be bumped as well!
-Obsoletes:      python3-mistune08 < 0.8.4-16
+%description -n python3-mistune %_description
 
-%description -n python3-%{srcname} %{common_description}
-
-%if %{with doc}
-%package doc
-Summary:        Documentation for %{name}
-
-%description doc
-%{common_description}
-
-This is the documentation package for %{name}.
-%endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n mistune-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-
-# replace shibuya theme which is not available in Fedora with sphinx read the docs theme
-sed -i 's/html_theme = "shibuya"/html_theme = "sphinx_rtd_theme"/' docs/conf.py
-sed -i "s/shibuya/sphinx-rtd-theme/" pyproject.toml
 
 %generate_buildrequires
-%if %{with doc}
-%pyproject_buildrequires -g docs
-%else
 %pyproject_buildrequires
-%endif
+
 
 %build
 %pyproject_wheel
 
-%if %{with doc}
-# generate html docs
-PYTHONPATH=$PWD/build/lib sphinx-build docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
-%endif
 
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%{_fixperms} %{buildroot}/*
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
 
-%if %{with doc}
-%files doc
-%doc html
-%license LICENSE
-%endif
+%files -n python3-mistune -f %{pyproject_files}
+%{_bindir}/mistune
 
 %changelog
 %autochangelog

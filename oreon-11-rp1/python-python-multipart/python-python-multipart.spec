@@ -1,59 +1,57 @@
-%global source0_hash 7340bef99a7e0032613f56dc36027b959fd3b30a787ed62d310e951f7c3a3a58
+%global source0_hash none
 
-Name:           python-python-multipart
-Version:        0.0.22
+Name:           python-multipart
+Version:        0.0.32
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        A streaming multipart parser for Python
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/Kludex/python-multipart
 Source:         %{pypi_source python_multipart}
 
-
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
 
-BuildRequires:  tomcli
 
-# See testenv.deps from
-# https://github.com/Kludex/python-multipart/blob/%%{version}/tox.ini.  Because
-# of unwanted coverage dependencies and arguments, it’s not worth packaging
-# from the GitHub source archive and generating test dependencies with tox;
-# it’s much easier to just enumerate them manually.
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist PyYAML}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'python-multipart' generated automatically by pyp2spec.}
 
-%global common_description %{expand:
-Python-Multipart is a streaming multipart parser for Python.}
+%description %_description
 
-%description %{common_description}
-
-%package -n python3-python-multipart
+%package -n     python3-python-multipart
 Summary:        %{summary}
 
-%description -n python3-python-multipart %{common_description}
+%description -n python3-python-multipart %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n python_multipart-%{version} -p1
+%autosetup -p1 -n python_multipart-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l python_multipart multipart
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-python-multipart -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

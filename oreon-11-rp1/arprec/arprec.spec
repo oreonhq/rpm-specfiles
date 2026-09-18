@@ -14,8 +14,8 @@
 %{!?_pkgdocdir:%global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 Name:           arprec
-Version:        2.2.19
-Release:        27%{?dist}
+Version:        2.2.20
+Release:        1%{?dist}
 Summary:        Software package for performing arbitrary precision arithmetic
 
 # Automatically converted from old format: BSD - review is highly recommended.

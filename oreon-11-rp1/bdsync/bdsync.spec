@@ -2,8 +2,8 @@
 
 Name: bdsync
 Summary: Remote sync for block devices
-Version: 0.11.2
-Release: 17%{?dist}
+Version: 0.11.4
+Release: 1%{?dist}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
 Source: https://github.com/rolffokkens/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz

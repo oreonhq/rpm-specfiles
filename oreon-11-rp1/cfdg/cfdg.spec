@@ -1,8 +1,8 @@
 %global source0_hash b357cfa9f4f1ee47fd3d7397c855fd9431e67a08c4901f242f205e1010e36e16
 
 Name: cfdg
-Version:  3.4.2
-Release:  5%{?dist}
+Version:  3.4.3
+Release:  1%{?dist}
 Summary: Context Free Design Grammar
 
 License: GPL-2.0-or-later

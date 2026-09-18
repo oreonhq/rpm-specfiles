@@ -5,8 +5,8 @@
 
 Summary: Controllable Regex Mutilator: multi-method content classifier and filter
 Name: crm114
-Version: 0
-Release: 36.%{cvsver}%{?dist}
+Version: 20100726
+Release: 1.%{cvsver}%{?dist}
 URL: http://crm114.sourceforge.net/
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License: GPL-3.0-only

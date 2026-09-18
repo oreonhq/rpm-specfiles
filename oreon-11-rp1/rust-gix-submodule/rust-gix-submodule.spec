@@ -7,7 +7,7 @@
 %global crate gix-submodule
 
 Name:           rust-gix-submodule
-Version:        0.24.0
+Version:        0.34.0
 Release:        %autorelease
 Summary:        A crate of the gitoxide project dealing git submodules
 

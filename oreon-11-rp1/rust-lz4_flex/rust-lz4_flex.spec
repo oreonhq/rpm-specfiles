@@ -7,7 +7,7 @@
 %global crate lz4_flex
 
 Name:           rust-lz4_flex
-Version:        0.13.1
+Version:        0.14.0
 Release:        %autorelease
 Summary:        Fastest LZ4 implementation in Rust, no unsafe by default.
 

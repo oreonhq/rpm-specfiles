@@ -1,78 +1,36 @@
-%global source0_hash bb1a37d679522089f6dc3751669e3dbe51bd56922f959ef3ce2706939b775217
+%global source0_hash none
 
-%bcond tests 1
+Name:           python-psycopg2
+Version:        2.9.13
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        psycopg2 - Python-PostgreSQL Database Adapter
 
-%global srcname	psycopg2
-%global sum	A PostgreSQL database adapter for Python
-%global desc	Psycopg is the most popular PostgreSQL adapter for the Python \
-programming language. At its core it fully implements the Python DB \
-API 2.0 specifications. Several extensions allow access to many of the \
-features offered by PostgreSQL.
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://psycopg.org/
+Source:         %{pypi_source psycopg2}
+
+BuildRequires:  python3-devel
+BuildRequires:  gcc
 
 
-Summary:	%{sum}
-Name:		python-%{srcname}
-Version:	2.9.10
-Release:	5%{?dist}
-# The exceptions allow linking to OpenSSL and PostgreSQL's libpq
-License:	LGPL-3.0-or-later WITH openvpn-openssl-exception
-Url:		https://www.psycopg.org/
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'psycopg2' generated automatically by pyp2spec.}
 
-Source:        https://github.com/psycopg/psycopg2/archive/refs/tags/%{version}.tar.gz#/psycopg2-%{version}.tar.gz
-
-BuildRequires:	python3-devel
-
-BuildRequires:	gcc
-BuildRequires:	libpq-devel
-BuildRequires:	python-sphinx
-
-# For testsuite
-%if %{with tests}
-BuildRequires:	postgresql-test-rpm-macros
-%endif
-
-# Remove test 'test_from_tables' for s390 architecture
-# from ./tests/test_types_extras.py
 Patch0: test_types_extras-2.9.3-test_from_tables.patch
 
-%description
-%{desc}
+%description %_description
 
+%package -n     python3-psycopg2
+Summary:        %{summary}
 
-%package -n python3-psycopg2
-Summary: %{sum} 3
-
-%description  -n python3-psycopg2
-%{desc}
-
-
-%package -n python3-%{srcname}-tests
-Summary: A testsuite for %sum 3
-Requires: python3-%srcname = %version-%release
-
-%description -n python3-%{srcname}-tests
-%desc
-This sub-package delivers set of tests for the adapter.
-
-
-%package doc
-Summary:	Documentation for psycopg python PostgreSQL database adapter
-%py_provides python3-%{srcname}-doc
-
-%description doc
-Documentation and example files for the psycopg python PostgreSQL
-database adapter.
+%description -n python3-psycopg2 %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n psycopg2-%{version}
-
-# The patch is applied only for s390 architecture as 
-# on other architectures the test works
-%ifarch s390x s390
-%patch -P0 -p0
-%endif
+%autosetup -p1 -n psycopg2-%{version}
 
 
 %generate_buildrequires
@@ -82,60 +40,19 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 %pyproject_wheel
 
-# Fix for wrong-file-end-of-line-encoding problem; upstream also must fix this.
-for i in `find doc -iname "*.html"`; do sed -i 's/\r//' $i; done
-for i in `find doc -iname "*.css"`; do sed -i 's/\r//' $i; done
-
-# Get rid of a "hidden" file that rpmlint complains about
-rm -f doc/html/.buildinfo
-
-# We can not build docs now:
-# https://www.postgresql.org/message-id/2741387.dvL6Cb0VMB@nb.usersys.redhat.com
-# as the bug was sorted, we can build the documentation again
-
-# Remove design formatting package
-sed -i '/better_theme_path/d' doc/src/conf.py
-sed -i "/html_theme = 'better'/d" doc/src/conf.py
-
-make html -C doc/src
-
-
-%check
-%if %{with tests}
-export PGTESTS_LOCALE=C.UTF-8
-%postgresql_tests_run
-
-export PSYCOPG2_TESTDB=${PGTESTS_DATABASES##*:}
-export PSYCOPG2_TESTDB_HOST=$PGHOST
-export PSYCOPG2_TESTDB_PORT=$PGPORT
-
-cmd="import tests; tests.unittest.main(defaultTest='tests.test_suite')"
-
-%py3_test_envvars %python3 -c "$cmd" --verbose
-%endif
-
 
 %install
 %pyproject_install
-%pyproject_save_files -l psycopg2
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Upstream removed tests from the package so we need to add them manually
-cp -r tests/ %{buildroot}%{python3_sitearch}/%{srcname}/tests/
-%py3_shebang_fix %{buildroot}%{python3_sitearch}/%{srcname}/tests/
+
+%check
+%_pyproject_check_import_allow_no_modules -t
 
 
 %files -n python3-psycopg2 -f %{pyproject_files}
-%doc AUTHORS NEWS README.rst
-
-
-%files -n python3-%{srcname}-tests
-%{python3_sitearch}/psycopg2/tests
-
-
-%files doc
-%license LICENSE
-%doc doc/src/_build/html
-
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.10-5

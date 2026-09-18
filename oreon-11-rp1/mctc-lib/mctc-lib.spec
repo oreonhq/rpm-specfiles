@@ -1,8 +1,8 @@
 %global source0_hash b18b06f80e6274b353dd091c12b3a83217033ce0bd80471b54cf486cc60c0251
 
 Name:           mctc-lib
-Version:        0.3.2
-Release:        4%{?dist}
+Version:        0.5.2
+Release:        1%{?dist}
 Summary:        Modular computation tool chain library
 License:        Apache-2.0
 URL:            https://grimme-lab.github.io/mctc-lib/

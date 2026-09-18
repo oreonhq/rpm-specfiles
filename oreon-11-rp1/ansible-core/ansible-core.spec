@@ -15,7 +15,7 @@
 %undefine _py3_shebang_s
 
 Name:           ansible-core
-Version:        2.20.3
+Version:        2.21.4
 %global uversion %{version_no_tilde %{quote:%nil}}
 Release:        1%{?dist}
 Summary:        A radically simple IT automation system

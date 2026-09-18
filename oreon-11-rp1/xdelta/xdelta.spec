@@ -2,8 +2,8 @@
 
 Summary: A binary file delta generator
 Name: xdelta
-Version: 3.1.0
-Release: 24%{?dist}
+Version: 3.2.0
+Release: 1%{?dist}
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License: Apache-2.0
 # the latest release tarball is only in the pre-relicensing GPL repo

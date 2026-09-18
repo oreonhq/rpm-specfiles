@@ -4,7 +4,7 @@
 
 Name:           gnome-sudoku
 Epoch:          1
-Version:        50.0
+Version:        51.0.1
 Release:        1%{?dist}
 Summary:        GNOME Sudoku game
 

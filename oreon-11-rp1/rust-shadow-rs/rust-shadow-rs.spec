@@ -7,7 +7,7 @@
 %global crate shadow-rs
 
 Name:           rust-shadow-rs
-Version:        0.8.1
+Version:        2.0.0
 Release:        %autorelease
 Summary:        Build-time information stored in your rust project
 

@@ -2,8 +2,8 @@
 
 Summary: A utility to collect various Linux performance data
 Name: collectl
-Version: 4.3.5
-Release: 10%{?dist}
+Version: 4.3.20.3
+Release: 1%{?dist}
 License: GPL-1.0-or-later OR Artistic-1.0-Perl
 Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.src.tar.gz
 Source1: %{name}.service

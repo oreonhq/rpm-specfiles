@@ -9,7 +9,7 @@
 %global nnuehash2 37f18f62d772
 
 Name:            stockfish
-Version:         18
+Version:         19
 Release:         %autorelease
 #Source0:        %%{url}/files/%%{name}-%%{version}-linux.zip
 Source0:         https://github.com/official-%{name}/%{srcname}/archive/sf_%{version}.zip

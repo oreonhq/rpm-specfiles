@@ -8,7 +8,7 @@
 %global crate human-date-parser
 
 Name:           rust-human-date-parser
-Version:        0.2.0
+Version:        0.3.1
 Release:        %autorelease
 Summary:        Parses strings that express dates in a human way into ones usable by code
 

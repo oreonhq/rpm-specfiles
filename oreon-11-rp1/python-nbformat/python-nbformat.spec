@@ -1,78 +1,64 @@
-%global source0_hash 322168b14f937a5d11362988ecac2a4952d3d8e3a2cbeb2319584631226d5b3a
+%global source0_hash none
 
-# Unset -s on python shebang - ensure that extensions installed with pip
-# to user locations are seen and properly loaded
-%global py3_shebang_flags %(echo %py3_shebang_flags | sed s/s//)
-
-%global srcname nbformat
-
-Name:           python-%{srcname}
-Version:        5.10.4
-Release:        6%{?dist}
+Name:           python-nbformat
+Version:        5.11.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        The Jupyter Notebook format
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://pypi.python.org/pypi/%{srcname}
-Source0:        https://files.pythonhosted.org/packages/source/n/%{srcname}/%{srcname}-%{version}.tar.gz
-# Removed dependency on hatch-nodejs-version
-Patch0:         nbformat-build-test.patch
-# Remove dependency on pep440 (package will be retired)
-Patch1:         https://github.com/jupyter/nbformat/pull/408.patch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://jupyter.org
+Source:         %{pypi_source nbformat}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  pyproject-rpm-macros
-# For tests
-BuildRequires:  python%{python3_pkgversion}-fastjsonschema
-BuildRequires:  python%{python3_pkgversion}-testpath
 
-%description
-This package contains the base implementation of the Jupyter Notebook format,
-and Python APIs for working with notebooks.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'nbformat' generated automatically by pyp2spec.}
 
-%package -n python%{python3_pkgversion}-%{srcname}
-Summary:        The Jupyter Notebook format
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
+Patch0:         nbformat-build-test.patch
+Patch1:         https://github.com/jupyter/nbformat/pull/408.patch
 
-%description -n python%{python3_pkgversion}-%{srcname}
-This package contains the base implementation of the Jupyter Notebook format,
-and Python APIs for working with notebooks.
+%description %_description
+
+%package -n     python3-nbformat
+Summary:        %{summary}
+
+%description -n python3-nbformat %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-nbformat docs,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n nbformat-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-mkdir -p nbformat/tests
-
-# Remove useless test dependencies
-sed -i '/"pre-commit",/d' pyproject.toml
-sed -i '/"check-manifest",/d' pyproject.toml
-
-# Set version statically
-# {VERSION} is a part of Patch0
-sed -i "s/{VERSION}/%{version}/" pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires -r -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Ignore failure for now
-# https://github.com/jupyter/nbformat/issues/405
-%pytest -p no:unraisableexception
+%_pyproject_check_import_allow_no_modules -t
 
- 
-%files -n python%{python3_pkgversion}-%{srcname} -f %pyproject_files
-%doc CHANGELOG.md README.md
-%license LICENSE
+
+%files -n python3-nbformat -f %{pyproject_files}
 %{_bindir}/jupyter-trust
 
 %changelog

@@ -7,7 +7,7 @@
 %global crate icu_pattern
 
 Name:           rust-icu_pattern
-Version:        0.4.1
+Version:        0.5.0
 Release:        %autorelease
 Summary:        ICU pattern utilities
 

@@ -1,7 +1,7 @@
 %global source0_hash 09b730d87165763222e2c86454e5565ca7003161a5c275386d82d9390ba99a5a
 
 Name:           pgpdump
-Version:        0.36
+Version:        0.37
 Release:        1%{?dist}
 Summary:        PGP packet visualizer
 License:        MIT

@@ -1,84 +1,57 @@
-%global source0_hash a96ec924da84c721c3cd4624dbb535e77a1a50644ead6373f41e52f0a61e273f
+%global source0_hash none
 
-# Disable tests everywhere since the latest version requires docker
-# for testing.
-%bcond_with     tests
-
-%global         srcname     azure-data-tables
-
-Name:           python-%{srcname}
-Version:        12.4.0
+Name:           python-azure-data-tables
+Version:        12.7.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Microsoft Azure Azure Data Tables Client Library for Python
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pypi.org/project/%{srcname}/
-# NOTE(mhayden): Upstream does not include some of the testing VCR cassettes in their
-# code released to PyPi because it makes their archive really large. Because of this,
-# about half of the tests fail. 😭
-# This source comes from making a git archive of the main azure-sdk-for-python
-# repository. To reproduce the source code, run these commands:
-#
-#   git clone https://github.com/azure/azure-sdk-for-python
-#   cd azure-sdk-for-python
-#   export VERSION=12.4.0
-#   git archive --format tar.gz --prefix=azure-data-tables-${VERSION}/ azure-data-tables_${VERSION}:sdk/tables/azure-data-tables \
-#     > azure-data-tables-$VERSION.tgz
-#
-Source0:        azure-data-tables-12.4.0.tgz
+URL:            https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/tables/azure-data-tables
+Source:         %{pypi_source azure_data_tables}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%if %{with tests}
-BuildRequires:  python3-azure-sdk-tools
-BuildRequires:  python3dist(azure-devtools)
-BuildRequires:  python3dist(azure-identity)
-BuildRequires:  python3dist(azure-mgmt-cosmosdb)
-BuildRequires:  python3dist(azure-mgmt-keyvault)
-BuildRequires:  python3dist(azure-mgmt-resource)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-aiohttp)
-BuildRequires:  python3dist(pytest-asyncio)
-BuildRequires:  python3dist(python-dateutil)
-BuildRequires:  python3dist(python-dotenv)
-%endif
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Microsoft Azure Azure Data Tables Client Library for Python}
+This is package 'azure-data-tables' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-azure-data-tables
 Summary:        %{summary}
-%description -n python3-%{srcname} %{_description}
+
+%description -n python3-azure-data-tables %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n azure_data_tables-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files azure
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%if %{with tests}
-# NOTE(mhayden): The tests which require network access carry the "live_test_only"
-# marker and we skip those here. It's only about 5-10% of the total tests.
-%pytest -m "not live_test_only" --disable-warnings
-%endif
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md CHANGELOG.md samples/
+%files -n python3-azure-data-tables -f %{pyproject_files}
 
 %changelog
 %autochangelog

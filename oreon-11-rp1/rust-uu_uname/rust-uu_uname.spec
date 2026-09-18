@@ -10,7 +10,7 @@
 %global crate uu_uname
 
 Name:           rust-uu_uname
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        uname ~ (uutils) display system information
 

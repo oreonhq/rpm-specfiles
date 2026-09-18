@@ -5,10 +5,10 @@
 %bcond regenerate_test_data 1
 
 Name:           libsonata
-Version:        0.1.29
+Version:        0.2.0
 # The SONAME version is constructed from the version number (MAJOR.MINOR), but
 # we repeat it here to avoid undected SONAME version bumps.
-%global so_version 0.1
+%global so_version 0.2
 Release:        %autorelease
 Summary:        A Python and C++ interface to the SONATA format
 

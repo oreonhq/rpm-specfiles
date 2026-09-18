@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/images
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.3.3
+Version:        1.4.2
 Release:        %autorelease
 Summary:        Minimal and canonical images in permutation groups
 

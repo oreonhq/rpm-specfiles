@@ -7,7 +7,7 @@
 %global crate mimalloc
 
 Name:           rust-mimalloc
-Version:        0.1.48
+Version:        0.1.52
 Release:        %autorelease
 Summary:        Performance and security oriented drop-in allocator
 

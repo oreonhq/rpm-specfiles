@@ -1,7 +1,7 @@
 %global source0_hash 9062eef2a4b0f29089bed4d56d635280fda79f0f45a32e2e7073bbe78c795924
 
 Name:           python-quart-trio
-Version:        0.12.0
+Version:        0.13.0
 Release:        %autorelease
 Summary:        A Quart extension to provide trio support
 

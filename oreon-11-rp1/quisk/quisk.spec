@@ -1,8 +1,8 @@
 %global source0_hash 1c5661549c4351e14315ba166068ae2581bc7dbfb179604a2a2ffab81883a7ce
 
 Name:           quisk
-Version:        4.2.50
-Release:        3%{?dist}
+Version:        4.2.54
+Release:        1%{?dist}
 Summary:        Software Defined Radio (SDR) software
 
 # Automatically converted from old format: GPLv2 and BSD - review is highly recommended.

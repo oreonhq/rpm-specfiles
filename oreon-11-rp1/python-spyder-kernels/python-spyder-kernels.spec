@@ -1,61 +1,62 @@
-%global source0_hash b706003e39be5f93ebc2c37e4a29cc6500c341607db92151bab3f0172bc45638
+%global source0_hash none
 
-%global pypi_name spyder-kernels
-
-Name:           python-%{pypi_name}
-Version:        3.1.1
+Name:           python-spyder-kernels
+Version:        3.1.6
 Release:        %autorelease
-Epoch:          2
-Summary:        Jupyter kernels for Spyder's console
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Jupyter kernels for Spyder_s console
 
-%global forgeurl https://github.com/spyder-ide/spyder-kernels
-%global tag v%{version_no_tilde %{quote:%nil}}
-%forgemeta
-
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            %forgeurl
-Source0:        %forgesource
-BuildArch:      noarch
+URL:            https://github.com/spyder-ide/spyder-kernels
+Source:         %{pypi_source spyder_kernels}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%global _description %{expand:
-Package that provides Jupyter kernels for use with the consoles of
-Spyder, the Scientific Python Development Environment.
 
-These kernels can launched either through Spyder itself or in an
-independent Python session, and allow for interactive or file-based
-execution of Python code inside Spyder.}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'spyder-kernels' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-spyder-kernels
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-spyder-kernels %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-spyder-kernels test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n spyder_kernels-%{version}
 
-%forgesetup
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l spyder_kernels
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Package doesn't provide any tests
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-spyder-kernels -f %{pyproject_files}
 
 %changelog
 %autochangelog

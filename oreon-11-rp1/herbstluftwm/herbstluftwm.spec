@@ -6,14 +6,14 @@
 #%%global shortcommit %%(c=%%{commit}; echo ${c:0:7})
 
 Name:           herbstluftwm
-Version:        0.9.5
+Version:        0.9.6
 Release:        %autorelease
 Summary:        A manual tiling window manager
 License:        BSD-2-Clause
 URL:            http://herbstluftwm.org
 #Source0:        https://github.com/%%{name}/%%{name}/archive/%%{commit}/%%{name}-%%{shortcommit}.tar.gz
 Source0:        http://herbstluftwm.org/tarballs/%{name}-%{version}.tar.gz
-Patch0:         0.9.5-cstdint-gcc15.patch
+Patch0:         0.9.6-cstdint-gcc15.patch
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

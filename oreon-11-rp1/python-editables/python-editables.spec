@@ -1,7 +1,7 @@
 %global source0_hash 1ff2663aa1669eb89115a38e2d4067c21bb847e7006f72bf979a1a91b8bc2304
 
 Name:           python-editables
-Version:        0.5
+Version:        0.6
 Release:        %autorelease
 Summary:        Editable installations
 
@@ -36,7 +36,7 @@ Python, without needing a reinstall.}
 Summary:        %{summary}
 
 # Dropped in F41; this upgrade path may be removed after F43
-Obsoletes:      python-editables-doc < 0.5-5
+Obsoletes:      python-editables-doc < 0.6-5
 
 %description -n python3-editables %{common_description}
 

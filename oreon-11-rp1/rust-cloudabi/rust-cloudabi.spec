@@ -7,7 +7,7 @@
 %global crate cloudabi
 
 Name:           rust-cloudabi
-Version:        0.0.3
+Version:        0.1.0
 Release:        %autorelease
 Summary:        Low level interface to CloudABI. Contains all syscalls and related ty...
 

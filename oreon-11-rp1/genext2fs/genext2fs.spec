@@ -1,7 +1,7 @@
 %global source0_hash b8aba9af48e664fa60134af696a57b3bb4ebd2b2878533d7611734e90b883ecc
 
 Name:           genext2fs
-Version:        1.6.2
+Version:        1.6.3
 Release:        %autorelease
 Summary:        ext2 filesystem generator
 

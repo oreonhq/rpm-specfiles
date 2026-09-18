@@ -1,56 +1,56 @@
-%global source0_hash 908de65b85270a4470b5de28fd9adec4e5204f3c30cd88e692cc3efb283a439e
+%global source0_hash none
 
-%global srcname aioodbc
+Name:           python-aioodbc
+Version:        0.5.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        ODBC driver for asyncio.
 
-Name:           python-%{srcname}
-Version:        0.4.0
-Release:        11%{?dist}
-Summary:        Library for accessing a ODBC databases from the asyncio
-
-License:        Apache-2.0
-URL:            https://github.com/aio-libs/aioodbc
-Source:         %{pypi_source}
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/jettify/uddsketch
+Source:         %{pypi_source aioodbc}
 
 BuildArch:      noarch
-
-%description
-%{summary}.
-
-%package -n python3-%{srcname}
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
 BuildRequires:  python3-devel
-# for tests
-#BuildRequires:  python3-pytest
-#BuildRequires:  python3-pytest-asyncio
 
-%description -n python3-%{srcname}
-%{summary}.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'aioodbc' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-aioodbc
+Summary:        %{summary}
+
+%description -n python3-aioodbc %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n aioodbc-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files aioodbc
 
 %check
-# tests all fail with error "AttributeError: module pytest has no attribute db_list"
-# and i'm not sure how to fix it right now
-#%%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc CHANGES.txt README.rst
+
+%files -n python3-aioodbc -f %{pyproject_files}
 
 %changelog
 %autochangelog

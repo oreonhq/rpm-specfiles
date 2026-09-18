@@ -1,60 +1,57 @@
-%global source0_hash b7564fd218cc4479f7f0106d341e096f78907b47865aeeff702c807df1927c01
+%global source0_hash none
 
-%global srcname bitarray
-%global sum Efficient Array of Booleans --C Extensions
+Name:           python-bitarray
+Version:        3.11.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        efficient arrays of booleans -- C extension
 
-Name:           python-%{srcname}
-Version:        2.8.5
-Release:        12%{?dist}
-Summary:        %{sum}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        PSF-2.0
+URL:            https://github.com/ilanschnell/bitarray
+Source:         %{pypi_source bitarray}
 
-# Automatically converted from old format: Python - review is highly recommended.
-License:        LicenseRef-Callaway-Python
-URL:            https://pypi.python.org/pypi/%{srcname}/
-Source0:        https://pypi.python.org/packages/source/b/%{srcname}/%{srcname}-%{version}.tar.gz
-
+BuildRequires:  python3-devel
 BuildRequires:  gcc
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
 
-%description
-Bitarrays are sequence types and behave very much like usual lists.
-Eight bits are represented by one byte in contiguous block of memory.
-The user can select between two representations; little-endian and big-endian.
-Most of the functionality is implemented in C.Methods for accessing the machine
-representation are provided. This can be useful when bit level access to binary
-files is required, such as portable bitmap image files (.pbm). Also, when
-dealing with compressed data which uses variable bit length encoding
-you may find this module useful.
 
-%package -n python%{python3_pkgversion}-%{srcname}
-Summary:  %{sum}
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'bitarray' generated automatically by pyp2spec.}
 
-%description -n python%{python3_pkgversion}-%{srcname}
-Bitarrays are sequence types and behave very much like usual lists.
-Eight bits are represented by one byte in contiguous block of memory.
-The user can select between two representations; little-endian and big-endian.
-Most of the functionality is implemented in C.Methods for accessing the machine
-representation are provided. This can be useful when bit level access to binary
-files is required, such as portable bitmap image files (.pbm). Also, when
-dealing with compressed data which uses variable bit length encoding
-you may find this module useful.
-This is Python 3 version.
+%description %_description
+
+%package -n     python3-bitarray
+Summary:        %{summary}
+
+%description -n python3-bitarray %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n bitarray-%{version}
 
-%setup -q -n %{srcname}-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python%{python3_pkgversion}-%{srcname}
-%{python3_sitearch}/%{srcname}*
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-bitarray -f %{pyproject_files}
 
 %changelog
 %autochangelog

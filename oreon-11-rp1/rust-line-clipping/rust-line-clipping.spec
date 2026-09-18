@@ -7,7 +7,7 @@
 %global crate line-clipping
 
 Name:           rust-line-clipping
-Version:        0.3.7
+Version:        0.3.8
 Release:        %autorelease
 Summary:        A simple crate implementing line clipping algorithms.
 

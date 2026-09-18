@@ -7,7 +7,7 @@
 %global crate gix-traverse
 
 Name:           rust-gix-traverse
-Version:        0.51.1
+Version:        0.61.0
 Release:        %autorelease
 Summary:        A crate of the gitoxide project
 

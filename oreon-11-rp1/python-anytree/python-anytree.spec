@@ -1,50 +1,57 @@
-%global source0_hash 3f0f93f355a91bc3e6245319bf4c1d50e3416cc7a35cc1133c1ff38306bbccab
-
-%global modname anytree
+%global source0_hash none
 
 Name:           python-anytree
-Version:        2.8.0
-Release:        24%{?dist}
-Summary:        Powerful and Lightweight Python Tree Data Structure
+Version:        2.13.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Powerful and Lightweight Python Tree Data Structure with various plugins
 
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://pypi.io/project/anytree
-Source0:        %pypi_source %{modname}
+URL:            https://github.com/c0fec0de/anytree
+Source:         %{pypi_source anytree}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
 
-%description
-Powerful and Lightweight Python Tree Data Structure with various plugins.
 
-%package -n python3-anytree
-Summary:        Powerful and Lightweight Python Tree Data Structure
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'anytree' generated automatically by pyp2spec.}
 
-%description -n python3-anytree
-Powerful and Lightweight Python Tree Data Structure with various plugins.
+%description %_description
+
+%package -n     python3-anytree
+Summary:        %{summary}
+
+%description -n python3-anytree %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n anytree-%{version}
 
-%setup -q -n %{modname}-%{version}
-rm -r %{modname}.egg-info
-# Prohibit that the file LICENSE will be installed in usr from the python setup
-sed -e "/LICENSE/d" -i setup.py
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-anytree
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/%{modname}/
-%{python3_sitelib}/%{modname}-%{version}*
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-anytree -f %{pyproject_files}
 
 %changelog
 %autochangelog

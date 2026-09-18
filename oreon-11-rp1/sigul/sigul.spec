@@ -3,8 +3,8 @@
 Summary: A signing server and related software client
 Name: sigul
 
-Version: 1.2
-Release: 4%{?dist}
+Version: 1.4
+Release: 1%{?dist}
 License: GPLv2
 
 URL: https://pagure.io/sigul/

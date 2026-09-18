@@ -1,7 +1,7 @@
 %global source0_hash ea17fc113f44b13b85916c44f3fb98ecd8257236842eb12fac70927c6f9c6b07
 
 %global         forgeurl https://github.com/minetest/minetestmapper
-%global         tag      20250408
+%global         tag      20260808
 Version:        %{tag}
 
 %forgemeta

@@ -1,7 +1,7 @@
 %global source0_hash 1b308176c7f0dfb034be038970ecb6e1b860212377f7e71dacc7c7bf0e8c9ae3
 
 Name:           ulauncher
-Version:        5.15.15
+Version:        5.16.2
 Release:        %{autorelease}
 Summary:        Feature rich application Launcher for Linux
 BuildArch:      noarch

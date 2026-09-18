@@ -25,8 +25,8 @@
 %endif
 
 Name: ucx
-Version: 1.19.0
-Release: 2%{?dist}
+Version: 1.22.0
+Release: 1%{?dist}
 Summary: UCX is a communication library implementing high-performance messaging
 
 License: BSD-3-Clause AND MIT AND CC-PDDC AND (BSD-3-Clause OR Apache-2.0)
@@ -136,7 +136,7 @@ autoreconf -fiv
 sed -i '/#include <limits.h>/a #include <math.h>' src/ucs/time/time.h
 
 %build
-# may be fixed in 1.19.0
+# may be fixed in 1.22.0
 %set_build_flags
 export CFLAGS="$CFLAGS -std=gnu17"
 

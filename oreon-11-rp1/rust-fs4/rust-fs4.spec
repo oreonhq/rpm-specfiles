@@ -7,7 +7,7 @@
 %global crate fs4
 
 Name:           rust-fs4
-Version:        0.13.1
+Version:        1.1.0
 Release:        %autorelease
 Summary:        No libc, pure Rust cross-platform file locks
 

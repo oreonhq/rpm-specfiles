@@ -7,7 +7,7 @@
 %global crate cpio-archive
 
 Name:           rust-cpio-archive
-Version:        0.9.0
+Version:        0.10.0
 Release:        %autorelease
 Summary:        Cpio archive reading and writing
 

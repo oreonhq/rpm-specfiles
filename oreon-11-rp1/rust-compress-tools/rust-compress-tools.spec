@@ -7,7 +7,7 @@
 %global crate compress-tools
 
 Name:           rust-compress-tools
-Version:        0.12.4
+Version:        0.16.1
 Release:        %autorelease
 Summary:        Utility functions for compressed and archive files handling
 

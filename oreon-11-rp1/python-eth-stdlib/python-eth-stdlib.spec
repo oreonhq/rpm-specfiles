@@ -1,46 +1,67 @@
-%global source0_hash 62e4416d37346cbd7c7594d564109903b810e3a8af1e445d8e32a464dc3128c8
+%global source0_hash none
 
-%global pypi_name eth-stdlib
+Name:           python-eth-stdlib
+Version:        0.2.8
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Ethereum Standard Library for Python
 
-Name:          python-%{pypi_name}
-Version:       0.2.7
-Release:       %autorelease
-BuildArch:     noarch
-Summary:       A collection of libraries for developers building on the EVM
-License:       LGPL-3.0-or-later
-URL:           https://github.com/skellet0r/eth-stdlib
-VCS:           git:%{url}.git
-Source0:       %{url}/archive/%{version}/%{pypi_name}-%{version}.tar.gz
-# Fedora-specific. We're using cryptodomex.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        LGPL-3.0-only
+URL:            https://github.com/skellet0r/eth-stdlib
+Source:         %{pypi_source eth_stdlib}
+
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'eth-stdlib' generated automatically by pyp2spec.}
+
 Patch:         python-eth-stdlib-0001-Switch-to-cryptodomex.patch
-# https://github.com/skellet0r/eth-stdlib/pull/21
 Patch:         python-eth-stdlib-0002-Clarify-licensing-terms.patch
-# Fedora-specific. We do not do code coverage during builds.
 Patch:         python-eth-stdlib-0003-Disable-pytest-coverage.patch
-# https://github.com/skellet0r/eth-stdlib/pull/26
 Patch:         python-eth-stdlib-0004-Fix-for-modern-poetry.patch
-BuildRequires: python3-dotenv
-BuildRequires: python3-hypothesis
-BuildRequires: python3-pytest
-BuildSystem:   pyproject
-BuildOption(prep):    -n %{pypi_name}-%{version}
-BuildOption(install): -L eth
 
-%description
-%{summary}.
+%description %_description
 
-%package -n python3-%{pypi_name}
-Summary: %{summary}
+%package -n     python3-eth-stdlib
+Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-%{summary}.
+%description -n python3-eth-stdlib %_description
 
-%check -a
-%pytest
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-eth-stdlib hypothesis
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license COPYING.LESSER
-%doc README.md
+
+%prep
+%autosetup -p1 -n eth_stdlib-%{version}
+
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x hypothesis
+
+
+%build
+%pyproject_wheel
+
+
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-eth-stdlib -f %{pyproject_files}
 
 %changelog
 %autochangelog

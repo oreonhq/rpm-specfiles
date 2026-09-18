@@ -9,8 +9,8 @@
 %global upname pystray
 
 Name:		python-%{upname}
-Version:	0.17.3
-Release:	20%{?dist}
+Version:	0.19.5
+Release:	1%{?dist}
 Summary:	%{common_sum}
 
 License:	LGPL-3.0-or-later

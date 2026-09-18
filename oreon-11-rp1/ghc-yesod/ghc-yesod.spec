@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        1.6.2.1
+Version:        1.6.2.3
 Release:        %autorelease
 Summary:        Creation of type-safe, RESTful web applications
 

@@ -13,8 +13,8 @@
 %global bundledate 20260308
 
 Name:           yarnpkg
-Version:        1.22.22
-Release:        18%{?dist}
+Version:        2.4.3
+Release:        1%{?dist}
 Summary:        Fast, reliable, and secure dependency management.
 License:        BSD-2-Clause
 URL:            https://github.com/yarnpkg/yarn

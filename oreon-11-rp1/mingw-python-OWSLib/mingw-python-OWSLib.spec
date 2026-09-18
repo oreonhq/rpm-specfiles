@@ -6,8 +6,8 @@
 
 Name:          mingw-python-OWSLib
 Summary:       MinGW Windows Python OWSLib library
-Version:       0.35.0
-Release:       2%{?dist}
+Version:       0.36.0
+Release:       1%{?dist}
 BuildArch:     noarch
 
 License:       BSD-3-Clause

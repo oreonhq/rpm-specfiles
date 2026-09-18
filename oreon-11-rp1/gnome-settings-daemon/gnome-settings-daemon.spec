@@ -15,7 +15,7 @@
 %global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           gnome-settings-daemon
-Version:        50.0
+Version:        51.0
 Release:        %autorelease
 Summary:        The daemon sharing settings from GNOME to GTK+/KDE applications
 

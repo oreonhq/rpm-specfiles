@@ -38,7 +38,7 @@
 %endif
 
 Name: python-avocado
-Version: 112.0
+Version: 113.0
 Release: 1%{?gitrel}%{?dist}
 Summary: Framework with tools and libraries for Automated Testing
 # Found licenses:

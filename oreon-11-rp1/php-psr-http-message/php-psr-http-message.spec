@@ -13,7 +13,7 @@
 
 %global github_owner     php-fig
 %global github_name      http-message
-%global github_version   1.1
+%global github_version   2.0
 %global github_commit    cb6ce4845ce34a8ad9e68117c10ee90a29919eba
 
 %global composer_vendor  psr
@@ -23,7 +23,7 @@
 
 Name:          php-%{composer_vendor}-%{composer_project}
 Version:       %{github_version}
-Release:       8%{?github_release}%{?dist}
+Release:       1%{?github_release}%{?dist}
 Summary:       Common interface for HTTP messages (PSR-7)
 
 Group:         Development/Libraries

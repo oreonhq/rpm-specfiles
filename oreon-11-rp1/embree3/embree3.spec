@@ -6,7 +6,7 @@
 %bcond_without	ispc
 
 Name:		%{srcname}3
-Version:	3.13.5
+Version:	4.4.1
 Release:	%autorelease
 Summary:	Collection of high-performance ray tracing kernels
 

@@ -7,7 +7,7 @@
 %global crate image-extras
 
 Name:           rust-image-extras
-Version:        0.1.0
+Version:        0.1.1
 Release:        %autorelease
 Summary:        Additional image format decoders for the image crate
 

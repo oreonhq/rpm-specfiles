@@ -1,8 +1,8 @@
 %global source0_hash a72543f7b92568a0c3c45a5c0e3487ced65c18003eecd9b7d017a6464e7cef82
 
 Name:       mako
-Version:    1.10.0
-Release:    3%{?dist}
+Version:    1.11.0
+Release:    1%{?dist}
 Summary:    Lightweight Wayland notification daemon
 Provides:   desktop-notification-daemon
 

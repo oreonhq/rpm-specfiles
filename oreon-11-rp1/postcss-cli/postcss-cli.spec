@@ -1,7 +1,7 @@
 %global source0_hash 7d111ce3b1324f46a10aad86a5b44d35dcf228e63f8ffe620d4357469b77cb50
 
 Name:           postcss-cli
-Version:        11.0.1
+Version:        12.0.0
 Release:        %autorelease
 Summary:        CLI for postcss, which transforms CSS styles with JS plugins
 

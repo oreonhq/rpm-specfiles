@@ -3,7 +3,7 @@
 %global debug_package %{nil}
 
 Name: semver
-Version: 0.3.1
+Version: 1.0.1
 Release: %autorelease
 
 License: MIT

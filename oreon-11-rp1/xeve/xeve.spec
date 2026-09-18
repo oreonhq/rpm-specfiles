@@ -1,7 +1,7 @@
 %global source0_hash 238c95ddd1a63105913d9354045eb329ad9002903a407b5cf1ab16bad324c245
 
 Name:           xeve
-Version:        0.5.1
+Version:        0.7.0
 Release:        %autorelease
 Summary:        Reference MPEG-5 Part 1 (EVC) encoder
 

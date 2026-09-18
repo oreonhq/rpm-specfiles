@@ -1,61 +1,62 @@
-%global source0_hash 209d8996e3c57595bee274ff97116d1d73c4980b2fd9a34c7846cd07fd2e1a48
+%global source0_hash none
 
-%global srcname cachelib
-
-Name:           python-%{srcname}
-Version:        0.13.0
+Name:           python-cachelib
+Version:        0.17.0
 Release:        %autorelease
-Summary:        A collection of cache libraries with a common API
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A collection of cache libraries in the same API interface.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://github.com/pallets-eco/cachelib
-Source0:        %{url}/archive/%{version}/cachelib-%{version}.tar.gz
+URL:            https://github.com/pallets-eco/cachelib/
+Source:         %{pypi_source cachelib}
 
 BuildArch:      noarch
-
-%global _description %{expand:
-A collection of cache libraries with a common API.
-
-Extracted from Werkzeug.}
-
-%description %{_description}
-
-%package -n python3-%{srcname}
-Summary:        %{summary}
-BuildRequires:  memcached
-BuildRequires:  redis
 BuildRequires:  python3-devel
-BuildRequires:  python3-pylibmc
-#BuildRequires:  python3-pymongo
-BuildRequires:  python3-pytest
-BuildRequires:  python3-pytest-xprocess
-BuildRequires:  python3-redis
-BuildRequires:  python3dist(setuptools)
 
-%description -n python3-%{srcname} %{_description}
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cachelib' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-cachelib
+Summary:        %{summary}
+
+%description -n python3-cachelib %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-cachelib dynamodb,memcached,mongodb,redis,uwsgi,valkey
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n cachelib-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dynamodb,memcached,mongodb,redis,uwsgi,valkey
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l cachelib
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# uWSGI is not packaged for Fedora and there is no straightforward way to test
-# Amazon DynamoDB so skip tests for these backends.
-# MongoDb is new as of 0.12.0, however, it fails the test suite even with
-# pymongo installed. Leave it disabled until fixed.
-%pytest -v -r s -k 'not Uwsgi and not DynamoDb and not MongoDb'
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
+
+%files -n python3-cachelib -f %{pyproject_files}
 
 %changelog
 %autochangelog

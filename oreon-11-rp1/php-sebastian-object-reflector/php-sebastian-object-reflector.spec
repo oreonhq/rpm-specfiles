@@ -28,8 +28,8 @@
 # NOTICE: used by phpunit 6, 7 and 8
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        1.1.3
-Release:        5%{?dist}
+Version:        6.1.0
+Release:        1%{?dist}
 Summary:        Allows reflection of object attributes, version 1
 
 License:        BSD-3-Clause

@@ -3,8 +3,8 @@
 %global _lto_cflags %{nil}
 
 Name:    vsomeip3
-Version: 3.5.11
-Release: 8%{?dist}
+Version: 3.7.6
+Release: 1%{?dist}
 Summary: COVESA implementation of SOME/IP protocol
 # remove from i686 as not needed.
 ExcludeArch: %{ix86}

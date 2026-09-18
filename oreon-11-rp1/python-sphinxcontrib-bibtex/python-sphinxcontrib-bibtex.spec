@@ -3,7 +3,7 @@
 %global giturl  https://github.com/mcmtroffaes/sphinxcontrib-bibtex
 
 Name:           python-sphinxcontrib-bibtex
-Version:        2.6.5
+Version:        2.7.0
 Release:        %autorelease
 Summary:        Sphinx extension for BibTeX style citations
 

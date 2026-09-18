@@ -1,83 +1,62 @@
-%global source0_hash df42bcec3204b70c49cbba5d1d3f15696f80157285e4f577dbff64e4ff13b51c
+%global source0_hash none
 
-%global srcname geopandas
-
-# There is a build dependency loop when built with tests.
-# It involves libpysal, mapclassify, networkx.
-# This bcond allows to bootstrap it.
-%bcond bootstrap 0
-
-Name:           python-%{srcname}
-Version:        1.1.3
+Name:           python-geopandas
+Version:        1.1.4
 Release:        %autorelease
-Summary:        Geographic Pandas extensions
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Geographic pandas extensions
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://pypi.python.org/pypi/%{srcname}
-# PyPI source does not have test data.
-Source:         https://github.com/%{srcname}/%{srcname}/archive/v%{version}/%{srcname}-%{version}.tar.gz
+URL:            https://github.com/geopandas/geopandas
+Source:         %{pypi_source geopandas}
 
 BuildArch:      noarch
-
-%global _description \
-GeoPandas is a project to add support for geographic data to Pandas objects. \
-\
-The goal of GeoPandas is to make working with geospatial data in Python easier. \
-It combines the capabilities of Pandas and Shapely, providing geospatial \
-operations in Pandas and a high-level interface to multiple geometries to \
-Shapely. GeoPandas enables you to easily do operations in Python that would \
-otherwise require a spatial database such as PostGIS.
-
-%description %{_description}
-
-%package -n python3-%{srcname}
-Summary:        %{summary}
 BuildRequires:  python3-devel
 
-%if %{without bootstrap}
-BuildRequires:  python3dist(fsspec)
-BuildRequires:  python3dist(fiona) >= 1.8.21
-BuildRequires:  python3dist(geopy)
-BuildRequires:  python3dist(mapclassify) >= 2.5
-BuildRequires:  python3dist(matplotlib) >= 3.7
-BuildRequires:  python3dist(psycopg) >= 3.1
-BuildRequires:  python3dist(pyarrow) >= 8
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(sqlalchemy) >= 2
-BuildRequires:  python3dist(xyzservices)
-# See:
-# Depend on pandas[test] for testing
-# https://github.com/geopandas/geopandas/pull/2438
-BuildRequires:  python3dist(pandas[test])
-%endif
 
-%description -n python3-%{srcname} %{_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'geopandas' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-geopandas
+Summary:        %{summary}
+
+%description -n python3-geopandas %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-geopandas all,dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n geopandas-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{without bootstrap}
-%{pytest} -ra geopandas -m 'not web'
-%else
-%pyproject_check_import -e 'geopandas.*test*'
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE.txt
-%doc README.md CHANGELOG.md
+
+%files -n python3-geopandas -f %{pyproject_files}
 
 %changelog
 %autochangelog

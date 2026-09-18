@@ -1,57 +1,57 @@
-%global source0_hash d63cfdafde4efd6b1730c600c32c5a8ea6282cf4122924edb5da85014a20275e
+%global source0_hash none
 
-%global debug_package %{nil}
-%global pypi_name yarl
+Name:           python-yarl
+Version:        1.25.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Yet another URL library
 
-Name:           python-%{pypi_name}
-Version:        1.22.0
-Release:        2%{?dist}
-Summary:        Python module to handle URLs
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://yarl.readthedocs.io
-Source0:        https://github.com/aio-libs/yarl/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
+URL:            https://matrix.to/#/#aio-libs:matrix.org
+Source:         %{pypi_source yarl}
 
-BuildRequires:  gcc
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(cython)
-BuildRequires:  python3dist(hypothesis)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-xdist)
+BuildRequires:  gcc
 
-%description
-The module provides handy URL class for URL parsing and changing.
 
-%package -n python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'yarl' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-yarl
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-The module provides handy URL class for URL parsing and changing.
+%description -n python3-yarl %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n yarl-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p1
-# Disable coverage
-sed -r -e 's/(-.*cov.*$)/#\1/g' -i pytest.ini
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Ignore the benchmark tests which require pytest_codspeed which is not
-# packaged in Fedora.
-%pytest -v --ignore tests/test_quoting_benchmarks.py --ignore tests/test_url_benchmarks.py tests
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc CHANGES.rst README.rst
+
+%files -n python3-yarl -f %{pyproject_files}
 
 %changelog
 %autochangelog

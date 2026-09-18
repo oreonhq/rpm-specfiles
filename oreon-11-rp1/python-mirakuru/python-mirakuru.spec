@@ -1,61 +1,57 @@
-%global source0_hash fc5d541874255fca66e1a6d0dd12731687866b5ed1d7359d30b6db367c955270
+%global source0_hash none
 
-%global pypi_name mirakuru
-
-Name:           python-%{pypi_name}
-Version:        2.6.0
+Name:           python-mirakuru
+Version:        3.0.3
 Release:        %autorelease
-Summary:        A process orchestration tool designed for functional and integration tests
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Process executor _not only_ for tests.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-3.0-or-later
-URL:            https://github.com/ClearcodeHQ/mirakuru
-Source0:        https://github.com/ClearcodeHQ/mirakuru/archive/v%{version}.tar.gz
+URL:            https://github.com/dbfixtures/mirakuru
+Source:         %{pypi_source mirakuru}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
 
-# for check
-BuildRequires:  netcat
-BuildRequires:  procps-ng
-BuildRequires:  python-unversioned-command
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-rerunfailures)
-BuildRequires:  python3dist(python-daemon)
 
-%description
-A python library that starts your subprocess and waits for a clear indication,
-that it's running (process orchestrator)
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'mirakuru' generated automatically by pyp2spec.}
 
-%package -n     python3-%{pypi_name}
+%description %_description
+
+%package -n     python3-mirakuru
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-Mirakuru is a process orchestration tool designed for functional and
-integration tests
+%description -n python3-mirakuru %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n mirakuru-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -r -x tests
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Skip test_forgotten_stop and test_daemons_killing as are failing with python 3.13
-%pytest -k 'not test_forgotten_stop and not test_daemons_killing'
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc AUTHORS.rst CHANGES.rst README.rst
+
+%files -n python3-mirakuru -f %{pyproject_files}
 
 %changelog
 %autochangelog

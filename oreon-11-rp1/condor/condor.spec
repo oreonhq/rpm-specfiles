@@ -1,13 +1,13 @@
 %global source0_hash f25be30e93f8406c696febc8bbe7a5dc57cb4cb9de4d9843ba95a0e7bef2c899
-%global version         23.9.6
+%global version         25.13.2
 %global version_ %(tr . _ <<< %{version})
 
 %global with_vault_credmon 0
 
 #######################
 Name:           condor
-Version:        23.9.6
-Release:        15%{?dist}
+Version:        25.13.2
+Release:        1%{?dist}
 Summary:        HTCondor: High Throughput Computing
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0

@@ -1,58 +1,62 @@
-%global source0_hash c44fd2d9b2edb35acccb0efc067996b40abe52c1674b91482f24145cafe98ce4
+%global source0_hash none
 
-%global pypi_name pyvlx
+Name:           python-pyvlx
+Version:        0.2.36
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        PyVLX is a wrapper for the Velux KLF 200 API. PyVLX enables you to run scenes and or open and close velux windows.
 
-Name:           python-%{pypi_name}
-Version:        0.2.26
-Release:        5%{?dist}
-Summary:        Python wrapper for the Velux KLF 200 API
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-3.0-or-later
 URL:            https://github.com/Julius2342/pyvlx
-Source0:        %{url}/archive/%{version}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source pyvlx}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-PyVLX allow you to control VELUX windows with Python. It uses the Velux
-KLF 200 interface to control io-Homecontrol devices, e.g., Velux
-Windows.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pyvlx' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-pyvlx
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pyyaml)
-BuildRequires:  python3dist(typing-extensions)
+%description -n python3-pyvlx %_description
 
-%description -n python3-%{pypi_name}
-PyVLX allow you to control VELUX windows with Python. It uses the Velux
-KLF 200 interface to control io-Homecontrol devices, e.g., Velux
-Windows.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pyvlx dev,release
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pyvlx-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,release
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files -l %{pypi_name}
 
 %check
-%pytest -v test
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n %files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
-%license LICENSE
+
+%files -n python3-pyvlx -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,7 +1,7 @@
 %global source0_hash 1e86e56146a748fa94ce80e05a402b3e19fb70c89118b96628aceb1be9b6f7fb
 
 Name:           poedit
-Version:        3.9
+Version:        3.9.1-oss
 Release:        1%{?dist}
 Summary:        GUI editor for GNU gettext .po files
 Summary(de):    Grafischer Editor für GNU Gettext-Dateien

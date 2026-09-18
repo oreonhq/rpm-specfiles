@@ -1,7 +1,7 @@
 %global source0_hash 1b2b7ee8df74707daf5ce0d91993780146c41d246055ee5087771fb1a6d83373
 
 Name:           python-snakemake-storage-plugin-xrootd
-Version:        1.0.0
+Version:        1.2.0
 Release:        %autorelease
 Summary:        Snakemake storage plugin for xrootd storage
 

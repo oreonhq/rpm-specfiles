@@ -1,72 +1,65 @@
-%global source0_hash f5d5cab866545e85a21b1921458ee8c711e23489ccc44fa66c6f70443a3ecae6
+%global source0_hash none
 
-%global srcname rasterio
-
-Name:           python-%{srcname}
-Version:        1.5.0
+Name:           python-rasterio
+Version:        1.5.1
 Release:        %autorelease
-Summary:        Fast and direct raster I/O for use with Numpy and SciPy
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Fast and direct raster I/O for use with NumPy
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/rasterio/rasterio
-# PyPI tarball doesn't include test data.
-Source0:        https://github.com/rasterio/rasterio/archive/%{version}/%{srcname}-%{version}.tar.gz
-# Fedora-specific.
+Source:         %{pypi_source rasterio}
+
+BuildRequires:  python3-devel
+BuildRequires:  gcc
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'rasterio' generated automatically by pyp2spec.}
+
 Patch:          0001-Loosen-up-build-requirements.patch
 Patch:          0002-xfail-warp-tests-gdal-3.12.2.patch
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch: %{ix86}
+%description %_description
 
-BuildRequires:  gcc-c++
-BuildRequires:  gdal >= 3.8
-BuildRequires:  gdal-devel >= 3.8
-
-# This is licensed as BSD-3-Clause, same as rasterio
-Provides: bundled(python3dist(click-plugins)) = 2
-
-%global _description %{expand:
-Rasterio reads and writes geospatial raster data. Geographic information
-systems use GeoTIFF and other formats to organize and store gridded, or raster,
-datasets. Rasterio reads and writes these formats and provides a Python API
-based on ND arrays.}
-
-%description %{_description}
-
-%package -n     python3-%{srcname}
+%package -n     python3-rasterio
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
+%description -n python3-rasterio %_description
 
-%description -n python3-%{srcname} %{_description}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-rasterio all,docs,ipython,plot,s3,test
 
-%pyproject_extras_subpkg -n python3-%{srcname} ipython plot s3
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n rasterio-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires -x ipython,plot,test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,docs,ipython,plot,s3,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-rm -r %{srcname}  # Don't try unbuilt copy.
+%_pyproject_check_import_allow_no_modules -t
 
-# test_outer_boundless_pixel_fidelity is very flaky, so skip it.
-# Skip debian tests since we are not on debian
-%{pytest} -ra -m 'not network and not wheel' \
-    -k 'not test_outer_boundless_pixel_fidelity and not debian'
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst AUTHORS.txt CHANGES.txt CITATION.txt
+%files -n python3-rasterio -f %{pyproject_files}
 %{_bindir}/rio
 
 %changelog

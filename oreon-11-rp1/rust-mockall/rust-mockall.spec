@@ -7,7 +7,7 @@
 %global crate mockall
 
 Name:           rust-mockall
-Version:        0.11.4
+Version:        0.15.0
 Release:        %autorelease
 Summary:        Powerful mock object library for Rust
 

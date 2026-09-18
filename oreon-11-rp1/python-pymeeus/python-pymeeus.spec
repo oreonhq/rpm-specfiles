@@ -1,74 +1,59 @@
-%global source0_hash bb9d670818d8b0594317b48a7dadea02a0594e5344263bf2054e1a011c8fed55
+%global source0_hash none
 
-%global pypi_name pymeeus
-
-Name:           python-%{pypi_name}
-Version:        0.5.11
+Name:           python-pymeeus
+Version:        0.5.12
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Python implementation of Jean Meeus astronomical routines
 
-# Automatically converted from old format: LGPLv3 - review is highly recommended.
-License:        LGPL-3.0-only
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/architest/pymeeus
-Source0:        %{pypi_source PyMeeus}
+Source:         %{pypi_source PyMeeus}
+
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pymeeus' generated automatically by pyp2spec.}
+
 Patch0:         0001-Fix-documentation-build-with-sphinx-8.patch
 Patch1:         0002-fix-pytest-7-2-compatibility.patch
-BuildArch:      noarch
 
-%description
-PyMeeus is a Python implementation of the astronomical algorithms described
-in the classical book "Astronomical Algorithms, 2nd Edition, Willmann-Bell
-Inc. (1998)" by Jean Meeus.
+%description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-pymeeus
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
+%description -n python3-pymeeus %_description
+
+
+%prep
+%autosetup -p1 -n PyMeeus-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
-%description -n python3-%{pypi_name}
-PyMeeus is a Python implementation of the astronomical algorithms described
-in the classical book "Astronomical Algorithms, 2nd Edition, Willmann-Bell
-Inc. (1998)" by Jean Meeus.
-
-%package -n python-%{pypi_name}-doc
-Summary:        %{name} documentation
-
-BuildRequires:  python3-sphinx
-BuildRequires:  python3-sphinx_rtd_theme
-
-%description -n python-%{pypi_name}-doc
-Documentation for %{name}.
-
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n PyMeeus-%{version} -p1
-rm -rf %{pypi_name}.egg-info
 
 %build
 %pyproject_wheel
-PYTHONPATH=${PWD} sphinx-build-3 docs/source html
-rm -rf html/.{doctrees,buildinfo,nojekyll}
+
 
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-PYTHONPATH=%{buildroot}%{python3_sitelib} pytest-%{python3_version} -v tests
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%license LICENSE.txt COPYING.LESSER
-%doc docs/README.txt README.rst
-%{python3_sitelib}/%{pypi_name}/
-%{python3_sitelib}/pymeeus-%{version}.dist-info
 
-%files -n python-%{pypi_name}-doc
-%doc html
-%license LICENSE.txt COPYING.LESSER
+%files -n python3-pymeeus -f %{pyproject_files}
 
 %changelog
 %autochangelog

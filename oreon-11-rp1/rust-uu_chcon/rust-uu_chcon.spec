@@ -10,7 +10,7 @@
 %global crate uu_chcon
 
 Name:           rust-uu_chcon
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        chcon ~ (uutils) change file security context
 

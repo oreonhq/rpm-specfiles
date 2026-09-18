@@ -7,7 +7,7 @@
 %global crate image
 
 Name:           rust-image
-Version:        0.24.9
+Version:        0.25.10
 Release:        %autorelease
 Summary:        Imaging library. Provides basic image processing and encoders/decoder...
 

@@ -1,8 +1,8 @@
 %global source0_hash 338ba2e83360f41ded96a0ceb132db9beaaf15018b36101be2bae8bb239017d9
 
 Name:           latex2rtf
-Version:        2.3.18
-Release:        17%{?dist}
+Version:        2.3.18a
+Release:        1%{?dist}
 Summary:        LaTeX to RTF converter that handles equations, figures, and cross-references
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

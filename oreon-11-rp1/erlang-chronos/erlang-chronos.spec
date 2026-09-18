@@ -3,7 +3,7 @@
 %global realname chronos
 
 Name:		erlang-%{realname}
-Version:	0.5.1
+Version:	1.0.1
 Release:	%autorelease
 BuildArch:	noarch
 Summary:	Timer utility for Erlang tests

@@ -3,7 +3,7 @@
 %global bash_completion_dir %(pkg-config --variable=completionsdir bash-completion || echo /etc/bash_completion.d)/
 
 Name:           tig
-Version:        2.6.0
+Version:        2.6.1
 Release:        %autorelease
 Summary:        Text-mode interface for the git revision control system
 

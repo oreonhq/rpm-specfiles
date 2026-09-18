@@ -7,8 +7,8 @@
 %endif
 
 Name: dlt-daemon
-Version: 2.18.10
-Release: 8%{?dist}
+Version: 2.18.11
+Release: 1%{?dist}
 Summary: DLT - Diagnostic Log and Trace
 Group: System Environment/Base
 License: MPL-2.0

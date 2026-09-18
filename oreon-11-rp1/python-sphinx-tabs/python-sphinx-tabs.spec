@@ -1,78 +1,65 @@
-%global source0_hash 8073e265d82eee148795f4ac3f98e6b8a68b755d64a338e9c22f873041808008
-
-%global pypi_name sphinx-tabs
-%global python_module_name sphinx_tabs
+%global source0_hash none
 
 Name:           python-sphinx-tabs
-Version:        3.4.7
-Release:        8%{?dist}
+Version:        3.5.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Tabbed views for Sphinx
-# SPDX
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/executablebooks/sphinx-tabs
-Source0:        https://github.com/executablebooks/%{pypi_name}/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source sphinx_tabs}
 
-# Open PR for Python Sphinx 8.1 issues with tests
-# https://bugzilla.redhat.com/show_bug.cgi?id=2330154
-Patch0:         https://patch-diff.githubusercontent.com/raw/executablebooks/sphinx-tabs/pull/200.patch
-# Make tests pass with docutils 0.22+
-Patch1:         https://github.com/executablebooks/sphinx-tabs/pull/207.patch
 BuildArch:      noarch
-
-%global _description %{expand:
-Create tabbed content in Sphinx documentation when building HTML.}
-
-BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
-# Needed for testing
-BuildRequires:  python3dist(beautifulsoup4)
-BuildRequires:  python3dist(pygments)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-regressions)
-BuildRequires:  python3dist(sphinx)
 
-%generate_buildrequires
-%pyproject_buildrequires
 
-%description %{_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sphinx-tabs' generated automatically by pyp2spec.}
 
-%package -n python3-%{pypi_name}
+Patch0:         https://patch-diff.githubusercontent.com/raw/executablebooks/sphinx-tabs/pull/200.patch
+Patch1:         https://github.com/executablebooks/sphinx-tabs/pull/207.patch
+
+%description %_description
+
+%package -n     python3-sphinx-tabs
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %{_description}
+%description -n python3-sphinx-tabs %_description
 
-%package -n python3-%{pypi_name}-doc
-Summary:        HTML documentation for %{pypi_name}
-Requires:       python3-%{pypi_name}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sphinx-tabs code-style,testing
 
-%description -n python3-%{pypi_name}-doc
-%{summary}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sphinx_tabs-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x code-style,testing
+
 
 %build
 %pyproject_wheel
 
-PYTHONPATH=$(pwd) sphinx-build -b html docs html_docs
 
 %install
 %pyproject_install
-%pyproject_save_files %{python_module_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# rinohtype extension to Sphinx is not yet packaged
-%pytest -k 'not test_rinohtype_pdf'
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n  python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc CHANGELOG.md README.md
 
-%files -n python3-%{pypi_name}-doc
-%doc html_docs/*
+%files -n python3-sphinx-tabs -f %{pyproject_files}
 
 %changelog
 %autochangelog

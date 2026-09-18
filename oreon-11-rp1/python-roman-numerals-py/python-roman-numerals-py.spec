@@ -1,22 +1,24 @@
-%global source0_hash be4bf804f083a4ce001b5eb7e3c0862479d10f94c936f6c4e5f250aa5ff5bd2d
+%global source0_hash none
 
 Name:           python-roman-numerals-py
-Version:        3.1.0
+Version:        4.1.0
 Release:        %autorelease
-Summary:        Manipulate well-formed Roman numerals
+# Fill in the actual package summary to submit package to Fedora
+Summary:        This package is deprecated, switch to roman-numerals.
 
-# Upstream says: Zero-Clause BSD license or the CC0 1.0 Universal license
-# CC0-1.0 is not allowed for Fedora, hence declaring only 0BSD
-License:        0BSD
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        0BSD OR CC0-1.0
 URL:            https://github.com/AA-Turner/roman-numerals/
 Source:         %{pypi_source roman_numerals_py}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This project provides utilities manipulating well-formed Roman numerals,
-in various programming languages.}
+This is package 'roman-numerals-py' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -25,28 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-roman-numerals-py %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n roman_numerals_py-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires -x test
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -L roman_numerals
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-roman-numerals-py -f %{pyproject_files}
-%license LICENCE.rst
-%doc README.rst
 
 %changelog
 %autochangelog

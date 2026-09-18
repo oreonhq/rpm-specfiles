@@ -1,56 +1,61 @@
-%global source0_hash a68d23d795704f1b687559b89c98e73d0dbebcab077592c60bffc1dc408b72e9
+%global source0_hash none
 
-%?python_enable_dependency_generator
-%global srcname conda-package-handling
-%global pkgname conda_package_handling
-
-Name:           python-%{srcname}
-Version:        2.4.0
+Name:           python-conda-package-handling
+Version:        2.6.0
 Release:        %autorelease
-Summary:        Create and extract conda packages of various formats
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Create and extract conda packages of various formats.
 
-License:        BSD-3-Clause
-URL:            https://github.com/conda/%{srcname}
-Source0:        https://github.com/conda/%{srcname}/archive/%{version}/%{srcname}-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://conda.github.io/conda-package-handling/
+Source:         %{pypi_source conda_package_handling}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-Create and extract conda packages of various formats.
 
-%package -n python%{python3_pkgversion}-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'conda-package-handling' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-conda-package-handling
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-bottle
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  python%{python3_pkgversion}-pytest-mock
 
-%description -n python%{python3_pkgversion}-%{srcname}
-Create and extract conda packages of various formats.
+%description -n python3-conda-package-handling %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-conda-package-handling docs,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n conda_package_handling-%{version}
 
-%autosetup -n %{srcname}-%{version}
-sed -i -e s/archive_and_deps/archive/ setup.py
-# do not run coverage in pytest
-sed -i -E '/--(no-)?cov/d' setup.cfg
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{pkgname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v -rs tests
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
-%doc AUTHORS.md CHANGELOG.md README.md
+
+%files -n python3-conda-package-handling -f %{pyproject_files}
 %{_bindir}/cph
 
 %changelog

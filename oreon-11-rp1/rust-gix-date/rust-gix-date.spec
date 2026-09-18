@@ -7,7 +7,7 @@
 %global crate gix-date
 
 Name:           rust-gix-date
-Version:        0.12.1
+Version:        0.16.0
 Release:        %autorelease
 Summary:        A crate of the gitoxide project parsing dates the way git does
 

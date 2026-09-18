@@ -7,7 +7,7 @@
 %global crate vt100
 
 Name:           rust-vt100
-Version:        0.15.2
+Version:        0.16.2
 Release:        %autorelease
 Summary:        Library for parsing terminal data
 

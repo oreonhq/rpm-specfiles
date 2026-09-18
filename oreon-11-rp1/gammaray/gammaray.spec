@@ -16,13 +16,13 @@
 %global qt6_ver %(echo %{_qt6_version} | cut -d. -f1,2)
 %global qt6_target %(echo qt%{qt6_ver}-%{arch} | sed 's/\\./_/g')
 
-%global gammaray_ver 3.1
+%global gammaray_ver 3.4
 %global gammaray_ver_minor 0
 %global gammaray_version %{gammaray_ver}.%{gammaray_ver_minor}
 
 Name:    gammaray
-Version: 3.1.0
-Release: 19%{?dist}
+Version: 3.4.0
+Release: 1%{?dist}
 Summary: A tool for examining internals of Qt applications
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later

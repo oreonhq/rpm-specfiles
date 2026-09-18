@@ -1,87 +1,65 @@
-%global source0_hash b34227cf63f6325b8ad2399ede780675083e439b20c323d376373d8ee6306d88
+%global source0_hash none
 
-# Building python-pydoctor in EPEL requires too many dependencies
-# and doc is not actually required on EPEL side.
-%bcond doc %{undefined rhel}
-
-%global srcname Automat
-%global libname automat
-
-%global common_description %{expand:
-Automat is a library for concise, idiomatic Python expression of finite-state
-automata (particularly deterministic finite-state transducers).}
-
-Name:           python-%{srcname}
-Version:        24.8.1
+Name:           python-automat
+Version:        25.4.16
 Release:        %autorelease
-Summary:        Self-service finite-state machines for the programmer on the go
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Self-service finite-state machines for the programmer on the go.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/glyph/automat
-Source0:        %pypi_source
+URL:            https://github.com/glyph/automat/
+Source:         %{pypi_source automat}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-%if %{with doc}
-BuildRequires:  python3dist(sphinx-rtd-theme)
-BuildRequires:  python3-pydoctor
-%endif
 
-# removes pieces of sphinx config trying to use git
-# to get branch name or commit
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'automat' generated automatically by pyp2spec.}
+
 Patch:          sphinx-no-git.patch
 
-%description %{common_description}
+%description %_description
 
-%package -n     python3-%{srcname}
+%package -n     python3-automat
 Summary:        %{summary}
-Provides:       python3-%{libname}
 
-%description -n python3-%{srcname} %{common_description}
+%description -n python3-automat %_description
 
-%if %{with doc}
-%package -n python-%{srcname}-doc
-Summary:        Automat documentation
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-automat visualize
 
-%description -n python-%{srcname}-doc
-Documentation for Automat
-%endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n automat-%{version}
 
-%autosetup  -p1 -n %{libname}-%{version}
-
-# Backport of https://github.com/glyph/automat/commit/2bf0abddd9b532ef9dd90707a10a09ce48c24f3d
-sed -i "s/py\.test/pytest/g" tox.ini
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x visualize
+
 
 %build
 %pyproject_wheel
 
-%if %{with doc}
-sphinx-build docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
-%endif
 
 %install
 %pyproject_install
-%pyproject_save_files %{libname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
+
+%files -n python3-automat -f %{pyproject_files}
 %{_bindir}/automat-visualize
-
-%if %{with doc}
-%files -n python-%{srcname}-doc
-%doc html
-%license LICENSE
-%endif
 
 %changelog
 %autochangelog

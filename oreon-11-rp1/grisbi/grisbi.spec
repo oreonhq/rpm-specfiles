@@ -1,8 +1,8 @@
 %global source0_hash bd3adbabfc4b4dfc05eff62d2b36458a24b0f00d07cf35a29f6af2f203c77a3f
 
 Name:		grisbi
-Version:	2.0.5
-Release:	9%{?dist}
+Version:	3.90.1
+Release:	1%{?dist}
 Summary:	Personal finances manager
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

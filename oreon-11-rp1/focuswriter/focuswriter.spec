@@ -1,7 +1,7 @@
 %global source0_hash d6e4a332f5e87365b5f5c14807f66f328ba6c7330ea21a0c8bef7c1268347314
 
 Name:           focuswriter
-Version:        1.9.0
+Version:        1.9.1
 Release:        %autorelease
 Summary:        A full screen, distraction-free writing program
 License:        GPL-3.0-or-later

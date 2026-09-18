@@ -5,7 +5,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.2.2
+Version:        0.2.2.1
 Release:        %autorelease
 Summary:        Boring and Absurd types
 

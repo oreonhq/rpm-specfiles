@@ -1,39 +1,24 @@
-%global source0_hash 29f37b2dbbf8075a06f55819fec38f0cdb022f98aa802284ef8c028ef8a0ab8a
-
-# need to reconfigure logging to run tests
-# FileNotFoundError: [Errno 2] No such file or directory: '/opt/mailman/web/logs/mailmanweb.log'           
-%bcond tests 0
-
-%global date    20251122
-%global commit  66cd0f7633af64b61a6c1c23291847500fd80ad5
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
+%global source0_hash none
 
 Name:           python-mailman-web
-Version:        0.0.10~^%{date}git%{shortcommit}
+Version:        0.0.9
 Release:        %autorelease
-Summary:        Mailman 3 Web interface
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Mailman 3 Web interface.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-3.0-or-later
 URL:            https://gitlab.com/mailman/mailman-web
-# Source:         %%{pypi_source mailman_web}
-Source:         %{url}/-/archive/%{commit}/mailman_web-%{version}.tar.gz
+Source:         %{pypi_source mailman_web}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  sed
-%if %{with tests}
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-django)
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is a Django project that contains default settings and URL settings
-for Mailman 3 Web interface. It consists of the following sub-projects:
-
-- Postorius
-- Hyperkitty
-}
+This is package 'mailman-web' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -42,43 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-mailman-web %_description
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n mailman_web-%{version}
 
-#autosetup -p1 -n mailman_web-%{version}
-%autosetup -p1 -n mailman-web-%{commit}
-
-# needed because we're building from a Git snapshot
-echo "fallback_version = \"0.0.10\"" >> pyproject.toml
-
-# Remove shebang from Python files
-for file in mailman_web/manage.py; do
- sed -i '1{\@^#!/usr/bin/env python@d}' $file
-done
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -L mailman_web
-mkdir -p %{buildroot}%{_sysconfdir}/mailman3
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-export DJANGO_SETTINGS_MODULE=mailman_web.settings
-%pyproject_check_import -e mailman_web.tests.test_basic -e mailman_web.urls
-%if %{with tests}
-%pytest --ds=mailman_web.tests.settings
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-mailman-web -f %{pyproject_files}
-%license LICENSE.txt
-%doc README.rst
-%dir %{_sysconfdir}/mailman3
-%ghost %config(noreplace) %{_sysconfdir}/mailman3/settings.py
 %{_bindir}/mailman-web
 
 %changelog

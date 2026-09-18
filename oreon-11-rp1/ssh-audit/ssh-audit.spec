@@ -1,8 +1,8 @@
 %global source0_hash e533c9ff2c1e655576b78a7732cdb01cf765e002716e5c086322ba4737c5e63b
 
 Name:           ssh-audit
-Version:        3.3.0
-Release:        7%{?dist}
+Version:        3.9.0
+Release:        1%{?dist}
 Summary:        An SSH server & client configuration security auditing tool
 
 License:        MIT

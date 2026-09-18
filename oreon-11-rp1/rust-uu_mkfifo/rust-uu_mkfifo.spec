@@ -10,7 +10,7 @@
 %global crate uu_mkfifo
 
 Name:           rust-uu_mkfifo
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        mkfifo ~ (uutils) create FIFOs (named pipes)
 

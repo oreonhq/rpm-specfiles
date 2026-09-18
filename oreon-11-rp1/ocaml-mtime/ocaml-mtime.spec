@@ -4,7 +4,7 @@
 ExcludeArch: %{ix86}
 
 Name:           ocaml-mtime
-Version:        2.1.0
+Version:        2.2.0
 Release:        %autorelease
 Summary:        Monotonic wall-clock time for OCaml
 

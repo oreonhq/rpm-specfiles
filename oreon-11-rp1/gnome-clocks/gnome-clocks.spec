@@ -8,7 +8,7 @@
 %global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           gnome-clocks
-Version:        50.0
+Version:        51.0
 Release:        %autorelease
 Summary:        Clock application designed for GNOME 3
 

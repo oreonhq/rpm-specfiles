@@ -1,7 +1,7 @@
 %global source0_hash e90820d2e2a95abf01c5b9813a98b74241391862254906017641bee30cc4ad08
 
 Name:             umockdev
-Version:          0.19.5
+Version:          0.19.8
 Release:          1%{?dist}
 Summary:          Mock hardware devices
 

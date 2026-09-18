@@ -6,15 +6,15 @@
 %{!?dlrn: %global tarsources ansible-collections-openstack}
 
 Name:           ansible-collections-openstack
-Version:        2.2.0
-Release:        7%{?dist}
+Version:        2.6.0
+Release:        1%{?dist}
 Summary:        Openstack Ansible collections
 License:        GPL-3.0-or-later
 URL:            https://opendev.org/openstack/ansible-collections-openstack
 Source0:        https://github.com/openstack/%{name}/archive/refs/tags/%{version}.tar.gz
 BuildArch:      noarch
-# (amoralej) We can remove this patch when we move to next release after 2.2.0
-%if %{lua:print(rpm.vercmp(rpm.expand("%{version}"), '2.2.0'));} <= 0
+# (amoralej) We can remove this patch when we move to next release after 2.6.0
+%if %{lua:print(rpm.vercmp(rpm.expand("%{version}"), '2.6.0'));} <= 0
 Patch0:         0001-Disable-auto-discovery-for-setuptools.patch
 %endif
 

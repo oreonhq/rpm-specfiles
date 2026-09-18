@@ -4,8 +4,8 @@
 %global _cmake_shared_libs %{nil}
 
 Name:           cryfs
-Version:        0.11.3
-Release:        15%{?dist}
+Version:        1.0.3
+Release:        1%{?dist}
 Summary:        Cryptographic filesystem for the cloud
 # Automatically converted from old format: LGPLv3 - review is highly recommended.
 License:        LGPL-3.0-only

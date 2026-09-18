@@ -7,7 +7,7 @@
 %global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:           libadwaita
-Version:        1.9.0
+Version:        1.10.0
 Release:        %autorelease
 Summary:        Building blocks for modern GNOME applications
 

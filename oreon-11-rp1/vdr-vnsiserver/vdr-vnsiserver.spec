@@ -3,8 +3,8 @@
 %global plugin_name     vnsiserver
 
 Name:           vdr-vnsiserver
-Version:        1.8.3
-Release:        17%{?dist}
+Version:        1.8.4
+Release:        1%{?dist}
 Summary:        VDR plugin to handle Kodi clients via VNSI
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

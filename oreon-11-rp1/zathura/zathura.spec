@@ -1,8 +1,8 @@
 %global source0_hash 647aca4d494315905d236504576e35b7568a4d702e56aa4590295a9f6a7259bd
 
 Name:              zathura
-Version:           0.5.14
-Release:           2%{?dist}
+Version:           2026.07.18
+Release:           1%{?dist}
 Summary:           A lightweight document viewer
 License:           Zlib
 URL:               http://pwmt.org/projects/%{name}/

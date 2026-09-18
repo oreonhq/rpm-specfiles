@@ -11,8 +11,8 @@
 %endif
 
 Name:           mod_wsgi
-Version:        5.0.2
-Release:        7%{?dist}
+Version:        6.0.6
+Release:        1%{?dist}
 Summary:        A WSGI interface for Python web applications in Apache
 License:        Apache-2.0 AND CC-BY-3.0
 URL:            https://modwsgi.readthedocs.io/

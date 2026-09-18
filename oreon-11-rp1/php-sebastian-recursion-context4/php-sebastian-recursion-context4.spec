@@ -25,8 +25,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        4.0.6
-Release:        2%{?dist}
+Version:        4.0.7
+Release:        1%{?dist}
 Summary:        Recursively process PHP variables, version %{major}
 
 License:        BSD-3-Clause

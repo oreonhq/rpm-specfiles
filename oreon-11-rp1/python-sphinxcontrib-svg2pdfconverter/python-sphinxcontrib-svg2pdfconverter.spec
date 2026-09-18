@@ -1,107 +1,62 @@
-%global source0_hash c56607a1423811ab479171db1059ffd81f63a5c15cf98ad07ffdcece7e340fb6
+%global source0_hash none
 
-%global forgeurl https://github.com/missinglinkelectronics/sphinxcontrib-svg2pdfconverter
-
-Version:        1.3.0
-
-%forgemeta
-
-%global srcname sphinxcontrib-svg2pdfconverter
-
-Name:           python-%{srcname}
+Name:           python-sphinxcontrib-svg2pdfconverter
+Version:        2.1.0
 Release:        %autorelease
-Summary:        Sphinx SVG to PDF Converter Extension
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Sphinx SVG to PDF or PNG converter extension
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            %{forgeurl}
-Source0:        %{forgesource}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-2-Clause
+URL:            https://github.com/missinglinkelectronics/sphinxcontrib-svg2pdfconverter
+Source:         %{pypi_source sphinxcontrib_svg2pdfconverter}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
-%generate_buildrequires
-%pyproject_buildrequires
 
-%description
-Converts SVG images to PDF in case the builder does not support SVG images
-natively (e.g. LaTeX).
 
-%package -n python3-%{srcname}-common
-Summary:        Sphinx SVG to PDF Converter Extension - common files
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sphinxcontrib-svg2pdfconverter' generated automatically by pyp2spec.}
 
-%description -n python3-%{srcname}-common
-Converts SVG images to PDF in case the builder does not support SVG images
-natively (e.g. LaTeX).
-This package contains common files.
+%description %_description
 
-%package -n python3-sphinxcontrib-inkscapeconverter
-Summary:        Sphinx SVG to PDF Converter Extension - Inkscape converter
+%package -n     python3-sphinxcontrib-svg2pdfconverter
+Summary:        %{summary}
 
-Requires:       /usr/bin/inkscape
-Requires:       python3-%{srcname}-common = %{version}-%{release}
+%description -n python3-sphinxcontrib-svg2pdfconverter %_description
 
-%description -n python3-sphinxcontrib-inkscapeconverter
-Converts SVG images to PDF in case the builder does not support SVG images
-natively (e.g. LaTeX).
-This package contains converter using Inkscape.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sphinxcontrib-svg2pdfconverter cairosvg
 
-%package -n python3-sphinxcontrib-rsvgconverter
-Summary:        Sphinx SVG to PDF Converter Extension - libRSVG converter
-
-Requires:       /usr/bin/rsvg-convert
-Requires:       python3-%{srcname}-common = %{version}-%{release}
-
-%description -n python3-sphinxcontrib-rsvgconverter
-Converts SVG images to PDF in case the builder does not support SVG images
-natively (e.g. LaTeX).
-This package contains converter using libRSVG.
-
-%package -n python3-sphinxcontrib-cairosvgconverter
-Summary:        Sphinx SVG to PDF Converter Extension - CairoSVG converter
-
-Requires:       %{py3_dist CairoSVG}
-Requires:       python3-%{srcname}-common = %{version}-%{release}
-
-%description -n python3-sphinxcontrib-cairosvgconverter
-Converts SVG images to PDF in case the builder does not support SVG images
-natively (e.g. LaTeX).
-This package contains converter using CairoSVG.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sphinxcontrib_svg2pdfconverter-%{version}
 
-%forgeautosetup
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x cairosvg
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-#check
-#{__python3} setup.py test
 
-# Note that there is no %%files section for the unversioned python module
-%files -n python3-%{srcname}-common
-%license LICENSE.txt
-%doc README.rst
-%{python3_sitelib}/sphinxcontrib/__init__.py
-%{python3_sitelib}/sphinxcontrib/__pycache__/__init__.*.pyc
-%{python3_sitelib}/sphinxcontrib_svg2pdfconverter-%{version}.dist-info/
+%check
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-sphinxcontrib-inkscapeconverter
-%{python3_sitelib}/sphinxcontrib/__pycache__/inkscapeconverter.*.pyc
-%{python3_sitelib}/sphinxcontrib/inkscapeconverter.py
 
-%files -n python3-sphinxcontrib-rsvgconverter
-%{python3_sitelib}/sphinxcontrib/__pycache__/rsvgconverter.*.pyc
-%{python3_sitelib}/sphinxcontrib/rsvgconverter.py
-
-%files -n python3-sphinxcontrib-cairosvgconverter
-%{python3_sitelib}/sphinxcontrib/__pycache__/cairosvgconverter.*.pyc
-%{python3_sitelib}/sphinxcontrib/cairosvgconverter.py
+%files -n python3-sphinxcontrib-svg2pdfconverter -f %{pyproject_files}
 
 %changelog
 %autochangelog

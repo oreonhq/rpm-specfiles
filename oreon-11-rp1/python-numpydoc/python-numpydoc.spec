@@ -1,67 +1,56 @@
-%global source0_hash 5fec64908fe041acc4b3afc2a32c49aab1540cf581876f5563d68bb129e27c5b
-
-# No matplot yet in EPEL10
-%if 0%{?rhel} >= 10
-%bcond_with matplotlib
-%else
-%bcond_without matplotlib
-%endif
+%global source0_hash none
 
 Name:           python-numpydoc
-Version:        1.9.0
-Release:        2%{?dist}
-Summary:        Sphinx extension to support docstrings in NumPy format
+Version:        1.11.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Sphinx extension to support docstrings in Numpy format
 
-License:        BSD-2-Clause
-URL:            https://pypi.python.org/pypi/numpydoc
-Source:         %pypi_source numpydoc
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://numpydoc.readthedocs.io
+Source:         %{pypi_source numpydoc}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%global _description %{expand:
-This package provides the numpydoc Sphinx extension for handling docstrings
-formatted according to the NumPy documentation format. The extension also adds
-the code description directives np:function, np-c:function, etc.}
 
-%description %{_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'numpydoc' generated automatically by pyp2spec.}
+
+%description %_description
 
 %package -n     python3-numpydoc
 Summary:        %{summary}
 
-%description -n python3-numpydoc %{_description}
+%description -n python3-numpydoc %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n numpydoc-%{version}
-# let's not measure coverage:
-sed -i '/pytest-cov/d' pyproject.toml
-sed -Ei 's/\s+--cov\S+//g' pyproject.toml
-%if %{without matplotlib}
-sed -i '/matplotlib/d' pyproject.toml
-%endif
 
-# Remove a useless shebang
-sed -i '\,#!/usr/bin/env python,d' numpydoc/validate.py
 
 %generate_buildrequires
-%pyproject_buildrequires -g test
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l numpydoc
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Deselected tests need to download an inventory from docs.python.org
-%pytest -k "not test_MyClass and not test_my_function"
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-numpydoc -f %pyproject_files
-%doc README.rst
+
+%files -n python3-numpydoc -f %{pyproject_files}
 %{_bindir}/numpydoc
 
 %changelog

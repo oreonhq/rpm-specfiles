@@ -1,56 +1,61 @@
-%global source0_hash 45283e8b471ac54ac2957bc14e311f681b84dabc50c85959b9931e6f5cc60bcb
+%global source0_hash none
 
-%bcond check 0
+Name:           python-xarray-einstats
+Version:        0.11.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Stats, linear algebra and einops for xarray
 
-%global srcname xarray-einstats
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/arviz-devs/xarray-einstats
+Source:         %{pypi_source xarray_einstats}
 
-Name: python-%{srcname}
-Version: 0.5.1
-Release: 9%{?dist}
-Summary: Stats, linear algebra and einops for xarray 
-License: Apache-2.0
-
-URL: https://github.com/arviz-devs/xarray-einstats
-Source0: %{pypi_source}
-
-BuildArch: noarch
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-xarray-einstats is an open source Python library part of the ArviZ project. 
-It acts as a bridge between the xarray library for labelled arrays and 
-libraries for raw arrays such as NumPy or SciPy.}     
+This is package 'xarray-einstats' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
-Summary: %{summary}
+%package -n     python3-xarray-einstats
+Summary:        %{summary}
 
-%description -n python3-%{srcname}
-%_description
+%description -n python3-xarray-einstats %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-xarray-einstats doc,einops,numba,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n xarray_einstats-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires 
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,einops,numba,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files xarray_einstats
 
 %check
-# Tests are not included in the tarball
-%pyproject_check_import -t
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md 
+
+%files -n python3-xarray-einstats -f %{pyproject_files}
 
 %changelog
 %autochangelog

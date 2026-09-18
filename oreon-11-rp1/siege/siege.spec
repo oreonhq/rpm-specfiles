@@ -1,8 +1,8 @@
 %global source0_hash ec140cedd159979383d60dbe87a0151c2c12ada78791095a8fa84ae635b93026
 
 Name:           siege
-Version:        4.1.7
-Release:        5%{?dist}
+Version:        4.2.0
+Release:        1%{?dist}
 Summary:        HTTP regression testing and benchmarking utility
 
 License:        GPL-3.0-or-later

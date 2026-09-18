@@ -1,7 +1,7 @@
 %global source0_hash 5d48bc3c099bb5e724303c3545326e2a0342f691d7310ad77b3ebf18c533bca9
 
 Name:      dist-git-client
-Version:   1.3
+Version:   1.3-1-1
 Release:   1%{?dist}
 Summary:   Get sources for RPM builds from DistGit repositories
 BuildArch: noarch

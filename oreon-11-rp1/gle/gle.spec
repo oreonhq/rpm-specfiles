@@ -6,8 +6,8 @@
 
 Summary:       Graphics Layout Engine
 Name:          gle
-Version:       4.2.5
-Release:       31%{?dist}
+Version:       4.2.5f
+Release:       1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:       GPL-2.0-or-later
 URL:           http://www.gle-graphics.org/

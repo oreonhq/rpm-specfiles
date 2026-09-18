@@ -1,8 +1,8 @@
 %global source0_hash 175b997518073ea82c95dadea50a0f01ffa4ff292cbb84b5e64f82e7e6c94fc9
 
 Name:           wsdd
-Version:        0.8
-Release:        6%{?dist}
+Version:        0.9
+Release:        1%{?dist}
 Summary:        Web Services Dynamic Discovery host daemon
 License:        MIT 
 URL:            https://github.com/christgau/wsdd 

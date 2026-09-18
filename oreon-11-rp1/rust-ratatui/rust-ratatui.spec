@@ -7,7 +7,7 @@
 %global crate ratatui
 
 Name:           rust-ratatui
-Version:        0.26.3
+Version:        0.30.2
 Release:        %autorelease
 Summary:        A library that's all about cooking up terminal user interfaces
 

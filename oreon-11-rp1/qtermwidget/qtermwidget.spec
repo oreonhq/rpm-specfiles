@@ -1,8 +1,8 @@
 %global source0_hash 194b97c46fe39268864b98d0d2b510692daebb2a94e6b242515f5d98d3ab718f
 
 Name:		qtermwidget
-Version:	2.3.0
-Release:	2%{?dist}
+Version:	2.4.0
+Release:	1%{?dist}
 License:	GPL-2.0-or-later
 Summary:	Qt6 terminal widget
 URL:		https://github.com/lxqt/%{name}/

@@ -7,7 +7,7 @@
 %global crate dot-parser
 
 Name:           rust-dot-parser
-Version:        0.5.1
+Version:        0.6.1
 Release:        %autorelease
 Summary:        This library provides a parser for the DOT/Graphviz graph description...
 

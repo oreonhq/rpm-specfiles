@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-nettle
-Version:        3.10.2
-Release:        2%{?dist}
+Version:        4.0
+Release:        1%{?dist}
 
 Summary: MinGW package for nettle cryptographic library
 # Automatically converted from old format: LGPLv3+ or GPLv2+ - review is highly recommended.

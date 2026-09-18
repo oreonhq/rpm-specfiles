@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        3000.11.6
+Version:        3000.11.6.1
 Release:        %autorelease
 Summary:        XML-RPC client and server library
 

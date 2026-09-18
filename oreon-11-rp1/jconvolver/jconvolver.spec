@@ -2,8 +2,8 @@
 
 Summary:       Real-time Convolution Engine
 Name:          jconvolver
-Version:       1.0.3
-Release:       17%{?dist}
+Version:       1.1.0
+Release:       1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:       GPL-2.0-or-later
 URL:           https://kokkinizita.linuxaudio.org/linuxaudio/index.html

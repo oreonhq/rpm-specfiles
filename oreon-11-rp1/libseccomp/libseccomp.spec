@@ -1,8 +1,8 @@
 %global source0_hash 83b6085232d1588c379dc9b9cae47bb37407cf262e6e74993c61ba72d2a784dc
 
 Name:           libseccomp
-Version:        2.6.0
-Release:        3%{?dist}
+Version:        2.6.1
+Release:        1%{?dist}
 Summary:        Enhanced seccomp library
 License:        LGPL-2.1-only
 URL:            https://github.com/seccomp/libseccomp

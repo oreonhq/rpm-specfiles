@@ -1,7 +1,7 @@
 %global source0_hash e5e941c4b4a57403e7c5ed658231c68fe229d85c82fc39ff50355fa85618af26
 
 Name:           python-cucumber-tag-expressions
-Version:        9.1.0
+Version:        11.0.1
 Release:        %autorelease
 Summary:        Provides a tag-expression parser and evaluation logic for cucumber/behave
 

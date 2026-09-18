@@ -2,15 +2,15 @@
 
 %global _artwork_version 1.7.5
 
-%global cinnamon_desktop_version 6.6.0
-%global csd_version 6.6.0
-%global cinnamon_menus_version 6.6.0
+%global cinnamon_desktop_version 6.7.5-unstable
+%global csd_version 6.7.5-unstable
+%global cinnamon_menus_version 6.7.5-unstable
 %global redhat_menus_version 1.8
 
 Summary: Utilities to configure the Cinnamon desktop
 Name:    cinnamon-control-center
-Version: 6.6.0
-Release: 3%{?dist}
+Version: 6.7.5-unstable
+Release: 1%{?dist}
 # The following files contain code from
 # ISC for panels/network/rfkill.h
 # And MIT for wacom/calibrator/calibrator.c

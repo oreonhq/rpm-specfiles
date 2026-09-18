@@ -1,54 +1,64 @@
-%global source0_hash ac5460a5498c48bdf2e8e767402583a4dcd13f4414d286f42ce4379e8b35066d
+%global source0_hash none
 
-Summary:        Multi-library, cross-platform audio decoding in Python
 Name:           python-audioread
-Version:        3.0.1
-Release:        12%{?dist}
+Version:        3.1.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Multi-library, cross-platform audio decoding.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            http://pypi.python.org/pypi/audioread/
-Source0:        https://files.pythonhosted.org/packages/source/a/audioread/audioread-%{version}.tar.gz
-Patch0:         0001-Remove-legacy-sound-modules-absent-in-Python-3.13.patch
+URL:            https://github.com/beetbox/audioread
+Source:         %{pypi_source audioread}
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-gobject
-BuildRequires:  /usr/bin/ffmpeg
-%global _description \
-Decode audio files using whichever backend is available. Among\
-currently supports backends are\
- o Gstreamer via PyGObject\
- o MAD via the pymad bindings\
- o FFmpeg or Libav via its command-line interface\
- o The standard library wave, aifc, and sunau modules
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'audioread' generated automatically by pyp2spec.}
+
+Patch0:         0001-Remove-legacy-sound-modules-absent-in-Python-3.13.patch
+
 %description %_description
 
-%package    -n  python3-audioread
-Summary:        Multi-library, cross-platform audio decoding in Python
-Requires:       python3-gobject
-Requires:       (/usr/bin/ffmpeg or (gstreamer1 and gstreamer1-plugins-base and gstreamer1-plugins-good))
-%{?python_provide:%python_provide python3-audioread}
+%package -n     python3-audioread
+Summary:        %{summary}
+
 %description -n python3-audioread %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-audioread gi,mad,test
 
+
+%prep
 %autosetup -p1 -n audioread-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires -t
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x gi,mad,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-audioread
-%doc README.rst decode.py
-%{python3_sitelib}/audioread/
-%{python3_sitelib}/audioread-*.dist-info/
+
+%files -n python3-audioread -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -10,8 +10,8 @@ used to maintain the Noto Fonts project, \
 including the google.com/get/noto website.
 
 Name:		nototools
-Version:	0.2.20
-Release:	4%{?dist}
+Version:	0.4.1
+Release:	1%{?dist}
 Summary:	Noto fonts support tools and scripts plus web site generation
 
 # In nototools source

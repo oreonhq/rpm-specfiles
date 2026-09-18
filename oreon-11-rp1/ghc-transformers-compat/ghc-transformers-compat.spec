@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.7.2
+Version:        0.8
 Release:        %autorelease
 Summary:        Compatibility shim exposing the new types from newer transformers
 

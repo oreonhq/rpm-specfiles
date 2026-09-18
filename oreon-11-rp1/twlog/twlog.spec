@@ -4,8 +4,8 @@
 %define _legacy_common_support 1
 
 Name:		twlog
-Version:	3.4
-Release:	15%{?dist}
+Version:	3.5
+Release:	1%{?dist}
 Summary:	Records basic ham radio log information
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:	GPL-2.0-or-later

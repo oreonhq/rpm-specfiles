@@ -7,7 +7,7 @@
 %global crate varlink
 
 Name:           rust-varlink
-Version:        11.0.1
+Version:        13.0.0
 Release:        %autorelease
 Summary:        Client and server support for the varlink protocol
 

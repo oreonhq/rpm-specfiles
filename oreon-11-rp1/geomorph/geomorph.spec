@@ -1,8 +1,8 @@
 %global source0_hash 8e268182d8651fb2066587c4ea54dbccc152703b1584f9224f3201d25210b6d4
 
 Name:           geomorph
-Version:        0.62
-Release:        26%{?dist}
+Version:        0.63
+Release:        1%{?dist}
 Summary:        A height field editor for Linux
 License:        GPL-2.0-only
 URL:            http://geomorph.sourceforge.net

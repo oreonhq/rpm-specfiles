@@ -1,7 +1,7 @@
 %global source0_hash 99cd891eec6e89b734d7cafe0e623dd8c2f27d8cbf3ee9bc4807e69e5c8fb55c
 
 Name:           bear
-Version:        3.1.6
+Version:        4.2.2
 Release:        %autorelease
 Summary:        Tool that generates a compilation database for clang tooling
 

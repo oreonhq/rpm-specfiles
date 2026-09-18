@@ -1,89 +1,65 @@
-%global source0_hash 372138a738e4216535cc76dcce6eddd5a1aaca95130f2354fb834264c06f18de
+%global source0_hash none
 
-%global modname pyramid
-%global sum The Pyramid web application framework, a Pylons project
-%global desc Pyramid is a small, fast, down-to-earth, open source Python web development\
-framework. It makes real-world web application development and deployment more\
-fun, more predictable, and more productive.
+Name:           python-pyramid
+Version:        2.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The Pyramid Web Framework, a Pylons project
 
-Name:           python-%{modname}
-Version:        2.0.2
-Release:        11%{?dist}
-Summary:        %{sum}
-
-License:        BSD-4-Clause
-URL:            https://trypyramid.com/
-Source0:        %pypi_source %{modname}
-
-# Allow InstancePropertyHelper to accept properties with names on Python 3.13+
-Patch:          https://github.com/Pylons/pyramid/pull/3762.patch
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        LicenseRef-Repoze-BSD-derived
+URL:            https://trypyramid.com
+Source:         %{pypi_source pyramid}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
 
-%description
-%{desc}
 
-%package -n python3-pyramid
-Summary:        %{sum}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pyramid' generated automatically by pyp2spec.}
 
-%description -n python3-pyramid
-%{desc}
+Patch:          https://github.com/Pylons/pyramid/pull/3762.patch
+
+%description %_description
+
+%package -n     python3-pyramid
+Summary:        %{summary}
+
+%description -n python3-pyramid %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pyramid-%{version}
 
-%autosetup -n pyramid-%{version} -p1
-
-# Remove bundled egg info
-rm -rf %{modname}.egg-info
 
 %generate_buildrequires
-%pyproject_buildrequires -x testing
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{modname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Create the Python 3 executables.
-for e in pserve prequest proutes pshell ptweens pviews pdistreport; do
-    mv %{buildroot}/%{_bindir}/$e %{buildroot}/%{_bindir}/$e-%{python3_version};
-    ln -s %{_bindir}/$e-%{python3_version} %{buildroot}/%{_bindir}/$e-3;
-    ln -s %{_bindir}/$e-%{python3_version} %{buildroot}/%{_bindir}/$e
-done;
 
 %check
-%pyproject_check_import
-%pytest tests
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{modname} -f %{pyproject_files}
-%license LICENSE.txt
-%doc README.rst
-%{_bindir}/pdistreport-%{python3_version}
-%{_bindir}/pdistreport-3
+
+%files -n python3-pyramid -f %{pyproject_files}
 %{_bindir}/pdistreport
-%{_bindir}/prequest-%{python3_version}
-%{_bindir}/prequest-3
 %{_bindir}/prequest
-%{_bindir}/proutes-%{python3_version}
-%{_bindir}/proutes-3
 %{_bindir}/proutes
-%{_bindir}/pserve-%{python3_version}
-%{_bindir}/pserve-3
 %{_bindir}/pserve
-%{_bindir}/pshell-%{python3_version}
-%{_bindir}/pshell-3
 %{_bindir}/pshell
-%{_bindir}/ptweens-%{python3_version}
-%{_bindir}/ptweens-3
 %{_bindir}/ptweens
-%{_bindir}/pviews-%{python3_version}
-%{_bindir}/pviews-3
 %{_bindir}/pviews
 
 %changelog

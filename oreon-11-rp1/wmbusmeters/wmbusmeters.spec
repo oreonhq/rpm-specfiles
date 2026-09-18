@@ -6,7 +6,7 @@ Name:                  wmbusmeters
 %global forgeurl       https://github.com/weetmuts/%{name}
 
 %if %{with_tag}
-%global tag            1.20.0
+%global tag            3.0.0
 Version:               %{tag}
 %else
 %global date           20210813

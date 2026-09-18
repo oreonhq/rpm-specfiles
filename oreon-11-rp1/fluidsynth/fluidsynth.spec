@@ -3,7 +3,7 @@
 
 Summary:      Real-time software synthesizer
 Name:         fluidsynth
-Version:      2.5.4
+Version:      2.6.0
 Release:      1%{?dist}
 URL:          http://www.fluidsynth.org/
 Source0:      https://github.com/Fluidsynth/fluidsynth/archive/v%{version}/fluidsynth-%{version}.tar.gz

@@ -3,8 +3,8 @@
 Summary:        Extension for creating pdf-Files with CUPS
 Summary(fr):    Extension de CUPS pour créer des fichiers PDF
 Name:           cups-pdf
-Version:        3.0.2
-Release:        3%{?dist}
+Version:        3.0.3
+Release:        1%{?dist}
 URL:            https://www.cups-pdf.de/
 License:        GPL-2.0-or-later
 

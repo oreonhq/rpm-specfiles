@@ -10,7 +10,7 @@
 # testsuite missing deps: tasty-lua
 
 Name:           ghc-%{pkg_name}
-Version:        1.1.1
+Version:        1.2.0
 Release:        %autorelease
 Summary:        Lua module for text
 

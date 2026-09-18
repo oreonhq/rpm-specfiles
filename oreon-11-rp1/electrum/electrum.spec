@@ -1,8 +1,8 @@
 %global source0_hash 1f8398fe01751120ef97e20702649dddcf1d5e27ccec85cca133e4d207d41f09
 
 Name:           electrum
-Version:        4.5.8
-Release:        9%{?dist}
+Version:        4.8.2
+Release:        1%{?dist}
 Summary:        A lightweight Bitcoin Client
 
 License:        MIT

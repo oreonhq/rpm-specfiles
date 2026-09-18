@@ -1,7 +1,7 @@
 %global source0_hash cdd1e69ba9cae05fa00c9ce20fb13886dc09242a8896adde658fc32ca67ecbc4
 
 Name:    fotocx
-Version: 26.2
+Version: 26.61
 Release: 1%{?dist}
 Summary: Photo editor
 

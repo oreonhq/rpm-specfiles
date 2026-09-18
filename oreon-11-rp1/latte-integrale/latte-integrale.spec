@@ -1,8 +1,8 @@
 %global source0_hash f7d4fbd9f6edaddd9b602a70c94ffac761152c6191493b5cf3908104d7b87693
 
 Name:           latte-integrale
-Version:        1.7.6
-Release:        15%{?dist}
+Version:        1_7_6
+Release:        1%{?dist}
 Summary:        Lattice point enumeration
 
 %global tarver  %(tr . _ <<< %{version})

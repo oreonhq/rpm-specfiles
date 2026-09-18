@@ -1,50 +1,57 @@
-%global source0_hash dae2cfa1326e5fcdd13a102f259dcd02130d7e6cc667ade3aa82a61984cc3338
+%global source0_hash none
 
-%global srcname dbus-signature-pyparsing
-
-Name:           python-%{srcname}
-Version:        0.4.1
+Name:           python-dbus-signature-pyparsing
+Version:        0.4.3
 Release:        %autorelease
-Summary:        Parser for a D-Bus Signature
+# Fill in the actual package summary to submit package to Fedora
+Summary:        dbus signature parser
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/stratis-storage/dbus-signature-pyparsing
-Source0:        https://github.com/stratis-storage/dbus-signature-pyparsing/archive/refs/tags/v0.4.1.tar.gz#/dbus-signature-pyparsing-0.4.1.tar.gz
+Source:         %{pypi_source dbus_signature_pyparsing}
 
 BuildArch:      noarch
-
-%global _description \
-%{summary}.
-
-%description %{_description}
-
-%package -n python3-%{srcname}
-Summary:        %{summary}
 BuildRequires:  python3-devel
 
-%description -n python3-%{srcname} %{_description}
 
-Python 3 version.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'dbus-signature-pyparsing' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-dbus-signature-pyparsing
+Summary:        %{summary}
+
+%description -n python3-dbus-signature-pyparsing %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{srcname}-%{version}
+%autosetup -p1 -n dbus_signature_pyparsing-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l dbus_signature_pyparsing
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
+
+%files -n python3-dbus-signature-pyparsing -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.4.1-1

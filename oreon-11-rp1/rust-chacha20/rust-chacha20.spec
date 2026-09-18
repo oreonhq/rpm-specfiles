@@ -8,7 +8,7 @@
 %global crate chacha20
 
 Name:           rust-chacha20
-Version:        0.10.1
+Version:        0.10.2
 Release:        %autorelease
 Summary:        The ChaCha20 stream cipher (RFC 8439) implemented in pure Rust using
 

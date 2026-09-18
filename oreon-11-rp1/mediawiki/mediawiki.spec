@@ -2,8 +2,8 @@
 
 Summary: A wiki engine
 Name: mediawiki
-Version: 1.44.3
-Release: 3%{?dist}
+Version: 1.46.0
+Release: 1%{?dist}
 License: GPL-2.0-or-later
 URL: https://www.mediawiki.org/
 Source0: https://releases.wikimedia.org/mediawiki/1.44/%{name}-%{version}.tar.gz

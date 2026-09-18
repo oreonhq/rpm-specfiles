@@ -2,8 +2,8 @@
 
 Name:		globus-xio-rate-driver
 %global _name %(tr - _ <<< %{name})
-Version:	2.1
-Release:	17%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Globus XIO Rate Limiting Driver
 
 License:	Apache-2.0

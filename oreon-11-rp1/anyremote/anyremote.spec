@@ -1,8 +1,8 @@
 %global source0_hash c30f6ad0e03716d4d3dfd839cf429763aea272c34ef19b7653b45b2e67f690d9
 
 Name: anyremote
-Version: 6.7.3
-Release: 18%{?dist}
+Version: 8.1.1
+Release: 1%{?dist}
 Summary: Remote control through Wi-Fi or bluetooth connection
 License: GPL-3.0-or-later
 URL: https://anyremote.sourceforge.net/
@@ -24,7 +24,7 @@ BuildRequires: avahi-devel >= 0.6.25
 Requires: bc
 Requires: wmctrl
 Requires: ImageMagick
-Requires: anyremote-data >= 6.7.3
+Requires: anyremote-data >= 8.1.1
 
 %description
 Remote control software for applications using Wi-Fi or Bluetooth.

@@ -1,90 +1,65 @@
-%global source0_hash 9d17f3425b46304d837dff514b3d1541f85e5de69eaa43629c1806220b4a0b26
+%global source0_hash none
 
-%global pypi_name xbout
-
-Name:           python-%{pypi_name}
-Version:        0.3.8
+Name:           python-xbout
+Version:        0.4.0
 Release:        %autorelease
-Summary:        Collects BOUT++ data from parallelized simulations into xarray
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Collect data from BOUT++ runs in python using xarray
 
-License:        apache-2.0
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0
 URL:            https://github.com/boutproject/xBOUT
-Source0:        %{pypi_source}
-BuildArch:      noarch
+Source:         %{pypi_source xbout}
 
-# The upstream theme is not packaged
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'xbout' generated automatically by pyp2spec.}
+
 Patch:          sphinx-theme.patch
 Patch:          engine-h5netcdf.patch
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch: %{ix86}
+%description %_description
 
-BuildRequires:  python3-devel
-# Sphinx for docs
-BuildRequires:  python3dist(sphinx)
-BuildRequires:  python3-boutdata
-BuildRequires:  python3-sphinx-autodoc-typehints
-# Testing
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-timeout)
-
-%generate_buildrequires
-%pyproject_buildrequires -r
-
-%description
-xBOUT provides an interface for collecting the output data from a
-BOUT++ simulation into an xarray dataset in an efficient and
-scalable way, as well as accessor methods for common BOUT++ analysis
-and plotting tasks.
-
-%package -n     python3-%{pypi_name}
+%package -n     python3-xbout
 Summary:        %{summary}
-%py_provides python3-%{pypi_name}}
 
-Requires:  python3-boutdata
+%description -n python3-xbout %_description
 
-%description -n python3-%{pypi_name}
-xBOUT provides an interface for collecting the output data from a
-BOUT++ simulation into an xarray dataset in an efficient and
-scalable way, as well as accessor methods for common BOUT++ analysis
-and plotting tasks.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-xbout 3d-plot,adios2,calc,cherab,docs,tests
 
-%package -n python3-%{pypi_name}-doc
-Summary:        xBOUT documentation
-Recommends:     python3-%{pypi_name}
-%description -n python3-%{pypi_name}-doc
-Documentation for xBOUT
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n xbout-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p 1
-# Remove bundled egg-info
-rm -rf xbout.egg-info
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x 3d-plot,adios2,calc,cherab,docs,tests
+
 
 %build
 %pyproject_wheel
-# generate html docs 
-PYTHONPATH=${PWD} sphinx-build-3 docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
+
 
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest xbout --long --durations=0 --timeout 3600 -sv
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%license LICENSE
-%doc README.md
-%{python3_sitelib}/%{pypi_name}
-%{python3_sitelib}/xbout-%{version}.dist-info
 
-%files -n python3-%{pypi_name}-doc
-%doc html
-%license LICENSE
+%files -n python3-xbout -f %{pyproject_files}
 
 %changelog
 %autochangelog

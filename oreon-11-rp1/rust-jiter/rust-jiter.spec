@@ -7,7 +7,7 @@
 %global crate jiter
 
 Name:           rust-jiter
-Version:        0.12.0
+Version:        0.17.0
 Release:        %autorelease
 Summary:        Fast Iterable JSON parser
 

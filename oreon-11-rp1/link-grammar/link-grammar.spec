@@ -8,8 +8,8 @@
 
 Summary: A full-service natural language dependency parser
 Name: link-grammar
-Version: 5.12.7
-Release: 3%{?dist}
+Version: 5.99.42
+Release: 1%{?dist}
 License: LGPL-2.1-or-later
 Source: https://www.gnucash.org/link-grammar/downloads/%{version}/link-grammar-%{version}.tar.gz
 URL: https://opencog.github.io/link-grammar-website/

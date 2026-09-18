@@ -23,8 +23,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{pk_vendor}-%{pk_project}
-Version:        1.0.5.2
-Release:        12%{?dist}
+Version:        2.0.3
+Release:        1%{?dist}
 Summary:        QR code decoder / reader
 
 Group:          Development/Libraries

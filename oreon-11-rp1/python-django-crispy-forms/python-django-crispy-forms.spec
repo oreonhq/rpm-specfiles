@@ -1,58 +1,57 @@
-%global source0_hash 35887b8851a931374dd697207a8f56c57a9c5cb9dbf0b9fa54314da5666cea5b
+%global source0_hash none
 
-%global pypi_name django-crispy-forms
-
-Name:           python-%{pypi_name}
-Version:        1.14.0
-Release:        15%{?dist}
+Name:           python-django-crispy-forms
+Version:        2.7
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Best way to have Django DRY forms
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/django-crispy-forms/django-crispy-forms
-Source0:        %{url}/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source django_crispy_forms}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-Requires:       python3-django
-Requires:	python3-coverage
-Requires:	python3-pytest-cov
-Requires:	python3-wheel
-Requires:	python3-twine
-Requires:	python3-pytest
 
-%description
-The best way to have Django DRY forms. Build programmatic reusable layouts out
-of components, having full control of the rendered HTML without writing HTML in
-templates. All this without breaking the standard way of doing things in Django,
-so it plays nice with any other form application.
 
-%package -n python3-%{pypi_name}
-Summary: %{summary} - Python 3 version
-%{?python_provide:%python_provide python3-%{pypi_name}}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'django-crispy-forms' generated automatically by pyp2spec.}
 
-%description -n python3-%{pypi_name}
-The best way to have Django DRY forms. Build programmatic reusable layouts out
-of components, having full control of the rendered HTML without writing HTML in
-templates. All this without breaking the standard way of doing things in Django,
-so it plays nice with any other form application.
+%description %_description
+
+%package -n     python3-django-crispy-forms
+Summary:        %{summary}
+
+%description -n python3-django-crispy-forms %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n django_crispy_forms-%{version}
 
-%setup -q -n %{pypi_name}-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
- 
-%files -n python3-%{pypi_name}
-%license LICENSE.txt
-%doc README.rst
-%{python3_sitelib}/crispy_forms/
-%{python3_sitelib}/django_crispy_forms-*.egg-info
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-django-crispy-forms -f %{pyproject_files}
 
 %changelog
 %autochangelog

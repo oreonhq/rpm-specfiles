@@ -7,7 +7,7 @@
 %global crate dlv-list
 
 Name:           rust-dlv-list
-Version:        0.3.0
+Version:        0.6.0
 Release:        %autorelease
 Summary:        Semi-doubly linked list implemented using a vector
 

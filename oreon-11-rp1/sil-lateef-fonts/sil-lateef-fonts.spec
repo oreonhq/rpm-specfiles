@@ -1,6 +1,6 @@
 %global source0_hash 3a4baec89e25f04e19b4edecfe59624ab33cfc275276009d3caca299ee013d99
 
-Version: 2.000
+Version: 4.400
 Release: %autorelease
 URL:     https://software.sil.org/lateef/
 

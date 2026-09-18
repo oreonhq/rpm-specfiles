@@ -8,7 +8,7 @@
 %global crate debugger_test
 
 Name:           rust-debugger_test
-Version:        0.1.5
+Version:        0.2.0
 Release:        %autorelease
 Summary:        Provides a proc macro for writing tests that launch a debugger and
 

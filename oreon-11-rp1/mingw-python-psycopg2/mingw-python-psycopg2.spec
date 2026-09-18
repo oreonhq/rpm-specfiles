@@ -6,8 +6,8 @@
 
 Name:          mingw-python-%{pypi_name}
 Summary:       MinGW Windows Python %{pypi_name} library
-Version:       2.9.11
-Release:       2%{?dist}
+Version:       2.9.13
+Release:       1%{?dist}
 BuildArch:     noarch
 
 # The exceptions allow linking to OpenSSL and PostgreSQL's libpq

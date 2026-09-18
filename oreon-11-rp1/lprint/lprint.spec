@@ -4,8 +4,8 @@
 %global _hardened_build 1
 
 Name: lprint
-Version: 1.3.1
-Release: 12%{?dist}
+Version: 1.4.0
+Release: 1%{?dist}
 Summary: A Label Printer Application
 
 License: Apache-2.0

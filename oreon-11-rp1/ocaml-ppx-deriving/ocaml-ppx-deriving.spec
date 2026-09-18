@@ -6,7 +6,7 @@ ExcludeArch: %{ix86}
 %global giturl  https://github.com/ocaml-ppx/ppx_deriving
 
 Name:           ocaml-ppx-deriving
-Version:        6.1.1
+Version:        6.2.0
 Release:        %autorelease
 Summary:        Type-driven code generation for OCaml
 

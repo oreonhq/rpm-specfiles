@@ -7,7 +7,7 @@
 %global crate gif
 
 Name:           rust-gif
-Version:        0.12.0
+Version:        0.14.2
 Release:        %autorelease
 Summary:        GIF de- and encoder
 

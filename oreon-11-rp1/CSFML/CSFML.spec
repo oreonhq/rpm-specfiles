@@ -4,8 +4,8 @@ Name:           CSFML
 Summary:        C Interface for the Simple and Fast Multimedia Library
 License:        Zlib
 
-Version:        2.6.1
-Release:        7%{?dist}
+Version:        3.0.0
+Release:        1%{?dist}
 
 URL:            https://www.sfml-dev.org/download/csfml/
 Source0:        https://github.com/SFML/CSFML/archive/%{version}/CSFML-%{version}.tar.gz

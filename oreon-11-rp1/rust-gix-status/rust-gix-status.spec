@@ -7,7 +7,7 @@
 %global crate gix-status
 
 Name:           rust-gix-status
-Version:        0.24.0
+Version:        0.34.1
 Release:        %autorelease
 Summary:        A crate of the gitoxide project dealing with 'git status'-like functi...
 

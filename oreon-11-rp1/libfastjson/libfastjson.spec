@@ -1,8 +1,8 @@
 %global source0_hash ef30d1e57a18ec770f90056aaac77300270c6203bbe476f4181cc83a2d5dc80c
 
 Name:		libfastjson
-Version:	1.2304.0
-Release:	8%{?dist}
+Version:	1.2609.0
+Release:	1%{?dist}
 Summary:	A JSON implementation in C
 License:	MIT
 URL:		https://github.com/rsyslog/libfastjson

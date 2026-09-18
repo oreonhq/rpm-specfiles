@@ -7,7 +7,7 @@
 %global crate gst-plugin-version-helper
 
 Name:           rust-gst-plugin-version-helper
-Version:        0.8.3
+Version:        0.8.4
 Release:        %autorelease
 Summary:        Build.rs helper function for GStreamer plugin metadata
 

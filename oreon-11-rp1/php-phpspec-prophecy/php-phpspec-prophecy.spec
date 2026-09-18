@@ -17,7 +17,7 @@
 %bcond_with          phpspec
 
 Name:           php-phpspec-prophecy
-Version:        1.26.0
+Version:        1.26.1
 Release:        1%{?dist}
 Summary:        Highly opinionated mocking framework for PHP
 

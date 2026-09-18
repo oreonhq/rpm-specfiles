@@ -5,8 +5,8 @@
 %global __requires_exclude (%{_privatelibs})
 
 Name:             pgmodeler
-Version:          1.2.2
-Release:          2%{?dist}
+Version:          1.2.3
+Release:          1%{?dist}
 Summary:          PostgreSQL Database Modeler
 
 License:          GPL-3.0-only

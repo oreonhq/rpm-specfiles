@@ -7,7 +7,7 @@
 %global crate elf
 
 Name:           rust-elf
-Version:        0.7.4
+Version:        0.8.0
 Release:        %autorelease
 Summary:        Pure-rust library for parsing ELF files
 

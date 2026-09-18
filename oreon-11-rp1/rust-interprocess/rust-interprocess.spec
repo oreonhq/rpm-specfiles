@@ -7,7 +7,7 @@
 %global crate interprocess
 
 Name:           rust-interprocess
-Version:        2.2.3
+Version:        2.4.4
 Release:        %autorelease
 Summary:        Interprocess communication toolkit
 

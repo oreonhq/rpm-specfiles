@@ -8,7 +8,7 @@
 %global crate enum-map-derive
 
 Name:           rust-enum-map-derive
-Version:        0.17.0
+Version:        1.0.1
 Release:        %autorelease
 Summary:        Macros 1.1 implementation of #[derive(Enum)]
 

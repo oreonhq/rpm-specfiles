@@ -1,8 +1,8 @@
 %global source0_hash 6e414deadb06de391909610178711fee5ab08990bafe7dd5b1b8bf4c4fc6f6b7
 
 Name:           pyodbc
-Version:        5.1.0
-Release:        7%{?dist}
+Version:        5.3.0
+Release:        1%{?dist}
 Summary:        Python DB API 2.0 Module for ODBC
 License:        MIT-0
 URL:            https://github.com/mkleehammer/pyodbc

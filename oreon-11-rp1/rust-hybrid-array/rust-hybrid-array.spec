@@ -7,7 +7,7 @@
 %global crate hybrid-array
 
 Name:           rust-hybrid-array
-Version:        0.4.13
+Version:        0.4.15
 Release:        %autorelease
 Summary:        Hybrid typenum-based and const generic array types designed to
 

@@ -2,12 +2,12 @@
 
 # Review: https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=173674
 
-%global minor_version 0.8
+%global minor_version 0.9
 
 %global xfceversion 4.16
 
 Name:           xfce4-xkb-plugin
-Version:        0.8.5
+Version:        0.9.0
 Release:        %autorelease
 Summary:        XKB layout switcher for the Xfce panel
 

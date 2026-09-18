@@ -15,7 +15,7 @@
 
 %global github_owner     guzzle
 %global github_name      promises
-%global github_version   1.5.2
+%global github_version   3.0.2
 %global github_commit    b94b2807d85443f9719887892882d0329d1e2598
 
 %global composer_vendor  guzzlehttp
@@ -28,7 +28,7 @@
 
 Name:          php-%{composer_vendor}-%{composer_project}
 Version:       %{github_version}
-Release:       9%{?github_release}%{?dist}
+Release:       1%{?github_release}%{?dist}
 Summary:       Guzzle promises library
 
 Group:         Development/Libraries

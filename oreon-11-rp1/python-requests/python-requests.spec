@@ -1,78 +1,47 @@
-%global source0_hash d227a9626d16504b4074ffedd53161bca8e1831179044fc6d6de7e61418fc766
-
-# When bootstrapping Python, we cannot test this yet
-# RHEL does not include the test dependencies
-%bcond tests    %{undefined rhel}
-# The extras are disabled on RHEL to avoid pysocks, chardet, and deprecated requests[security]
-%bcond extras    %[%{undefined rhel} || %{defined eln}]
-%bcond extradeps %{undefined rhel}
+%global source0_hash none
 
 Name:           python-requests
-Version:        2.33.1
+Version:        2.34.2
 Release:        %autorelease
-Summary:        HTTP library, written in Python, for human beings
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python HTTP for Humans.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://pypi.io/project/requests
-Source:        https://github.com/requests/requests/archive/v%{version}/requests-v%{version}.tar.gz#/python-requests-2.33.1.tar.gz
-
-# Explicitly use the system certificates in ca-certificates.
-# https://bugzilla.redhat.com/show_bug.cgi?id=904614
-Patch:          system-certs.patch
-
-# Add support for IPv6 CIDR in no_proxy setting
-# This functionality is needed in Openshift and it has been
-# proposed for upstream in 2021 but the PR unfortunately stalled.
-# Upstream PR: https://github.com/psf/requests/pull/5953
-# This change is backported also into RHEL 9.4 (via CS)
-Patch:          support_IPv6_CIDR_in_no_proxy.patch
+URL:            https://github.com/psf/requests
+Source:         %{pypi_source requests}
 
 BuildArch:      noarch
-BuildRequires:  python%{python3_pkgversion}-devel
-%if %{with tests}
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-httpbin)
-BuildRequires:  python3dist(pytest-mock)
-BuildRequires:  python3dist(trustme)
-%endif
-
-%description
-Most existing Python modules for sending HTTP requests are extremely verbose and
-cumbersome. Python’s built-in urllib2 module provides most of the HTTP
-capabilities you should need, but the API is thoroughly broken. This library is
-designed to make HTTP requests easy for developers.
+BuildRequires:  python3-devel
 
 
-%package -n python%{python3_pkgversion}-requests
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'requests' generated automatically by pyp2spec.}
+
+Patch:          system-certs.patch
+Patch:          support_IPv6_CIDR_in_no_proxy.patch
+
+%description %_description
+
+%package -n     python3-requests
 Summary:        %{summary}
 
-%description -n python%{python3_pkgversion}-requests
-Most existing Python modules for sending HTTP requests are extremely verbose and
-cumbersome. Python’s built-in urllib2 module provides most of the HTTP
-capabilities you should need, but the API is thoroughly broken. This library is
-designed to make HTTP requests easy for developers.
+%description -n python3-requests %_description
 
-
-%if %{with extras}
-%pyproject_extras_subpkg -n python%{python3_pkgversion}-requests security socks use_chardet_on_py3
-%endif
-
-
-%generate_buildrequires
-%pyproject_buildrequires %{?with_extradeps:-x security,socks,use_chardet_on_py3}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-requests security,socks,use-chardet-on-py3
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n requests-%{version}
 
-# env shebang in nonexecutable file
-sed -i '/#!\/usr\/.*python/d' src/requests/certs.py
 
-# Some doctests use the internet and fail to pass in Koji. Since doctests don't have names, I don't
-# know a way to skip them. We also don't want to patch them out, because patching them out will
-# change the docs. Thus, we set pytest not to run doctests at all.
-sed -i 's/ --doctest-modules//' pyproject.toml
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x security,socks,use-chardet-on-py3
 
 
 %build
@@ -81,21 +50,16 @@ sed -i 's/ --doctest-modules//' pyproject.toml
 
 %install
 %pyproject_install
-%pyproject_save_files -l requests
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-%pyproject_check_import
-%if %{with tests}
-# test_unicode_header_name - reported: https://github.com/psf/requests/issues/6734
-# test_use_proxy_from_environment needs pysocks
-%pytest -v tests -k "not test_unicode_header_name %{!?with_extradeps:and not test_use_proxy_from_environment}"
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files -n python%{python3_pkgversion}-requests -f %{pyproject_files}
-%doc README.md HISTORY.md
-
+%files -n python3-requests -f %{pyproject_files}
 
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.33.1-1

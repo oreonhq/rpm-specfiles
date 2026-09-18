@@ -7,7 +7,7 @@
 %global llvm_ver 21
 
 Name: pocl
-Version: 7.1
+Version: 7.2
 Release: %autorelease
 
 # The entire code is under MIT

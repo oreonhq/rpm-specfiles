@@ -7,7 +7,7 @@
 %global crate tame-index
 
 Name:           rust-tame-index
-Version:        0.25.0
+Version:        0.26.3
 Release:        %autorelease
 Summary:        Access to local and remote cargo registry indices
 

@@ -1,8 +1,8 @@
 %global source0_hash 1eee15b29ddcbfd2d15e0a0d26f59e28bac281c870b77418fa369dceed796806
 
 Name:		psiconv
-Version:	0.9.8
-Release:	49%{?dist}
+Version:	0.9.9
+Release:	1%{?dist}
 Summary:	A conversion utility for Psion files
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:	GPL-2.0-or-later

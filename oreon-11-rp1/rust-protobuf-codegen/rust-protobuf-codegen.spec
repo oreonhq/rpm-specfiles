@@ -10,7 +10,7 @@
 %global crate protobuf-codegen
 
 Name:           rust-protobuf-codegen
-Version:        3.7.2
+Version:        4.36.2-release
 Release:        %autorelease
 Summary:        Code generator for rust-protobuf
 

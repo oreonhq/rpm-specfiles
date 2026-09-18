@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        1.7.7
+Version:        1.9.1
 Release:        %autorelease
 Summary:        X509 reader and writer
 

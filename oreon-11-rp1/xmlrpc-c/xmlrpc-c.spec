@@ -4,8 +4,8 @@
 %global _smp_mflags -j1
 
 Name:           xmlrpc-c
-Version:        1.60.04
-Release:        5%{?dist}
+Version:        1.60.05
+Release:        1%{?dist}
 Summary:        Lightweight RPC library based on XML and HTTP
 # See doc/COPYING for details.
 # The Python 1.5.2 license used by a few files is just BSD.

@@ -7,8 +7,8 @@
 %define with_worker 1
 
 Name:           kobo
-Version:        0.41.0
-Release:        2%{?dist}
+Version:        0.42.0
+Release:        1%{?dist}
 License:        LGPL-2.1-only
 Summary:        Python modules for tools development
 URL:            https://github.com/release-engineering/kobo

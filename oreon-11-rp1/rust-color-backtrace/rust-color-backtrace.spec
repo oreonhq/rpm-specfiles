@@ -7,7 +7,7 @@
 %global crate color-backtrace
 
 Name:           rust-color-backtrace
-Version:        0.7.2
+Version:        0.7.4
 Release:        %autorelease
 Summary:        Colorful panic backtraces
 

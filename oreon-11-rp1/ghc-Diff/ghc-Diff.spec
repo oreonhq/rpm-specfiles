@@ -10,7 +10,7 @@
 # testsuite missing deps: test-framework test-framework-quickcheck2
 
 Name:           ghc-%{pkg_name}
-Version:        1.0.2
+Version:        2.0.1
 Release:        %autorelease
 Summary:        Diff algorithm in pure Haskell
 

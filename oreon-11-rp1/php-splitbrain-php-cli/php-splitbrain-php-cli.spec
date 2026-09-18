@@ -4,8 +4,8 @@
 %global project  php-cli
 Name: php-%{author}-%{project}
 
-Version: 1.3.1
-Release: 4%{?dist}
+Version: 1.3.4
+Release: 1%{?dist}
 
 Summary: PHP library to build command line tools 
 License: MIT

@@ -1,62 +1,56 @@
-%global source0_hash caf47ac4c6346eef47fc11e799adbeaf645921c712cc099cf2530560e7ecde44
+%global source0_hash none
 
-%global srcname cloud-sptheme
-%global modname cloud_sptheme
-%global sum A nice sphinx theme named 'Cloud', and some related extensions
+Name:           python-cloud-sptheme
+Version:        1.10.1^post20200504175005
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        a nice sphinx theme named _Cloud_, and some related extensions
 
-Name:             python-%{srcname}
-Version:          1.10.1
-Release:          21%{?dist}
-Summary:          %{sum}
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://cloud-sptheme.readthedocs.io
+Source:         %{pypi_source cloud_sptheme 1.10.1.post20200504175005}
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:          LicenseRef-Callaway-BSD
-URL:              http://pypi.python.org/pypi/%{modname}
-Source0:          %pypi_source %{modname} %{version} post20200504175005.tar.gz
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildArch:        noarch
 
-BuildRequires:    python3-sphinx
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cloud-sptheme' generated automatically by pyp2spec.}
 
-BuildRequires:    python3-devel
-BuildRequires:    python3-setuptools
+%description %_description
 
-%description
-This is a small package containing a Sphinx theme named "Cloud",
-along with some related Sphinx extensions. To see an example
-of the theme in action, check out it's documentation
-at http://packages.python.org/cloud_sptheme.
+%package -n     python3-cloud-sptheme
+Summary:        %{summary}
 
-%package -n python3-%{srcname}
-Summary:    %{sum}
-Requires:   python3-sphinx
-%{?python_provide:%python_provide python3-%{srcname}}
+%description -n python3-cloud-sptheme %_description
 
-%description -n python3-%{srcname}
-This is a small Python 3 package containing a Sphinx theme named "Cloud",
-along with some related Sphinx extensions. To see an example
-of the theme in action, check out it's documentation
-at http://packages.python.org/cloud_sptheme.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n cloud_sptheme-1.10.1.post20200504175005
 
-%setup -q -n %{modname}-%{version}.post20200504175005
 
-# Remove bundled egg-info in case it exists
-rm -rf %{modname}.egg-info
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{srcname}
-%doc README CHANGES docs/
-%license LICENSE
-%{python3_sitelib}/%{modname}/
-%{python3_sitelib}/%{modname}-%{version}*
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-cloud-sptheme -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -3,8 +3,8 @@
 %global srcname latex-rubber
 
 Name: rubber
-Version: 1.6.1
-Release: 14%{?dist}
+Version: 1.6.7
+Release: 1%{?dist}
 Summary: An automated system for building LaTeX documents
 
 License: GPL-1.0-or-later

@@ -1,7 +1,7 @@
 %global source0_hash 5db69e57680a036156e9e8f2a5ad7dcbb47f716419055f871671b1d39cc08c55
 
 Name:           goodvibes
-Version:        0.8.3
+Version:        0.8.4
 Release:        %autorelease
 Summary:        Lightweight Radio Player
 

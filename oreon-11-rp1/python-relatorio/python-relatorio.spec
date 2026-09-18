@@ -1,64 +1,62 @@
-%global source0_hash a0c72302d50d5dfa433ddab191672eec1dde1c6ed26330a378b720e5a3012e23
+%global source0_hash none
 
-%global pypi_name relatorio
-%global sum A templating library able to output odt and pdf files
+Name:           python-relatorio
+Version:        1.0.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A templating library able to output odt files
 
-Name:           python-%{pypi_name}
-Version:        0.10.1
-Release:        16%{?dist}
-Summary:        %{sum}
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
-License:        GPL-2.0-or-later
-URL:            https://pypi.org/project/relatorio/
-Source0:	%{pypi_source}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-3.0-or-later
+URL:            https://www.tryton.org/
+Source:         %{pypi_source relatorio}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  python3-magic
-BuildRequires:	pyproject-rpm-macros
-%py_provides python3-%{pypi_name}
 
-%description
-A templating library which provides a way to easily output all kind of
-different files (odt, ods, png, svg, ...). Adding support for more filetype
-is easy: you just have to create a plugin for this.
 
-relatorio also provides a report repository allowing you to link python
-objects and report together, find reports by mimetypes/name/python objects.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'relatorio' generated automatically by pyp2spec.}
 
-%package -n python3-%{pypi_name}
-Summary:        %{sum}
+%description %_description
 
-%description -n python3-%{pypi_name}
-A templating library which provides a way to easily output all kind of
-different files (odt, ods, png, svg, ...). Adding support for more filetype
-is easy: you just have to create a plugin for this.
+%package -n     python3-relatorio
+Summary:        %{summary}
 
-relatorio also provides a report repository allowing you to link python
-objects and report together, find reports by mimetypes/name/python objects.
+%description -n python3-relatorio %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-relatorio fodt
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n relatorio-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x fodt
+
 
 %build
 %pyproject_wheel
 
-%install	
+
+%install
 %pyproject_install
-%pyproject_save_files relatorio
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README
+
+%files -n python3-relatorio -f %{pyproject_files}
 %{_bindir}/relatorio-render
 
 %changelog

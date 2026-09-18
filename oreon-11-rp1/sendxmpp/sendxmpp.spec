@@ -2,8 +2,8 @@
 
 Summary:        Perl script to send XMPP messages
 Name:           sendxmpp
-Version:        1.24
-Release:        24%{?dist}
+Version:        1.24a
+Release:        1%{?dist}
 License:        GPL-2.0-only
 URL:            https://sendxmpp.hostname.sk/
 Source:         https://github.com/lhost/%{name}/archive/%{version}/%{name}-%{version}.tar.gz

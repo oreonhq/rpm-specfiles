@@ -7,7 +7,7 @@
 %global crate icu_calendar
 
 Name:           rust-icu_calendar
-Version:        2.1.1
+Version:        2.3.0
 Release:        %autorelease
 Summary:        Date APIs for Gregorian and non-Gregorian calendars
 

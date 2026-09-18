@@ -1,7 +1,7 @@
 %global source0_hash f3e19722156b5ed212a592814d92750cdb935ccf15d1af3ab51d3aa096042ae4
 
 Name:           python-snakemake-logger-plugin-rich
-Version:        0.4.1
+Version:        0.5.0
 Release:        %autorelease
 Summary:        Log plugin for snakemake using Rich
 

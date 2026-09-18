@@ -8,7 +8,7 @@
 %bcond_without tests
 
 Name:           debhelper
-Version:        13.30
+Version:        14.5.git
 Release:        %autorelease
 Summary:        Helper programs for debian/rules
 License:        GPL-2.0-or-later

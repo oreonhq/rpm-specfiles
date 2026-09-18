@@ -1,7 +1,7 @@
 %global source0_hash 45bed70abd74ffeeec08b75089ba44900291e9c86309bcce892ccc7ece8f1e61
 
 Name:           scrot
-Version:        1.12.1
+Version:        2.0.0
 Release:        %autorelease
 Summary:        Command line screen capture utility
 

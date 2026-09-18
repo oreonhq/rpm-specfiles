@@ -15,9 +15,9 @@
 # testsuite missing deps: tasty-smallcheck tasty-inspection-testing
 
 Name:           ghc-%{pkg_name}
-Version:        1.2.1.3
+Version:        1.3.1
 # can only be reset when subpkg bumped
-Release:        7%{?dist}
+Release:        1%{?dist}
 Summary:        Pseudo-random number generation
 
 License:        BSD-3-Clause

@@ -1,65 +1,59 @@
-%global source0_hash 0bd564ee166980d419a8aaf4ac00289bc152afcf2eadca5efe8c8e36711853fd
+%global source0_hash none
 
-%global srcname selenium
+Name:           python-selenium
+Version:        4.49.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Official Python bindings for Selenium WebDriver
 
-Name:          python-%{srcname}
-Version:       4.20.0
-Release:       %autorelease
-Summary:       Python bindings for Selenium
-License:       Apache-2.0
-URL:           http://docs.seleniumhq.org/
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0
+URL:            https://www.selenium.dev
+Source:         %{pypi_source selenium}
 
-Source0:       %pypi_source
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildArch:     noarch
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'selenium' generated automatically by pyp2spec.}
 
 Patch1:        selenium-use-without-bundled-libs.patch
 
-%description
-The selenium package is used automate web browser interaction from Python.
+%description %_description
 
-Several browsers/drivers are supported (Firefox, Chrome, Internet Explorer,
-PhantomJS), as well as the Remote protocol.
+%package -n     python3-selenium
+Summary:        %{summary}
 
-%package -n python3-%{srcname}
-Summary:       Python bindings for Selenium
+%description -n python3-selenium %_description
 
-BuildRequires: pyproject-rpm-macros
-BuildRequires: python3-devel
-Requires:      python3-rdflib
-BuildArch:     noarch
-
-%description -n python3-%{srcname}
-The selenium package is used automate web browser interaction from Python.
-
-Several browsers/drivers are supported (Firefox, Chrome, Internet Explorer,
-PhantomJS), as well as the Remote protocol.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n selenium-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-find . -type f -name "*.py" -exec sed -i '1{/^#!/d;}' {} \;
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
-sed -ie '/x_ignore_nofocus.so$/d' %pyproject_files
-rm -f %{buildroot}%{python3_sitelib}/selenium/webdriver/firefox/amd64/x_ignore_nofocus.so
-rm -f %{buildroot}%{python3_sitelib}/selenium/webdriver/firefox/x86/x_ignore_nofocus.so
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %pyproject_files
-%license LICENSE
-%doc CHANGES README.rst
+
+%files -n python3-selenium -f %{pyproject_files}
 
 %changelog
 %autochangelog

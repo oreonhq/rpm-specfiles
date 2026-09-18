@@ -1,8 +1,8 @@
 %global source0_hash 4fbe2d1e17ad4451bb3a9d9101ac89f7b465205470f1c7ad5e2c1386ac2c87d2
 
 Name: xsd
-Version: 4.1.0
-Release: 0.19.a11%{?dist}
+Version: 4.2.0
+Release: 1.19.a11%{?dist}
 Summary: W3C XML schema to C++ data binding compiler
 # Exceptions permit otherwise GPLv2 incompatible combination with ASL 2.0
 # Automatically converted from old format: GPLv2 with exceptions and ASL 2.0 - review is highly recommended.

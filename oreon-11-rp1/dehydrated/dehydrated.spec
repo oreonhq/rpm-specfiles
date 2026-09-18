@@ -2,8 +2,8 @@
 
 Summary: Client for signing certificates with an ACME server
 Name: dehydrated
-Version: 0.7.1
-Release: 10%{?dist}
+Version: 0.7.2
+Release: 1%{?dist}
 License: MIT
 URL: https://github.com/dehydrated-io/dehydrated
 Source0: https://github.com/dehydrated-io/dehydrated/releases/download/v%{version}/dehydrated-%{version}.tar.gz

@@ -1,8 +1,8 @@
 %global source0_hash 3ae9d084d7a65af52ef8657c2adbeda0a0747825f9b3b58b8352b7403d5b95b5
 
 Name: tecnoballz
-Version: 0.92
-Release: 48%{?dist}
+Version: 0.93.1
+Release: 1%{?dist}
 Summary: A Brick Busting game
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

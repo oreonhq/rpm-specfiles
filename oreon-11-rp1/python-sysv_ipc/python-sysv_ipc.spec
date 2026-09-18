@@ -1,59 +1,57 @@
-%global source0_hash 0f063cbd36ec232032e425769ebc871f195a7d183b9af32f9901589ea7129ac3
+%global source0_hash none
 
-%global srcname sysv_ipc
-%global sum System V IPC for Python - Semaphores, Shared Memory and Message Queues
-%global desc The sysv_ipc module which gives Python access to System V inter-process\
-semaphores, shared memory and message queues on systems that support them.
+Name:           python-sysv-ipc
+Version:        1.2.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        SysV IPC primitives _semaphores, shared memory and message queues_ for Python
 
-Name:           python-%{srcname}
-Version:        1.1.0
-Release:        18%{?dist}
-Summary:        %{sum}
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
-License:        GPL-3.0-or-later
-URL:            http://semanchuk.com/philip/%{srcname}/
-Source0:        https://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://github.com/osvenskan/sysv_ipc/
+Source:         %{pypi_source sysv_ipc}
 
-BuildRequires:  gcc
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
+BuildRequires:  gcc
 
-%description
-%{desc}
 
-%package examples
-Summary:    Examples for Python sysv_ipc module
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sysv-ipc' generated automatically by pyp2spec.}
 
-%description examples
-This module comes with four demonstration apps. 
+%description %_description
 
-%package -n python3-%{srcname}
-Summary:        %{sum}
-%{?python_provide:%python_provide python3-%{srcname}}
+%package -n     python3-sysv-ipc
+Summary:        %{summary}
 
-%description -n python3-%{srcname}
-%{desc}
+%description -n python3-sysv-ipc %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sysv_ipc-%{version}
 
-%setup -q -n sysv_ipc-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
-chmod -x demos/*/*.{py,sh}
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{srcname}
-%license LICENSE 
-%doc LICENSE README ReadMe.html VERSION
-%{python3_sitearch}/*
-%{python3_sitearch}/%{srcname}-%{version}-*.egg-info
 
-%files examples
-%doc demos
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-sysv-ipc -f %{pyproject_files}
 
 %changelog
 %autochangelog

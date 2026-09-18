@@ -7,7 +7,7 @@
 %global crate sequoia-keystore-openpgp-card
 
 Name:           rust-sequoia-keystore-openpgp-card
-Version:        0.2.1
+Version:        0.3.0-pqc.1
 Release:        %autorelease
 Summary:        An OpenPGP card backend for Sequoia's private key store.
 

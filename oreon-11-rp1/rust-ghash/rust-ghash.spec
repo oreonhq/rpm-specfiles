@@ -7,7 +7,7 @@
 %global crate ghash
 
 Name:           rust-ghash
-Version:        0.5.1
+Version:        0.6.0
 Release:        %autorelease
 Summary:        Universal hash over GF(2^128) useful for constructing a Message Authe...
 

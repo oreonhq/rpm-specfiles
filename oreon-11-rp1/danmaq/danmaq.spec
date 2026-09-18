@@ -4,8 +4,8 @@
 %global reponame danmaQ
 
 Name:		danmaq
-Version:	0.2.3.2
-Release:	18%{?dist}
+Version:	0.12
+Release:	1%{?dist}
 Summary:	A small client side Qt program to play danmaku on any screen
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

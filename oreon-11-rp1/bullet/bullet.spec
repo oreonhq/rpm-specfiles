@@ -3,8 +3,8 @@
 %global source0_hash 05826c104b842bcdd1339b86894cb44c84ac2525ac296689d34b38a14bbba0dd
 
 Name: bullet
-Version: 3.08
-Release: 19%{?dist}
+Version: 3.25
+Release: 1%{?dist}
 Summary: 3D Collision Detection and Rigid Body Dynamics Library
 # Automatically converted from old format: zlib and MIT and BSD and Boost - review is highly recommended.
 License: Zlib AND LicenseRef-Callaway-MIT AND LicenseRef-Callaway-BSD AND BSL-1.0

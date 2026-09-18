@@ -1,29 +1,24 @@
-%global source0_hash 7c4d6ed9e1325c6a6cb209b9668b6e3f4e8c3a44d55468554c15235b478c1a64
+%global source0_hash none
 
 Name:           python-dbus-fast
-Version:        2.45.1
+Version:        5.0.22
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        A faster version of dbus-next
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/bluetooth-devices/dbus-fast
-Source:         %{URL}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source:         %{pypi_source dbus_fast}
 
 BuildRequires:  python3-devel
 BuildRequires:  gcc
 
-# Cherry-picked from pyproject.toml section [tool.poetry.group.dev.dependencies]
-BuildRequires: python3-pytest
-BuildRequires: python3-pytest-cov
-BuildRequires: python3-pytest-asyncio
-BuildRequires: python3-cairo
-BuildRequires: python3-gobject
-# Used to run the tests
-BuildRequires: /usr/bin/dbus-run-session
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-dbus-fast is a Python library for DBus that aims to be a performant fully
-featured high level library primarily geared towards integration of
-applications into Linux desktop and mobile environments.}
+This is package 'dbus-fast' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -32,34 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-dbus-fast %_description
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n dbus_fast-%{version}
 
-%autosetup -n dbus-fast-%{version}
-
-# Relax poetry dependencies
-sed -i 's/Cython>=3,<3.1.0/Cython>=3/' pyproject.toml
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -L dbus_fast
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%global __pytest dbus-run-session -- %{__pytest}
-%pytest --no-cov --ignore tests/benchmarks
+%_pyproject_check_import_allow_no_modules -t
 
-%pyproject_check_import
 
 %files -n python3-dbus-fast -f %{pyproject_files}
-%license LICENSE
-%doc README.md
-%doc CHANGELOG.md
 
 %changelog
 %autochangelog

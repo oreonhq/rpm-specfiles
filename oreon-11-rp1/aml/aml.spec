@@ -3,7 +3,7 @@
 # -*-Mode: rpm-spec -*-
 
 Name:     aml
-Version:  0.3.0
+Version:  1.0.0
 Release:  1%{?dist}
 Summary:  Another Main Loop
 License:  ISC AND LicenseRef-Callaway-BSD

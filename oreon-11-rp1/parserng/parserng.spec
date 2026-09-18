@@ -3,15 +3,15 @@
 Summary: %{nice_name} is a powerful open-source tool that parses and evaluates algebraic and mathematical expressions
 %global nice_name ParserNG
 Name: parserng
-Version: 0.1.9
-Release: 11%{?dist}
+Version: 3.0.7
+Release: 1%{?dist}
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License: Apache-2.0
 URL: https://github.com/gbenroscience/ParserNG
 # tarred cloned repo without hidden files and without idea iml
 # usptream do not tag, but uses maven versionining
 # so this is f619fad1fefa21116bab4a0abba2dd0ebe719e45
-# which set pom to 0.1.9 and moved it to maven repos
+# which set pom to 3.0.7 and moved it to maven repos
 # git clone https://github.com/gbenroscience/ParserNG &&  cd ParserNG  && git checkout f619fad1fefa21116bab4a0abba2dd0ebe719e45 && tar -cJf parserng-0.1.9.tar.xz *
 Source0: %{name}-%{version}.tar.xz
 Source1: parserng

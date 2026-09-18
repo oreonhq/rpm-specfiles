@@ -1,75 +1,57 @@
-%global source0_hash e8add7980a7574b5114185ff3fdea9b3ad6aa766f6c8253f8e77f59641fc2612
+%global source0_hash none
 
-%global         commit          8c47cc9e665b3b1744cccfaa7a650de5f3c575dd
-%global         shortcommit     %(c=%{commit}; echo ${c:0:7})
-%global         commitdate      20200323
-%global         srcname         jstyleson
-%global         forgeurl        https://github.com/linjackson78/jstyleson
-Version:        0.0.2^%{commitdate}.%{shortcommit}
-%global         tag             %{version}
-%forgemeta
-
-Name:           python-%{srcname}
+Name:           python-jstyleson
+Version:        0.0.2
 Release:        %autorelease
-Summary:        A python library to parse JSON with js-style comments
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Library to parse JSON with js-style comments.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            %{forgeurl}
-Source:         %{forgeurl}/archive/%{commit}/%{srcname}-%{shortcommit}.tar.gz
+URL:            https://github.com/linjackson78/jstyleson
+Source:         %{pypi_source jstyleson}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
 
-BuildArch: noarch
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-jstyleson is a python library to parse JSON with js-style comments.
-Trailing comma is also supported.
-
-JSON by standard does not allow comments and trailing comma, and the
-python standard json module does not offer options to parse such informal
-JSON.
-
-jstyleson try to make it happy with your js-style commented JSON, by first
-removing all elements inside (comments and trailing comma), then hand it
-to the standard json module.
-
-jstyleson supports parsing JSON with:
-
-- single-line comment
-- multi-line comment
-- inline comment
-- trailing comma
-}
+This is package 'jstyleson' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-jstyleson
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-jstyleson %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n jstyleson-%{version}
 
-%autosetup -n %{srcname}-%{commit}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%check 
-%pytest tests
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
-%license LICENSE
- 
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-jstyleson -f %{pyproject_files}
+
 %changelog
 %autochangelog

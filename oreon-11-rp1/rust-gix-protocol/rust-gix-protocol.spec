@@ -7,7 +7,7 @@
 %global crate gix-protocol
 
 Name:           rust-gix-protocol
-Version:        0.55.0
+Version:        0.65.1
 Release:        %autorelease
 Summary:        A crate of the gitoxide project for implementing git protocols
 

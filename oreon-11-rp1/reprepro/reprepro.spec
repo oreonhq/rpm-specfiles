@@ -1,8 +1,8 @@
 %global source0_hash 5b028f79183659d441d1b340deb88341a7f29335ae7370eff4b3c094fbe90bc4
 
 Name:       reprepro
-Version:    5.4.4
-Release:    6%{?dist}
+Version:    5.5.1
+Release:    1%{?dist}
 Summary:    Tool to handle local repositories of Debian packages
 # filecntl.c, md5.c, md5.h are Public Domain
 # dpkgversions.c is GPLv2+

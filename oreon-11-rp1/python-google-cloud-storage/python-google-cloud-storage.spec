@@ -1,72 +1,62 @@
-%global source0_hash 3c7803a6f491814b31bfd0db318a2d7c2aa3fe557ae40512205c0e2abdc8f65e
+%global source0_hash none
 
-%bcond_without  tests
-
-%global         srcname     google-cloud-storage
-
-Name:           python-%{srcname}
-Version:        2.14.0
+Name:           python-google-cloud-storage
+Version:        3.14.1
 Release:        %autorelease
-Summary:        Python Client for Google Cloud Storage
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Google Cloud Storage API client library
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://github.com/googleapis/python-storage
-Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz
+URL:            https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-storage
+Source:         %{pypi_source google_cloud_storage}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%if %{with tests}
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-asyncio)
-%endif
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Google Cloud Storage allows you to store data on Google infrastructure with
-very high reliability, performance and availability, and can be used to
-distribute large data objects to users via direct download.}
+This is package 'google-cloud-storage' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-google-cloud-storage
 Summary:        %{summary}
-%description -n python3-%{srcname} %{_description}
+
+%description -n python3-google-cloud-storage %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-google-cloud-storage grpc,protobuf,testing,tracing
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n google_cloud_storage-%{version}
 
-%autosetup -n python-storage-%{version} -p1
-
-# Replace mock imports with unittest.mock.
-grep -rl "^[[:space:]]*import mock" tests | \
-    xargs sed -i -E 's/^([[:space:]]*)import mock/\1from unittest import mock/'
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x grpc,protobuf,testing,tracing
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files google
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-# NOTE(mhayden): Setting PYTHONUSERBASE as a hack for PEP 420 namespaces.
-# Thanks to churchyard for the fix.
-PYTHONUSERBASE=%{buildroot}%{_prefix} \
-    %pytest tests/unit \
-        -k "not test_create_bucket_w_custom_endpoint \
-            and not test_ctor_w_custom_endpoint_use_auth \
-            and not test_list_buckets_w_custom_endpoint \
-            and not test_seek_fails \
-            and not test_downloads_w_client_custom_headers"
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst CHANGELOG.md
+
+%files -n python3-google-cloud-storage -f %{pyproject_files}
 
 %changelog
 %autochangelog

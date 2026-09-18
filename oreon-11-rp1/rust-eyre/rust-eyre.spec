@@ -7,7 +7,7 @@
 %global crate eyre
 
 Name:           rust-eyre
-Version:        0.6.12
+Version:        0.6.14
 Release:        %autorelease
 Summary:        Flexible concrete Error Reporting type built on std::error::Error wit...
 

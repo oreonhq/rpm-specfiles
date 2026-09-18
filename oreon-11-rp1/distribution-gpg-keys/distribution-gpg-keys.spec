@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:		distribution-gpg-keys
-Version:	1.118
+Version:	1.122-1
 Release:	1%{?dist}
 Summary:	GPG keys of various Linux distributions
 

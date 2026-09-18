@@ -7,7 +7,7 @@
 %global forgeurl https://github.com/tari01/odio-sacd
 
 Name:           odio-sacd
-Version:        23.1.31
+Version:        24.8.1
 Release:        %autorelease
 Summary:        Command-line SACD decoder
 

@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           groonga
-Version:        15.0.9
+Version:        16.1.0
 Release:        %autorelease
 Summary:        An Embeddable Fulltext Search Engine
 License:        LGPL-2.1-only

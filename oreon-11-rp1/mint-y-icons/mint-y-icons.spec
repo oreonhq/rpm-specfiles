@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           mint-y-icons
-Version:        1.9.1
-Release:        2%{?dist}
+Version:        1.9.4
+Release:        1%{?dist}
 Summary:        The Mint-Y icon theme
 
 # Automatically converted from old format: CC-BY-SA - review is highly recommended.

@@ -1,7 +1,7 @@
 %global source0_hash e29d7946649d68db5d1625af496be954e73ad7d1bb8e6f10a1e8440c7c516aff
 
 Name:           miriway
-Version:        26.01
+Version:        26.08.1
 Release:        1%{?dist}
 Summary:        Simple Wayland compositor built on Mir
 

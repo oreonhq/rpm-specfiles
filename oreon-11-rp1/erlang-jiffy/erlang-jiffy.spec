@@ -3,7 +3,7 @@
 %global realname jiffy
 
 Name:           erlang-%{realname}
-Version:        1.1.3
+Version:        2.0.2
 Release:        %autorelease
 Summary:        Erlang JSON parser
 # Main sources are licensed under MIT, double-conversion is licensed under

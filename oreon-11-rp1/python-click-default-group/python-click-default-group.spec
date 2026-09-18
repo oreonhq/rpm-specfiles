@@ -1,56 +1,64 @@
-%global source0_hash 25c6141d87550549b4e27d0661fd543f1deae0dea6e9eeb9e14cbb134610e811
+%global source0_hash none
 
-%global srcname  click-default-group
-%global libname click_default_group
-
-%global common_description %{expand:
-Provides DefaultGroup, a subclass of click.Group that invokes a default
-subcommand instead of showing a help message when a subcommand is not passed.}
-
-Name:           python-%{srcname}
-Version:        1.2.2
+Name:           python-click-default-group
+Version:        1.2.4
 Release:        %autorelease
-Summary:        Extends click.Group to invoke a command without explicit subcommand name
+# Fill in the actual package summary to submit package to Fedora
+Summary:        click_default_group
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://github.com/sublee/click-default-group/
-Source0:        %url/archive/v%{version}/%{srcname}-%{version}.tar.gz
-# Fix detection of error message in test, related to click 8
-Patch0:         https://patch-diff.githubusercontent.com/raw/click-contrib/click-default-group/pull/18.patch#/0001-Fix-detection-of-error-message.patch
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        LicenseRef-Fedora-Public-Domain
+URL:            https://github.com/click-contrib/click-default-group
+Source:         %{pypi_source click_default_group}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
 
-%description %{common_description}
 
-%package -n     python3-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'click-default-group' generated automatically by pyp2spec.}
+
+Patch0:         https://patch-diff.githubusercontent.com/raw/click-contrib/click-default-group/pull/18.patch#/0001-Fix-detection-of-error-message.patch
+
+%description %_description
+
+%package -n     python3-click-default-group
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{common_description}
+%description -n python3-click-default-group %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-click-default-group test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n click_default_group-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{libname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc README.md
+
+%files -n python3-click-default-group -f %{pyproject_files}
 
 %changelog
 %autochangelog

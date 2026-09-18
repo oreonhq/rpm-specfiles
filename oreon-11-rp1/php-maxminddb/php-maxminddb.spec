@@ -33,8 +33,8 @@
 
 Summary:       MaxMind DB Reader extension
 Name:          php-maxminddb
-Version:       1.13.1
-Release:       2%{?dist}
+Version:       1.14.0
+Release:       1%{?dist}
 License:       Apache-2.0
 URL:           https://github.com/%{gh_owner}/%{gh_project}
 

@@ -4,8 +4,8 @@ Name: ttyplot
 Summary: Real-time plotting utility for the terminal
 License: Apache-2.0
 
-Version: 1.7.4
-Release: 2%{?dist}
+Version: 1.7.6
+Release: 1%{?dist}
 
 URL: https://github.com/tenox7/ttyplot/
 Source0: %{URL}archive/refs/tags/%{version}/%{name}-%{version}.tar.gz

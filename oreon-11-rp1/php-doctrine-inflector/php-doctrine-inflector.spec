@@ -13,7 +13,7 @@
 
 %global github_owner     doctrine
 %global github_name      inflector
-%global github_version   1.4.4
+%global github_version   2.1.0
 %global github_commit    4bd5c1cdfcd00e9e2d8c484f79150f67e5d355d9
 
 %global composer_vendor  doctrine
@@ -29,7 +29,7 @@
 
 Name:          php-%{composer_vendor}-%{composer_project}
 Version:       %{github_version}
-Release:       12%{?github_release}%{?dist}
+Release:       1%{?github_release}%{?dist}
 Summary:       Common string manipulations with regard to casing and singular/plural rules
 
 License:       MIT

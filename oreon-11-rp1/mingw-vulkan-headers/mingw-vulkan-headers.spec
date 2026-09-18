@@ -6,8 +6,8 @@
 %global srcname Vulkan-Headers
 
 Name:          mingw-%{pkgname}
-Version:       1.4.328.1
-Release:       2%{?dist}
+Version:       1.4.362
+Release:       1%{?dist}
 Summary:       MinGW Windows %{pkgname}
 
 License:       Apache-2.0

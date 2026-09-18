@@ -11,7 +11,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        1.0.9
+Version:        1.1.0
 Release:        %autorelease -b 25
 Summary:        A portable alternative to GNU Readline
 

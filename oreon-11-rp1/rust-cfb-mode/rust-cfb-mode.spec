@@ -7,7 +7,7 @@
 %global crate cfb-mode
 
 Name:           rust-cfb-mode
-Version:        0.8.2
+Version:        0.9.1
 Release:        %autorelease
 Summary:        Cipher Feedback (CFB) block cipher mode of operation
 

@@ -1,94 +1,64 @@
-%global source0_hash 5f8358a4269ff2a714081ceb8d2e7673c802256afd44e98c0735f73ca69890fb
+%global source0_hash none
 
-Name:       python-numpoly
-Version:    1.3.8
-Release:    %autorelease
-Summary:    Polynomials as a numpy datatype
+Name:           python-numpoly
+Version:        1.3.9
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Polynomials as a numpy datatype
 
-%global forgeurl https://github.com/jonathf/numpoly
-%global tag %{version}
-%forgemeta
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-2-Clause
+URL:            https://pypi.org/project/numpoly/
+Source:         %{pypi_source numpoly}
 
-# SPDX
-License:    BSD-2-Clause
-URL:        %forgeurl
-Source:     %forgesource
-# As of NumPy 2.3.0 `numpy.count_nonzero` returns a scalar instead of int
-# https://github.com/jonathf/numpoly/issues/126
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'numpoly' generated automatically by pyp2spec.}
+
 Patch:      %{forgeurl}/pull/127.patch
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch:    %{ix86}
-
-BuildRequires:  gcc
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(sympy)
-
-%global desc %{expand: \
-Numpoly is a generic library for creating, manipulating and evaluating
-arrays of polynomials based on `numpy.ndarray` objects.
-
-- Intuitive interface for users experienced with numpy, as the library
-  provides a high level of compatibility with the `numpy.ndarray`,
-  including fancy indexing, broadcasting, `numpy.dtype`, vectorized
-  operations to name a few
-- Computationally fast evaluations of lots of functionality inherent
-  from numpy
-- Vectorized polynomial evaluation
-- Support for arbitrary number of dimensions
-- Native support for lots of `numpy.<name>` functions using numpy’s
-  compatibility layer (which also exists as `numpoly.<name`> equivalents)
-- Support for polynomial division through the operators `/`, `%` and
-  `divmod`
-- Extra polynomial specific attributes exposed on the polynomial
-  objects like `poly.exponents`, `poly.coefficients`,
-  `poly.indeterminants` etc.
-- Polynomial derivation through functions like `numpoly.derivative`,
-  `numpoly.gradient`, `numpoly.hessian` etc.
-- Decompose polynomial sums into vector of addends using
-  `numpoly.decompose`
-- Variable substitution through `numpoly.call`}
-
-%description
-%{desc}
+%description %_description
 
 %package -n     python3-numpoly
 Summary:        %{summary}
 
-%description -n python3-numpoly
-%{desc}
+%description -n python3-numpoly %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-numpoly dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n numpoly-%{version}
 
-%forgeautosetup -p1
-
-# Don't turn deprecation warnings into errors. It fails the build with
-# NumPy 2.x.
-sed -r -i '/error::DeprecationWarning/d' pyproject.toml
-
-# Fix incorrect version string in pyproject.toml
-# Tarball n PyPI has the correct version, but not the GitHub tarball
-sed -r \
-    -e 's/^(version = ).*/\1"%{version}"/' \
-    -i pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l numpoly
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -r fEs --import-mode=importlib
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-numpoly -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

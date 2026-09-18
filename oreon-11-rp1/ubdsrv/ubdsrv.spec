@@ -2,7 +2,7 @@
 
 %global forgeurl https://github.com/ublk-org/ublksrv
 %global commit a2f2daa9f02509a008d9304c197f6a2b0da0ad38
-Version:       1.6
+Version:       1.8
 %forgemeta
 
 Summary:       Userspace block driver server and ublk tool

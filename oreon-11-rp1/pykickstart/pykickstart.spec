@@ -6,7 +6,7 @@
 %bcond_with signed
 
 Name:      pykickstart
-Version:   3.69
+Version:   3.78
 Release:   1%{?dist}
 License:   GPL-2.0-only
 Summary:   Python utilities for manipulating kickstart files.

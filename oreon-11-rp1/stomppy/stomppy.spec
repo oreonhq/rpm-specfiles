@@ -1,7 +1,7 @@
 %global source0_hash 9908689361e263bf198e6acfb3c4386759fb7df7d141f4384d7414771c68d7fc
 
 Name:           stomppy
-Version:        8.2.0
+Version:        9.0.0
 Release:        %autorelease
 Summary:        Python stomp client for messaging
 

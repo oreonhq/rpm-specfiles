@@ -7,7 +7,7 @@
 #%%global snapshotver 20250518git%%{shortcommit}
 
 Name:     gimp-%{pkgname}
-Version:  3.0.0
+Version:  3.0.1
 Release:  %autorelease %{?snapshotver:-p -s %{snapshotver}}
 Summary:  GIMP plug-in for texture synthesis
 License:  GPL-3.0-or-later

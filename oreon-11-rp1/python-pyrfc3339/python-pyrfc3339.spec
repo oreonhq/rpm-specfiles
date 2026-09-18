@@ -1,60 +1,57 @@
-%global source0_hash e47843379ea35c1296c3b6c67a948a1a490ae0584edfcbdea0eaffb5dd29960b
-
-%global srcname pyrfc3339
+%global source0_hash none
 
 Name:           python-pyrfc3339
-Version:        2.0.1
-Release:        7%{?dist}
+Version:        2.1.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Generate and parse RFC 3339 timestamps
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pypi.python.org/pypi/pyRFC3339
-Source0:        %{pypi_source}
-# release tarballs do not contain unit tests (pyrfc3339/tests/tests.py)
-# https://github.com/kurtraschke/pyRFC3339/blob/master/pyrfc3339/tests/test_all.py
-# v2.0.1: git commit 53c2d1587d3a
-Source1:        https://raw.githubusercontent.com/kurtraschke/pyRFC3339/53c2d1587d3aac1734ddd4d4006a815df2d80f36/pyrfc3339/tests/test_all.py
+URL:            https://github.com/kurtraschke/pyrfc3339
+Source:         %{pypi_source pyrfc3339}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-# --- unit tests ---
-# Specified manually because upstream release tarballs do not contain unit tests
-BuildRequires:  python3-pytest
 
-%description
-This package contains a python library to parse and generate
-RFC 3339-compliant timestamps using Python datetime.datetime objects.
 
-%package     -n python3-pyrfc3339
-Summary:        Generate and parse RFC 3339 timestamps
-%{?python_provide:%python_provide python3-pyrfc3339}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pyrfc3339' generated automatically by pyp2spec.}
 
-%description -n python3-pyrfc3339
-This package contains a Python 3 library to parse and generate
-RFC 3339-compliant timestamps using Python datetime.datetime objects.
+%description %_description
+
+%package -n     python3-pyrfc3339
+Summary:        %{summary}
+
+%description -n python3-pyrfc3339 %_description
+
+
+%prep
+%autosetup -p1 -n pyrfc3339-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n %{srcname}-%{version} -N
-cp -a %{SOURCE1} .
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pyrfc3339
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v test_all.py
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pyrfc3339 -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

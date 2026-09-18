@@ -1,8 +1,8 @@
 %global source0_hash 8f684737a52a75c0a0c465ec26e6a5d0fdc1d495392ea83015aed84563f93e0f
 
 Name:           quake2
-Version:        8.60
-Release:        3%{?dist}
+Version:        8.70
+Release:        1%{?dist}
 Summary:        Quake II (Yamagi version)
 
 License:        GPL-2.0-or-later

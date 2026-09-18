@@ -7,7 +7,7 @@
 %global crate fixed
 
 Name:           rust-fixed
-Version:        1.31.0
+Version:        2.0.0-alpha.28.0
 Release:        %autorelease
 Summary:        Fixed-point numbers.
 

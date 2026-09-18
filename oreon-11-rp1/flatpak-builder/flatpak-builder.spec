@@ -9,7 +9,7 @@
 %global __requires_exclude ^/usr/bin/python2$
 
 Name:           flatpak-builder
-Version:        1.4.7
+Version:        1.4.12
 Release:        %autorelease
 Summary:        Tool to build flatpaks from source
 

@@ -10,8 +10,8 @@
 %{?!python3_pkgversion:%global python3_pkgversion 3}
 
 Name: koji
-Version: 1.35.3
-Release: 9%{?dist}
+Version: 1.36.0
+Release: 1%{?dist}
 # the included arch lib from yum's rpmUtils is GPLv2+
 License: LGPL-2.1-only AND GPL-2.0-or-later
 Summary: Build system tools

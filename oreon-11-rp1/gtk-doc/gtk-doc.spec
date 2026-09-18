@@ -3,8 +3,8 @@
 %global debug_package %{nil}
 
 Name: gtk-doc
-Version: 1.35.1
-Release: 3%{?dist}
+Version: 1.36.1
+Release: 1%{?dist}
 Summary: API documentation generation tool for GTK+ and GNOME
 
 License: GPL-2.0-or-later AND GFDL-1.1-no-invariants-or-later

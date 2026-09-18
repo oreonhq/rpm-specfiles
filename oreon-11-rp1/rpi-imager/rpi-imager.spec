@@ -1,7 +1,7 @@
 %global source0_hash 3a7e0b8124e5625591c0a3e3eb0bd14da42da8c618c1131af2bf050b1722700b
 
 Name:           rpi-imager
-Version:        2.0.6
+Version:        2.0.11.1
 Release:        %autorelease
 Summary:        Graphical user-interface to write disk images and format SD cards
 License:        Apache-2.0

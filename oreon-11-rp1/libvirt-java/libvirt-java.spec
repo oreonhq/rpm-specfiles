@@ -2,9 +2,9 @@
 
 Summary:    Java bindings for the libvirt virtualization API
 Name:       libvirt-java
-Version:    0.4.9
+Version:    0.5.4
 Prefix:     libvirt
-Release:    35%{?dist}%{?extra_release}
+Release:    1%{?dist}%{?extra_release}
 License:    MIT
 BuildArch:  noarch
 ExclusiveArch:  %{java_arches} noarch

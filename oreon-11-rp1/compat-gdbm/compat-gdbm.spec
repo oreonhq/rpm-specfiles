@@ -4,8 +4,8 @@
 
 Summary: A GNU set of database routines which use extensible hashing
 Name: compat-gdbm
-Version: 1.14.1
-Release: 21%{?dist}
+Version: 1.26
+Release: 1%{?dist}
 License: GPLv3+
 URL: http://www.gnu.org/software/gdbm/
 

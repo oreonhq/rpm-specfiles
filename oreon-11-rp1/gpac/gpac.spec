@@ -4,7 +4,7 @@
 
 Name:        gpac
 Summary:     MPEG-4 multimedia framework
-Version:     26.02.0
+Version:     26.07.0
 Release:     1%{?dist}
 License:     LGPL-2.0-or-later
 URL:         https://gpac.io/

@@ -3,7 +3,7 @@
 %global pypi_name normality
 
 Name:           python-%{pypi_name}
-Version:        3.0.2
+Version:        3.1.0
 Release:        %autorelease
 Summary:        Tiny library for Python text normalisation
 

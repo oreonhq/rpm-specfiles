@@ -1,77 +1,61 @@
-%global source0_hash 8194abcd4f1d2d1dd50f452f278c9b34a3e45b551ce9efe76ceb21f0c66c40e1
+%global source0_hash none
 
-%global srcname pycollada
+Name:           python-pycollada
+Version:        0.9.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        python library for reading and writing collada documents
 
-Name:           python-collada
-Version:        0.9.2
-Release:        5%{?dist}
-Summary:        A python module for creating, editing and loading COLLADA
-
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://github.com/pycollada/pycollada
-Source0:        https://github.com/pycollada/pycollada/archive/v%{version}/%{srcname}-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            http://pycollada.readthedocs.org/
+Source:         %{pypi_source pycollada}
 
 BuildArch:      noarch
-
-# Python 3
 BuildRequires:  python3-devel
-BuildRequires:  python3-pip
-BuildRequires:  python3-wheel
-# unit test requirements
-BuildRequires:  python3-dateutil
-BuildRequires:  python3-lxml
-BuildRequires:  python3-six
-BuildRequires:  python3-numpy
-BuildRequires:  python3-pytest
 
-%description
-pycollada is a python module for creating, editing and loading COLLADA, which
-is a COLLAborative Design Activity for establishing an interchange file format
-for interactive 3D applications.
 
-The library allows you to load a COLLADA file and interact with it as a python
-object. In addition, it supports creating a collada python object from scratch,
-as well as in-place editing.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pycollada' generated automatically by pyp2spec.}
 
-%package -n python%{python3_pkgversion}-collada
-Summary:        A python 3 module for creating, editing and loading COLLADA
-Requires:       python%{python3_pkgversion}-dateutil
-Requires:       python%{python3_pkgversion}-numpy
-%{?python_provide: %python_provide python%{python3_pkgversion}-collada}
+%description %_description
 
-%description -n python%{python3_pkgversion}-collada
-pycollada is a python 3 module for creating, editing and loading COLLADA, which
-is a COLLAborative Design Activity for establishing an interchange file format
-for interactive 3D applications.
+%package -n     python3-pycollada
+Summary:        %{summary}
 
-The library allows you to load a COLLADA file and interact with it as a python
-object. In addition, it supports creating a collada python object from scratch,
-as well as in-place editing.
+%description -n python3-pycollada %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pycollada prettyprint,validation
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pycollada-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x prettyprint,validation
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l '*'
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
- 
+
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%pytest
 
-%files -n python%{python3_pkgversion}-collada -f %{pyproject_files}
-%doc AUTHORS.md CHANGELOG.rst README.markdown
+%files -n python3-pycollada -f %{pyproject_files}
 
 %changelog
 %autochangelog

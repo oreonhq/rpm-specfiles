@@ -16,7 +16,7 @@
 %bcond_without       tests
 
 Name:           php-phpdocumentor-reflection-docblock%{major}
-Version:        5.6.7
+Version:        6.0.3
 Release:        1%{?dist}
 Summary:        DocBlock parser
 

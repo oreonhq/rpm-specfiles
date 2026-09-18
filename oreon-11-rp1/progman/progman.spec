@@ -1,8 +1,8 @@
 %global source0_hash 28bbc33ee64fdcaa086b1b134220b69c9d5a4aec887e043612bbca51dbe17e34
 
 Name:           progman
-Version:        1.0
-Release:        13%{?dist}
+Version:        1.1
+Release:        1%{?dist}
 Summary:        Simple X11 window manager modeled after Program Manager
 
 License:        MIT

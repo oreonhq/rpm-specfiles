@@ -7,7 +7,7 @@
 %global crate const-oid
 
 Name:           rust-const-oid
-Version:        0.9.6
+Version:        0.10.2
 Release:        %autorelease
 Summary:        Const-friendly implementation of the ISO/IEC Object Identifier (OID)...
 

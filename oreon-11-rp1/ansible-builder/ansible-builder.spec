@@ -3,8 +3,8 @@
 %bcond tests 1
 
 Name:           ansible-builder
-Version:        3.1.0
-Release:        8%{?dist}
+Version:        3.1.1
+Release:        1%{?dist}
 Summary:        A tool for building Ansible Execution Environments
 
 License:        Apache-2.0

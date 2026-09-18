@@ -6,7 +6,7 @@
 %global crate crypto-auditing-client
 
 Name:           rust-crypto-auditing-client
-Version:        0.2.4
+Version:        0.3.2
 Release:        %autorelease
 Summary:        Event broker client for crypto-auditing project
 

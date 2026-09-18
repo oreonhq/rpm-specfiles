@@ -3,7 +3,7 @@
 %global giturl  https://github.com/Normaliz/Normaliz
 
 Name:           normaliz
-Version:        3.10.5
+Version:        3.11.1
 Release:        %autorelease
 Summary:        A tool for discrete convex geometry
 

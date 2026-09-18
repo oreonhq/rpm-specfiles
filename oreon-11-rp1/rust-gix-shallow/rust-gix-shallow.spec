@@ -7,7 +7,7 @@
 %global crate gix-shallow
 
 Name:           rust-gix-shallow
-Version:        0.7.0
+Version:        0.13.0
 Release:        %autorelease
 Summary:        Handle files specifying the shallow boundary
 

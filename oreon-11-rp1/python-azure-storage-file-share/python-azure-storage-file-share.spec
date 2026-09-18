@@ -1,53 +1,62 @@
-%global source0_hash 90f9b0234e771fda08bf56103c43a4f4ac08bf79334d9dac7bb1b6f37baadd25
+%global source0_hash none
 
 Name:           python-azure-storage-file-share
-Version:        12.24.0
+Version:        12.26.0
 Release:        %autorelease
-Summary:        Azure Storage File Share client library for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Microsoft Azure Azure File Share Storage Client Library for Python
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pypi.org/project/azure-storage-file-share/
-Source:         %{pypi_source azure_storage_file_share %{version}}
+URL:            https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/storage/azure-storage-file-share
+Source:         %{pypi_source azure_storage_file_share}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Azure File Share storage offers fully managed file shares in the cloud that are
-accessible via the industry standard Server Message Block (SMB) protocol. Azure
-file shares can be mounted concurrently by cloud or on-premises deployments of
-Windows, Linux, and macOS. Additionally, Azure file shares can be cached on
-Windows Servers with Azure File Sync for fast access near where the data is
-being used.}
+This is package 'azure-storage-file-share' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-azure-storage-file-share
+%package -n     python3-azure-storage-file-share
 Summary:        %{summary}
 
-%description -n python3-azure-storage-file-share %{_description}
+%description -n python3-azure-storage-file-share %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-azure-storage-file-share aio
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n azure_storage_file_share-%{version}
 
-%autosetup -n azure_storage_file_share-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x aio
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l azure
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Like other Azure SDK packages, the tests expect Azure to be available
+
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-azure-storage-file-share -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

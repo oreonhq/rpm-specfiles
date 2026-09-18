@@ -1,7 +1,7 @@
 %global source0_hash 4d19e5cb8fb09fe35e6df69ae07132cf621b0b2a82f54149091bce630642adbd
 
 Name:           prename
-Version:        1.14
+Version:        1.16.2
 Release:        %autorelease
 Summary:        Perl script to rename multiple files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

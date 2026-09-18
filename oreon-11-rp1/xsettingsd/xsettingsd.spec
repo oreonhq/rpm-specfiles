@@ -1,8 +1,8 @@
 %global source0_hash 69b5d1987608d1b5f2a0085f2f88cc55936a99b92279118e655d665ebb5e50d3
 
 Name:           xsettingsd
-Version:        1.0.2
-Release:        13%{?dist}
+Version:        1.0.4
+Release:        1%{?dist}
 Summary:        Provides settings to X11 clients via the XSETTINGS specification
 
 # Automatically converted from old format: BSD - review is highly recommended.

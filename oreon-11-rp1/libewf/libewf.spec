@@ -7,8 +7,8 @@
 %endif
 
 Name:           libewf
-Version:        20140608
-Release:        33%{?dist}
+Version:        20240506
+Release:        1%{?dist}
 Summary:        Library for the Expert Witness Compression Format (EWF)
 
 License:        LGPL-3.0-or-later
@@ -70,7 +70,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %if 0%{?_with_python2}
   --enable-python \
 %endif
-%if "%{version}" <= "20140608"
+%if "%{version}" <= "20240506"
   CFLAGS="${RPM_OPT_FLAGS} -std=gnu89"
 %endif
 

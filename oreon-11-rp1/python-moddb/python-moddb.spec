@@ -1,53 +1,56 @@
-%global source0_hash e9dcaddf1820392eeabba81774b694265546f1e20e297564226b8c1ae0f8cd86
+%global source0_hash none
 
 Name:           python-moddb
-Version:        0.12.0
-Release:        6%{?dist}
-Summary:        A Python scraper/parser for ModDB
-License:        MIT
+Version:        0.15.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A scrapper for ModDB Mod and Game pages
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/ClementJ18/moddb
-Source0:        %{url}/archive/v%{version}/moddb-%{version}.tar.gz
+Source:         %{pypi_source moddb}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-                       The goal of the library is to be able to navigate ModDB purely
-                       programmatically through scraping and parsing of the various models
-                       present on the website. This is based off a command of a bot which
-                       can parse either a game or a mod, this command gave birth to the
-                       original library which was extremely limited in its abilities and
-                       only able to parse a few pages with inconsistencies. This library
-                       is a much more mature and professional attempt at the whole idea,
-                       adding on a much deeper understanding of OOP.}
+This is package 'moddb' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-moddb
+%package -n     python3-moddb
 Summary:        %{summary}
 
-%description -n python3-moddb %{_description}
+%description -n python3-moddb %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n moddb-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files moddb
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Upstream tests generally require network access and authentication
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-moddb -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

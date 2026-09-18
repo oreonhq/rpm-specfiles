@@ -1,53 +1,57 @@
-%global source0_hash 63925ea0c71862ff89aea1fd493402fd84b519989371cfcf0a11b369fb59bbcb
-
-%global srcname queuelib
+%global source0_hash none
 
 Name:           python-queuelib
-Version:        1.8.0
-Release:        6%{?dist}
-Summary:        Collection of persistent (disk-based) queues
+Version:        1.10.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Collection of persistent _disk-based_ and non-persistent _memory-based_ queues
 
-License:        LicenseRef-Callaway-BSD
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
 URL:            https://github.com/scrapy/queuelib
-Source0:        %{url}/archive/v%{version}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source queuelib}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-Queuelib is a collection of persistent (disk-based) queues for
-Python. Queuelib goals are speed and simplicity.
 
-%package -n python3-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'queuelib' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-queuelib
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-BuildRequires:  python3-hatchling
-BuildRequires:  python3-pytest
+%description -n python3-queuelib %_description
 
-%description -n python3-%{srcname}
-Queuelib is a collection of persistent (disk-based) queues for
-Python. Queuelib goals are speed and simplicity.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n queuelib-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files queuelib
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
-%license LICENSE
+
+%files -n python3-queuelib -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -3,7 +3,7 @@
 %global realname ibrowse
 
 Name:		erlang-%{realname}
-Version:	4.4.2
+Version:	4.5.0
 Release:	%autorelease
 BuildArch:	noarch
 Summary:	Erlang HTTP client

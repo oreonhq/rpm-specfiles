@@ -1,7 +1,7 @@
 %global source0_hash b8fb9d609e3aedebde7b0efa0c3de3b1fa5c4b61f5493b7f797b496a80f15fd0
 
 Name:           synfig
-Version:        1.5.4
+Version:        1.5.5
 Release:        1%{?dist}
 Summary:        Vector-based 2D animation rendering backend
 

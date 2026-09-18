@@ -13,7 +13,7 @@
 
 %global github_owner     php-fig
 %global github_name      simple-cache
-%global github_version   1.0.1
+%global github_version   3.0.0
 %global github_commit    408d5eafb83c57f6365a3ca330ff23aa4a5fa39b
 
 %global composer_vendor  psr
@@ -26,7 +26,7 @@
 
 Name:          php-%{composer_vendor}-%{composer_project}
 Version:       %{github_version}
-Release:       18%{?github_release}%{?dist}
+Release:       1%{?github_release}%{?dist}
 Summary:       Common interfaces for simple caching (PSR-16)
 
 License:       MIT

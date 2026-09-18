@@ -8,7 +8,7 @@
 %define __perl_provides %{nil}
 
 Name:           moodle
-Version:        5.1.3
+Version:        5.2.1
 Release:       	1%{?dist}
 Summary:        A Course Management System
 

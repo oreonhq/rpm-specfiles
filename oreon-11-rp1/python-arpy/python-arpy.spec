@@ -1,60 +1,57 @@
-%global source0_hash f681d6b0a7209c0b35f8eb89cf3b47595a4789099023d55bd7fdc909682979de
+%global source0_hash none
 
-%global srcname arpy
+Name:           python-arpy
+Version:        2.4.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Library for accessing _ar_ files
 
-Name:          python-%{srcname}
-Summary:       Library for accessing "ar" files
-# Automatically converted from old format: BSD - review is highly recommended.
-License:       LicenseRef-Callaway-BSD
-URL:           https://github.com/viraptor/arpy
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-2-Clause
+URL:            ...
+Source:         %{pypi_source arpy}
 
-Version:       2.3.0
-Release:       15%{?dist}
-Source0:       %{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildArch:     noarch
 
-%description
-arpy is a library for accessing the archive files and reading the contents.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'arpy' generated automatically by pyp2spec.}
 
-It supports extended long filenames in both GNU and BSD format. Right now it
-does not support the symbol tables, but can ignore them gracefully.
+%description %_description
 
-%package -n python3-%{srcname}
-Summary:       %{summary}
-BuildRequires: python3-devel
-BuildRequires: python3-setuptools
-BuildRequires: python3-pytest
+%package -n     python3-arpy
+Summary:        %{summary}
 
-%description -n python3-%{srcname}
-arpy is a library for accessing the archive files and reading the contents.
+%description -n python3-arpy %_description
 
-It supports extended long filenames in both GNU and BSD format. Right now it
-does not support the symbol tables, but can ignore them gracefully.
-
-This package allows using arpy in Python 3 applications.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n arpy-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files %{srcname}
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-arpy -f %{pyproject_files}
 
 %changelog
 %autochangelog

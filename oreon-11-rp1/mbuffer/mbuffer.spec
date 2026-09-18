@@ -1,8 +1,8 @@
 %global source0_hash 9d7363010b4ef45b1646f6b5f5027b49bb6a209c502fb84e281c7bd771d56bed
 
 Name:           mbuffer
-Version:        20241007
-Release:        3%{?dist}
+Version:        20260511
+Release:        1%{?dist}
 Summary:        Measuring Buffer is an enhanced version of buffer
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

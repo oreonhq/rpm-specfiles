@@ -1,8 +1,8 @@
 %global source0_hash 3eeb137319b608512b2d23c54ea8b52b511db806ffbd5fa730a394431d556f3f
 
 Name:           rsync-bpc
-Version:        3.1.3.0
-Release:        16%{?dist}
+Version:        3.1.3.2
+Release:        1%{?dist}
 Summary:        A customized fork of rsync that is used as part of BackupPC
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

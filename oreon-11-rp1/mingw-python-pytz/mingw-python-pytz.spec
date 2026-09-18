@@ -6,8 +6,8 @@
 
 Name:          mingw-python-%{pypi_name}
 Summary:       MinGW Windows Python %{pypi_name} library
-Version:       2025.2
-Release:       3%{?dist}
+Version:       2026.3.post1
+Release:       1%{?dist}
 BuildArch:     noarch
 
 License:       MIT

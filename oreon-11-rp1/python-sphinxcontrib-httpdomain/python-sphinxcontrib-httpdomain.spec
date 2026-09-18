@@ -1,51 +1,59 @@
-%global source0_hash 6c2dfe6ca282d75f66df333869bb0ce7331c01b475db6809ff9d107b7cdfe04b
+%global source0_hash none
 
-%global upstream_name sphinxcontrib-httpdomain
+Name:           python-sphinxcontrib-httpdomain
+Version:        2.0.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Sphinx extension that provides a domain for documenting HTTP APIs.
 
-Name:           python-%{upstream_name}
-Version:        1.8.1
-Release:        7%{?dist}
-Summary:        Sphinx domain for documenting HTTP APIs
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
-URL:            http://packages.python.org/sphinxcontrib-httpdomain/
-Source0:        https://files.pythonhosted.org/packages/source/s/%{upstream_name}/%{upstream_name}-%{version}.tar.gz
-# issue to be filed(?)
-Patch4:         0004-httpdomain-bump-domain-data-version.patch
+URL:            https://github.com/sphinx-contrib/httpdomain
+Source:         %{pypi_source sphinxcontrib_httpdomain}
+
 BuildArch:      noarch
-
-%description
-Using this Sphinx domain you can document your HTTP API. It includes support 
-for generating documentation from Flask routing tables.
-
-%package -n python3-%{upstream_name}
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{upstream_name}}
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-Requires:       python3-sphinx
-Requires:       python3-six
 
-%description -n python3-%{upstream_name}
-Using this Sphinx domain you can document your HTTP API. It includes support 
-for generating documentation from Flask routing tables.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sphinxcontrib-httpdomain' generated automatically by pyp2spec.}
+
+Patch4:         0004-httpdomain-bump-domain-data-version.patch
+
+%description %_description
+
+%package -n     python3-sphinxcontrib-httpdomain
+Summary:        %{summary}
+
+%description -n python3-sphinxcontrib-httpdomain %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{upstream_name}-%{version}
-%patch -P4 -p2
-rm -r *.egg-info
+%autosetup -p1 -n sphinxcontrib_httpdomain-%{version}
+
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%{py3_build}
+%pyproject_wheel
+
 
 %install
-%{py3_install}
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{upstream_name}
-%doc README.rst
-%license LICENSE
-%{python3_sitelib}/sphinxcontrib*
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-sphinxcontrib-httpdomain -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.1-7

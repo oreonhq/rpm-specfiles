@@ -1,102 +1,61 @@
-%global source0_hash f72f148f54442c6b056bf931dbc34f986fd0c3b0b6b5a58d013c9aef274d0c88
+%global source0_hash none
 
-%global srcname xlrd
-%global sum Library to extract data from Microsoft Excel (TM) spreadsheet files
+Name:           python-xlrd
+Version:        2.0.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Library for developers to extract data from Microsoft Excel _tm_ .xls spreadsheet files
 
-Name:           python-%{srcname}
-Version:        2.0.1
-Release:        27%{?dist}
-Summary:        %{sum}
-
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            http://www.python-excel.org/
-Source0:        %pypi_source
+Source:         %{pypi_source xlrd}
 
 BuildArch:      noarch
-#BuildRequires:  dos2unix
+BuildRequires:  python3-devel
 
-%generate_buildrequires
-%pyproject_buildrequires
 
-%description
-Extract data from Excel spreadsheets (.xls and .xlsx, versions 2.0 onwards)
-on any platform.  Pure Python (2.6, 2.7, 3.2+).  Strong support for Excel
-dates.  Unicode-aware.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'xlrd' generated automatically by pyp2spec.}
 
-%package -n python%{python3_pkgversion}-%{srcname}
-Summary:        %{sum}
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-pytest
+%description %_description
 
-%description -n python%{python3_pkgversion}-%{srcname}
-Extract data from Excel spreadsheets (.xls and .xlsx, versions 2.0 onwards)
-on any platform.  Pure Python (2.6, 2.7, 3.2+).  Strong support for Excel
-dates.  Unicode-aware.
+%package -n     python3-xlrd
+Summary:        %{summary}
 
-%if 0%{?with_python3_other}
-%package -n python%{python3_other_pkgversion}-%{srcname}
-Summary:        %{sum}
-BuildRequires:  python%{python3_other_pkgversion}-devel
-BuildRequires:  python%{python3_other_pkgversion}-setuptools
+%description -n python3-xlrd %_description
 
-%description -n python%{python3_other_pkgversion}-%{srcname}
-Extract data from Excel spreadsheets (.xls and .xlsx, versions 2.0 onwards)
-on any platform.  Pure Python (2.6, 2.7, 3.2+).  Strong support for Excel
-dates.  Unicode-aware.
-%endif
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-xlrd build,docs,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n xlrd-%{version}
 
-%setup -q -n %{srcname}-%{version}
 
-# fix CRLF to LF
-#for i in */*.py *.html docs/* examples/*; do
-#  # ignore missing files, they was may be only removed by mistake
-#  dos2unix $i || :
-#done
-#for i in docs/* examples/xlrdnameAPIdemo.py; do
-#  iconv -f iso8859-1 -t UTF-8 $i > $i.tmp
-#  mv -f $i.tmp $i
-#done
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x build,docs,test
+
 
 %build
 %pyproject_wheel
-%if 0%{?with_python3_other}
-%py3_other_build
-%endif
+
 
 %install
-%if 0%{?with_python3_other}
-%py3_other_install
-%endif
 %pyproject_install
-%pyproject_save_files -l xlrd
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# remove .py extension from binary
-mv $RPM_BUILD_ROOT%{_bindir}/runxlrd.py $RPM_BUILD_ROOT%{_bindir}/runxlrd
-rm -rf $RPM_BUILD_ROOT%{_bindir}/runxlrd.py* \
-  $RPM_BUILD_ROOT/%{python3_sitelib}/xlrd/doc \
-  $RPM_BUILD_ROOT/%{python3_sitelib}/xlrd/examples
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%{python3} -c 'import xlrd'
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
-%doc README.rst CHANGELOG.rst
-%attr(755,root,root) %{_bindir}/*
-
-%if 0%{?with_python3_other}
-%files -n python%{python3_other_pkgversion}-%{pypi_name}
-%license LICENSE
-%doc README.rst CHANGELOG.rst
-%attr(755,root,root) %dir %{python3_other_sitelib}/xlrd
-%{python3_other_sitelib}/xlrd/*
-%{python3_other_sitelib}/xlrd-*egg-info
-%endif
+%files -n python3-xlrd -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        0.8.15
+Version:        0.8.16
 Release:        %autorelease
 Summary:        Parse source to template-haskell abstract syntax
 

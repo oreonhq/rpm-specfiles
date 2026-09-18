@@ -21,7 +21,7 @@
 
 Summary: A text mode mail user agent
 Name: mutt
-Version: 2.3.0
+Version: 2.4.2
 Release: 1%{?dist}
 Epoch: 5
 # The entire source code is GPLv2+ except

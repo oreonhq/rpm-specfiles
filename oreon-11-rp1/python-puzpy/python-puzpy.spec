@@ -1,57 +1,64 @@
-%global source0_hash 97a9b95d38f6dc69c61e4d33c3af5835937b5be5659cd5e4345cc54c3d106c36
+%global source0_hash none
 
-%global srcname puzpy
-
-Name:           python-%{srcname}
-# PyPI tarball does not contain test files
-Version:        0.5.0
+Name:           python-puzpy
+Version:        0.6.1
 Release:        %autorelease
-Summary:        Python crossword puzzle library
+# Fill in the actual package summary to submit package to Fedora
+Summary:        python crossword puzzle library
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/alexdej/puzpy
-Source:         %{url}/archive/v%{version}/%{srcname}-%{version}.tar.gz
-# Disable irrelevant tests that pull in unpackaged deps
-Patch:          puzpy-drop-unneeded-deps.diff
+URL:            https://github.com/alexdej/puzpy.git
+Source:         %{pypi_source puzpy}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Implementation of .puz crossword puzzle file parser based on the .puz file
-format documentation.}
+This is package 'puzpy' generated automatically by pyp2spec.}
+
+Patch:          puzpy-drop-unneeded-deps.diff
 
 %description %_description
 
-%package -n     python3-%{srcname}
+%package -n     python3-puzpy
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-puzpy %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-puzpy dev,publish
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n puzpy-%{version}
 
-%autosetup -N -n %{srcname}-%{version}
-%autopatch -p1
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,publish
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname}
-%license %{python3_sitelib}/puzpy-%{version}.dist-info/licenses/LICENSE
-%doc CHANGELOG.md README.md
-%pycached %{python3_sitelib}/puz.py
-%{python3_sitelib}/%{srcname}-%{version}.dist-info
+
+%files -n python3-puzpy -f %{pyproject_files}
 
 %changelog
 %autochangelog

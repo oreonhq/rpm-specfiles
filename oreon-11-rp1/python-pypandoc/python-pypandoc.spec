@@ -1,75 +1,63 @@
-%global source0_hash dbee3c16fdbbc63bcfec7cea79ae3e29d5dd49cae2dfd30905378ee85c0f9645
+%global source0_hash none
 
 Name:           python-pypandoc
-Version:        1.16.2
+Version:        1.17
 Release:        %autorelease
-Summary:        Thin wrapper for pandoc
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Thin wrapper for pandoc.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/bebraw/pypandoc
-Source:         https://github.com/JessicaTegner/pypandoc/archive/v%{version}/%{name}-%{version}.tar.gz
+URL:            https://github.com/JessicaTegner/pypandoc
+Source:         %{pypi_source pypandoc}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-# for tests
-BuildRequires:  pandoc
-BuildRequires:  texlive-scheme-basic
-BuildRequires:  texlive-collection-fontsrecommended
-BuildRequires:  tex(ecrm1000.tfm)
 
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-pandocfilters
-
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-pypandoc provides a thin Python wrapper for pandoc, a universal document
-converter, allowing parsing and conversion of pandoc-formatted text.}
+This is package 'pypandoc' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python%{python3_pkgversion}-pypandoc
+%package -n     python3-pypandoc
 Summary:        %{summary}
-%if ! 0%{?flatpak}
-Requires:       pandoc
-%endif
-%if 0%{?fedora} || 0%{?rhel} >= 8
-Recommends:     texlive-scheme-basic
-Recommends:     texlive-collection-fontsrecommended
-%endif
 
-%description -n python%{python3_pkgversion}-pypandoc  %_description
+%description -n python3-pypandoc %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pypandoc tinytex
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n pypandoc-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x tinytex
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -L pypandoc
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Disable test that requires network
-sed -i -r 's/test_basic_conversion_from_http_url/_disabled_\0/' tests.py
+%_pyproject_check_import_allow_no_modules -t
 
-# https://github.com/NicklasTegner/pypandoc/issues/277
-sed -i -r 's/test_basic_conversion_from_file_pattern/_disabled_\0/' tests.py
 
-# https://github.com/jgm/pandoc/issues/8128
-sed -i -r 's/test_conversion_with_data_files/_disabled_\0/' tests.py
-
-%python3 tests.py
-
-%global _docdir_fmt %{name}
-
-%files -n python%{python3_pkgversion}-pypandoc -f %pyproject_files
-%license LICENSE
-%doc README.md examples/
+%files -n python3-pypandoc -f %{pyproject_files}
+%{_bindir}/pypandoc
 
 %changelog
 %autochangelog

@@ -1,75 +1,57 @@
-%global source0_hash 64dfcd7d5c168b38d3f9f8bba7fc639edb3418abcc74f22fdbe6b8938293f30b
+%global source0_hash none
 
 Name:           python-jiter
-Version:        0.12.0
+Version:        0.17.0
 Release:        %autorelease
-Summary:        Fast iterable JSON parser
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Fast iterable JSON parser.
 
-# python-jiter is MIT only, but the rest are rust libraries
-# based on cargo_license_summary output:
-#
-# BSD-2-Clause OR Apache-2.0 OR MIT
-# MIT
-# MIT OR Apache-2.0
-License:        %{shrink:
-    MIT AND
-    (BSD-2-Clause OR Apache-2.0 OR MIT) AND
-    (MIT OR Apache-2.0)
-    }
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
 URL:            https://github.com/pydantic/jiter/
 Source:         %{pypi_source jiter}
 
-BuildSystem:            pyproject
-BuildOption(install):   -l jiter
-BuildOption(generate_buildrequires): crates/jiter-python/tests/requirements.txt
+BuildRequires:  python3-devel
+BuildRequires:  gcc
 
-BuildRequires:  cargo-rpm-macros
-BuildRequires:  tomcli
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-%{summary}.}
+This is package 'jiter' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
 %package -n     python3-jiter
 Summary:        %{summary}
 
-%description -n python3-jiter %{_description}
+%description -n python3-jiter %_description
 
-%prep -a
-# We want to use the system copy of the jiter crate, but we need the JSON data
-# files from its benchmarks for testing the Python extension.
-find crates/jiter -mindepth 1 -maxdepth 1 ! -name benches -exec rm -rv '{}' '+'
-find crates/jiter/benches -type f ! -name '*.json' -print -delete
 
-# E.g., for 0.5.0, this would allow crate(jiter) 0.5.x.
-tomcli set crates/jiter-python/Cargo.toml str dependencies.jiter.version "%{version}"
-tomcli set crates/jiter-python/Cargo.toml del dependencies.jiter.path
+%prep
+%autosetup -p1 -n jiter-%{version}
 
-# This feature only applies to Windows, and is hidden in our PyO3 packages.
-# We can and should remove it with no consequence.
-tomcli set pyproject.toml lists delitem \
-    tool.maturin.features pyo3/generate-import-lib
-tomcli set crates/jiter-python/Cargo.toml lists delitem \
-    features.extension-module pyo3/generate-import-lib
 
-# Remove a purely-cosmetic test dependency
-sed -r -i 's/^pytest-pretty\b/# &/' crates/jiter-python/tests/requirements.txt
+%generate_buildrequires
+%pyproject_buildrequires
 
-%cargo_prep
 
-%generate_buildrequires -p
-%cargo_generate_buildrequires -a
+%build
+%pyproject_wheel
 
-%build -p
-%cargo_license_summary
-%{cargo_license} > LICENSE.dependencies
 
-%check -a
-%pytest
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-jiter -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.1.2.1
+Version:        0.1.2.2
 Release:        %autorelease
 Summary:        Basic mime-type handling types and functions
 

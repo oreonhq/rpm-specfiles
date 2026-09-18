@@ -1,8 +1,8 @@
 %global source0_hash 59c2d46106621df40eb3de331521c5664a71fe35a43ec1d640ec3a88d4e4730e
 
 Name:           python3-lxc
-Version:        5.0.0
-Release:        16%{?dist}
+Version:        7.0.0
+Release:        1%{?dist}
 Summary:        Python binding for LXC
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+

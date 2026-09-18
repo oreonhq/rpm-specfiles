@@ -7,7 +7,7 @@
 %global crate gix-glob
 
 Name:           rust-gix-glob
-Version:        0.23.0
+Version:        0.27.1
 Release:        %autorelease
 Summary:        A crate of the gitoxide project dealing with pattern matching
 

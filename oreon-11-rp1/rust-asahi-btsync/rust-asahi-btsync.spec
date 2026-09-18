@@ -6,7 +6,7 @@
 %global crate asahi-btsync
 
 Name:           rust-asahi-btsync
-Version:        0.2.4
+Version:        0.2.6
 Release:        %autorelease
 Summary:        Tool to sync Bluetooth pairing keys with macos on ARM Macs
 

@@ -1,7 +1,7 @@
 %global source0_hash 0c720ab329a4e23e3403327a2521d86e4bd762057b8fb3be88cfb8973b4084be
 
 Name:		converseen
-Version:	0.15.2.1
+Version:	0.15.2.7
 Release:	%autorelease
 Summary:	A batch image conversion tool written in C++ with Qt5 and Magick++
 # Automatically converted from old format: GPLv3 - review is highly recommended.

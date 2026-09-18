@@ -1,63 +1,56 @@
-%global source0_hash 6b5d7b4b05cfda53aae55fc43aaf29421e0c45a6eac57ed52ddf3041bc73c7fc
-
-%global forgeurl https://github.com/noxdafox/pebble
-
-# Tests take rather long compared to build. Allow skipping.
-%bcond tests 1
+%global source0_hash none
 
 Name:           python-pebble
-Version:        5.2.0
+Version:        5.2.2
 Release:        %autorelease
-Summary:        Threading and multiprocessing eye-candy for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Threading and multiprocessing eye-candy.
 
-%global tag %{version}
-%forgemeta
-
-License:        LGPL-3.0-or-later
-URL:            %{forgeurl}
-Source:         %{forgesource}
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/noxdafox/pebble
+Source:         %{pypi_source pebble}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Pebble provides an API to manage threads and processes within an application.
-It wraps Python’s standard library threading and multiprocessing objects.}
+This is package 'pebble' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-pebble
+%package -n     python3-pebble
 Summary:        %{summary}
 
 %description -n python3-pebble %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%forgeautosetup
+%prep
+%autosetup -p1 -n pebble-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l pebble
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-  # test intermittently hangs
-  %{pytest} -v -k "not test_process_pool_multiple_futures"
-%else
-  %pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pebble -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

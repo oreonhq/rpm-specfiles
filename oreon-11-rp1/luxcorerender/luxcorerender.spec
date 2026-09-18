@@ -6,7 +6,7 @@
 %global	        prerelease	beta1
 
 Name:		luxcorerender
-Version:	2.7
+Version:	2.10.0-a2
 Release:	%autorelease %{?prerelease: -p -e %{prerelease}}
 Summary:	LuxCore Renderer, an unbiased rendering system
 

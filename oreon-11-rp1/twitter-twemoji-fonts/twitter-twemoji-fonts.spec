@@ -8,8 +8,8 @@
 %global Fontname Twemoji
 
 Name:           %{foundry}-%{fontname}-fonts
-Version:        14.0.2
-Release:        10%{?dist}
+Version:        17.0.3
+Release:        1%{?dist}
 Summary:        Twitter Emoji for everyone
 
 # In noto-emoji-fonts source

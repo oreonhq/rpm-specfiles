@@ -3,7 +3,7 @@
 %global upname RSyntaxTextArea
 
 Name:           rsyntaxtextarea
-Version:        3.6.0
+Version:        4.0.1
 Release:        1%{?dist}
 Summary:        A syntax highlighting, code folding text editor for Java Swing applications
 

@@ -1,8 +1,8 @@
 %global source0_hash 48db0ed58c8c0e207b5d7327a0210b5bcaeb50e26387935d02829239b0f3c2b9
 
 Name:       rtmidi
-Version:    5.0.0
-Release:    6%{?dist}
+Version:    6.0.0
+Release:    1%{?dist}
 Summary:    Library for realtime MIDI input/output (ALSA support)
 License:    MIT
 URL:        https://www.music.mcgill.ca/~gary/rtmidi/index.html

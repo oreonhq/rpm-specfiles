@@ -1,61 +1,59 @@
-%global source0_hash ee4c427a10f44d2e38065e480668a47316b5d93612ebe3d05d9318f0fe0d417f
+%global source0_hash none
 
 Name:           python-pulsectl-asyncio
-Version:        1.2.2
-Release:        %{autorelease}
+Version:        1.3.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Asyncio frontend for the pulsectl Python bindings of libpulse
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/mhthies/pulsectl-asyncio
-Source0:        %{pypi_source pulsectl_asyncio}
-
-# https://github.com/mhthies/pulsectl-asyncio/commit/c1e5587bcec8f976580e2291518497388eb88109
-Patch:          python-pulsectl-24.12.0.diff
+Source:         %{pypi_source pulsectl_asyncio}
 
 BuildArch:      noarch
-# BuildRequires:  /usr/bin/pulseaudio
-BuildRequires:  pulseaudio-libs
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A Python 3 asyncio interface on top of the pulsectl library for monitoring and
-controlling the PulseAudio sound server.}
+This is package 'pulsectl-asyncio' generated automatically by pyp2spec.}
+
+Patch:          python-pulsectl-24.12.0.diff
 
 %description %_description
 
-%package -n python3-pulsectl-asyncio
+%package -n     python3-pulsectl-asyncio
 Summary:        %{summary}
 
 %description -n python3-pulsectl-asyncio %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n pulsectl_asyncio-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l pulsectl_asyncio
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-## https://github.com/mhthies/pulsectl-asyncio/issues/15
-# touch tests/__init__.py
+%_pyproject_check_import_allow_no_modules -t
 
-## These test fail, because they cause the puleseaudio daemon to crash.
-## Perhaps this doesn't matter, because users will typically be using
-## pipewire-pulse instead.
-## https://github.com/mhthies/pulsectl-asyncio/issues/16
-# %%{py3_test_envvars} %%{python3} -m unittest discover
-
-%pyproject_check_import
 
 %files -n python3-pulsectl-asyncio -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

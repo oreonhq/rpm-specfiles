@@ -4,7 +4,7 @@
 %global soversion 2
 
 Name:       fast-cdr
-Version:    2.3.5
+Version:    2.4.0
 Release:    1%{?dist}
 Summary:    Fast Common Data Representation (CDR) Serialization Library
 

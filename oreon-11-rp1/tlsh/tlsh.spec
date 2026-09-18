@@ -2,7 +2,7 @@
 
 %undefine __cmake_in_source_build
 Name:           tlsh
-Version:        4.12.1
+Version:        5.0.0
 Release:        %autorelease
 Summary:        Fuzzy text matching library
 

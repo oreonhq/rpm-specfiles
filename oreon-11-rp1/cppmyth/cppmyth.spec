@@ -5,8 +5,8 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           cppmyth
-Version:        2.17.6
-Release:        5%{?dist}
+Version:        3.2.1
+Release:        1%{?dist}
 Summary:        Client interface for the MythTV backend
 
 License:        GPL-2.0-or-later

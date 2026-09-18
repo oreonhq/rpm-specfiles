@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-pa
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 Summary: Plasma applet for audio volume management using PulseAudio
 

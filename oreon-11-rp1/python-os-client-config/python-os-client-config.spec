@@ -1,113 +1,56 @@
-%global source0_hash abc38a351f8c006d34f7ee5f3f648de5e3ecf6455cc5d76cfd889d291cdf3f4e
+%global source0_hash none
 
-%{!?_licensedir:%global license %%doc}
-%global pypi_name os-client-config
-%global with_doc 1
+Name:           python-os-client-config
+Version:        2.3.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        OpenStack Client Configuation Library
 
-%{!?upstream_version: %global upstream_version %{version}%{?milestone}}
-
-%global common_desc \
-The os-client-config is a library for collecting client configuration for \
-using an OpenStack cloud in a consistent and comprehensive manner. It \
-will find cloud config for as few as 1 cloud and as many as you want to \
-put in a config file. It will read environment variables and config files, \
-and it also contains some vendor specific default values so that you don't \
-have to know extra info to use OpenStack \
- \
-* If you have a config file, you will get the clouds listed in it \
-* If you have environment variables, you will get a cloud named `envvars` \
-* If you have neither, you will get a cloud named `defaults` with base defaults
-
-Name:           python-%{pypi_name}
-Version:        2.1.0
-Release:        20%{?dist}
-Summary:        OpenStack Client Configuration Library
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
-License:        Apache-2.0
-URL:            https://github.com/openstack/%{pypi_name}
-Source0:        https://pypi.io/packages/source/o/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://docs.openstack.org/os-client-config/latest
+Source:         %{pypi_source os_client_config}
 
 BuildArch:      noarch
-BuildRequires:  git
-
-%description
-%{common_desc}
-
-%package -n python3-%{pypi_name}
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{pypi_name}}
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-pbr
-# Testing requirements
-BuildRequires:  python3-fixtures
-BuildRequires:  python3-stestr
-BuildRequires:  python3-glanceclient >= 0.18.0
-BuildRequires:  python3-openstacksdk
-BuildRequires:  python3-oslotest >= 1.10.0
-BuildRequires:  python3-jsonschema >= 2.6.0
 
-Requires:       python3-openstacksdk >= 0.13.0
 
-%description -n python3-%{pypi_name}
-%{common_desc}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'os-client-config' generated automatically by pyp2spec.}
 
-%if 0%{?with_doc}
-%package  -n python-%{pypi_name}-doc
-Summary:        Documentation for OpenStack os-client-config library
+%description %_description
 
-BuildRequires:  python3-sphinx
-BuildRequires:  python3-openstackdocstheme
-BuildRequires:  python3-reno
+%package -n     python3-os-client-config
+Summary:        %{summary}
 
-%description -n python-%{pypi_name}-doc
-Documentation for the os-client-config library.
-%endif
+%description -n python3-os-client-config %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n os_client_config-%{version}
 
-%autosetup -n %{pypi_name}-%{upstream_version} -S git
 
-# Let RPM handle the dependencies
-rm -f test-requirements.txt requirements.txt
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%{py3_build}
+%pyproject_wheel
 
-%if 0%{?with_doc}
-# generate html doc
-sphinx-build-3 -b html doc/source/ doc/build/html
-rm -rf doc/build/html/.{doctrees,buildinfo} doc/build/html/objects.inv
-%endif
 
 %install
-%{py3_install}
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# NOTE(jpena): we are disabling Python2 unit tests when building the Python 3 package.
-# The reason is that unit tests require glanceclient, and glanceclient is python3-only
-# when building with Python 3. We could revert that, but it is a rabbit hole we do not
-# want to enter
-export OS_TEST_PATH='./os_client_config/tests'
-export PATH=$PATH:$RPM_BUILD_ROOT/usr/bin
-export PYTHONPATH=$PWD
+%_pyproject_check_import_allow_no_modules -t
 
-#rm -rf .stestr
-#PYTHON=python3 stestr-3 --test-path $OS_TEST_PATH run
 
-%files -n python3-%{pypi_name}
-%doc ChangeLog CONTRIBUTING.rst PKG-INFO README.rst
-%license LICENSE
-%{python3_sitelib}/os_client_config
-%{python3_sitelib}/*.egg-info
-
-%if 0%{?with_doc}
-%files -n python-%{pypi_name}-doc
-%license LICENSE
-%doc doc/build/html
-%endif
+%files -n python3-os-client-config -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,7 +1,7 @@
 %global source0_hash fdb621d7e5f46e74b4de1ad6b0fff6e69cd91b4f219de1476190ebdd0f4781df
 
 Name:           python-daemon
-Version:        3.1.0
+Version:        3.1.2
 Release:        %autorelease
 Summary:        Library to implement a well-behaved Unix daemon process
 

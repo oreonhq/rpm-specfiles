@@ -1,8 +1,8 @@
 %global source0_hash 2387431c0e83c4189cccb35b989141a3280d735cb5d42bacf3451af9869bebf7
 
 Name:		lua-penlight
-Version:	1.14.0
-Release:	4%{?dist}
+Version:	1.15.0
+Release:	1%{?dist}
 Summary:	Penlight Lua Libraries
 License:	MIT
 URL:		https://github.com/lunarmodules/Penlight

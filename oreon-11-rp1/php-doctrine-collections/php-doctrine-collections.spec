@@ -13,7 +13,7 @@
 
 %global github_owner     doctrine
 %global github_name      collections
-%global github_version   1.8.0
+%global github_version   3.1.0
 %global github_commit    2b44dd4cbca8b5744327de78bafef5945c7e7b5e
 
 %global composer_vendor  doctrine
@@ -32,7 +32,7 @@
 
 Name:          php-%{composer_vendor}-%{composer_project}
 Version:       %{github_version}
-Release:       9%{?github_release}%{?dist}
+Release:       1%{?github_release}%{?dist}
 Summary:       Collections abstraction library
 
 License:       MIT

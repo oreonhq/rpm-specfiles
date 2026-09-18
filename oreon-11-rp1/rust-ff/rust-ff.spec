@@ -7,7 +7,7 @@
 %global crate ff
 
 Name:           rust-ff
-Version:        0.13.1
+Version:        0.14.0
 Release:        %autorelease
 Summary:        Library for building and interfacing with finite fields
 

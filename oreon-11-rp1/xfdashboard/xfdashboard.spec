@@ -1,10 +1,10 @@
 %global source0_hash a5284343e5ce09722f98d3b578588b36923e1ae5649754aa906980fdcdef48a5
 
-%global majorversion 1.0
+%global majorversion 1.1
 %global libversion 0.10000.0
 
 Name:		xfdashboard
-Version:	1.0.0
+Version:	1.1.0
 Release:	%autorelease
 Summary:	GNOME shell like dashboard for Xfce
 

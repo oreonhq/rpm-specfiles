@@ -1,10 +1,10 @@
 %global source0_hash ca4e3bd5b9d4a8ff7c01cc96d1bffd46dbd6321237ec94c52f8badd51032eeff
 
 %define _hardened_build 1
-%global clientversion 3.0.8.2
+%global clientversion 5.0.4
 Name: argus
-Version: 3.0.8.2
-Release: 30%{?dist}
+Version: 5.0.4
+Release: 1%{?dist}
 Summary: Network transaction audit tool
 License: GPL-2.0-or-later
 Url: http://qosient.com/argus

@@ -1,8 +1,8 @@
 %global source0_hash 30d560205fe82fb811cd57a8fcbc7ac853a5b6195e9cb9e6ff142f5e2d8be217
 
 Name: tdlib
-Version: 1.8.0
-Release: 9%{?dist}
+Version: 1.8.67
+Release: 1%{?dist}
 
 License: BSL-1.0
 URL: https://github.com/%{name}/td

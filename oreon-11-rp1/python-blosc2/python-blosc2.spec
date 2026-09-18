@@ -1,79 +1,66 @@
-%global source0_hash e002b8e874fb41aeee5fce5a5f7cf343d31fa95b8633c4f146c5fa4d8e2aa856
+%global source0_hash none
 
 Name:           python-blosc2
-Version:        3.12.0
+Version:        4.13.1
 Release:        %autorelease
-Summary:        Python wrapper for the Blosc2 compression library
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A fast _ compressed ndarray library with a flexible compute engine.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://blosc.org/python-blosc2/python-blosc2.html
-Source:         https://github.com/Blosc/python-blosc2/archive/v%{version}/python-blosc2-%{version}.tar.gz
+URL:            https://github.com/Blosc/python-blosc2
+Source:         %{pypi_source blosc2}
 
 BuildRequires:  python3-devel
-BuildRequires:  gcc-g++
-BuildRequires:  blosc2-devel >= 2.21.0
-BuildRequires:  tomcli
+BuildRequires:  gcc
 
-ExcludeArch:    %{ix86}
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-C-Blosc2 is the new major version of C-Blosc, and is backward compatible with
-both the C-Blosc1 API and its in-memory format. Python-Blosc2 is a Python
-package that wraps C-Blosc2, the newest version of the Blosc compressor.
-
-In addition, Python-Blosc2 aims to leverage the new C-Blosc2 API so as to
-support super-chunks, multi-dimensional arrays (NDArray), serialization and
-other bells and whistles introduced in C-Blosc2. Although this is always and
-endless process, it has already caught up with most of the C-Blosc2 API
-capabilities.}
+This is package 'blosc2' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-blosc2
+%package -n     python3-blosc2
 Summary:        %{summary}
 
 %description -n python3-blosc2 %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-blosc2 fsspec,hdf5,hires,parquet,tui,zarr
 
-%autosetup -p1
-# Remove the numpy version constraint
-tomcli set pyproject.toml lists replace "build-system.requires" "numpy.*" "numpy"
-# Remove torch tests for now
-tomcli set pyproject.toml lists delitem "project.optional-dependencies.test" "torch.*"
+
+%prep
+%autosetup -p1 -n blosc2-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x fsspec,hdf5,hires,parquet,tui,zarr
+
 
 %build
-export USE_SYSTEM_BLOSC2=ON
-export SKBUILD_CMAKE_BUILD_TYPE=RelWithDebInfo
-export SKBUILD_BUILD_DIR=python-build
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files blosc2
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# There are unconditional torch imports. Let's drop those files fow now.
-grep -l '^import torch' tests/ndarray/test_*.py | xargs rm -v
+%_pyproject_check_import_allow_no_modules -t
 
-OPTIONS=(
-    --deselect="tests/test_embed_store.py::test_with_remote"
-    # One of those tests seems to hang in x86_64 builds in koji.
-    --deselect="tests/ndarray/test_lazyexpr.py::test_lazyexpr[float32"
-    # Newly failing with python-blosc2 3.12.0
-    --deselect="tests/ndarray/test_resize.py::test_expand_dims"
-)
-
-%pytest tests/ "${OPTIONS[@]}" -v \
-%ifarch s390x
-  || :    # https://github.com/Blosc/python-blosc2/issues/125
-%endif
 
 %files -n python3-blosc2 -f %{pyproject_files}
-%doc README.rst RELEASE_NOTES.md
+%{_bindir}/b2nd-to-zarr
+%{_bindir}/b2view
+%{_bindir}/blosc2-to-zarr
+%{_bindir}/parquet-to-blosc2
 
 %changelog
 %autochangelog

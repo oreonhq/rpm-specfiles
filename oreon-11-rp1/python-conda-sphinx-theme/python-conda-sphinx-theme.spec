@@ -1,64 +1,58 @@
-%global source0_hash a6e691c006e1582df9377e87386eab5e585caa4dafd437a382ba7f1385c56b1f
+%global source0_hash none
 
-%global srcname conda-sphinx-theme
-%global modname conda_sphinx_theme
-
-Name:           python-%{srcname}
-Version:        0.3.0
+Name:           python-conda-sphinx-theme
+Version:        0.4.0
 Release:        %autorelease
-Summary:        A Sphinx theme for conda documentations
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Conda theme for Sphinx
 
-# main/conda_sphinx_theme/static/js/count.js is ISC
-License:        BSD-3-Clause AND ISC
-URL:            https://github.com/conda-incubator/conda-sphinx-theme
-Source0:        https://github.com/conda-incubator/conda-sphinx-theme/archive/%{version}/%{srcname}-%{version}.tar.gz
-# Use packaged fonts
-Patch:          python-conda-sphinx-theme-fonts.patch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/conda-incubator/conda-sphinx-theme/
+Source:         %{pypi_source conda_sphinx_theme}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is the Conda Sphinx Theme. It extends the PyData Sphinx Theme
-project by adding custom styling.}
+This is package 'conda-sphinx-theme' generated automatically by pyp2spec.}
+
+Patch:          python-conda-sphinx-theme-fonts.patch
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-conda-sphinx-theme
 Summary:        %{summary}
-BuildRequires:  python3-devel
 
-%description -n python3-%{srcname} %_description
+%description -n python3-conda-sphinx-theme %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n conda_sphinx_theme-%{version}
 
-%autosetup -p0 -n %{srcname}-%{version}
-# Relase dep
-sed -i -e '/pydata-sphinx-theme/s/<0.16/<0.17/' pyproject.toml
-# Remove bundled fonts
-rm -r conda_sphinx_theme/static/fonts
 
 %generate_buildrequires
-export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 %pyproject_buildrequires
 
+
 %build
-export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l %{modname}
-# Doc build needs an installed version so we do it here
-#PYTHONPATH=%{buildroot}%{python3_sitearch} make -C docs html
-#
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# No tests
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md CONTRIBUTING.md
+
+%files -n python3-conda-sphinx-theme -f %{pyproject_files}
 
 %changelog
 %autochangelog

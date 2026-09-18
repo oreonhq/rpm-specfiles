@@ -4,7 +4,7 @@
 #%global debug_package %{nil}
 
 %global forgeurl https://github.com/boost-ext/ut
-Version:        2.1.1
+Version:        2.3.1
 %forgemeta
 
 Name:           ut

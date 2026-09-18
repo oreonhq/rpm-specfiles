@@ -1,78 +1,61 @@
-%global source0_hash 588e27868e4a0ed70ae4a7a5b0f3bca4cec5e5c49dbd7e41349c0883182bf2fe
+%global source0_hash none
 
-# Created by pyp2rpm-1.0.1
-%global pypi_name kazoo
+Name:           python-kazoo
+Version:        2.11.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        _Higher Level Zookeeper Client_
 
-Name:           python-%{pypi_name}
-Version:        2.8.0
-Release:        21%{?dist}
-Summary:        Higher level Python Zookeeper client
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/python-zk/kazoo
+Source:         %{pypi_source kazoo}
 
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
-License:        Apache-2.0
-URL:            https://kazoo.readthedocs.org
-Source0:        https://pypi.python.org/packages/source/k/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%global _description\
-Kazoo is a Python library designed to make working with Zookeeper a more\
-hassle-free experience that is less prone to errors.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'kazoo' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{pypi_name}
-Summary:        Higher level Python Zookeeper client
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-# For building documentation
-BuildRequires:  python3-sphinx
-Requires:       python3-six
+%package -n     python3-kazoo
+Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-Kazoo is a Python library designed to make working with Zookeeper a more
-hassle-free experience that is less prone to errors.
+%description -n python3-kazoo %_description
 
-%package doc
-Summary:    Documentation for %{name}
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
-License:    Apache-2.0
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-kazoo alldeps,dev,docs,eventlet,gevent,sasl,test,typing
 
-%description doc
-Kazoo is a Python library designed to make working with Zookeeper a more
-hassle-free experience that is less prone to errors.
-
-This package contains documentation in HTML format.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n kazoo-%{version}
 
-%setup -q -n %{pypi_name}-%{version}
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
 
-find . -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x alldeps,dev,docs,eventlet,gevent,sasl,test,typing
 
-# generate html docs
-sphinx-build docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-#delete tests
-rm -fr %{buildroot}%{python3_sitelib}/%{pypi_name}/tests/
 
-%files -n python3-%{pypi_name}
-%doc README.md LICENSE
-%{python3_sitelib}/%{pypi_name}
-%{python3_sitelib}/%{pypi_name}-%{version}-py%{python3_version}.egg-info
+%check
+%_pyproject_check_import_allow_no_modules -t
 
-%files doc
-%doc html
+
+%files -n python3-kazoo -f %{pyproject_files}
 
 %changelog
 %autochangelog

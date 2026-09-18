@@ -2,8 +2,8 @@
 
 Summary: Library of Optimized Inner Loops, CPU optimized functions
 Name: liboil
-Version: 0.3.16
-Release: 38%{?dist}
+Version: 0.3.17
+Release: 1%{?dist}
 # See COPYING which details everything, various BSD licenses apply
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD

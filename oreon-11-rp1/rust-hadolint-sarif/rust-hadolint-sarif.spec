@@ -6,7 +6,7 @@
 %global crate hadolint-sarif
 
 Name:           rust-hadolint-sarif
-Version:        0.5.0
+Version:        0.8.0
 Release:        %autorelease
 Summary:        Convert hadolint output to SARIF
 

@@ -1,96 +1,66 @@
-%global source0_hash 6bab36950f0822901612c233e94c3bb33b44011a648a77c2bae7b2481f9c4a07
+%global source0_hash none
 
-%global srcname twisted
-
-%global common_description %{expand:
-Twisted is a networking engine written in Python, supporting numerous protocols.
-It contains a web server, numerous chat clients, chat servers, mail servers
-and more.}
-
-Name:           python-%{srcname}
-Version:        25.5.0
+Name:           python-twisted
+Version:        26.4.0
 Release:        %autorelease
-Summary:        Twisted is a networking engine written in Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        An asynchronous networking framework written in Python
 
-License:        MIT
-URL:            http://twistedmatrix.com/
-VCS:            https://github.com/twisted/twisted
-Source0:        %vcs/archive/%{srcname}-%{version}/%{srcname}-%{version}.tar.gz
-# downstream-only disable tests that fail in the buildsystem or due to sha1
-Patch0:         python-twisted-25.5.0-disable-tests.patch
-# https://github.com/twisted/twisted/pull/12508
-Patch1:         0001-Fix-asyncio-get_event_loop-for-Python-3-14.patch
-# https://github.com/twisted/twisted/pull/12511
-Patch2:         0002-Fix-web-client-urljoin-for-Python-3-14.patch
-# https://github.com/twisted/twisted/pull/12551
-Patch3:         0003-Fix-tests-for-Python-3-14-2.patch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://twisted.org/
+Source:         %{pypi_source twisted}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description %{common_description}
 
-%package -n python3-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'twisted' generated automatically by pyp2spec.}
+
+Patch0:         python-twisted-25.5.0-disable-tests.patch
+Patch1:         0001-Fix-asyncio-get_event_loop-for-Python-3-14.patch
+Patch2:         0002-Fix-web-client-urljoin-for-Python-3-14.patch
+Patch3:         0003-Fix-tests-for-Python-3-14-2.patch
+
+%description %_description
+
+%package -n     python3-twisted
 Summary:        %{summary}
 
-BuildRequires:  git-core
-BuildRequires:  python3-bcrypt
-BuildRequires:  python3-cryptography
-BuildRequires:  python3-devel >= 3.3
-BuildRequires:  python3-h2
-BuildRequires:  python3-hamcrest
-BuildRequires:  python3-httpx
-BuildRequires:  python3-hypothesis
-BuildRequires:  python3-pyasn1-modules
-BuildRequires:  python3-pynacl
-BuildRequires:  python3-pyOpenSSL
-BuildRequires:  python3-service-identity
-BuildRequires:  python3-subunit
+%description -n python3-twisted %_description
 
-Recommends:  python3-%{srcname}+tls
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-twisted all-non-platform,all-non-platform,conch,dev,dev-release,dev-release,gtk-platform,gtk-platform,http2,macos-platform,macos-platform,mypy,osx-platform,osx-platform,serial,test,tls,websocket,windows-platform,windows-platform
 
-%description -n python3-%{srcname} %{common_description}
-
-%pyproject_extras_subpkg -n python3-%{srcname} tls
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n twisted-%{version}
 
-%autosetup -p1 -n %{srcname}-%{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all-non-platform,all-non-platform,conch,dev,dev-release,dev-release,gtk-platform,gtk-platform,http2,macos-platform,macos-platform,mypy,osx-platform,osx-platform,serial,test,tls,websocket,windows-platform,windows-platform
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# no-manual-page-for-binary
-mkdir -p %{buildroot}%{_mandir}/man1/
-for s in conch core mail; do
-cp -a docs/$s/man/*.1 %{buildroot}%{_mandir}/man1/
-done
-
-# Packages that install arch-independent twisted plugins install here.
-# https:# bugzilla.redhat.com/show_bug.cgi?id=1252140
-mkdir -p %{buildroot}%{python3_sitelib}/twisted/plugins
-
-# Move and symlink python3 scripts
-ln -s ./trial %{buildroot}%{_bindir}/trial-3
-ln -s ./twistd %{buildroot}%{_bindir}/twistd-3
-
-%pyproject_save_files %{srcname}
-echo "%ghost %{python3_sitelib}/twisted/plugins/dropin.cache" >> %{pyproject_files}
 
 %check
-# Temporarily allow SHA1 signature in the test suite, but ideally the test shall avoid
-# using it, reported upstream in https://github.com/twisted/twisted/issues/12443
-OPENSSL_ENABLE_SHA1_SIGNATURES= PATH=%{buildroot}%{_bindir}:$PATH PYTHONPATH=$PWD/src %{buildroot}%{_bindir}/trial twisted
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-twisted  -f %{pyproject_files}
-%doc NEWS.rst README.rst
-%license LICENSE
+
+%files -n python3-twisted -f %{pyproject_files}
 %{_bindir}/cftp
 %{_bindir}/ckeygen
 %{_bindir}/conch
@@ -100,16 +70,6 @@ OPENSSL_ENABLE_SHA1_SIGNATURES= PATH=%{buildroot}%{_bindir}:$PATH PYTHONPATH=$PW
 %{_bindir}/trial
 %{_bindir}/twist
 %{_bindir}/twistd
-%{_bindir}/trial-3
-%{_bindir}/twistd-3
-%{_mandir}/man1/cftp.1*
-%{_mandir}/man1/ckeygen.1*
-%{_mandir}/man1/conch.1*
-%{_mandir}/man1/mailmail.1*
-%{_mandir}/man1/pyhtmlizer.1*
-%{_mandir}/man1/tkconch.1*
-%{_mandir}/man1/trial.1*
-%{_mandir}/man1/twistd.1*
 
 %changelog
 %autochangelog

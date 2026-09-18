@@ -11,8 +11,8 @@
 
 Summary: The WebAssembly Binary Toolkit
 Name: wabt
-Version: 1.0.39
-Release: 2%{?dist}
+Version: 1.0.42
+Release: 1%{?dist}
 URL: https://github.com/WebAssembly/wabt
 Source0: https://github.com/WebAssembly/wabt/archive/%{version}/%{name}-%{version}.tar.gz
 Source1: https://github.com/WebAssembly/testsuite/archive/%{ts_commit}/%{name}-testsuite-%{ts_shortcommit}.tar.gz

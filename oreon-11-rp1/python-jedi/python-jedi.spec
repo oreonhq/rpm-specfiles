@@ -1,98 +1,62 @@
-%global source0_hash c965ef6137477013c7c33a196aa64c577f9f2bd5f9e94cc58bda2e6e32aa9dea
-
-%global common_description %{expand:
-Jedi is a static analysis tool for Python that can be used in IDEs/editors. Its
-historic focus is autocompletion, but does static analysis for now as well.
-Jedi is fast and is very well tested. It understands Python on a deeper level
-than all other static analysis frameworks for Python.}
-
-%if %{defined fedora}
-# epel9 is missing django
-%bcond_without tests
-%endif
-
-# jedi bundles 2 other projects
-# when using the git tarball, the projects need to be pulled separately
-# when using tarballs from PyPI, those are included
-%global django_stubs_commit fd057010f6cbf176f57d1099e82be46d39b99cb9
-%global typeshed_commit     ae9d4f4b21bb5e1239816c301da7b1ea904b44c3
+%global source0_hash none
 
 Name:           python-jedi
-Version:        0.19.2
+Version:        0.20.0
 Release:        %autorelease
-Summary:        An auto completion tool for Python that can be used for text editors
+# Fill in the actual package summary to submit package to Fedora
+Summary:        An autocompletion tool for Python that can be used for text editors.
 
-# jedi is MIT
-# django-stubs is MIT
-# typeshed is Apache-2.0
-License:        MIT AND Apache-2.0
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://jedi.readthedocs.io/en/latest/
+Source:         %{pypi_source jedi}
 
-URL:            https://jedi.readthedocs.org
-Source0:        https://github.com/davidhalter/jedi/archive/v%{version}/jedi-%{version}.tar.gz
-Source1:        https://github.com/davidhalter/django-stubs/archive/%{django_stubs_commit}/django-stubs-%{django_stubs_commit}.tar.gz
-Source2:        https://github.com/davidhalter/typeshed/archive/%{typeshed_commit}/typeshed-%{typeshed_commit}.tar.gz
 BuildArch:      noarch
-
-%description %{common_description}
-
-%package -n python3-jedi
-Summary:        %{summary}
 BuildRequires:  python3-devel
-Provides:       bundled(python3dist(django-stubs)) = %{django_stubs_commit}
-Provides:       bundled(typeshed) = %{typeshed_commit}
 
-%description -n python3-jedi %{common_description}
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'jedi' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-jedi
+Summary:        %{summary}
+
+%description -n python3-jedi %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-jedi dev,docs
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n jedi-%{version}
 
-%autosetup -n jedi-%{version} -p 1
-
-# git submodules
-pushd jedi/third_party
-rmdir django-stubs typeshed
-tar xf %{SOURCE1} && mv django-stubs-%{django_stubs_commit} django-stubs
-tar xf %{SOURCE2} && mv typeshed-%{typeshed_commit} typeshed
-popd
-cp -p jedi/third_party/django-stubs/LICENSE.txt LICENSE-django-stubs.txt
-cp -p jedi/third_party/typeshed/LICENSE LICENSE-typeshed.txt
-
-# relax upper limits on test dependencies
-sed -e 's/pytest<7.0.0/pytest/' \
-    -e 's/Django<3.1/Django/' \
-    -i setup.py
-
-# Fix for compatibility with pytest 8
-# Proposed upstream: https://github.com/davidhalter/jedi/pull/1996
-sed -i "/def __init__/s/__init__/setUp/" test/test_utils.py
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-x testing}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files jedi
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-# %%pytest manipulates the sys.path
-# test_string_annotation does not work with Python 3.14
-# https://github.com/davidhalter/jedi/issues/2064
-%pytest -k "\
-    not test_venv_and_pths and \
-    not test_find_system_environments and \
-    not test_import and \
-    not test_string_annotation and \
-    not test_compiled_signature_annotation_string"
-%else
-%pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-jedi -f %{pyproject_files}
-%doc CHANGELOG.rst README.rst
 
 %changelog
 %autochangelog

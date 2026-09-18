@@ -3,13 +3,13 @@
 %bcond defrag 0
 
 Name:           exfatprogs
-Version:        1.3.2
+Version:        1.4.3
 Release:        %autorelease
 Summary:        Userspace utilities for exFAT filesystems
 License:        GPL-2.0-only
 URL:            https://github.com/%{name}/%{name}
 
-Source0:        https://github.com/exfatprogs/exfatprogs/releases/download/1.3.2/exfatprogs-1.3.2.tar.xz
+Source0:        https://github.com/exfatprogs/exfatprogs/releases/download/1.4.3/exfatprogs-1.3.2.tar.xz
 
 BuildRequires:  autoconf
 BuildRequires:  automake

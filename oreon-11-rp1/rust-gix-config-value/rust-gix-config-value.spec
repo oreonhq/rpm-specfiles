@@ -7,7 +7,7 @@
 %global crate gix-config-value
 
 Name:           rust-gix-config-value
-Version:        0.16.0
+Version:        0.19.1
 Release:        %autorelease
 Summary:        A crate of the gitoxide project providing git-config value parsing
 

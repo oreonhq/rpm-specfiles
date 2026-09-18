@@ -13,7 +13,7 @@
 
 %global github_owner     php-fig
 %global github_name      log
-%global github_version   1.1.4
+%global github_version   3.0.2
 %global github_commit    d49695b909c3b7628b6289db5479a1c204601f11
 
 %global composer_vendor  psr
@@ -23,7 +23,7 @@
 
 Name:      php-PsrLog
 Version:   %{github_version}
-Release:   12%{?dist}
+Release:   1%{?dist}
 Summary:   Common interface for logging libraries
 
 License:   MIT

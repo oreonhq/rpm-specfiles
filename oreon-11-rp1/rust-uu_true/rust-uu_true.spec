@@ -10,7 +10,7 @@
 %global crate uu_true
 
 Name:           rust-uu_true
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        true ~ (uutils) do nothing and succeed
 

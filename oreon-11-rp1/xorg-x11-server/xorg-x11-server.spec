@@ -18,7 +18,7 @@
 
 Summary:    X.Org X11 X server
 Name:       xorg-x11-server
-Version:    21.1.22
+Version:    21.1.24
 Release:    1%{?dist}
 URL:        http://www.x.org
 # SPDX

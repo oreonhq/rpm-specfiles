@@ -3,8 +3,8 @@
 Summary:   Command-line program to read and set MPEG-4 tags compatible with iPod/iTunes 
 URL:       http://atomicparsley.sourceforge.net/
 Name:      AtomicParsley
-Version:   0.9.5
-Release:   33%{?dist}
+Version:   20240608.083822.1ed9031
+Release:   1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:   GPL-2.0-or-later
 Source0:   https://bitbucket.org/wez/atomicparsley/overview/%{name}-%{version}.tar.gz

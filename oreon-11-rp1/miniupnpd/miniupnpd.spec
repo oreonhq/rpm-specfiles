@@ -1,8 +1,8 @@
 %global source0_hash 66cb3c3d697ab2bb3a61d3c48628166d6ba328d7c2dbeb95898fdf2a3202af7b
 
 Name:       miniupnpd
-Version:    2.3.9
-Release:    4%{?dist}
+Version:    2.3.11
+Release:    1%{?dist}
 Summary:    Lightweight UPnP IGD & PCP/NAT-PMP daemon
 
 # Automatically converted from old format: BSD - review is highly recommended.

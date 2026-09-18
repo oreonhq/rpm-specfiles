@@ -6,7 +6,7 @@
 %global smplayer_skins_ver 20.11.0
 
 Name:           smplayer
-Version:        25.6.0
+Version:        26.8.29
 Release:        %autorelease
 Summary:        Graphical frontend for mplayer and mpv
 

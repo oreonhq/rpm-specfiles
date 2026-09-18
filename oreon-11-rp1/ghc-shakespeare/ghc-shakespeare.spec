@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        2.1.7.1
+Version:        2.2.0
 Release:        %autorelease
 Summary:        A toolkit for making compile-time interpolated templates
 

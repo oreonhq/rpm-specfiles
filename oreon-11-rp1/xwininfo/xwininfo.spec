@@ -2,7 +2,7 @@
 
 Summary:    X window info utility
 Name:       xwininfo
-Version:    1.1.6
+Version:    1.1.7
 Release:    %autorelease
 License:    MIT
 URL:        https://www.x.org

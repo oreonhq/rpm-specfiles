@@ -25,8 +25,8 @@
 %global ver_major    3
 
 Name:           php-%{pk_vendor}-%{pk_project}%{ver_major}
-Version:        3.0.1
-Release:        7%{?dist}
+Version:        4.0.0
+Release:        1%{?dist}
 Summary:        Simple template engine, version %{ver_major}
 
 License:        BSD-3-Clause

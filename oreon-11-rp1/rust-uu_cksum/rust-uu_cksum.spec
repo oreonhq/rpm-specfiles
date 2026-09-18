@@ -10,7 +10,7 @@
 %global crate uu_cksum
 
 Name:           rust-uu_cksum
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        cksum ~ (uutils) display CRC and size of input
 

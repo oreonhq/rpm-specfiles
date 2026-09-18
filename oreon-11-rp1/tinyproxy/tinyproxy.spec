@@ -4,8 +4,8 @@
 %global _distro_extra_cflags -DNDEBUG
 
 Name:           tinyproxy
-Version:        1.11.2
-Release:        6%{?dist}
+Version:        1.11.3
+Release:        1%{?dist}
 Summary:        A small, efficient HTTP/SSL proxy daemon
 License:        GPL-2.0-or-later
 URL:            https://tinyproxy.github.io/

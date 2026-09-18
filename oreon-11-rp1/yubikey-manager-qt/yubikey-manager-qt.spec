@@ -3,8 +3,8 @@
 %global bname ykman-gui
 Name: yubikey-manager-qt
 Summary: Application for configuring any YubiKey over all USB interfaces
-Version: 1.2.5
-Release: 10%{?dist}
+Version: 1.2.6
+Release: 1%{?dist}
 URL: https://developers.yubico.com/yubikey-manager-qt/
 Source0: https://developers.yubico.com/%{name}/Releases/%{name}-%{version}.tar.gz
 Source1: https://developers.yubico.com/%{name}/Releases/%{name}-%{version}.tar.gz.sig

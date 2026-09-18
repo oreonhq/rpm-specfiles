@@ -24,7 +24,7 @@
 %global ns_project   PHPCOV
 
 Name:           %{pk_project}
-Version:        12.0.0
+Version:        13.1.0
 Release:        1%{?dist}
 Summary:        CLI frontend for PHP_CodeCoverage
 

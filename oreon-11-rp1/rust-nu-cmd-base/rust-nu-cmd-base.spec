@@ -7,7 +7,7 @@
 %global crate nu-cmd-base
 
 Name:           rust-nu-cmd-base
-Version:        0.99.1
+Version:        0.115.1
 Release:        %autorelease
 Summary:        Foundation tools to build Nushell commands
 

@@ -7,7 +7,7 @@
 %global crate aead
 
 Name:           rust-aead
-Version:        0.5.2
+Version:        0.6.1
 Release:        %autorelease
 Summary:        Traits for Authenticated Encryption with Associated Data (AEAD) algor...
 

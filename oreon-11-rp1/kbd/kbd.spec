@@ -7,8 +7,8 @@
 %global kbd_datadir %{_exec_prefix}/lib/kbd
 
 Name:           kbd
-Version:        2.9.0
-Release:        5%{?dist}
+Version:        2.10.0
+Release:        1%{?dist}
 Summary:        Tools for configuring the console (keyboard, virtual terminals, etc.)
 License:        GPL-2.0-or-later
 URL:            http://www.kbd-project.org/
@@ -16,7 +16,7 @@ URL:            http://www.kbd-project.org/
 Source0:        https://ftp.altlinux.org/pub/people/legion/kbd/kbd-%{version}.tar.xz
 # Same tarballs as Fedora kbd lookaside (public mirrors)
 Source1:        https://www.linuxfromscratch.org/~ken/console-fonts/other/kbd-latsun-fonts.tar.bz2
-# latarcyrheb-sun16/sun32.psfu are in upstream kbd 2.9.0 (no separate Source2, Koji copy 404s)
+# latarcyrheb-sun16/sun32.psfu are in upstream kbd 2.10.0 (no separate Source2, Koji copy 404s)
 Source3:        xml2lst.pl
 Source4:        vlock.pamd
 Source5:        kbdinfo.1

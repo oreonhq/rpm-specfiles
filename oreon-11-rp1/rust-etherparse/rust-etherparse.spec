@@ -7,7 +7,7 @@
 %global crate etherparse
 
 Name:           rust-etherparse
-Version:        0.13.0
+Version:        0.21.0
 Release:        %autorelease
 Summary:        A library for parsing & writing a bunch of packet based protocols (Et...
 

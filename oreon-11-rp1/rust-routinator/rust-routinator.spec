@@ -6,7 +6,7 @@
 %global crate routinator
 
 Name:           rust-routinator
-Version:        0.14.2
+Version:        0.15.2
 Release:        %autorelease
 Summary:        RPKI relying party software
 

@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.4.0.0
+Version:        0.5.1.0
 Release:        %autorelease
 Summary:        A high-performance striped resource pooling implementation
 

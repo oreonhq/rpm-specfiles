@@ -6,8 +6,8 @@
 %global libargparse_commit ee74d1b53bd680748af14e737378de57e2a0a954
 
 Name:           libavif
-Version:        1.3.0
-Release:        9%{?dist}
+Version:        1.4.2
+Release:        1%{?dist}
 Summary:        Library for encoding and decoding AVIF images
 License:        BSD-2-Clause
 URL:            https://github.com/AOMediaCodec/libavif

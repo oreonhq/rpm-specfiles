@@ -1,7 +1,7 @@
 %global source0_hash 31d65c2db14d321b9d862a323fc63002179cf3cc0b10d04db6ed55ffaed00db3
 
 Name:           gdk-pixbuf2-modules-extra
-Version:        2.44.0
+Version:        2.44.8
 Release:        %autorelease
 Summary:        Extra image loaders for gdk-pixbuf2
 

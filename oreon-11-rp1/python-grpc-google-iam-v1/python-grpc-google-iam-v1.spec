@@ -1,64 +1,56 @@
-%global source0_hash bb687bc434efeff4d8e0bee50fb7119afcd183e2cc451778db177ac860dacdea
+%global source0_hash none
 
-# Upstream test directory is empty.
-%bcond_with     tests
-
-%global         srcname     grpc-google-iam-v1
-%global         forgeurl    https://github.com/googleapis/python-grpc-google-iam-v1
-Version:        0.13.0
-%global         tag         v%{version}
-%forgemeta
-
-Name:           python-%{srcname}
+Name:           python-grpc-google-iam-v1
+Version:        0.14.5
 Release:        %autorelease
-Summary:        GRPC library for the google-iam-v1 service
+# Fill in the actual package summary to submit package to Fedora
+Summary:        IAM API client library
 
-License:        Apache-2.0
-URL:            %forgeurl
-Source0:        %forgesource
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/googleapis/google-cloud-python
+Source:         %{pypi_source grpc_google_iam_v1}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%if %{with tests}
-BuildRequires:  python3dist(pytest)
-%endif
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The IDL-derived library for the google-iam (v1) service in Google Cloud.}
+This is package 'grpc-google-iam-v1' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-grpc-google-iam-v1
 Summary:        %{summary}
-%description -n python3-%{srcname} %{_description}
+
+%description -n python3-grpc-google-iam-v1 %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n grpc_google_iam_v1-%{version}
 
-%forgeautosetup
 
 %generate_buildrequires
-%pyproject_buildrequires -x testing
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files google
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-# NOTE(mhayden): Setting PYTHONUSERBASE as a hack for PEP 420 namespaces.
-# Thanks to churchyard for the fix.
-PYTHONUSERBASE=%{buildroot}%{_prefix} \
-    %pytest tests/unit
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
+
+%files -n python3-grpc-google-iam-v1 -f %{pyproject_files}
 
 %changelog
 %autochangelog

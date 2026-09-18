@@ -1,8 +1,8 @@
 %global source0_hash cb1bfd4f655289cd39bc04642d597be9de5427623f0861c1fc19c08d98467fa2
 
 Name:		orc
-Version:	0.4.41
-Release:	3%{?dist}
+Version:	0.4.44
+Release:	1%{?dist}
 Summary:	The Oil Run-time Compiler
 
 License:	BSD-2-Clause AND BSD-3-Clause

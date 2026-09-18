@@ -1,7 +1,7 @@
 %global source0_hash 9abe9cde35a412b26b6376a5e8996dfeeeb5910fe6a723b78bcf954656fca0e6
 
 Name:           qtpass
-Version:        1.4.0
+Version:        1.8.1
 Release:        %autorelease
 Summary:        Cross-platform GUI for pass
 

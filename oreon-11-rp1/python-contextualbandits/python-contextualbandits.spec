@@ -1,98 +1,56 @@
-%global source0_hash 28ef86ea1672c180b5189e22441e17ebe54e98ebf6293a64eeaaa8f10ab74942
+%global source0_hash none
 
-%global pypi_name contextualbandits
+Name:           python-contextualbandits
+Version:        0.3.30
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python Implementations of Algorithms for Contextual Bandits
 
-%global _description %{expand:
-This Python package contains implementations of methods from different papers
-dealing with contextual bandit problems, as well as adaptations from typical
-multi-armed bandits strategies. It aims to provide an easy way to prototype
-and compare ideas, to reproduce research papers that don't provide 
-easily-available implementations of their proposed algorithms, and to
-serve as a guide in learning about contextual bandits.}
-
-%global commit          6c152e2ff3a2c4c41daebc01e6c202548b3be092
-%global snapshotdate    20241901
-%global shortcommit     %(c=%{commit}; echo ${c:0:7})
-
-Name:           python-%{pypi_name}
-Version:        0.3.27
-Release:        6%{?dist}
-Summary:        Python implementations of algorithms for contextual bandits
-
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/david-cortes/contextualbandits
+Source:         %{pypi_source contextualbandits}
 
-# we fetch the latest tarball from the upstream
-# we do not rely on Pypi version (no docs, no LICENSE included)
-Source0:        %url/archive/%{commit}/%{pypi_name}-%{commit}.tar.gz
-
-# Stop building for i686
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch:    %{ix86}
-
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(pip)
-BuildRequires:  python3dist(wheel)
-BuildRequires:  make
-BuildRequires:  gcc-c++
-BuildRequires:  Cython
 
-# For documentation
-BuildRequires:  python3dist(sphinx)
-BuildRequires:  python3dist(sphinx-rtd-theme)
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'contextualbandits' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-contextualbandits
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-contextualbandits %_description
 
-%package doc
-Summary:        Documentation for %{name}
-BuildArch:      noarch
-
-%description doc
-Documentation for %{name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n contextualbandits-%{version}
 
-%autosetup -n %{pypi_name}-%{commit}
-rm -rf %{pypi_name}.egg-info
-# remove toml file. It is actually not used in real build.
-rm -rf pyproject.toml
 
 %generate_buildrequires
-echo 'python3dist(numpy)'
-echo 'python3dist(scipy)'
-echo 'python3dist(pandas)'
-echo 'python3dist(scikit-learn)'
-echo 'python3dist(joblib)'
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
-# Generate html docs
-PYTHONPATH=${PWD} sphinx-build-3 docs html
-# Remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
 
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files %{pypi_name}
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
-%license LICENSE
+%check
+%_pyproject_check_import_allow_no_modules -t
 
-%files doc
-%license LICENSE
-%doc html/
-%doc example/
+
+%files -n python3-contextualbandits -f %{pyproject_files}
 
 %changelog
 %autochangelog

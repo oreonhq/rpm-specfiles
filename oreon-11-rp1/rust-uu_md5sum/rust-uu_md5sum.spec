@@ -10,7 +10,7 @@
 %global crate uu_md5sum
 
 Name:           rust-uu_md5sum
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        md5sum ~ (uutils) Print or check the MD5 checksums
 

@@ -7,7 +7,7 @@
 %global crate gzp
 
 Name:           rust-gzp
-Version:        2.0.2
+Version:        2.0.4
 Release:        %autorelease
 Summary:        Parallel Compression
 

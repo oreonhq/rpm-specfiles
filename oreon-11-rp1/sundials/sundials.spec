@@ -103,7 +103,7 @@
 
 Summary:    Suite of nonlinear solvers
 Name:       sundials
-Version:    7.6.0
+Version:    7.9.0
 Release:    %autorelease
 License:    BSD-3-Clause
 URL:        https://computation.llnl.gov/projects/%{name}/

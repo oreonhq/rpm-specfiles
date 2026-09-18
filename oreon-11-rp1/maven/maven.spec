@@ -8,7 +8,7 @@
 
 Name:           maven
 Epoch:          1
-Version:        3.9.11
+Version:        3.9.16
 Release:        %autorelease
 Summary:        Java project management and project comprehension tool
 # maven itself is Apache-2.0
@@ -94,7 +94,7 @@ Requires(postun): alternatives
 # TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 1:3.9.9-13
 # TODO Remove in Fedora 47
-Obsoletes:      %{name}-openjdk21 < 1:3.9.11-11
+Obsoletes:      %{name}-openjdk21 < 1:3.9.16-11
 
 %description
 Maven is a software project management and comprehension tool. Based on the

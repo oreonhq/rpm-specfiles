@@ -7,7 +7,7 @@
 %global crate darling
 
 Name:           rust-darling
-Version:        0.23.0
+Version:        0.24.1
 Release:        %autorelease
 Summary:        A proc-macro library for reading attributes into structs when
 

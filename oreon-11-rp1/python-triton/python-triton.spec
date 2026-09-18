@@ -25,7 +25,7 @@
 %global pypi_version 3.3.0
 %else
 
-%global pypi_version 3.1.0
+%global pypi_version 3.8.0
 
 # The sdist does not contain enough to do the build
 # Fetch top of release/3.1.x at 12/31/24
@@ -54,7 +54,7 @@
 
 Name:           python-%{pypi_name}
 Version:        %{pypi_version}
-Release:        9%{?dist}
+Release:        1%{?dist}
 Summary:        A language and compiler for custom Deep Learning operations
 
 License:        MIT AND Apache-2.0 AND BSD-3-Clause AND BSD-2-Clause

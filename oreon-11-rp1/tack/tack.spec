@@ -2,8 +2,8 @@
 
 %global revision 20250503
 Name:           tack
-Version:        1.11
-Release:        3.%{revision}%{?dist}
+Version:        1.11-20251210-20251210
+Release:        1.%{revision}%{?dist}
 Summary:        Terminfo action checker
 
 License:        GPL-2.0-only

@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/hapcryst
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        0.1.15
+Version:        0.2.1
 Release:        %autorelease
 Summary:        Integral cohomology computations of Bieberbach groups
 

@@ -1,19 +1,24 @@
-%global source0_hash 879c3e79a2729ce768ebb7d36d4609e3a78a4ca2ec3a9f12286ca057e3d0db08
+%global source0_hash none
 
 Name:           python-argon2-cffi
-Version:        23.1.0
+Version:        25.1.0
 Release:        %autorelease
-Summary:        The secure Argon2 password hashing algorithm
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Argon2 for Python
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://argon2-cffi.readthedocs.io/
+URL:            https://github.com/hynek/argon2-cffi
 Source:         %{pypi_source argon2_cffi}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-CFFI-based Argon2 Bindings for Python.}
+This is package 'argon2-cffi' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -22,29 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-argon2-cffi %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n argon2_cffi-%{version}
-# don't BR coverage, we will not measure it
-sed -Ei 's/"coverage[^"]+", //' pyproject.toml
+%prep
+%autosetup -p1 -n argon2_cffi-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -x tests
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files argon2
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-argon2-cffi -f %{pyproject_files}
-%doc README.md
-%license LICENSE
 
 %changelog
 %autochangelog

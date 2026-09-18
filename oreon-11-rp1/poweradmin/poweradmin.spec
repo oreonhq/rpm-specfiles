@@ -1,8 +1,8 @@
 %global source0_hash 2388e76ff7c4d47658f9ee500166fd60f3953a93d9e9225a61ebb1ea768231e6
 
 Name:         poweradmin
-Version:      2.1.7
-Release:      23%{?dist}
+Version:      4.4.1
+Release:      1%{?dist}
 Summary:      A friendly web-based DNS administration tool for Bert Hubert's PowerDNS server
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

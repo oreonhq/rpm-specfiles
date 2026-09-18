@@ -1,7 +1,7 @@
 %global source0_hash 8124d0a057aebfaba30eb63a8c331b3c5e60dd15d24d8e6492316d1536e36305
 
 Name:           remind
-Version:        06.02.05
+Version:        06.03.03
 Release:        %autorelease
 Summary:        Sophisticated calendar and alarm program
 

@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           hmmer
-Version:        3.3.2
-Release:        12%{?dist}
+Version:        3.4
+Release:        1%{?dist}
 Summary:        Biosequence analysis using profile hidden Markov models
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

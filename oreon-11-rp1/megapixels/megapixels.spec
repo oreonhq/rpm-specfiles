@@ -1,7 +1,7 @@
 %global source0_hash 580c4c72e08eed848c121faf573a4447a3bb578c3b0022c73783583ee53a7397
 
 %global forgeurl https://gitlab.com/megapixels-org/Megapixels
-Version:        1.8.3
+Version:        2.1.0
 %global tag %{version}
 %forgemeta
 

@@ -7,8 +7,8 @@
 %bcond_without tests
 
 Name:           wxGTK
-Version:        3.2.9
-Release:        3%{?dist}
+Version:        3.2.11
+Release:        1%{?dist}
 Summary:        GTK port of the wxWidgets GUI library
 License:        LGPL-2.0-or-later WITH WxWindows-exception-3.1
 URL:            https://www.wxwidgets.org/

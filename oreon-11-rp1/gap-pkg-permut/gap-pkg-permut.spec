@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/permut
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        2.0.5
+Version:        2.0.7
 Release:        %autorelease
 Summary:        Permutability in finite groups for GAP
 

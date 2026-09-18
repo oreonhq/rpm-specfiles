@@ -51,8 +51,8 @@
 }
 
 Name:           zig
-Version:        0.15.2
-Release:        3%{?dist}
+Version:        0.16.0
+Release:        1%{?dist}
 Summary:        Programming language for maintaining robust, optimal, and reusable software
 # The minisign file references a specific archive name so we store for ease of use
 %global         archive_name %{name}-%{version}.tar.xz

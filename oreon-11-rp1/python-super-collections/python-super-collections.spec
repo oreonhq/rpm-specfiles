@@ -1,21 +1,24 @@
-%global source0_hash 60f6b6641964fd726a90d3c3281b91503d8b53c6f5f89f50bc8875c4d5f5baf1
+%global source0_hash none
 
 Name:           python-super-collections
-Version:        0.5.3
+Version:        0.6.2
 Release:        %autorelease
-Summary:        Python SuperDictionaries (with attributes) and SuperLists
+# Fill in the actual package summary to submit package to Fedora
+Summary:        file: README.md
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/fralau/super-collections
-# PyPI tarball doesn't include tests
-Source:         %{url}/archive/v%{version}/super-collections-%{version}.tar.gz
+Source:         %{pypi_source super_collections}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package provides a Python library to instantly convert JSON and YAML files
-into objects with attributes.}
+This is package 'super-collections' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -24,26 +27,36 @@ Summary:        %{summary}
 
 %description -n python3-super-collections %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-super-collections test
 
-%autosetup -p1 -n super-collections-%{version}
+
+%prep
+%autosetup -p1 -n super_collections-%{version}
+
 
 %generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
 %pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l super_collections
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-super-collections -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

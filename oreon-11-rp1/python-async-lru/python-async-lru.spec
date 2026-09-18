@@ -1,23 +1,24 @@
-%global source0_hash 94bc100c32862e09817f019fc9c44ded625fe52a5f338b3168117fcf84c178a7
+%global source0_hash none
 
 Name:           python-async-lru
-Version:        2.1.0
+Version:        2.3.0
 Release:        %autorelease
-Summary:        Simple lru_cache for asyncio
-# SPDX
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Simple LRU cache for asyncio
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/aio-libs/async_lru
-Source:         https://github.com/aio-libs/async-lru/archive/refs/tags/v%{version}.tar.gz
+URL:            https://matrix.to/#/#aio-libs:matrix.org
+Source:         %{pypi_source async_lru}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  python3-pytest-asyncio
-BuildRequires:  python3-pytest-timeout
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package is 100% port of Python built-in
-function functools.lru_cache for asyncio.}
+This is package 'async-lru' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -26,31 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-async-lru %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n async-lru-%{version}
-# Removing pytest CLI options. Most of them are related to coverage.
-sed -i "/addopts/d" setup.cfg
+%prep
+%autosetup -p1 -n async_lru-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files async_lru
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Ignore DeprecationWarning untill
-# https://github.com/aio-libs/async-lru/issues/635
-# is resolved.
-%pytest -W ignore::DeprecationWarning
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-async-lru -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

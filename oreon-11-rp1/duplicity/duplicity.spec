@@ -3,7 +3,7 @@
 %bcond check 0
 
 Name:           duplicity
-Version:        3.0.7
+Version:        3.2.0.2
 Release:        %autorelease
 Summary:        Encrypted bandwidth-efficient backup using rsync algorithm
 

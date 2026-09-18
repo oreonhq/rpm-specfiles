@@ -6,8 +6,8 @@ for maintaining VMs in IBM Cloud (starting, stopping, cleaning orphans, etc.).
 }
 
 Name:           resalloc-ibm-cloud
-Version:        3.4
-Release:        2%{?dist}
+Version:        3.5-1
+Release:        1%{?dist}
 Summary:        Resource allocator scripts for IBM cloud
 
 License:        GPL-2.0-or-later

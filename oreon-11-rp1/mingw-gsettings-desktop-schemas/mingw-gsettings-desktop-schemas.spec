@@ -6,8 +6,8 @@
 %global release_version %(echo %{version} | awk -F. '{print $1}')
 
 Name:           mingw-gsettings-desktop-schemas
-Version:        49.1
-Release:        2%{?dist}
+Version:        51.0
+Release:        1%{?dist}
 Summary:        MinGW Windows gsettings-desktop-schemas
 
 License:        LGPL-2.1-or-later

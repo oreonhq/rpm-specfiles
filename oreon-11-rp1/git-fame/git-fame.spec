@@ -1,8 +1,8 @@
 %global source0_hash e74319c409aed8c84fccb1695782c2d1b01178f32e85165ea87e4a1bedb24920
 
 Name:           git-fame
-Version:        2.0.1
-Release:        14%{?dist}
+Version:        4.2.1
+Release:        1%{?dist}
 Summary:        Pretty-print git repository collaborators sorted by contributions
 
 License:        MPL-2.0

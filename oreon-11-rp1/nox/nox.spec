@@ -1,7 +1,7 @@
 %global source0_hash c2e0034d5645e560e6ea913594ab4408cfcb88f64809722c39194c934cbb1344
 
 Name:           nox
-Version:        2025.11.12
+Version:        2026.8.17
 Release:        %autorelease
 Summary:        Flexible test automation
 

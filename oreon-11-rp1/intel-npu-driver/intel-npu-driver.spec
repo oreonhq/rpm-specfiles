@@ -7,7 +7,7 @@ Meteor Lake). It enables energy-efficient execution of artificial neural
 network tasks.}
 
 Name:		intel-npu-driver
-Version:	1.16.0
+Version:	1.38.0
 Release:	%autorelease
 Summary:	Intel Neural Processing Unit Driver
 

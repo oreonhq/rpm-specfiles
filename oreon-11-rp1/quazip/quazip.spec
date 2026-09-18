@@ -19,7 +19,7 @@
 %global QUAZIP_LIB_SOVERSION 1.4.0
 
 Name:		quazip
-Version:	1.4
+Version:	1.7.2
 Release:	%autorelease
 Summary:	Qt/C++ wrapper for the minizip library
 # Automatically converted from old format: GPLv2+ or LGPLv2+ - review is highly recommended.

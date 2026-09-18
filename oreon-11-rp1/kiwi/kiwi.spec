@@ -15,7 +15,7 @@ and cloud systems like Xen, KVM, VMware, EC2 and more.
 %endif
 
 Name:           kiwi
-Version:        10.3.0
+Version:        11.0.2
 Release:        1%{?dist}
 URL:            http://osinside.github.io/kiwi/
 Summary:        Flexible operating system image builder

@@ -4,7 +4,7 @@
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 Name:       suil
-Version:    0.10.24
+Version:    0.10.26
 Release:    %autorelease
 Summary:    A lightweight C library for loading and wrapping LV2 plugin UIs
 

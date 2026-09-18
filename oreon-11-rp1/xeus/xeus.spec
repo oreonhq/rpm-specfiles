@@ -1,7 +1,7 @@
 %global source0_hash ea19c4e742b8c0f62cfcd7660dfc65e2ae5fba9579a08385e8bd8ae4951ff70a
 
 Name:           xeus
-Version:        5.2.6
+Version:        6.0.5
 Release:        %autorelease
 Summary:        C++ implementation of the Jupyter kernel protocol
 

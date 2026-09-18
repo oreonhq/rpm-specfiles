@@ -1,8 +1,8 @@
 %global source0_hash fbf016063430c0c47e091aa393dc698b5874e78fce34269c817b73ec67b31be5
 
 Name:           xgalaxy
-Version:        2.0.34
-Release:        47%{?dist}
+Version:        2.1.1.0
+Release:        1%{?dist}
 Summary:        Arcade game: shoot down the space ships attacking the planet
 License:        GPL-1.0-or-later
 URL:            http://sourceforge.net/projects/xgalaga/

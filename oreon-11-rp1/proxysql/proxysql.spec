@@ -2,7 +2,7 @@
 
 Summary:       A high-performance MySQL proxy
 Name:          proxysql
-Version:       3.0.2
+Version:       4.0.11
 Release:       %autorelease
 # Proxysql Google group for free community support: https://groups.google.com/g/proxysql
 URL:           https://proxysql.com/

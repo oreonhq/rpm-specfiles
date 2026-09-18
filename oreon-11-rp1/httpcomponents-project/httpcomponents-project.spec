@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           httpcomponents-project
-Version:        13
+Version:        14
 Release:        %autorelease
 Summary:        Common POM file for HttpComponents
 License:        Apache-2.0

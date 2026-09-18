@@ -1,8 +1,8 @@
 %global source0_hash 3446e1d71abdeb98d41e252777e67e1909b186496fda59f98f67032f7fbcd955
 
 Name:           mdbtools
-Version:        1.0.0
-Release:        9%{?dist}
+Version:        1.0.1
+Release:        1%{?dist}
 Summary:        Access data stored in Microsoft Access databases
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

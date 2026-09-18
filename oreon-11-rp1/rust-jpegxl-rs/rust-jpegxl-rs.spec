@@ -6,11 +6,11 @@
 %global debug_package %{nil}
 
 %global crate jpegxl-rs
-%global crate_version 0.12.0+libjxl-0.11.1
+%global crate_version 0.15.0+libjxl-0.12.0+libjxl-0.11.1
 %global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-jpegxl-rs
-Version:        0.12.0
+Version:        0.15.0+libjxl-0.12.0
 Release:        %autorelease
 Summary:        Safe Rust wrapper for JPEG XL reference implementation
 

@@ -1,62 +1,43 @@
-%global source0_hash 025ce2b150f7fe4296d116ee9bad455a6643ab4f6e7dce541613a4758cbce347
+%global source0_hash none
 
-# RHEL does not include pillow or pypng
-%bcond extras %[%{undefined rhel} || %{defined epel}]
-
-%global pkgname qrcode
-
-Name:           python-%{pkgname}
-Version:        8.0
+Name:           python-qrcode
+Version:        8.2
 Release:        %autorelease
-Summary:        Python QR Code image generator
+# Fill in the actual package summary to submit package to Fedora
+Summary:        QR Code image generator
 
-License:        BSD-3-Clause
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/lincolnloop/python-qrcode
-Source0:        https://files.pythonhosted.org/packages/source/q/qrcode/qrcode-8.0.tar.gz
-Source1:        flit-pyproject.toml.in
+Source:         %{pypi_source qrcode}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
 
-%description
-This module uses the Python Imaging Library (PIL) to allow for the\
-generation of QR Codes.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'qrcode' generated automatically by pyp2spec.}
 
+%description %_description
 
-%package -n python3-%{pkgname}
-Summary:        Python QR Code image generator
-Obsoletes:      python3-qrcode-core < 7.4.2-2
-Provides:       python3-qrcode-core = %{version}-%{release}
-%if %{with extras}
-Recommends:     (python3-%{pkgname}+pil or python3-%{pkgname}+png or python3-%{pkgname}+all)
-%endif
+%package -n     python3-qrcode
+Summary:        %{summary}
 
-%description -n python3-%{pkgname}
-This module uses the Python Imaging Library (PIL) to allow for the
-generation of QR Codes. Python 3 version.
+%description -n python3-qrcode %_description
 
-
-%if %{with extras}
-%pyproject_extras_subpkg -n python3-%{pkgname} pil,png,all
-%endif
-
-
-%generate_buildrequires
-# RHEL does not include the extra test dependencies (coverage, pillow)
-%pyproject_buildrequires %{?with_extras:-x pil -x png}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-qrcode all,pil,png
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n qrcode-%{version} -p1
-# Remove shebang
-sed -i '1d' qrcode/console_scripts.py
-%if %{defined rhel} && %{undefined epel}
-# use flit-core instead of poetry-core
-sed -e 's|@VERSION@|%{version}|' %{SOURCE1} > pyproject.toml
-%endif
+%autosetup -p1 -n qrcode-%{version}
+
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,pil,png
 
 
 %build
@@ -65,18 +46,17 @@ sed -e 's|@VERSION@|%{version}|' %{SOURCE1} > pyproject.toml
 
 %install
 %pyproject_install
-%pyproject_save_files qrcode
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files -n python3-%{pkgname} -f %{pyproject_files}
-%doc README.rst CHANGES.rst
-%license LICENSE
+%files -n python3-qrcode -f %{pyproject_files}
 %{_bindir}/qr
-
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.0-1

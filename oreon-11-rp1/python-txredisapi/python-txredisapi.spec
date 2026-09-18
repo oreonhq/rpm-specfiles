@@ -1,60 +1,56 @@
-%global source0_hash c9607062d05e4d0b8ef84719eb76a3fe7d5ccd606a2acf024429da51d6e84559
+%global source0_hash none
 
 Name:           python-txredisapi
-Version:        1.4.9
+Version:        1.4.12
 Release:        %autorelease
-Summary:        Non-blocking Redis client for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        non-blocking redis client for python
 
-License:        Apache-2.0
-URL:            http://github.com/fiorix/txredisapi
-Source0:        https://files.pythonhosted.org/packages/source/t/txredisapi/txredisapi-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            http://github.com/IlyaSkriblovsky/txredisapi
+Source:         %{pypi_source txredisapi}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-txredisapi is a non-blocking client driver for the Redis database,
-written in Python. It uses Twisted for the asynchronous communication
-with Redis.
+This is package 'txredisapi' generated automatically by pyp2spec.}
 
-It started as a fork of the original Redis protocol for Twisted, and
-evolved into a more robust, reliable, and complete solution for
-applications like web servers. These types of applications often need a
-fault-tolerant pool of connections with multiple Redis servers, making it
-possible to easily develop and maintain distributed systems.
-
-Most of the Redis commands are supported, as well as other features such as
-silent reconnection, connection pools, and automatic sharding.
-
-This driver is distributed as part of the cyclone web framework.}
-
-%description %{_description}
+%description %_description
 
 %package -n     python3-txredisapi
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-txredisapi}
-Requires:       python3-six
-Requires:       python3-twisted
-%description -n python3-txredisapi %{_description}
+
+%description -n python3-txredisapi %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n txredisapi-%{version}
 
-%autosetup -n txredisapi-%{version}
-# Remove bundled egg-info
-rm -rf txredisapi.egg-info
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-txredisapi
-%{python3_sitelib}/__pycache__/*
-%{python3_sitelib}/txredisapi.py
-%{python3_sitelib}/txredisapi-%{version}-py%{python3_version}.egg-info
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-txredisapi -f %{pyproject_files}
 
 %changelog
 %autochangelog

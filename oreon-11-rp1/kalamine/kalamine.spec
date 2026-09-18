@@ -1,7 +1,7 @@
 %global source0_hash 1ffadf9b59ea17587bf7a6e7213b8f8b462d9bf27d5f5fdc81cf4a6323d94036
 
 Name:           kalamine
-Version:        0.38
+Version:        0.40
 Release:        %autorelease
 Summary:        Cross-platform Keyboard Layout Maker
 License:        MIT

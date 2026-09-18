@@ -2,8 +2,8 @@
 
 Name:           snapraid
 Summary:        Disk array backup for many large rarely-changed files
-Version:        13.0
-Release:        2%{?dist}
+Version:        14.9
+Release:        1%{?dist}
 # snapraid itself is GPL-3.0-or-later but uses other source codes, breakdown:
 # Apache-2.0 AND GPL-3.0-or-later: cmdline/metro.c
 # BSD-2-Clause: tommyds/*

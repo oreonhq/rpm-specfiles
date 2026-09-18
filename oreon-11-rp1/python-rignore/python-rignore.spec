@@ -1,7 +1,7 @@
 %global source0_hash 7ced054af610c442cc78fe82ba36a3f35c4884b35335faff3a670117d9d49279
 
 Name:           python-rignore
-Version:        0.7.6
+Version:        0.8.1
 Release:        %autorelease
 Summary:        Python bindings for the ignore crate
 

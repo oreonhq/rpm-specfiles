@@ -4,7 +4,7 @@
 
 Name: mypaint-brushes
 Epoch: 1
-Version: 1.3.1
+Version: 2.0.2
 Release: %autorelease
 Summary: Brushes to be used with the MyPaint library
 

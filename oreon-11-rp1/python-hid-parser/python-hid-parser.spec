@@ -1,69 +1,61 @@
-%global source0_hash 6b9647bfecca11dcf5669813c80d3720dc02923c86a3240cd7eb5b6682c84186
-
-%bcond check 0
-%global pname hid-parser
-%global commit 4b7944f4999e152c678cd7fa76278b7e2535c3ff
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-%global snapshotdate 20211206
+%global source0_hash none
 
 Name:           python-hid-parser
-Version:        0.0.3
-Release:        16.%{snapshotdate}git%{shortcommit}%{?dist}
-Summary:        Parse HID report descriptors
+Version:        0.1.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Typed pure Python library to parse HID report descriptors
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/usb-tools/python-hid-parser
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
-
-# compatibility with pytest 8
-# downstream-only patch, upstream seems dead
-# https://github.com/usb-tools/python-hid-parser/pull/23
-Patch:          https://github.com/usb-tools/python-hid-parser/pull/23.patch#/%{name}-pytest-8.patch
-# https://github.com/usb-tools/python-hid-parser/pull/18
-Patch:          https://github.com/usb-tools/python-hid-parser/pull/18.patch#/%{name}-fix-GenericDesktopControls-Rz.patch
-# backport fix from solaar fork
-Patch:          %{name}-solaar.patch
+Source:         %{pypi_source hid_parser}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%global _desc %{expand:
-python-hid-parser is a typed pure Python library to parse HID report
-descriptors.
-}
 
-%description %_desc
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'hid-parser' generated automatically by pyp2spec.}
 
-%package     -n python3-%{pname}
+Patch:          https://github.com/usb-tools/python-hid-parser/pull/23.patch#/%{name}-pytest-8.patch
+Patch:          https://github.com/usb-tools/python-hid-parser/pull/18.patch#/%{name}-fix-GenericDesktopControls-Rz.patch
+Patch:          %{name}-solaar.patch
+
+%description %_description
+
+%package -n     python3-hid-parser
 Summary:        %{summary}
 
-%description -n python3-%{pname} %_desc
+%description -n python3-hid-parser %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n hid_parser-%{version}
 
-%autosetup -p1 -n %{name}-%{commit}
+
 %generate_buildrequires
-%if %{with check}
-%pyproject_buildrequires -x test
-%else
 %pyproject_buildrequires
-%endif
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files hid_parser
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with check}
+
 %check
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pname} -f %{pyproject_files}
-%doc README.md
-%license LICENSE
+
+%files -n python3-hid-parser -f %{pyproject_files}
 
 %changelog
 %autochangelog

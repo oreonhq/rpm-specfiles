@@ -1,8 +1,8 @@
 %global source0_hash b7ff8b9b8c26a811103ea22cce542ec93d7a15f4c66afb4e244096d58f7f52d0
 
 Name: QXlsx
-Version:  1.4.10
-Release:  7%{?dist}
+Version:  1.5.1
+Release:  1%{?dist}
 Summary:  Excel/XLSX file reader/writer library for Qt
 
 License: MIT

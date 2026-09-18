@@ -11,7 +11,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        1.6.28.1
+Version:        1.7.0.0
 Release:        %autorelease
 Summary:        Creation of type-safe, RESTful web applications
 

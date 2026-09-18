@@ -4,7 +4,7 @@
 
 Name:           maven-resolver2
 Epoch:          1
-Version:        2.0.9
+Version:        2.0.23
 Release:        %autorelease
 Summary:        Apache Maven Artifact Resolver library
 License:        Apache-2.0
@@ -83,7 +83,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_remove_plugin -r :maven-enforcer-plugin
 %pom_remove_plugin -r :japicmp-maven-plugin
 
-%mvn_compat_version : 2.0.9
+%mvn_compat_version : 2.0.23
 
 %build
 %mvn_build -j -f -j -- -Dmaven4Version=4.0.0-rc-4

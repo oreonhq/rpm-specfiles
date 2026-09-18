@@ -8,8 +8,8 @@ Name: initial-setup
 Summary: Initial system configuration utility
 URL: https://fedoraproject.org/wiki/InitialSetup
 License: GPL-2.0-or-later
-Version: 0.3.101
-Release: 7%{?dist}
+Version: 0.3.105-1
+Release: 1%{?dist}
 
 # This is a Red Hat maintained package which is specific to
 # our distribution.

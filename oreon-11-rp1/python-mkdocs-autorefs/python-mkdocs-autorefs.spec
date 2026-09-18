@@ -1,31 +1,27 @@
-%global source0_hash beee715b254455c4aa93b6ef3c67579c399ca092259cc41b7d9342573ff1fc75
-
-%bcond tests 1
+%global source0_hash none
 
 Name:           python-mkdocs-autorefs
-Version:        1.4.3
+Version:        1.4.4
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Automatically link across pages in MkDocs.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ISC
 URL:            https://mkdocstrings.github.io/autorefs
 Source:         %{pypi_source mkdocs_autorefs}
-# Fix test_reference_implicit_with_code_inlinehilite_python
-Patch:          https://github.com/mkdocstrings/autorefs/pull/60.patch
-# setuptools is too old for the new PEP 639 SPDX license expression
-# see https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license-and-license-files
-Patch100:       mkdocs_autorefs-revert-license-fields.diff
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-%if %{with tests}
-BuildRequires:  mkdocs-material
-BuildRequires:  python3dist(pymdown-extensions)
-BuildRequires:  python3dist(pytest)
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package provides a plugin to automatically link across pages in MkDocs.}
+This is package 'mkdocs-autorefs' generated automatically by pyp2spec.}
+
+Patch:          https://github.com/mkdocstrings/autorefs/pull/60.patch
+Patch100:       mkdocs_autorefs-revert-license-fields.diff
 
 %description %_description
 
@@ -34,39 +30,31 @@ Summary:        %{summary}
 
 %description -n python3-mkdocs-autorefs %_description
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n mkdocs_autorefs-%{version}
 
-%autosetup -N -n mkdocs_autorefs-%{version}
-%autopatch -p1 -M99
-
-%if (0%{?fedora} && 0%{?fedora} < 43) || (0%{?rhel} && 0%{?rhel} < 11)
-# for older setuptools
-%autopatch -p1 -m100 -M199
-%endif
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -L mkdocs_autorefs
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-# requires griffe which is unpackaged
-rm tests/test_api.py
-%pytest -v --deselect=tests/test_references.py::test_reference_implicit_with_code_inlinehilite_python
-%else
-%pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-mkdocs-autorefs -f %{pyproject_files}
-%license LICENSE
-%doc README.md CHANGELOG.md
 
 %changelog
 %autochangelog

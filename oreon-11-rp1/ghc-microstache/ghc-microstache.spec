@@ -10,7 +10,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        1.0.3
+Version:        1.0.3.1
 Release:        %autorelease
 Summary:        Mustache templates for Haskell
 

@@ -4,7 +4,7 @@
 %global srcname weasyprint
 
 Name:           weasyprint
-Version:        68.1
+Version:        70.0
 Release:        1%{?dist}
 Summary:        Utility to render HTML and CSS to PDF
 

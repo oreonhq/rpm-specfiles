@@ -9,8 +9,8 @@
 
 Summary:         A small text editor
 Name:            nano
-Version:         8.7.1
-Release:         3%{?dist}
+Version:         9.2
+Release:         1%{?dist}
 License:         GPL-3.0-or-later
 URL:             https://www.nano-editor.org
 

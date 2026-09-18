@@ -26,7 +26,7 @@
 %global sources      %{pecl_name}-%{version}
 
 # For test suite, see https://github.com/php-ds/tests/commits/master
-# version 1.5.1  (version 1.6.0 exist but requires phpunit12, so PHP 8.3)
+# version 1.5.1  (version 2.0.1 exist but requires phpunit12, so PHP 8.3)
 %global gh_commit    3d14aa6f8c25d38d79c90924150c51636544e4a8
 %global gh_short     %(c=%{gh_commit}; echo ${c:0:7})
 %global gh_owner     php-ds
@@ -34,8 +34,8 @@
 
 Summary:        Data Structures for PHP
 Name:           php-pecl-%{pecl_name}
-Version:        1.6.0
-Release:        4%{?dist}
+Version:        2.0.1
+Release:        1%{?dist}
 License:        MIT
 URL:            https://pecl.php.net/package/%{pecl_name}
 Source0:        https://pecl.php.net/get/%{sources}.tgz

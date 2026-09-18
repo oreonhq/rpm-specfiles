@@ -10,7 +10,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        0.3.6.4
+Version:        0.4.0
 Release:        %autorelease
 Summary:        Http-client backend using the connection package and tls library
 

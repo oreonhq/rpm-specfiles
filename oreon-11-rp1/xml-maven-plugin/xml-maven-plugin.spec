@@ -2,7 +2,7 @@
 
 Name:           xml-maven-plugin
 Summary:        Maven XML Plugin
-Version:        1.1.0
+Version:        1.2.2
 Release:        %autorelease
 License:        Apache-2.0
 

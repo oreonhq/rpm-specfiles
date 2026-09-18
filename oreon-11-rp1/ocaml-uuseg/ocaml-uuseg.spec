@@ -5,7 +5,7 @@
 %endif
 
 Name:           ocaml-uuseg
-Version:        17.0.0
+Version:        18.0.0
 Release:        %autorelease
 Summary:        Unicode text segmentation for OCaml
 
@@ -24,7 +24,7 @@ BuildRequires:  ocaml-findlib
 BuildRequires:  ocaml-ocamlbuild
 BuildRequires:  ocaml-rpm-macros
 BuildRequires:  ocaml-topkg-devel >= 1.1.0
-BuildRequires:  ocaml-uucp-devel >= 17.0.0
+BuildRequires:  ocaml-uucp-devel >= 18.0.0
 BuildRequires:  ocaml-uutf-devel >= 1.0.0
 BuildRequires:  unicode-ucd
 

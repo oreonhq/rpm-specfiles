@@ -1,8 +1,8 @@
 %global source0_hash 7e021bab89f136aa3cf736f772a635aaa353f93f6f8859495f4bd8c519be4805
 
 Name:           apriltag
-Version:        3.4.2
-Release:        6%{?dist}
+Version:        3.4.5
+Release:        1%{?dist}
 Summary:        Visual fiducial system popular for robotics research
 
 # The entire source code BSD-2-Clause-Views except common/pthreads_cross.{cpp,h} which is MIT

@@ -1,7 +1,7 @@
 %global source0_hash 422b8c2d56777560cb104c48f426a2ae6af4b83256c512510ab83d02f4648611
 
 Name:           archlinux-keyring
-Version:        20260206
+Version:        20260909
 Release:        %autorelease
 Url:            https://archlinux.org/packages/core/any/archlinux-keyring/
 Source0:        https://gitlab.archlinux.org/archlinux/archlinux-keyring/-/archive/%{version}/archlinux-keyring-%{version}.tar.gz

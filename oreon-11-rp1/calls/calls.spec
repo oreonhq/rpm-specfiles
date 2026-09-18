@@ -3,8 +3,8 @@
 %global libcall_ui_commit f66056ace818ff19b507335634dd67138a92c77f
 
 Name:       calls
-Version:    49.1.1
-Release:    7%{?dist}
+Version:    50.0
+Release:    1%{?dist}
 Summary:    A phone dialer and call handler
 
 License:    GPL-3.0-or-later AND LGPL-2.1-or-later

@@ -14,8 +14,8 @@ ExcludeArch: %{ix86}
 
 Name:           ocaml-ocplib-simplex
 Epoch:          1
-Version:        0.4.1
-Release:        15%{?dist}
+Version:        0.5.1
+Release:        1%{?dist}
 Summary:        Simplex algorithm for solving systems of linear inequalities
 
 License:        LGPL-2.1-only WITH OCaml-LGPL-linking-exception

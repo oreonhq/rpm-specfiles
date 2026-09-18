@@ -1,107 +1,57 @@
-%global source0_hash e7f69aaa0c46ddf61fce1a8c29755fdee3c02a34ed34f4bd5c6e8c37ca77ee94
+%global source0_hash none
 
-# Created by pyp2rpm-3.3.2
-%global pypi_name trololio
-%global mod_name Trololio
+Name:           python-trololio
+Version:        1.0~b0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Trollius and asyncio compatibility library
 
-%if (0%{?rhel} && 0%{?rhel} < 8) || (0%{?fedora} && 0%{?fedora} < 29)
-%bcond_without python2
-%else
-%bcond_with python2
-%endif
-
-%global sum Trollius and asyncio compatibility library
-
-%global desc \
-Trololio provides a compatibility layer for Trollius and asyncio (aka Tulip). \
-It addresses the differences listed in Trollius and Tulip: \
-\
-* Allows the use of Trollius' syntax with asyncio. \
-* Provides missing objects and aliases for the others. \
-* Synchronizes debug environnement variables.
-
-Name:           python-%{pypi_name}
-Version:        1.0
-Release:        28%{?dist}
-Summary:        %{sum}
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            http://github.com/ThinkChaos/Trololio/
-Source0:        https://files.pythonhosted.org/packages/source/t/%{pypi_name}/%{mod_name}-%{version}.zip
-# License file from source repository
-Source1:        https://raw.githubusercontent.com/ThinkChaos/Trololio/25fe6b9a0d9e2dc69d59f1b5c6e6e56a6615c305/LICENSE#/Trololio-LICENSE
+Source:         %{pypi_source Trololio-1.0b 1.0b0 zip}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%if %{with python2}
-BuildRequires:  python2-devel
-BuildRequires:  python2-setuptools
-%endif
 
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'trololio' generated automatically by pyp2spec.}
 
-%description %{desc}
+%description %_description
 
-%if %{with python2}
-%package -n     python2-%{pypi_name}
-Summary:        %{sum} for Python 2
-%{?python_provide:%python_provide python2-%{pypi_name}}
-%if (0%{?rhel} && 0%{?rhel} < 8) || (0%{?fedora} && 0%{?fedora} < 28)
-Requires:       python-trollius
-%else
-Requires:       python2-trollius
-%endif
+%package -n     python3-trololio
+Summary:        %{summary}
 
-%description -n python2-%{pypi_name} %{desc}
+%description -n python3-trololio %_description
 
-This package provides the Python 2 module.
-
-%endif
-
-%package -n     python%{python3_pkgversion}-%{pypi_name}
-Summary:        %{sum} for Python 3
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
-
-%description -n python%{python3_pkgversion}-%{pypi_name} %{desc}
-
-This package provides the Python 3 module.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n Trololio-1.0b-1.0b0
 
-%autosetup -n %{mod_name}-%{version}
-# Remove bundled egg-info
-rm -rf *.egg-info
 
-# Install license into source tree
-cp %{SOURCE1} LICENSE
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%if %{with python2}
-%py2_build
-%endif
-%py3_build
+%pyproject_wheel
+
 
 %install
-%if %{with python2}
-%py2_install
-%endif
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with python2}
-%files -n python2-%{pypi_name}
-%doc README.rst
-%license LICENSE
-%{python2_sitelib}/%{pypi_name}.py*
-%{python2_sitelib}/%{mod_name}-%{version}-py?.?.egg-info
-%endif
 
-%files -n python%{python3_pkgversion}-%{pypi_name}
-%doc README.rst
-%license LICENSE
-%{python3_sitelib}/__pycache__/*
-%{python3_sitelib}/%{pypi_name}.py
-%{python3_sitelib}/%{mod_name}-%{version}-py%{python3_version}.egg-info
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-trololio -f %{pyproject_files}
 
 %changelog
 %autochangelog

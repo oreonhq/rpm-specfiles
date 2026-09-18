@@ -1,50 +1,57 @@
-%global source0_hash dcf487b64541c07a47888d51fd199a96aae320e735a8ed923d698c4e6062f39f
+%global source0_hash none
 
-%global pypi_name rarfile
-
-Name:           python-%{pypi_name}
-Version:        4.2
+Name:           python-rarfile
+Version:        4.5
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        RAR archive reader for Python
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ISC
 URL:            https://github.com/markokr/rarfile
-Source0:        %{url}/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
-Buildarch:      noarch
+Source:         %{pypi_source rarfile}
 
-%description
-This is Python module for RAR archive reading. The interface is made as
-zipfile like as possible.
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%package -n python3-%{pypi_name}
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'rarfile' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-rarfile
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
+%description -n python3-rarfile %_description
+
+
+%prep
+%autosetup -p1 -n rarfile-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
-%description -n python3-%{pypi_name}
-This is Python module for RAR archive reading. The interface is made as
-zipfile like as possible.
-
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n %{pypi_name}-%{version}
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{pypi_name}
-%doc README.rst
-%license LICENSE
-%{python3_sitelib}/%{pypi_name}.py*
-%{python3_sitelib}/%{pypi_name}*.dist-info
-%{python3_sitelib}/__pycache__/%{pypi_name}*
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-rarfile -f %{pyproject_files}
 
 %changelog
 %autochangelog

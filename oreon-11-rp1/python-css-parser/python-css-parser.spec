@@ -1,7 +1,7 @@
 %global source0_hash 0b1fe5771cf4dcecf1c63502331a3b628fc99507f0d1b5b893a8a6b292d7f3e0
 
 Name:           python-css-parser
-Version:        1.0.10
+Version:        1.1.1
 Release:        %autorelease
 Summary:        Parse and build Cascading Style Sheets
 

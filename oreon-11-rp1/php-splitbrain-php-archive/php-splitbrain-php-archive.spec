@@ -4,8 +4,8 @@
 %global project  php-archive
 Name: php-%{author}-%{project}
 
-Version: 1.3.1
-Release: 10%{?dist}
+Version: 1.4.1
+Release: 1%{?dist}
 
 Summary: Pure-PHP implementation to read and write TAR and ZIP archives
 License: MIT

@@ -4,8 +4,8 @@
 %undefine _py3_shebang_s
 
 Name:           tortoisehg
-Version:        7.0.1
-Release:        6%{?dist}
+Version:        7.2.2
+Release:        1%{?dist}
 Summary:        Mercurial GUI command line tool thg
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

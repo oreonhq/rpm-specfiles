@@ -7,7 +7,7 @@
 %global crate drm
 
 Name:           rust-drm
-Version:        0.14.2
+Version:        0.15.0
 Release:        %autorelease
 Summary:        Safe, low-level bindings to the Direct Rendering Manager API
 

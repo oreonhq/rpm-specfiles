@@ -7,7 +7,7 @@
 %global crate x25519-dalek
 
 Name:           rust-x25519-dalek
-Version:        2.0.1
+Version:        3.0.0
 Release:        %autorelease
 Summary:        X25519 elliptic curve Diffie-Hellman key exchange in pure-Rust, using...
 

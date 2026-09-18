@@ -7,7 +7,7 @@
 %global crate mesa3d_util
 
 Name:           rust-mesa3d_util
-Version:        0.1.75
+Version:        0.1.76-libkrun.0
 Release:        %autorelease
 Summary:        Utility crate part of Mesa3D project
 

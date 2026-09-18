@@ -6,8 +6,8 @@
 %undefine _strict_symbol_defs_build
 
 Name:           pragha
-Version:        1.3.3
-Release:        34%{?dist}
+Version:        1.3.4
+Release:        1%{?dist}
 Summary:        Lightweight GTK+ music manager
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

@@ -1,8 +1,8 @@
 %global source0_hash 541eddc8cc427d1aeb749bc455911fccc87f64a7784bd4bbc35ecb7b56c03ad5
 
 Name:           imhex
-Version:        1.37.4
-Release:        3%{?dist}
+Version:        1.38.1
+Release:        1%{?dist}
 Summary:        A hex editor for reverse engineers and programmers
 
 License:        GPL-2.0-only AND Zlib AND MIT AND Apache-2.0
@@ -103,7 +103,7 @@ rm -rf lib/third_party/capstone
 # the cmake scripts look for patterns to be in ImHex-Patterns
 mkdir -p ImHex-Patterns && tar -xf %{SOURCE1} -C ImHex-Patterns --strip-components=1
 
-# convert this to IMHEX_BUILD_HARDENING=OFF build flag in > 1.37.4
+# convert this to IMHEX_BUILD_HARDENING=OFF build flag in > 1.38.1
 # rhel buildroots already set fortify_source, doing it twice results in build errors
 %if 0%{?rhel}
 sed -i '/_FORTIFY_SOURCE/d' cmake/build_helpers.cmake
@@ -122,7 +122,7 @@ sed -i -e '/url type="vcs-browser"/d' \
 %set_build_flags
 CXXFLAGS+=" -std=gnu++2b"
 %endif
-# should be removable in > 1.37.4 (fixed upstream)
+# should be removable in > 1.38.1 (fixed upstream)
 CXXFLAGS+=" -Wno-error=deprecated-declarations"
 %cmake \
  -D CMAKE_BUILD_TYPE=Release             \

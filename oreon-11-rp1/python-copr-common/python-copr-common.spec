@@ -1,77 +1,56 @@
-%global source0_hash 84c3794b026fd558b3fb42748e3060f26884a8fb828eb36df967b6de83e03e3e
+%global source0_hash none
 
-%global srcname copr-common
+Name:           python-copr-common
+Version:        1.8
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Common python code used by Copr.
 
-Name:       python-copr-common
-Version:    1.5
-Release:    2%{?dist}
-Summary:    Python code used by Copr
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/fedora-copr/copr
+Source:         %{pypi_source copr_common}
 
-License:    GPL-2.0-or-later
-URL:        https://github.com/fedora-copr/copr
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-# Source is created by:
-# git clone %%url && cd copr
-# tito build --tgz --tag %%name-%%version-%%release
-Source0:    %name-%version.tar.gz
 
-BuildArch: noarch
-
-%if 0%{?rhel} > 10 || 0%{?fedora} > 42
-BuildRequires: python3-devel
-%else
-BuildRequires: python3-devel
-BuildRequires: python3-setuptools
-%endif
-BuildRequires: python3-pytest
-BuildRequires: python3-requests
-BuildRequires: python3-filelock
-BuildRequires: python3-setproctitle
-
-%global _description\
-COPR is lightweight build system. It allows you to create new project in WebUI,\
-and submit new builds and COPR will create yum repository from latest builds.\
-\
-This package contains python code used by other Copr packages. Mostly\
-useful for developers only.\
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'copr-common' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
-Summary: %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
-%description -n python3-%{srcname} %_description
+%package -n     python3-copr-common
+Summary:        %{summary}
 
-%if 0%{?rhel} > 10 || 0%{?fedora} > 42
-%generate_buildrequires
-%pyproject_buildrequires
-%endif
+%description -n python3-copr-common %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n copr_common-%{version}
 
-%setup -q
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%if 0%{?rhel} > 10 || 0%{?fedora} > 42
-version="%version" %pyproject_wheel
-%else
-version="%version" %py3_build
-%endif
+%pyproject_wheel
+
 
 %install
-%if 0%{?rhel} > 10 || 0%{?fedora} > 42
-version=%version %pyproject_install
-%else
-version=%version %py3_install
-%endif
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{_bindir}/python3 -m pytest -vv tests
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname}
-%license LICENSE
-%{python3_sitelib}/*
+
+%files -n python3-copr-common -f %{pyproject_files}
 
 %changelog
 %autochangelog

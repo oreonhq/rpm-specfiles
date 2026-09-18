@@ -1,96 +1,64 @@
-%global source0_hash 339ac842ba11a3cfe5030a786e56f27ec933623f77497cab37c4edd7b879cb9a
-
-%bcond tests 1
+%global source0_hash none
 
 Name:           python-imbalanced-learn
-Version:        0.14.0
+Version:        0.14.2
 Release:        %autorelease
-Summary:        A Python Package to Tackle the Imbalanced Datasets in Machine Learning
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Toolbox for imbalanced dataset in machine learning
 
-%global forgeurl https://github.com/scikit-learn-contrib/imbalanced-learn
-%global tag %{version}
-%forgemeta
-
-# The entire source is (SPDX) MIT; some other licenses are mentioned in
-# doc/sphinxext/LICENSE.txt, but the code to which they apply does not seem to
-# be present, and the directory is removed in %%prep anyway.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            %forgeurl
-Source:         %forgesource
-
-# Fix compatibility with scikit-learn 1.8+
-# Sent upstream: https://github.com/scikit-learn-contrib/imbalanced-learn/pull/1152
-Patch:          fix-scikit-learn-1.8-compat.patch
+URL:            https://imbalanced-learn.org/
+Source:         %{pypi_source imbalanced_learn}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  tomcli
 
-# tests
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-xdist)
-# Dependencies such as pytest-cov, flake8, black, and mypy are omitted:
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-imbalanced-learn is a python package offering a number of re-sampling
-techniques commonly used in datasets showing strong between-class imbalance. It
-is compatible with scikit-learn and is part of scikit-learn-contrib projects.}
+This is package 'imbalanced-learn' generated automatically by pyp2spec.}
+
+Patch:          fix-scikit-learn-1.8-compat.patch
 
 %description %_description
 
-%package -n python3-imbalanced-learn
+%package -n     python3-imbalanced-learn
 Summary:        %{summary}
 
 %description -n python3-imbalanced-learn %_description
 
-%pyproject_extras_subpkg -n python3-imbalanced-learn optional
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-imbalanced-learn dev,docs,keras,linters,optional,tensorflow,tests
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n imbalanced_learn-%{version}
 
-%forgeautosetup -p1
-
-# Remove the bundled Sphinx extensions. We don’t build the documentation, so we
-# don’t need to make an effort to unbundle them.
-rm -vrf doc/sphinxext/
-
-# Remove obsolete sklearn-compat dependency. Upstream dropped it post
-# release and it's not packaged for Fedora.
-# https://github.com/scikit-learn-contrib/imbalanced-learn/commit/e511ddbf44f819f3777a2689eb7a87e77bf2a0e5
-sed -i '/sklearn-compat/d' pyproject.toml
-
-# Erroring on these warnings is too strict for downstream packaging.
-tomcli set pyproject.toml lists delitem \
-    tool.pytest.ini_options.filterwarnings \
-    'error::(Deprecation|Future)Warning'
 
 %generate_buildrequires
-%pyproject_buildrequires -x optional
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs,keras,linters,optional,tensorflow,tests
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l imblearn
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-# some tests are skipped, because of keras and tensorflow deps
-k="${k-}${k+ and }not test_all_estimators"
-k="${k-}${k+ and }not test_classification_report_imbalanced_multiclass_with_unicode_label"
-k="${k-}${k+ and }not test_rusboost"
-k="${k-}${k+ and }not test_cluster_centroids_n_jobs"
-k="${k-}${k+ and }not test_fit_docstring"
-k="${k-}${k+ and }not keras"
-k="${k-}${k+ and }not test_function_sampler_validate"
-%pytest -v "${k+-k $k}" imblearn
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-imbalanced-learn -f %{pyproject_files}
-%doc README.rst examples/
 
 %changelog
 %autochangelog

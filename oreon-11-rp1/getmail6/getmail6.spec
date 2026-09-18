@@ -1,7 +1,7 @@
 %global source0_hash 48e8f61d5c40739339940806e052077262db0e28e207c2e5adfb0af9c3110e8d
 
 Name:           getmail6
-Version:        6.19.10
+Version:        6.20.1
 Release:        %autorelease
 Summary:        A mail retrieval, sorting, and delivering system
 License:        GPL-2.0-only and Apache-2.0

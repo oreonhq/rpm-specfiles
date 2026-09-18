@@ -3,10 +3,10 @@
 %define prever rc5
 
 Name:           openlierox
-# Because we downgraded from 0.59 to 0.58 as 0.59 never became stable
+# Because we downgraded from 0.59 to 0.59_beta10.win32 as 0.59 never became stable
 Epoch:          1
-Version:        0.58
-Release:        0.38.%{prever}%{?dist}
+Version:        0.59_beta10.win32
+Release:        1.38.%{prever}%{?dist}
 Summary:        Addictive realtime multi-player 2D shoot-em-up
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+

@@ -1,8 +1,8 @@
 %global source0_hash cd3a08ecd0c7cf856f9e6dac83fe178672c897e66c65d730d184a14e7f77851a
 
 Name:		php-oojs-oojs-ui
-Version:	0.51.2
-Release:	3%{?dist}
+Version:	0.53.2
+Release:	1%{?dist}
 Summary:	Object-Oriented JavaScript – User Interface
 
 License:	MIT

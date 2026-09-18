@@ -7,7 +7,7 @@
 %global crate grep-printer
 
 Name:           rust-grep-printer
-Version:        0.2.2
+Version:        0.3.1
 Release:        %autorelease
 Summary:        Implementation of the grep crate's Sink trait
 

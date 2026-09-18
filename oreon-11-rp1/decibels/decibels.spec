@@ -4,7 +4,7 @@
 %global tarball_version %%(echo %{version} | tr '~' '.')
 
 Name:           decibels
-Version:        49.0
+Version:        49.6.1
 Release:        %autorelease
 Summary:        Audio player for the GNOME desktop
 

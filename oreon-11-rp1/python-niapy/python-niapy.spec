@@ -1,7 +1,7 @@
 %global source0_hash e412e5531e4ae5b7221c5f8199b93b37e95beaae475008ef261927aef6058457
 
 Name:           python-niapy
-Version:        2.6.1
+Version:        2.7.1
 Release:        %autorelease
 Summary:        Micro framework for building nature-inspired algorithms
 

@@ -4,8 +4,8 @@
 
 Summary:	IPv4/v6 type and IPv4/v6 range index type for PostgreSQL
 Name:		postgresql-%{sname}
-Version:	2.4.2
-Release:	8%{?dist}
+Version:	2.4.3
+Release:	1%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License:	LicenseRef-Callaway-BSD
 # Note that the URL is generated, needs to be changed.

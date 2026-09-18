@@ -1,8 +1,8 @@
 %global source0_hash 4f0b58727dc296b92cfa3c404d31d52597de8bab0530c697f01f0d4397d6120c
 
 Name:           python3-mypy
-Version:        1.18.2
-Release:        4%{?dist}
+Version:        2.3.1
+Release:        1%{?dist}
 Summary:        A static type checker for Python
 
 # The files under lib-python and lib-typing/3.2 are Python-licensed, but this

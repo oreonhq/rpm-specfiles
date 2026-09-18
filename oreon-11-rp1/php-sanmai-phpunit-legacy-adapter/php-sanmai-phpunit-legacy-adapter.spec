@@ -19,8 +19,8 @@
 %global ns_project   LegacyPHPUnit
 
 Name:           php-%{gh_owner}-%{gh_project}
-Version:        8.2.2
-Release:        9%{?dist}
+Version:        8.2.3
+Release:        1%{?dist}
 Summary:        PHPUnit Legacy Versions Adapter
 
 License:        Apache-2.0

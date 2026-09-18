@@ -1,62 +1,73 @@
-%global source0_hash c2862cf046147c02c2b6a1d40957c5e73d6fd5421cf43f087a9f67e0dacd2258
+%global source0_hash none
 
-%global pypi_name minikerberos
+Name:           python-minikerberos
+Version:        0.4.9
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Kerberos manipulation library in pure Python
 
-Name:           python-%{pypi_name}
-Version:        0.2.9
-Release:        20%{?dist}
-Summary:        Kerberos manipulation library in Python
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/skelsec/minikerberos
-Source0:        %pypi_source
+Source:         %{pypi_source minikerberos}
+
 BuildArch:      noarch
-
-%description
-Kerberos manipulation library in pure Python.
-
-%package -n python3-%{pypi_name}
-Summary:        %{summary}
-
 BuildRequires:  python3-devel
-%{?python_provide:%python_provide python3-%{pypi_name}}
 
-%description -n python3-%{pypi_name}
-Kerberos manipulation library in pure Python
 
-%package -n %{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'minikerberos' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-minikerberos
 Summary:        %{summary}
-Requires:       python3-%{pypi_name}
 
-%description -n %{pypi_name}
-Command line tools for Kerberos manipulations.
+%description -n python3-minikerberos %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n minikerberos-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-# Remove shebangs. https://github.com/skelsec/minikerberos/issues/7
-sed -i -e '/^#!\//, 1d' %{pypi_name}/{*.py,*/*.py,*/*/*.py}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{pypi_name}
-%doc README.md
-%license LICENSE
-%{python3_sitelib}/%{pypi_name}/
-%{python3_sitelib}/%{pypi_name}*.dist-info
 
-%files -n %{pypi_name}
-%doc README.md
-%license LICENSE
-%{_bindir}/*
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-minikerberos -f %{pyproject_files}
+%{_bindir}/minikerberos-asreproast
+%{_bindir}/minikerberos-ccache2kirbi
+%{_bindir}/minikerberos-ccacheedit
+%{_bindir}/minikerberos-ccacheroast
+%{_bindir}/minikerberos-cve202233647
+%{_bindir}/minikerberos-cve202233679
+%{_bindir}/minikerberos-getntpkinit
+%{_bindir}/minikerberos-gets4u2proxy
+%{_bindir}/minikerberos-gets4u2self
+%{_bindir}/minikerberos-gettgs
+%{_bindir}/minikerberos-gettgt
+%{_bindir}/minikerberos-kerb23hashdecrypt
+%{_bindir}/minikerberos-kerberoast
+%{_bindir}/minikerberos-keylist
+%{_bindir}/minikerberos-kirbi2ccache
+%{_bindir}/minikerberos-pw
 
 %changelog
 %autochangelog

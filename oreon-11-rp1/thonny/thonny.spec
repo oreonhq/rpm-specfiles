@@ -1,7 +1,7 @@
 %global source0_hash 131456f92aac3e5324ef8136ed38d0b15f5c1f10522c64f0cce6fe5696606388
 
 Name:           thonny
-Version:        4.1.6
+Version:        5.0.0
 Release:        %autorelease
 Summary:        Python IDE for beginners
 

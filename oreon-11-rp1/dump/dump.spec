@@ -1,7 +1,7 @@
 %global source0_hash 4042997bdfed463c7a0bf8788229718b9c692ce2cfafe46ea54d478bcd663591
 
 %define PREVER b52
-%define DUMP_VERSION 0.4%{PREVER}
+%define DUMP_VERSION 0.4b56%{PREVER}
 
 %if 0%{?rhel}
 Summary:       Program for restoring ext2/ext3 filesystems
@@ -11,8 +11,8 @@ Summary:       Programs for backing up and restoring ext2/ext3/ext4 filesystems
 Name:          dump
 %endif
 Epoch:         1
-Version:       0.4
-Release:       0.62.%{PREVER}%{?dist}
+Version:       0.4b56
+Release:       1.62.%{PREVER}%{?dist}
 License:       BSD-3-Clause
 URL:           https://sourceforge.net/projects/dump/
 Source:        https://downloads.sourceforge.net/dump/dump-%{DUMP_VERSION}.tar.gz
@@ -27,7 +27,7 @@ BuildRequires: libblkid-devel libuuid-devel
 Requires:      setup
 Requires:      rmt
 %if 0%{?fedora}
-Obsoletes:     dump-static <= 0.4
+Obsoletes:     dump-static <= 0.4b56
 Provides:      dump-static
 %endif
 

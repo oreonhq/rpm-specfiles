@@ -6,7 +6,7 @@
 %global min_libzypp_ver 17.37.12
 
 Name:           zypper
-Version:        1.14.94
+Version:        1.14.101
 Release:        1%{?dist}
 Summary:        Command line package manager using libzypp
 

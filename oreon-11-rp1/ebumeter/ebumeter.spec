@@ -2,8 +2,8 @@
 
 Name:          ebumeter
 Summary:       Loudness measurement according to EBU-R128
-Version:       0.4.2
-Release:       18%{?dist}
+Version:       0.5.1
+Release:       1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:       GPL-2.0-or-later
 URL:           http://kokkinizita.linuxaudio.org/linuxaudio

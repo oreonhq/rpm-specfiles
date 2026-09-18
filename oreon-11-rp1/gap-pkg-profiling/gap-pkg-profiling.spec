@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/profiling
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        2.6.2
+Version:        2.6.3
 Release:        %autorelease
 Summary:        Line by line profiling and code coverage for GAP
 

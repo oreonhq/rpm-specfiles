@@ -6,8 +6,8 @@
 %undefine _auto_set_build_flags
 
 Name:           mingw-gsm
-Version:        1.0.16
-Release:        20%{?dist}
+Version:        1.0.24
+Release:        1%{?dist}
 Summary:        Shared libraries for GSM speech compressor
 
 License:        MIT

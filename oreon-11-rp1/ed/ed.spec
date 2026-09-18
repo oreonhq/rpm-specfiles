@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name: ed
-Version: 1.22.5
+Version: 1.22.6
 Release: %autorelease
 Summary: The GNU line editor
 

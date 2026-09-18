@@ -1,8 +1,8 @@
 %global source0_hash 07ca594f7277f9876d0038048418343ea2964028e93c90f9569eff36a8932e4a
 
 Name:             zathura-ps
-Version:          0.2.8
-Release:          4%{?dist}
+Version:          2026.07.18
+Release:          1%{?dist}
 Summary:          PS support for zathura via libspectre
 License:          Zlib
 URL:              https://pwmt.org/projects/%{name}

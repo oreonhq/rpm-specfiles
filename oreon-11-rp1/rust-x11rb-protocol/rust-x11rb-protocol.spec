@@ -7,7 +7,7 @@
 %global crate x11rb-protocol
 
 Name:           rust-x11rb-protocol
-Version:        0.13.2
+Version:        0.14.0
 Release:        %autorelease
 Summary:        Rust bindings to X11
 

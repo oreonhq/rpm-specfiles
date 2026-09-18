@@ -1,53 +1,62 @@
-%global source0_hash e7d98ea108258d29aa0efbfd591b2e2075fa1722a2fae8699f0b3c9de11eff41
+%global source0_hash none
 
-%global srcname azure-storage-blob
-
-Name:           python-%{srcname}
-Version:        12.28.0
+Name:           python-azure-storage-blob
+Version:        12.30.2
 Release:        %autorelease
-Summary:        Azure Storage Blobs client library for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Microsoft Azure Blob Storage Client Library for Python
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pypi.org/project/%{srcname}/
+URL:            https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/storage/azure-storage-blob
 Source:         %{pypi_source azure_storage_blob}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Azure Storage Blobs client library for Python}
+This is package 'azure-storage-blob' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-azure-storage-blob
 Summary:        %{summary}
-%description -n python3-%{srcname} %{_description}
 
-%pyproject_extras_subpkg -n python3-%{srcname} aio
+%description -n python3-azure-storage-blob %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-azure-storage-blob aio
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n azure_storage_blob-%{version}
 
-%autosetup -n azure_storage_blob-%{version}
 
 %generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
 %pyproject_buildrequires -x aio
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l azure
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-# pytest unittest are not run as the test depends on the vcrpy that is pinned https://github.com/Azure/azure-sdk-for-python/tree/main/tools/vcrpy
-# Furthermore the pypi_source file are missing some test files used to run the test e.g recording rules
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
+%files -n python3-azure-storage-blob -f %{pyproject_files}
 
 %changelog
 %autochangelog

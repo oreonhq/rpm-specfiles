@@ -1,40 +1,59 @@
-%global source0_hash f1636d231d4868a3256731c10f82fd968f6f7b616c57cdacab92d21599450cc2
+%global source0_hash none
 
-%global pypi_name eth_event
+Name:           python-eth-event
+Version:        1.4.10
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Ethereum event decoder and topic generator
 
-Name:          python-eth-event
-Version:       1.4.6
-Release:       %autorelease
-Summary:       Tools for Ethereum event decoding and topic generation
-License:       MIT
-URL:           https://github.com/iamdefinitelyahuman/eth-event
-VCS:           git:%{url}.git
-Source0:       %{url}/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/iamdefinitelyahuman/eth-event
+Source:         %{pypi_source eth_event}
+
+BuildRequires:  python3-devel
+BuildRequires:  gcc
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'eth-event' generated automatically by pyp2spec.}
+
 Patch:         python-eth-event-0001-Relax-deps.patch
-BuildRequires: gcc
-BuildRequires: python3dist(eth-abi)
-BuildRequires: python3dist(eth-utils)
-BuildRequires: python3dist(mypy[mypyc])
-BuildRequires: python3dist(pytest)
-BuildRequires: python3dist(pytest-cov)
-BuildSystem:   pyproject
-BuildOption(install): -l %{pypi_name}
 
-%description
-%{summary}.
+%description %_description
 
-%package -n python3-eth-event
-Summary: %{summary}
+%package -n     python3-eth-event
+Summary:        %{summary}
 
-%description -n python3-eth-event
-%{summary}.
+%description -n python3-eth-event %_description
 
-%check -a
-%pytest --ignore=benchmarks/
+
+%prep
+%autosetup -p1 -n eth_event-%{version}
+
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+
+%build
+%pyproject_wheel
+
+
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-eth-event -f %{pyproject_files}
-%doc README.md
-%{python3_sitearch}/*.so
 
 %changelog
 %autochangelog

@@ -8,8 +8,8 @@
 %global commit0     f46ee068860d363ace27004ec4da588bf4b48147
 
 Name:           %{srcname}-chess
-Version:        1.4
-Release:        31.%{commitdate}git%(c=%{commit0}; echo ${c:0:7})%{?dist}
+Version:        1.4.70b
+Release:        1.%{commitdate}git%(c=%{commit0}; echo ${c:0:7})%{?dist}
 Summary:        Polyglot chess opening book program
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

@@ -1,50 +1,57 @@
-%global source0_hash 75a76a81e64d2b4e70b48e5f9a4c5c5296d323066bfd9d53b799756c28abf9da
+%global source0_hash none
 
-%global srcname cerealizer
-%global sum Secure pickle-like module
+Name:           python-cerealizer
+Version:        0.8.4
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A secure pickle-like module
 
-Name:			python-%{srcname}
-Summary: 		%{sum}
-Version:		0.8.2
-Release:		28%{?dist}
-# Automatically converted from old format: Python - review is highly recommended.
-License:		LicenseRef-Callaway-Python
-Source0:		https://files.pythonhosted.org/packages/5a/2b/8a2ff505db0ef7ce59f700b96898369b22a823c8d9191eba37639e568667/Cerealizer-%{version}.tar.gz
-URL:			http://www.lesfleursdunormal.fr/static/informatique/cerealizer/index_en.html
-BuildArch:		noarch
-BuildRequires:		python3-devel
-BuildRequires:		python3-setuptools
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        PSF-2.0
+URL:            http://www.lesfleursdunormal.fr/static/informatique/cerealizer/index_en.html
+Source:         %{pypi_source Cerealizer}
 
-%description
-Cerealizer is a secure pickle-like module. It support basic types (int, string,
-unicode, tuple, list, dict, set,...), old and new-style classes (you need to 
-register the class for security), object cycles, and it can be extended to 
-support C-defined type.
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%package -n python3-%{srcname}
-Summary:                %{sum}
-%{?python_provide:%python_provide python3-%{srcname}}
 
-%description -n python3-%{srcname}
-Cerealizer is a secure pickle-like module. It support basic types (int, string,
-unicode, tuple, list, dict, set,...), old and new-style classes (you need to 
-register the class for security), object cycles, and it can be extended to 
-support C-defined type.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cerealizer' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-cerealizer
+Summary:        %{summary}
+
+%description -n python3-cerealizer %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n Cerealizer-%{version}
 
-%setup -q -n Cerealizer-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-/usr/bin/python3 ./setup.py build
+%pyproject_wheel
+
 
 %install
-/usr/bin/python3 ./setup.py install --skip-build --root $RPM_BUILD_ROOT
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{srcname}
-%doc README.rst PKG-INFO
-%{python3_sitelib}/*
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-cerealizer -f %{pyproject_files}
 
 %changelog
 %autochangelog

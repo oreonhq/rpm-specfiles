@@ -7,7 +7,7 @@
 %global crate cookie
 
 Name:           rust-cookie
-Version:        0.18.1
+Version:        0.18.2
 Release:        %autorelease
 Summary:        HTTP cookie parsing and cookie jar management. Supports signed and pr...
 

@@ -3,8 +3,8 @@
 %global libname libimagequant
 
 Name:           pngquant
-Version:        2.18.0
-Release:        12%{?dist}
+Version:        3.0.3
+Release:        1%{?dist}
 Summary:        PNG quantization tool for reducing image file size
 
 License:        GPL-3.0-or-later

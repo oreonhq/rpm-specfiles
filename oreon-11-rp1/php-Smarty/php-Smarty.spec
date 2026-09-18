@@ -2,7 +2,7 @@
 
 %global github_owner   smarty-php
 %global github_name    smarty
-%global github_version 3.1.48
+%global github_version 5.8.4
 %global github_commit  2fc443806cdcaee4441be4d0bb09f8fa56a17f2c
 
 %global composer_vendor  smarty
@@ -16,7 +16,7 @@
 Name:          php-Smarty
 Summary:       Smarty - the compiling PHP template engine
 Version:       %{github_version}
-Release:       9%{?dist}
+Release:       1%{?dist}
 
 # Automatically converted from old format: LGPLv3 - review is highly recommended.
 License:       LGPL-3.0-only

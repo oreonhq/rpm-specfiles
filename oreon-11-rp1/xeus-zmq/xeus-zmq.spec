@@ -1,8 +1,8 @@
 %global source0_hash 55ebfca641e2295dbc0d6c85dbfb54810762bc0792d3e464d32f79a5ce0bdd26
 
 Name:           xeus-zmq
-Version:        3.1.0
-Release:        5%{?dist}
+Version:        4.0.0
+Release:        1%{?dist}
 Summary:        ZeroMQ based middleware for xeus
 
 License:        BSD-3-Clause

@@ -1,8 +1,8 @@
 %global source0_hash 376033a2f4e6cf96b89130c12196e1c20ffe99300347593bec233aa472d74891
 
 Name:           multiwatch
-Version:        1.0.0
-Release:        16%{?dist}
+Version:        1.0.1
+Release:        1%{?dist}
 Summary:        Forks and watches multiple instances of a program in the same context
 License:        MIT
 URL:            https://redmine.lighttpd.net/projects/multiwatch/wiki

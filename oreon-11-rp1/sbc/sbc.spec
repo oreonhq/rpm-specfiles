@@ -1,7 +1,7 @@
 %global source0_hash 426633cabd7c798236443516dfa8335b47e004b0ef37ff107e0c7ead3299fcc2
 
 Name:          sbc
-Version:       2.1
+Version:       2.2
 Release:       %autorelease
 Summary:       Sub Band Codec used by bluetooth A2DP
 

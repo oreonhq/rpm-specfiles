@@ -1,67 +1,57 @@
-%global source0_hash 49d3c401a5b221d5b8118c05154a8bae638ccdbfae1292371bbb466da3a86928
+%global source0_hash none
 
-%global pypi_name murmurhash
+Name:           python-murmurhash
+Version:        1.0.15
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Cython bindings for MurmurHash
 
-Name:           python-%{pypi_name}
-Version:        1.0.10
-Release:        13%{?dist}
-Summary:        Cython bindings for MurmurHash2
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/explosion/murmurhash
-Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz#/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source murmurhash}
 
-BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
+BuildRequires:  gcc
 
-%description
-Cython bindings for MurmurHash2
 
-%package -n     python3-%{pypi_name}
-Summary:        Cython bindings for MurmurHash2
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'murmurhash' generated automatically by pyp2spec.}
 
-%description -n python3-%{pypi_name}
-Cython bindings for MurmurHash2
+%description %_description
+
+%package -n     python3-murmurhash
+Summary:        %{summary}
+
+%description -n python3-murmurhash %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n murmurhash-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
-
-# Remove random *.h
-rm -rf include/msvc9/stdint.h
 
 %generate_buildrequires
-%pyproject_buildrequires requirements.txt
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
-%check
-pushd %{buildroot}/%{python3_sitearch}
-%pytest -p no:cacheprovider %{pypi_name}/tests
-popd
 
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# E: zero-length /usr/lib64/python3.12/site-packages/murmurhash/__init__.pxd
-rm %{buildroot}%{python3_sitearch}/%{pypi_name}/__init__.pxd
 
-# remove local murmurhash/ headers
-rm -rf %{buildroot}%{python3_sitearch}/%{pypi_name}/include
+%check
+%_pyproject_check_import_allow_no_modules -t
 
-# remove tests
-rm -rf %{buildroot}/%{python3_sitearch}%{pypi_name}/tests
 
-%files -n python3-%{pypi_name}
-%license LICENSE
-%doc README.md
-%{python3_sitearch}/%{pypi_name}
-%{python3_sitearch}/%{pypi_name}-%{version}.dist-info
+%files -n python3-murmurhash -f %{pyproject_files}
 
 %changelog
 %autochangelog

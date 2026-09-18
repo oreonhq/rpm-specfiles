@@ -1,63 +1,57 @@
-%global source0_hash 61c7246b34d6e5544c8a1fa4dae396d10e16ceb23371a31db22e0a2993d01432
+%global source0_hash none
 
-%global pkgname flufl-lock
+Name:           python-flufl-lock
+Version:        9.1.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        NFS-safe file locking with timeouts for POSIX and Windows
 
-Name:           python-%{pkgname}
-Version:        8.0.2
-Release:        9%{?dist}
-Summary:        NFS-safe file locking with timeouts for POSIX systems
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://gitlab.com/warsaw/flufl.lock
-Source0:        https://files.pythonhosted.org/packages/source/f/flufl.lock/flufl_lock-%{version}.tar.gz
+URL:            https://flufllock.readthedocs.io
+Source:         %{pypi_source flufl_lock}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-# for tests
-# we don't actually test code cov.
-# upstream default pytest flags have --cov
-# so this is easier than a patch.  we add
-# the --no-cov flag below to avoid running coverage
-BuildRequires:  python3-pytest-cov
-BuildRequires:  python3-sybil
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The flufl.lock library provides an NFS-safe file-based locking algorithm
-influenced by the GNU/Linux "open(2)" man page, under the description of
-the "O_EXCL" option.}
+This is package 'flufl-lock' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-%{pkgname}
+%package -n     python3-flufl-lock
 Summary:        %{summary}
 
-%description -n python3-%{pkgname} %{_description}
+%description -n python3-flufl-lock %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n flufl_lock-%{version}
 
-%autosetup -n flufl_lock-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files flufl
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# this file causes pytest to do weird things
-# so let's get it out of the way
-rm -f conftest.py
-%pytest --no-cov
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pkgname} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst docs/
+
+%files -n python3-flufl-lock -f %{pyproject_files}
 
 %changelog
 %autochangelog

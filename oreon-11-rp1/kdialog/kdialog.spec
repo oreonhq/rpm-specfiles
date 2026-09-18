@@ -5,7 +5,7 @@
 
 Name:    kdialog
 Summary: Nice dialog boxes from shell scripts
-Version: 26.04.3
+Version: 26.08.1
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ and GFDL - review is highly recommended.

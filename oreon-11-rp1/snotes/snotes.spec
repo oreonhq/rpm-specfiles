@@ -1,8 +1,8 @@
 %global source0_hash 782547cc4db6591d9db015eac49062e62837b2bd4bc4bdaa358a60e268081242
 
 Name:           snotes
-Version:        1.0
-Release:        26%{?dist}
+Version:        1.1
+Release:        1%{?dist}
 Summary:        A flexible and easy to use notes system
 License:        MIT
 URL:            https://github.com/v4hn/%{name}

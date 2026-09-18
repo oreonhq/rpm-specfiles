@@ -1,8 +1,8 @@
 %global source0_hash dc54513af9a4681029a1243fd0c9cdf153d813a1125de6c782926674285bc5ae
 
 Name: xmp
-Version: 4.2.0
-Release: 7%{?dist}
+Version: 4.3.1
+Release: 1%{?dist}
 Summary: A multi-format module player
 Source0: https://downloads.sourceforge.net/project/xmp/xmp/%{version}/xmp-%{version}.tar.gz
 # use pulseaudio output by default

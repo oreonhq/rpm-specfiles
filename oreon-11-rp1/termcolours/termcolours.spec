@@ -1,7 +1,7 @@
 %global source0_hash bf6575d546d45b9bf470d4dfd2e5140a332f6142d3c38946596cb1f1a81ff904
 
 Name:           termcolours
-Version:        0.7.0
+Version:        0.8.0
 Release:        %autorelease
 Summary:        Automatically set unique terminal colour schemes
 

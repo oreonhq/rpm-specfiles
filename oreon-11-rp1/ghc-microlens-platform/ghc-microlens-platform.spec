@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.4.4.1
+Version:        0.4.4.2
 Release:        %autorelease
 Summary:        Microlens + all batteries included (best for apps)
 

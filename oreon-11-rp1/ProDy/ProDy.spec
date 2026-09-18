@@ -11,7 +11,7 @@
 
 Name: ProDy
 Summary: Application for protein structure, dynamics and sequence analysis
-Version: 2.4.1
+Version: 2.6.1
 Release: %autorelease
 
 # MIT is the main license for ProDy

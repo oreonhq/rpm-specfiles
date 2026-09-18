@@ -1,8 +1,8 @@
 %global source0_hash 82ec8ea11d239c9967dbd1717cac09c8330a558e025b3e4dc6a7594e80d13bb1
 
 Name:           libetpan
-Version:        1.9.4
-Release:        19%{?dist}
+Version:        1.10.1
+Release:        1%{?dist}
 Summary:        Portable, efficient middle-ware for different kinds of mail access
 
 # src/bsd/getopt.c BSD-4-Clause (not used)

@@ -1,61 +1,61 @@
-%global source0_hash 6c666f68fc321ad5e345b4838733072b9456be097b4fbb4752ca2c4e8f24803f
+%global source0_hash none
 
-%global pypi_name emoji
-
-Name:           python-%{pypi_name}
-Version:        2.15.0
+Name:           python-emoji
+Version:        2.16.0
 Release:        %autorelease
-Summary:        Emoji library for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Emoji for Python
 
-%global forgeurl https://github.com/carpedm20/emoji
-%global tag v%{version}
-%forgemeta
-
-License:        BSD-3-Clause
-URL:            %forgeurl
-Source:         %forgesource
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/carpedm20/emoji/
+Source:         %{pypi_source emoji}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  %{py3_dist pytest}
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Full featured simple emoji library for Python. This project was
-inspired by kyokomi.
-
-The entire set of Emoji codes as defined by the unicode consortium is
-supported in addition to a bunch of aliases. By default, only the
-official list is enabled but doing emoji.emojize(use_aliases=True)
-enables both the full list and aliases.}
+This is package 'emoji' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{pypi_name}
-Summary: %{summary}
+%package -n     python3-emoji
+Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-emoji %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-emoji dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n emoji-%{version}
 
-%forgeautosetup -p1
 
 %generate_buildrequires
-%pyproject_buildrequires -p
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -r fEs
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.rst CHANGES.md
+
+%files -n python3-emoji -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,73 +1,62 @@
-%global source0_hash 034d7354a9a018bdce352f48b2a8a450f05e9d6ee85db84764e9b6bd96dafe5a
+%global source0_hash none
 
 Name:           python-parso
-Version:        0.8.5
+Version:        0.8.7
 Release:        %autorelease
-Summary:        Parser that supports error recovery and round-trip parsing
-License:        MIT AND PSF-2.0
-BuildArch:      noarch
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Python Parser
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
 URL:            https://github.com/davidhalter/parso
 Source:         %{pypi_source parso}
 
-%global common_description %{expand:
-Parso is a Python parser that supports error recovery and round-trip parsing
-for different Python versions (in multiple Python versions). Parso is also able
-to list multiple syntax errors in your python file.  Parso has been
-battle-tested by jedi. It was pulled out of jedi to be useful for other
-projects as well.  Parso consists of a small API to parse Python and analyse
-the syntax tree.}
-
-%description %{common_description}
-
-%package -n python3-parso
-Summary:        %{summary}
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%description -n python3-parso %{common_description}
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'parso' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-parso
+Summary:        %{summary}
+
+%description -n python3-parso %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-parso qa,testing
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n parso-%{version}
 
-%autosetup -p 1 -n parso-%{version}
-
-sed -e '/^addopts/d' -i pytest.ini
-
-# Upstream maintains grammar files for individual Python versions.
-# To ease testing with the next Python version, we copy the previous grammar
-# if the current one is not found.
-# If this doesn't work, the tests should fail.
-cd parso/python
-%global python3_version_nodots_previous %[0%{?python3_version_nodots} - 1]
-if [[ ! -f grammar%{python3_version_nodots}.txt &&
-        -f grammar%{python3_version_nodots_previous}.txt ]]; then
-  cp -a grammar%{python3_version_nodots_previous}.txt grammar%{python3_version_nodots}.txt
-fi
-cd -
 
 %generate_buildrequires
-%pyproject_buildrequires -x testing
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x qa,testing
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files parso
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# According to upstream, the error tests are "very susceptible to failures and
-# might break from time to time".  They recommend skipping them during distro
-# package builds.
-# https://github.com/davidhalter/parso/issues/63
-# https://github.com/davidhalter/parso/issues/103
-# https://github.com/davidhalter/parso/issues/123
-# https://bugzilla.redhat.com/show_bug.cgi?id=1830965
-# https://github.com/davidhalter/parso/issues/192
-# https://github.com/davidhalter/parso/issues/222
-%pytest --verbose -k "not test_python_exception_matches"
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-parso -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

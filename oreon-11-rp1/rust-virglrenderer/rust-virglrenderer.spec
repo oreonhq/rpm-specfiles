@@ -7,7 +7,7 @@
 %global crate virglrenderer
 
 Name:           rust-virglrenderer
-Version:        0.1.3
+Version:        0.1.6
 Release:        %autorelease
 Summary:        Safe and idiomatic Rust wrapper for virglrenderer
 

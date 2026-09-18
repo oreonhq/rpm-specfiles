@@ -7,7 +7,7 @@
 %global crate group
 
 Name:           rust-group
-Version:        0.13.0
+Version:        0.14.0
 Release:        %autorelease
 Summary:        Elliptic curve group traits and utilities
 

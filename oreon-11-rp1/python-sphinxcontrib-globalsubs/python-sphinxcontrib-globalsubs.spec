@@ -3,7 +3,7 @@
 %global commit 5acbe50717a4f53a411310f03eb5f6ad13b3d1ea
 
 Name:           python-sphinxcontrib-globalsubs
-Version:        0.1.1
+Version:        1.1.0
 Release:        %autorelease
 Summary:        Global substitutions defined in conf.py
 License:        BSD-2-Clause

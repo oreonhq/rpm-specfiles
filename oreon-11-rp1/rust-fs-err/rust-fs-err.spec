@@ -7,7 +7,7 @@
 %global crate fs-err
 
 Name:           rust-fs-err
-Version:        3.2.2
+Version:        3.3.1
 Release:        %autorelease
 Summary:        Drop-in replacement for std::fs with more helpful error messages
 

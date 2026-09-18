@@ -1,8 +1,8 @@
 %global source0_hash baac28b60f8f46ae0f273155f4968b20e84380016629247ed2a4d7e3fbeb4d98
 
 Name:			libsafec
-Version:		3.7.1
-Release:		7%{?dist}
+Version:		3.9.1.40-gc99b71
+Release:		1%{?dist}
 Summary:		Safec fork with all C11 Annex K functions
 
 License:		MIT

@@ -7,7 +7,7 @@
 %global crate libmimalloc-sys
 
 Name:           rust-libmimalloc-sys
-Version:        0.1.44
+Version:        0.1.49
 Release:        %autorelease
 Summary:        Sys crate wrapping the mimalloc allocator
 

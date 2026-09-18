@@ -1,87 +1,62 @@
-%global source0_hash 6eafd2b9542f51acc5150b93758018c1bc95d9ac57d1e04571894d293ae4eb84
+%global source0_hash none
 
-%global pypi_name intbitset
-
-Name:           python-%{pypi_name}
-Version:        4.1.0
+Name:           python-intbitset
+Version:        4.1.2
 Release:        %autorelease
-Summary:        Python C-based extension implementing fast integer bit sets
+# Fill in the actual package summary to submit package to Fedora
+Summary:        C-based extension implementing fast integer bit sets.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-3.0-or-later
-URL:            https://github.com/inveniosoftware-contrib/intbitset
-Source:         %url/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
+URL:            http://github.com/inveniosoftware-contrib/intbitset/
+Source:         %{pypi_source intbitset}
 
-BuildRequires:  gcc
 BuildRequires:  python3-devel
-BuildRequires:  Cython
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(sphinx)
+BuildRequires:  gcc
 
-%global common_description %{expand:
-The intbitset library provides a set implementation to store sorted unsigned
-integers either 32-bits integers (between 0 and 2**31 - 1 or
-intbitset.__maxelem__) or an infinite range with fast set operations implemented
-via bit vectors in a Python C extension for speed and reduced memory usage.
 
-The inbitset class emulates the Python built-in set class interface with some
-additional specific methods such as its own fast dump and load marshalling
-functions.}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'intbitset' generated automatically by pyp2spec.}
 
-%description %{common_description}
+%description %_description
 
-%package -n python3-%{pypi_name}
+%package -n     python3-intbitset
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %{common_description}
+%description -n python3-intbitset %_description
 
-%package -n python-%{pypi_name}-doc
-Summary:        Documentation for python-%{pypi_name}
-# BSD-2-Clause: Sphinx javascript
-# MIT: jquery
-License:        LGPL-3.0-or-later AND BSD-2-Clause AND MIT
-BuildArch:      noarch
-Requires:       python3-%{pypi_name} = %{?epoch:%{epoch}:}%{version}-%{release}
-Provides:       bundled(js-sphinx_javascript_frameworks_compat)
-Provides:       bundled(js-doctools)
-Provides:       bundled(js-jquery)
-Provides:       bundled(js-language_data)
-Provides:       bundled(js-searchtools)
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-intbitset tests
 
-%description -n python-%{pypi_name}-doc
-%{common_description}
-
-This package is providing the documentation for %{pypi_name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n intbitset-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
-rm -rfv src/intbitset.c
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x tests
+
 
 %build
-cython intbitset/intbitset.pyx
 %pyproject_wheel
 
-# generate html docs
-sphinx-build-3 -b html docs/ html
-# remove the sphinx-build-3 leftovers
-rm -rf html/.{doctrees,buildinfo}
 
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -k 'not test_set_consistency'
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%pycached %{python3_sitearch}/intbitset_*.py
 
-%files -n python-%{pypi_name}-doc
-%doc html
+%files -n python3-intbitset -f %{pyproject_files}
 
 %changelog
 %autochangelog

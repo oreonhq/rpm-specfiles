@@ -1,8 +1,8 @@
 %global source0_hash 3c00d5213d36fb6faa16d57dba42568e801505f25846e41b342c159c1b3b66a5
 
 Name:           tellico
-Version:        4.1.2
-Release:        5%{?dist}
+Version:        4.2.2
+Release:        1%{?dist}
 Summary:        A collection manager
 
 License:        GPL-2.0-or-later

@@ -1,60 +1,59 @@
-%global source0_hash 7d278172b32f44956c3dc750e7c6cfbe2d53098021e96e2b619bf796b469ecdd
+%global source0_hash none
 
 Name:           python-pdir2
-Version:        1.1.0
-Release:        7%{?dist}
-Summary:        Pretty dir() printing with joy
+Version:        1.1.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Pretty dir printing with joy
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/laike9m/pdir2
-Source0:        %{pypi_source pdir2}
-
-# https://github.com/laike9m/pdir2/issues/78
-Patch0:         python313.patch
+Source:         %{pypi_source pdir2}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildRequires:  python3-devel python3-pip python3-pdm-pep517
-BuildRequires:  python3-typing-extensions
-BuildRequires:  pytest
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-An improved version of dir() with better output.  Attributes are grouped by
-types/functionalities, with beautiful colors.  Supports ipython, ptpython,
-bpython, and Jupyter Notebook.}
+This is package 'pdir2' generated automatically by pyp2spec.}
+
+Patch0:         python313.patch
 
 %description %_description
 
-%package -n python3-pdir2
-Summary: %{summary}
+%package -n     python3-pdir2
+Summary:        %{summary}
 
 %description -n python3-pdir2 %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n pdir2-%{version} -p 1
-# We can’t respect preemptive upper bounds on dependency versions. At least
-# convert them into lower bounds. Also turn invalid version specifiers (.*)
-# into valid ones, see: https://fedoraproject.org/wiki/Changes/Update_python-packaging_to_version_22_plus
-sed -r -i 's/=(=[[:digit:]\.]+)\.\*/>\1/' pyproject.toml
+%prep
+%autosetup -p1 -n pdir2-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pdir
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pdir2 -f %{pyproject_files}
-%license LICENSE
-%doc README.md
 
 %changelog
 %autochangelog

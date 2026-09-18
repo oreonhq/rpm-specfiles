@@ -14,7 +14,7 @@
 %global nscl_commit 54883a5795144772ffd641a991a91c6b1cc0cf9b
 
 Name:           mozilla-noscript
-Version:        13.6.7
+Version:        13.6.33
 Release:        %autorelease
 Summary:        JavaScript white list extension for Mozilla Firefox
 

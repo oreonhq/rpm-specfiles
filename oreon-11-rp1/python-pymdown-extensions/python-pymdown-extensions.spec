@@ -1,71 +1,64 @@
-%global source0_hash 71dac4fca63fabeffd3eb9038b756161a33ec6e8d230853d3cecf562155ab3de
+%global source0_hash none
 
-%global pypi_name pymdown-extensions
-
-Name:           python-%{pypi_name}
-Version:        10.16
+Name:           python-pymdown-extensions
+Version:        12.0.1
 Release:        %autorelease
-Summary:        Extension pack for Python Markdown
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Extension pack for Python Markdown.
 
-# Most of the package is MIT except two files (highlight.py and superfences.py)
-License:        MIT and BSD-2-Clause
-URL:            https://facelessuser.github.io/pymdown-extensions
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/facelessuser/pymdown-extensions
 Source:         %{pypi_source pymdown_extensions}
-# Conditional compatibility for markdown 3.5 for el10 based on
-# https://github.com/facelessuser/pymdown-extensions/commit/722461c65829ed6bf45ae83934c04b2dbb691e12
-Patch:          pymdown-extensions-markdown-3.5.patch
 
 BuildArch:      noarch
- 
-%description
-PyMdown Extensions (pymdownx) is a collection of extensions for Python
-Markdown.
-
-%package -n     python3-%{pypi_name}
-Summary:        %{summary}
-
 BuildRequires:  python3-devel
 
-%description -n python3-%{pypi_name}
-PyMdown Extensions (pymdownx) is a collection of extensions for Python
-Markdown.
 
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pymdown-extensions' generated automatically by pyp2spec.}
+
+Patch:          pymdown-extensions-markdown-3.5.patch
+
+%description %_description
+
+%package -n     python3-pymdown-extensions
+Summary:        %{summary}
+
+%description -n python3-pymdown-extensions %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
 %pyproject_extras_subpkg -n python3-pymdown-extensions extra
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pymdown_extensions-%{version}
 
-%autosetup -n pymdown_extensions-%{version} -p1
-
-# Drop invalid entry that breaks the pyproject macros
-sed -i '/\.\[extra\]/d' pyproject.toml
-
-# Don't run mypy and drop its unpackaged typing deps
-sed -e '/^mypy/d' -e '/^types-/d' -i requirements/test.txt
-sed -i '/"{envpython}" -m mypy/d' pyproject.toml
-
-# EL10 only has markdown 3.5
-# https://issues.redhat.com/browse/RHEL-74397
-%if 0%{?el10}
-sed -i 's/"Markdown>=3.6"/"Markdown>=3.5"/' pyproject.toml
-%endif
 
 %generate_buildrequires
-%pyproject_buildrequires -t -x extra
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x extra
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pymdownx
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE.md
-%doc README.md
+
+%files -n python3-pymdown-extensions -f %{pyproject_files}
 
 %changelog
 %autochangelog

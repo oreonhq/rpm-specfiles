@@ -92,7 +92,6 @@ export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print
 %{perl_vendorarch}/Net/IDN
 %{_mandir}/man3/Net::IDN::*.3pm*
 
-
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.500-27
 - Prepare for Oreon 11 (RP1)

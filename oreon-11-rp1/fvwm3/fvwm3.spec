@@ -1,7 +1,7 @@
 %global source0_hash 9146661565edf5ff36a8373337e366ed2ffb10e4c232b4a63c0c72d348d9bb46
 
 Name:		fvwm3
-Version:	1.1.4
+Version:	1.1.5
 Release:	%autorelease
 Summary:	Highly configurable multiple virtual desktop window manager
 # ./fvwm/screen.h "NTP License (legal disclaimer)",

@@ -5,9 +5,9 @@
 %global pkgname libcharset
 
 Name:          mingw-%{pkgname}
-Version:       1.18
+Version:       1.19
 Summary:       MinGW Windows libcharset library
-Release:       2%{?dist}
+Release:       1%{?dist}
 
 BuildArch:     noarch
 License:       LGPL-2.0-or-later

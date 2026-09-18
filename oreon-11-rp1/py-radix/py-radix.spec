@@ -2,8 +2,8 @@
 
 Name: py-radix
 Summary: Radix tree data structure for Python
-Version: 0.10.0
-Release: 19%{?dist}
+Version: 1.1.0
+Release: 1%{?dist}
 
 URL: https://github.com/mjschultz/py-radix
 Source0: https://github.com/mjschultz/py-radix/archive/v%{version}/%{name}-%{version}.tar.gz

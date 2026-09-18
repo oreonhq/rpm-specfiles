@@ -7,7 +7,7 @@
 %global crate picky-asn1
 
 Name:           rust-picky-asn1_0.8
-Version:        0.8.0
+Version:        0.10.1
 Release:        %autorelease
 Summary:        Provide ASN.1 simple types
 

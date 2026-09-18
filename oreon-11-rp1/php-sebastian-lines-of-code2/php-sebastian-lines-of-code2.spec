@@ -26,8 +26,8 @@
 %global ns_project   LinesOfCode
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        2.0.2
-Release:        7%{?dist}
+Version:        3.0.0
+Release:        1%{?dist}
 Summary:        Counting the lines of code in PHP source code, version %{major}
 
 License:        BSD-3-Clause

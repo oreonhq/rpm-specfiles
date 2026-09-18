@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           nethack-vultures
-Version:        2.1.2
-Release:        45%{?dist}
+Version:        2.4
+Release:        1%{?dist}
 Summary:        NetHack - Vulture's Eye and Vulture's Claw
 
 License:        NGPL

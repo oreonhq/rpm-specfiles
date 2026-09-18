@@ -7,7 +7,7 @@
 %global crate hkdf
 
 Name:           rust-hkdf
-Version:        0.12.4
+Version:        0.13.0
 Release:        %autorelease
 Summary:        HMAC-based Extract-and-Expand Key Derivation Function (HKDF)
 

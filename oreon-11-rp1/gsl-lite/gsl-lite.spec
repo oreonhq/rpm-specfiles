@@ -11,7 +11,7 @@ originally based on Microsoft GSL.
 %global debug_package %{nil}
 
 Name:           gsl-lite
-Version:        0.43.0
+Version:        1.1.1
 Release:        %autorelease
 Summary:        Header-only version of ISO C++ Guidelines Support Library (GSL)
 

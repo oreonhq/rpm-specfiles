@@ -1,7 +1,7 @@
 %global source0_hash feec9d2e5ab407a68c3f2036024b11f560c000c17bd041e38024b580026d26ac
 
 Name:           pipx
-Version:        1.11.0
+Version:        1.17.3
 Release:        %autorelease
 Summary:        Install and run Python applications in isolated environments
 

@@ -1,110 +1,59 @@
-%global source0_hash a700604b0ec191c62c1228b20af4912e7e478eff4636b12284fb0f8395cc0415
+%global source0_hash none
 
-%global __python %{__python3}
-%global modname marshmallow
-%global _docdir_fmt %{name}
-
-Name:           python-%{modname}
-Version:        3.25.0
+Name:           python-marshmallow
+Version:        4.3.1
 Release:        %autorelease
-Summary:        Python library for converting complex datatypes to and from primitive types
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A lightweight library for converting complex datatypes to and from native Python datatypes.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            http://marshmallow.readthedocs.org/
-Source0:        https://github.com/marshmallow-code/marshmallow/archive/%{version}/%{modname}-%{version}.tar.gz
-Patch0:         ordered_set.patch
+URL:            https://github.com/marshmallow-code/marshmallow
+Source:         %{pypi_source marshmallow}
 
 BuildArch:      noarch
-
-%global _description \
-Marshmallow is a framework-agnostic library for converting complex datatypes,\
-such as objects, to and from primitive Python datatypes.\
-\
-Marshmallow schemas can be used to:\
-* Validate input data.\
-* Deserialize input data to app-level objects.\
-* Serialize app-level objects to primitive Python types. The serialized objects\
-  can then be rendered to standard formats such as JSON for use in an HTTP API.
-
-%description %{_description}
-
-%package doc
-Summary:        Documentation for %{name}
-Provides:       python3-%{modname}-doc = %{version}
-Obsoletes:      python3-%{modname}-doc < 2.8.0-1
-
-%description doc
-Documentation for %{name}.
-
-%package -n python3-%{modname}
-Summary:        %{summary}
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-# for tests
-BuildRequires:  python3-pytest
-BuildRequires:  python3-ordered-set
-BuildRequires:  python3-dateutil
-BuildRequires:  python3-simplejson
-BuildRequires:  python3-sphinx-issues
-Requires:       python3-ordered-set
-Recommends:     python3-dateutil
-Recommends:     python3-simplejson
 
-%description -n python3-%{modname} %{_description}
 
-Python 3 version.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'marshmallow' generated automatically by pyp2spec.}
+
+Patch0:         ordered_set.patch
+
+%description %_description
+
+%package -n     python3-marshmallow
+Summary:        %{summary}
+
+%description -n python3-marshmallow %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n marshmallow-%{version}
 
-%autosetup -n %{modname}-%{version} -p1
-
-# remove bundled library
-# instead of orderedsett we patch code to usu python-ordered-set
-rm -f ./marshmallow/orderedset.py
-
-# unsupported theme option 'donate_url' given
-sed -i -e "/donate_url/d" docs/conf.py
-# python3-autodocsumm is not in Fedora
-# This is needed only for doc subpackage.
-# this used to be patch, but this change every release
-# and I am sick of change it every time
-sed -i '/"autodocsumm",/d' docs/conf.py
-sed -i '/"autodocsumm==/d' pyproject.toml
-sed -i '/"versionwarning.extension",/d' docs/conf.py
-sed -i '/"sphinx-version-warning==/d' pyproject.toml
-sed -i '/"sphinx_issues",/d' docs/conf.py
-sed -i '/"sphinx-issues==/d' pyproject.toml
-sed -i '/version = release = importlib.metadata.version/d' docs/conf.py
-# Drop the sphinx version constraint
-sed -i 's/"sphinx==[^ ]*"/"sphinx"/' pyproject.toml
-# the newer version is not yet in Fedora and is required just because CVEs, old version has all required functionality
-sed -i '/"alabaster==/c\\"alabaster==0.7.16"' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires -x docs,tests
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
-sphinx-build -b html docs html
+
 
 %install
 %pyproject_install
-%pyproject_save_files %{modname}
-rm -rf html/{.buildinfo,.doctrees}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%{py_test_envvars} py.test-%{python3_version} -v
+%_pyproject_check_import_allow_no_modules -t
 
-%files doc
-%license LICENSE
-%doc html examples
 
-%files -n python3-%{modname}
-%license LICENSE
-%doc CHANGELOG.rst README.rst
-%{python3_sitelib}/%{modname}/
-%{python3_sitelib}/%{modname}-%{version}.dist-info/
+%files -n python3-marshmallow -f %{pyproject_files}
 
 %changelog
 %autochangelog

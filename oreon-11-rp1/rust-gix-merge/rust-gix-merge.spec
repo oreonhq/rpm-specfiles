@@ -7,7 +7,7 @@
 %global crate gix-merge
 
 Name:           rust-gix-merge
-Version:        0.10.0
+Version:        0.20.1
 Release:        %autorelease
 Summary:        A crate of the gitoxide project implementing merge algorithms
 

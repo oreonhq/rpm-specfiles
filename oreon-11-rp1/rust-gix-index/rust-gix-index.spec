@@ -7,7 +7,7 @@
 %global crate gix-index
 
 Name:           rust-gix-index
-Version:        0.45.1
+Version:        0.55.0
 Release:        %autorelease
 Summary:        A work-in-progress crate of the gitoxide project dedicated implementi...
 

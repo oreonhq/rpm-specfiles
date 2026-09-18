@@ -1,8 +1,8 @@
 %global source0_hash 1a3a48f0f23561b77a50d81d6a834aae7536fd13c632024e34199208e14f4ba5
 
 Name:           abcMIDI
-Version:        2025.02.16
-Release:        5%{?dist}
+Version:        2026.06.16
+Release:        1%{?dist}
 Summary:        ABC to/from MIDI conversion utilities
 
 Group:          Applications/Multimedia

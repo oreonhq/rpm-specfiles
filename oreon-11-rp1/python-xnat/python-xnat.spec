@@ -1,112 +1,59 @@
-%global source0_hash 28a1e6543e7bf0861bcd3321316b9fc6865e74fc89b14b193b04e9b435913d3e
-
-# Tests require xnat4tests, which depends circularly on xnat
-%bcond bootstrap 0
-# Tests requiring network are skipped (mostly dependent on docker)
-# Tests requiring connection to https://xnat.bmia.nl can be run locally
-# by passing `--enable-network` to fedpkg or mock. They will be skipped
-# when connection to server is unavailable.
-%bcond tests %{without bootstrap}
+%global source0_hash none
 
 Name:           python-xnat
-Version:        0.7.2
+Version:        0.8.1
 Release:        %autorelease
-Summary:        XNAT client that exposes XNAT objects/functions as python objects/functions
+# Fill in the actual package summary to submit package to Fedora
+Summary:        An XNAT client that exposes the XNAT REST interface as python objects. Part of the interface is automatically generated based on the servers data model as defined by the xnat schema.
 
-%global forgeurl https://gitlab.com/radiology/infrastructure/xnatpy
-%global tag %{version}
-%forgemeta
-
-License:        Apache-2.0
-URL:            %forgeurl
-Source0:        %forgesource
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://gitlab.com/radiology/infrastructure/xnatpy
+Source:         %{pypi_source xnat}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-# For setting up git repo allowing `versioningit` to determine version
-BuildRequires:  git-core
-BuildRequires:  help2man
-%if %{with tests}
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-mock)
-BuildRequires:  python3dist(requests-mock)
-BuildRequires:  python3dist(xnat4tests)
-%endif
 
-%global desc %{expand: \
-XNAT client that exposes XNAT objects/functions as python
-objects/functions. The aim is to abstract as much of the REST API away
-as possible and make xnatpy feel like native Python code. This reduces
-the need for the user to know the details of the REST API. Low level
-functionality can still be accessed via the connection object which has
-get, head, put, post, delete methods for more directly calling the REST
-API.}
 
-%description
-%{desc}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'xnat' generated automatically by pyp2spec.}
 
-%package -n python3-xnat
+%description %_description
+
+%package -n     python3-xnat
 Summary:        %{summary}
 
-%description -n python3-xnat
-%{desc}
+%description -n python3-xnat %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n xnat-%{version}
 
-%forgeautosetup -p1 -S git
-
-# Strip version constraints
-# We are either ahead or behind
-sed -r -i 's/[~<>=]=[0-9.]*//g' requirements.txt pyproject.toml
-
-# remove shebang from non executable scripts
-sed -i '1d' xnat/scripts/copy_project.py
-sed -i '1d' xnat/scripts/data_integrity_check.py
-sed -i '1d' xnat/scripts/import_experiment_dir.py
-
-# Don't try to import docker (we are not using it)
-sed -i '/import docker/d' xnat/tests/test_import.py
-
-# Commit everything then tag allowing `versioningit` to do its "magic"
-git add --all
-git commit -m "Downstream changes"
-git tag %{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -r requirements.txt
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l xnat
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# generate man pages
-# skip xnat_cp_project and xnat_data_integrity, seems generally broken: https://gitlab.com/radiology/infrastructure/xnatpy/-/issues/46
-for binary in "xnat" "xnat download" "xnat import" "xnat list" "xnat login" "xnat logout" "xnat prearchive" "xnat rest" "xnat script"
-do
-    echo "Generating man page for ${binary// /-/}"
-    PYTHONPATH="$PYTHONPATH:%{buildroot}/%{python3_sitelib}/" PATH="$PATH:%{buildroot}/%{_bindir}/" help2man --no-info --no-discard-stderr --name="${binary}" --version-string="${binary} %{version}" --output="${binary// /-}.1" "${binary}"
-    cat "${binary// /-}.1"
-    install -t '%{buildroot}%{_mandir}/man1' -p -m 0644 -D "${binary// /-}.1"
-done
 
 %check
-%if %{with tests}
-%pytest -r fEs --run-functional
-%else
-%pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-xnat -f %{pyproject_files}
-%doc README.rst
 %{_bindir}/xnat
 %{_bindir}/xnat_cp_project
 %{_bindir}/xnat_data_integrity-check
-%{_mandir}/man1/xnat*
 
 %changelog
 %autochangelog

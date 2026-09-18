@@ -1,10 +1,10 @@
 %global source0_hash 33c42ebc2e6088570421e282c6332e899705d42b4f73ebd1212e6a11da714dd4
 
-%global sover 1.7.0
+%global sover 1.8.2
 
 Name:           liquid-dsp
-Version:        1.7.0
-Release:        2%{?dist}
+Version:        1.8.2
+Release:        1%{?dist}
 Summary:        Digital Signal Processing Library for Software-Defined Radios
 
 License:        MIT

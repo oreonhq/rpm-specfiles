@@ -1,6 +1,6 @@
 %global source0_hash d8d3efac1396e61d8a3a5e8b39b2015c8742fddd96b76689ab898062022d72b0
 
-Version:        0.8.1
+Version:        0.9.0
 
 %global forgeurl https://github.com/OpenTTD/nml
 %global tag      %{version}

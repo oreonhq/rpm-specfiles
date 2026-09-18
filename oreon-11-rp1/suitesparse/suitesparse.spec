@@ -50,8 +50,8 @@
 %global _smp_build_ncpus 4
 
 Name:           suitesparse
-Version:        7.11.0
-Release:        2%{?dist}
+Version:        7.14.1
+Release:        1%{?dist}
 Summary:        A collection of sparse matrix libraries
 
 # See LICENSE.txt for a breakdown of all licenses:

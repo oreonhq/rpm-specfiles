@@ -1,98 +1,66 @@
-%global source0_hash b2b8f66f14dac4af66b180d2338819981b981f70e196c9a66e6bfaa9e59572f5
+%global source0_hash none
 
-%global srcname zarr
-%bcond doc 0
-
-Name:           python-%{srcname}
-Version:        2.18.7
+Name:           python-zarr
+Version:        3.4.0
 Release:        %autorelease
-Summary:        Chunked, compressed, N-dimensional arrays for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        An implementation of chunked, compressed, N-dimensional arrays for Python
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/zarr-developers/zarr
-Source:         %pypi_source %{srcname}
-# https://github.com/zarr-developers/zarr-python/pull/1970
-# https://github.com/zarr-developers/zarr-python/issues/1819
-# fix tests with recent fsspec
+URL:            https://github.com/zarr-developers/zarr-python
+Source:         %{pypi_source zarr}
+
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'zarr' generated automatically by pyp2spec.}
+
 Patch:          0001-Adapt-storage-tests-for-changes-in-fsspec-1819-1679.patch
-# Allow the latest numcodecs version.
 Patch:          0002-Fix-compatibility-with-latest-numcodecs.patch
 
-BuildArch:      noarch
+%description %_description
 
-BuildRequires:  python3-devel
-# Test dependencies
-BuildRequires:  python3dist(bsddb3)
-BuildRequires:  python3dist(fsspec)
-BuildRequires:  python3dist(h5py)
-# lmdb is FTBFS and FTI: https://bugzilla.redhat.com/show_bug.cgi?id=2259530
-# not having it causes several tests to be skipped
-#BuildRequires:  python3dist(lmdb)
-BuildRequires:  python3dist(msgpack)
-BuildRequires:  python3dist(pytest)
-
-%description
-Zarr is a Python package providing an implementation of compressed, chunked,
-N-dimensional arrays, designed for use in parallel computing.
-
-%package -n     python3-%{srcname}
+%package -n     python3-zarr
 Summary:        %{summary}
 
-%description -n python3-%{srcname}
-Zarr is a Python package providing an implementation of compressed, chunked,
-N-dimensional arrays, designed for use in parallel computing.
+%description -n python3-zarr %_description
 
-%if %{with doc}
-%package -n python-%{srcname}-doc
-Summary:        zarr documentation
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-zarr cast-value-rs,cli,gpu,optional,remote
 
-BuildArch:      noarch
-
-BuildRequires:  python3dist(numpydoc)
-BuildRequires:  python3dist(sphinx)
-BuildRequires:  python3dist(sphinx-copybutton)
-BuildRequires:  python3dist(sphinx-design)
-BuildRequires:  python3dist(sphinx-issues)
-BuildRequires:  python3dist(pydata-sphinx-theme)
-
-%description -n python-%{srcname}-doc
-Documentation for zarr
-%endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n zarr-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x cast-value-rs,cli,gpu,optional,remote
+
 
 %build
 %pyproject_wheel
 
-%if %{with doc}
-# generate html docs
-PYTHONPATH=${PWD} sphinx-build-3 docs html
-
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo,_static/donotdelete}
-%endif
 
 %install
 %pyproject_install
-%pyproject_save_files -l %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -ra
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
 
-%if %{with doc}
-%files -n python-%{srcname}-doc
-%doc html
-%license LICENSE.txt
-%endif
+%files -n python3-zarr -f %{pyproject_files}
+%{_bindir}/zarr
 
 %changelog
 %autochangelog

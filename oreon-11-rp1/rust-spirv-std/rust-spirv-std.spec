@@ -7,7 +7,7 @@
 %global crate spirv-std
 
 Name:           rust-spirv-std
-Version:        0.4.0-alpha.8
+Version:        0.10.0-alpha.1
 Release:        %autorelease
 Summary:        Standard functions and types for SPIR-V
 

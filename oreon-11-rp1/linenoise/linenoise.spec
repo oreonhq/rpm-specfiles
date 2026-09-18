@@ -4,8 +4,8 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           linenoise
-Version:        1.0
-Release:        14.20200312git%{shortcommit}%{?dist}
+Version:        2.0
+Release:        1.20200312git%{shortcommit}%{?dist}
 Summary:        Minimal replacement for readline
 License:        BSD-2-Clause
 URL:            https://github.com/antirez/linenoise

@@ -7,7 +7,7 @@
 %global crate ptr_meta_derive
 
 Name:           rust-ptr_meta_derive0.3
-Version:        0.3.1
+Version:        0.3.2
 Release:        %autorelease
 Summary:        Proc macros for ptr_meta
 

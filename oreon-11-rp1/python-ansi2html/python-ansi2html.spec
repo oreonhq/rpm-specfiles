@@ -1,79 +1,63 @@
-%global source0_hash 3453bf87535d37b827b05245faaa756dbab4ec3d69925e352b6319c3c955c0a5
+%global source0_hash none
 
-# Run tests by default
-%bcond_without tests
+Name:           python-ansi2html
+Version:        1.9.5
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Convert text with ANSI color codes to HTML or to LaTeX
 
-%global srcname ansi2html
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        LGPL-3.0-or-later
+URL:            https://github.com/pycontribs/ansi2html
+Source:         %{pypi_source ansi2html}
 
-Name:       python-%{srcname}
-Version:    1.9.2
-Release:    8%{?dist}
-Summary:    Python module that converts text with ANSI color to HTML
-# While the project was previously licensed as GPLv3+, it is now LGPLv3.
-# See https://github.com/pycontribs/ansi2html/issues/72 and also
-# https://github.com/pycontribs/ansi2html/issues/188 for more info.
-# In these issues, all of the previous contributors agreed to relicense their code.
-License:    LGPL-3.0-only
-URL:        http://github.com/pycontribs/%{srcname}
-Source:     %{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
-
-BuildArch:  noarch
-
+BuildArch:      noarch
 BuildRequires:  python3-devel
-# Needed for building manpages
-BuildRequires:  /usr/bin/a2x
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The ansi2html module can convert text with ANSI color codes to HTML.}
+This is package 'ansi2html' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-%{srcname}
-Summary:    %{summary}
-%dnl colorized-logs also provides %{_bindir}/ansi2html and %{_mandir}/man1/ansi2html.1*
-Conflicts:  colorized-logs
+%package -n     python3-ansi2html
+Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-ansi2html %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-ansi2html docs,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n ansi2html-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
-# The -t is set if %%{with_tests} is true
-%pyproject_buildrequires %{?with_tests:-t}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
-# Build manpages
-a2x \
-    --conf-file=man/asciidoc.conf \
-    --attribute="manual_package=ansi2html" \
-    --attribute="manual_title=ansi2html Manual" \
-    --attribute="manual_version=%{version}" \
-    --format=manpage -D man \
-     man/ansi2html.1.txt
-
-# Build wheel
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Install manpage
-install -Dpm 644 man/%{srcname}.1 %{buildroot}%{_mandir}/man1/%{srcname}.1
 
 %check
-%if %{with tests}
-%tox
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md docs/*.md
-%license LICENSE
-%{_bindir}/%{srcname}
-%{_mandir}/man1/%{srcname}.1*
+
+%files -n python3-ansi2html -f %{pyproject_files}
+%{_bindir}/ansi2html
 
 %changelog
 %autochangelog

@@ -12,7 +12,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        0.24.3
+Version:        0.25.0
 Release:        %autorelease
 Summary:        Test interactive Haskell examples
 

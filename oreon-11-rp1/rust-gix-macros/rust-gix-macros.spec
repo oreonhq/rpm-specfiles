@@ -7,7 +7,7 @@
 %global crate gix-macros
 
 Name:           rust-gix-macros
-Version:        0.1.5
+Version:        0.1.6
 Release:        %autorelease
 Summary:        Proc-macro utilities for gix
 

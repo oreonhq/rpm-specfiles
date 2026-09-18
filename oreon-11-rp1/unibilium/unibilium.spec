@@ -1,7 +1,7 @@
 %global source0_hash 370ecb07fbbc20d91d1b350c55f1c806b06bf86797e164081ccc977fc9b3af7a
 
 Name:           unibilium
-Version:        2.1.2
+Version:        2.1.4
 Release:        %autorelease
 Summary:        Terminfo parsing library
 

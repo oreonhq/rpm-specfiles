@@ -17,7 +17,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        0.6.4.0
+Version:        0.7.2.0
 # can only be reset when all subpkgs bumped
 Release:        1%{?dist}
 Summary:        Reading, writing and manipulating ".tar" archive files

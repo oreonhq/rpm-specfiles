@@ -7,7 +7,7 @@
 %global crate subplot
 
 Name:           rust-subplot
-Version:        0.12.0
+Version:        0.14.0
 Release:        %autorelease
 Summary:        tools for specifying, documenting,
 

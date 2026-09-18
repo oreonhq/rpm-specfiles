@@ -6,8 +6,8 @@
 %bcond_without  python3
 
 Name:           krop
-Version:        0.5.1
-Release:        29%{?dist}
+Version:        0.7.0
+Release:        1%{?dist}
 Summary:        Tool to crop PDF files with an eye towards eReaders
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later

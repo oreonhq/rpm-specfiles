@@ -1,70 +1,62 @@
-%global source0_hash d8b6d66b9bf44f11c3c475e08cd2a1a5043f2c1be8804a68c536c456af5bec1e
-
-%global forgeurl https://github.com/stripe/stripe-python
-Version:        14.1.0
-%forgemeta
+%global source0_hash none
 
 Name:           python-stripe
+Version:        15.6.1
 Release:        %autorelease
-Summary:        Python library for the Stripe API
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python bindings for the Stripe API
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            %{forgeurl}
-Source0:        %{forgesource}
+URL:            https://stripe.com/
+Source:         %{pypi_source stripe}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The Stripe Python library provides convenient access to the Stripe API from
-applications written in the Python language. It includes a pre-defined set of
-classes for API resources that initialize themselves dynamically from API
-responses which makes it compatible with a wide range of versions of the
-Stripe API.}
+This is package 'stripe' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-stripe
+%package -n     python3-stripe
 Summary:        %{summary}
 
 %description -n python3-stripe %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-stripe async
 
-%forgeautosetup -- -n stripe-python-%{version}
+
+%prep
+%autosetup -p1 -n stripe-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x async
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files stripe
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-# Testing suite depends on outdated unpackaged go libraries, hence no test
-# here.
-#
-# To run tests manually, install:
-# 1. The package
-# 2. The dependencies:
-#    sudo dnf install go python3-aiohttp python3-anyio python3-httpx python3-pytest python3-pytest-mock python3-pytest-xdist python3-trio
-#
-# Then execute:
-# In first shell:
-# $ go install github.com/stripe/stripe-mock@master
-# $ stripe-mock
-# In second shell (replace `~/stripe-python` with actual path with sources):
-# $ cd /  # So that pytest use installed stripe version, not sources
-# $ pytest --ignore ~/stripe-python/stripe/ ~/stripe-python/
 
 %files -n python3-stripe -f %{pyproject_files}
-%doc README.md CHANGELOG.md
 
 %changelog
 %autochangelog

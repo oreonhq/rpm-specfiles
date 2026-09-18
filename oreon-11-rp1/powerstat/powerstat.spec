@@ -1,8 +1,8 @@
 %global source0_hash 23044e87a62a18fe929e66725b637271b0ec72528f79f3e9381b036768a36af5
 
 Name:           powerstat
-Version:        0.04.05
-Release:        3%{?dist}
+Version:        0.04.6
+Release:        1%{?dist}
 Summary:        Measures the power consumption of a machine
 
 License:        GPL-2.0-or-later

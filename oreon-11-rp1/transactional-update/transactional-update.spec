@@ -3,7 +3,7 @@
 %global somajor 8
 
 Name:           transactional-update
-Version:        6.0.0
+Version:        6.1.3
 Release:        1%{?dist}
 Summary:        Transactional Updates with btrfs and snapshots
 

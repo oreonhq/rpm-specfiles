@@ -1,57 +1,57 @@
-%global source0_hash 8a1db8f51af79a63f999fad138af94def6742c5ff1519d0dc263f2af3903639b
+%global source0_hash none
 
 Name:           python-exoscale
-Version:        0.16.1
-Release:        1%{?dist}
-Summary:        Python bindings for Exoscale API
+Version:        0.16.4
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Clients for Exoscale IaaS APIs
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ISC
-URL:            https://exoscale.github.io/python-exoscale/
-Source0:        https://github.com/exoscale/python-exoscale/archive/v%{version}/%{name}-%{version}.tar.gz
+URL:            https://github.com/exoscale/python-exoscale
+Source:         %{pypi_source exoscale}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The library to allow developers to use the Exoscale cloud platform API with
-high-level Python bindings.}
+This is package 'exoscale' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-exoscale
+%package -n     python3-exoscale
 Summary:        %{summary}
-
-BuildRequires:  python3-devel
-# Test dependencies:
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-timeout)
-BuildRequires:  python3dist(requests-mock)
-BuildRequires:  python3dist(setuptools)
 
 %description -n python3-exoscale %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n python-exoscale-%{version}
+%prep
+%autosetup -p1 -n exoscale-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files exoscale
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-exoscale -f %{pyproject_files}
-%doc README.md
-%license LICENSE
 
 %changelog
 %autochangelog

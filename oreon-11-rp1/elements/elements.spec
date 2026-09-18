@@ -2,7 +2,7 @@
 
 Summary:        A C++/Python build framework
 Name:           elements
-Version:        6.3.4
+Version:        6.3.7
 Release:        %autorelease
 License:        LGPL-3.0-or-later
 Source0:        https://github.com/astrorama/Elements/archive/%{version}/%{name}-%{version}.tar.gz

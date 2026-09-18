@@ -12,8 +12,8 @@
 %global __python %{__python3}
 
 Name:           cinnamon
-Version:        6.6.7
-Release:        2%{?dist}
+Version:        6.7.7-unstable
+Release:        1%{?dist}
 Summary:        Window management and application launching for GNOME
 # Automatically converted from old format: GPLv2+ and LGPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later AND LicenseRef-Callaway-LGPLv2+

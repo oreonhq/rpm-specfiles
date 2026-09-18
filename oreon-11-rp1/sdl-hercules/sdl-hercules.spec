@@ -18,7 +18,7 @@
 %endif
 
 Name:           sdl-hercules
-Version:        4.8
+Version:        4.9.1
 Release:        %autorelease
 Summary:        SoftDevLabs version of the Hercules S/370, ESA/390, and z/Arch Emulator
 

@@ -3,12 +3,12 @@
 %global upname OpenDKIM
 %global bigname OPENDKIM
 
-%global full_version 2.11.0-Beta2
+%global full_version 2.11.0-Beta2-Beta2
 
 Summary: A DomainKeys Identified Mail (DKIM) milter to sign and/or verify mail
 Name: opendkim
-Version: 2.11.0
-Release: 0.44%{?dist}
+Version: 2.11.0-Beta2-Beta2
+Release: 1.44%{?dist}
 License: BSD-3-Clause AND Sendmail-Open-Source-1.1
 URL: http://%{name}.org/
 Source0: https://github.com/trusteddomainproject/OpenDKIM/archive/%{full_version}.tar.gz

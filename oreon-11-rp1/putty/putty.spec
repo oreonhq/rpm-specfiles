@@ -1,8 +1,8 @@
 %global source0_hash 718777c13d63d0dff91fe03162bc2a05b4dfc8b0827634cd60b51cefdff631c6
 
 Name:		putty
-Version:	0.83
-Release:	4%{?dist}
+Version:	0.85
+Release:	1%{?dist}
 Summary:	SSH, Telnet and Rlogin client
 License:	MIT
 URL:		http://www.chiark.greenend.org.uk/~sgtatham/putty/

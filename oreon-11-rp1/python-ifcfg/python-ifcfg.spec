@@ -1,70 +1,59 @@
-%global source0_hash bf3cfa02425ad7adc5322fe88d18cb665e6228337d775c0c9cac441d3315e900
+%global source0_hash none
 
-%global srcname ifcfg
+Name:           python-ifcfg
+Version:        0.24
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python ifconfig wrapper for Unix/Linux/MacOSX + ipconfig for Windows
 
-Name:           python-%{srcname}
-Version:        0.21
-Release:        25%{?dist}
-Summary:        Python cross-platform network interface discovery (ifconfig/ipconfig/ip)
-
-License:        BSD-3-Clause
-URL:            https://github.com/ftao/%{name}
-Source0:        https://github.com/ftao/%{name}/archive/releases/%{version}/%{name}-releases-%{version}.tar.gz
-
-# Not yet submitted upstream
-Patch0:         %{name}-0.21-drop-nose.patch
-# Maintainers, please upstream
-Patch1:         %{name}-rm-python-mock-usage.patch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/ftao/python-ifcfg
+Source:         %{pypi_source ifcfg}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-Ifcfg is a cross-platform library for parsing ifconfig and ipconfig output in
-Python. It is useful for pulling information such as IP, Netmask, MAC Address,
-Hostname, etc.
 
-A fallback to ip is included for newer Unix systems w/o ifconfig.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'ifcfg' generated automatically by pyp2spec.}
 
-%package -n python%{python3_pkgversion}-%{srcname}
+Patch0:         %{name}-0.21-drop-nose.patch
+Patch1:         %{name}-rm-python-mock-usage.patch
+
+%description %_description
+
+%package -n     python3-ifcfg
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  python%{python3_pkgversion}-setuptools
-BuildRequires:  iproute
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
 
-%if !0%{?rhel} || 0%{?rhel} >= 8
-Recommends:     (iproute or net-tools)
-%endif
+%description -n python3-ifcfg %_description
 
-%description -n python%{python3_pkgversion}-%{srcname}
-Ifcfg is a cross-platform library for parsing ifconfig and ipconfig output in
-Python. It is useful for pulling information such as IP, Netmask, MAC Address,
-Hostname, etc.
-
-A fallback to ip is included for newer Unix systems w/o ifconfig.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n ifcfg-%{version}
 
-%autosetup -p1 -n %{name}-releases-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest \
-  --override-ini 'python_files=*_tests.py' \
-  tests
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname}
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/%{srcname}/
-%{python3_sitelib}/%{srcname}-%{version}-py%{python3_version}.egg-info/
+
+%files -n python3-ifcfg -f %{pyproject_files}
 
 %changelog
 %autochangelog

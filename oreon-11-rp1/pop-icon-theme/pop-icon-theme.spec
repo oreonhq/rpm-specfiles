@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           pop-icon-theme
-Version:        3.5.0
+Version:        3.5.1
 Release:        %autorelease
 Summary:        Pop Icons
 License:        CC-BY-SA-4.0

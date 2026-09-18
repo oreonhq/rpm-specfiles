@@ -1,66 +1,59 @@
-%global source0_hash 940272a72ac27d16a1db69aafef820684012cc3553ffe9875d5cd2e3a9cb69dc
+%global source0_hash none
 
-%global pypi_name dbf
-%global sum Pure python package for reading/writing dBase, FoxPro, and Visual FoxPro .dbf
-%global desc Pure python package for reading/writing dBase, FoxPro, and Visual FoxPro .dbf\
-files (including memos)\
-\
-Currently supports dBase III, Clipper, FoxPro, and Visual FoxPro tables. Text is\
-returned as unicode, and codepage settings in tables are honored. Memos and Null\
-fields are supported.
+Name:           python-dbf
+Version:        0.99.11
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Pure python package for reading/writing dBase, FoxPro, and Visual FoxPro .dbf files _including memos_
 
-Name:           python-%{pypi_name}
-Version:        0.99.3
-Release:        13%{?dist}
-Summary:        %{sum}
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/ethanfurman/dbf
+Source:         %{pypi_source dbf}
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://pypi.python.org/pypi/%{pypi_name}
-Source0:        https://pypi.python.org/packages/source/d/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'dbf' generated automatically by pyp2spec.}
+
 Patch0:         prevent-synthax-error.patch
 Patch1:         remove-distutil.patch
 
-BuildArch:      noarch
+%description %_description
 
-%description
-%{desc}
+%package -n     python3-dbf
+Summary:        %{summary}
 
-%package -n     python3-%{pypi_name}
-Summary:        %{sum}
-BuildRequires:  python3-devel
-Requires:       python3-aenum
+%description -n python3-dbf %_description
 
-%description -n python3-%{pypi_name}
-%{desc}
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n dbf-%{version}
 
-%setup -qn %{pypi_name}-%{version}
-# Correct line endings for setup.py
-sed -i "s|\r||g" setup.py
-%autopatch -p1
-rm -f dbf/ver_32.py
-rm -f dbf/ver_2.py
-sed -i "s|\r||g" dbf/README.md
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc dbf/README.md
-%license dbf/LICENSE
+
+%files -n python3-dbf -f %{pyproject_files}
 
 %changelog
 %autochangelog

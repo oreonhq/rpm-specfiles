@@ -1,8 +1,8 @@
 %global source0_hash b9d9e1eae25e63071960e921af8b217ab1abe64210bd290994aca178a8dc68d2
 
 Name:           ii
-Version:        1.8
-Release:        14%{?dist}
+Version:        2.0
+Release:        1%{?dist}
 Summary:        IRC IT, simple FIFO based IRC client
 License:        MIT
 URL:            http://tools.suckless.org/%{name}

@@ -1,84 +1,62 @@
-%global source0_hash 9f7375348b3a0dd9a03342d8f1506b5914a9eeb5f034f0eb5bcdaa799ac4d795
+%global source0_hash none
 
-# tests are enabled by default
-%bcond_without  tests
-
-# python-redis is missing from EPEL 9, but many of the tests will still run without
-# it being present at test time. See BZ 2063713.
-%if 0%{?el9} || 0%{?centos} >= 9
-%global test_with_redis 0
-%else
-%global test_with_redis 1
-%endif
-
-%global         srcname     portalocker
-%global         forgeurl    https://github.com/WoLpH/portalocker
-Version:        3.1.1
-%global         tag         v%{version}
-%forgemeta
-
-Name:           python-%{srcname}
+Name:           python-portalocker
+Version:        4.3.2
 Release:        %autorelease
-Summary:        Library to provide an easy API to file locking
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Cross-platform file locking, with Redis, PID-file and bounded-semaphore locks
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            %forgeurl
-Source:         %forgesource
+URL:            https://github.com/wolph/portalocker/
+Source:         %{pypi_source portalocker}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%if %{with tests}
-BuildRequires:  python3dist(pygments)
-BuildRequires:  python3dist(pytest)
-%if 0%{?test_with_redis}
-BuildRequires:  python3dist(redis)
-%endif
-%endif
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-%{summary}}
+This is package 'portalocker' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-portalocker
 Summary:        %{summary}
-%description -n python3-%{srcname} %{_description}
+
+%description -n python3-portalocker %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-portalocker docs,redis,tests,win32
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n portalocker-%{version}
 
-%forgeautosetup
-
-# NOTE(mhayden): Upstream has a custom pytest.ini that requires 100% test
-# coverage, but upstream does not have 100% test coverage yet.
-mv pytest.ini pytest.ini_disabled
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,redis,tests,win32
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files portalocker
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{test_with_redis}
-%pyproject_check_import
-%else
-%pyproject_check_import -e portalocker.redis
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%if %{with tests}
-%pytest %{?test_with_redis:--ignore=portalocker_tests/test_redis.py} portalocker_tests
-%endif
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
+%files -n python3-portalocker -f %{pyproject_files}
 
 %changelog
 %autochangelog

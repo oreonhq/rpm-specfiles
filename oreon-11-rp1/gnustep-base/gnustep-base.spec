@@ -11,7 +11,7 @@
 # GNU Public License.
 
 Name: gnustep-base
-Version: 1.31.0
+Version: 1_31_1
 Release: %autorelease
 License: GPL-3.0-or-later AND LGPL-2.0-or-later
 Summary: GNUstep Base library package

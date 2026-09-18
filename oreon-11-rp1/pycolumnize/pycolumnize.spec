@@ -3,8 +3,8 @@
 %global pypi_name columnize
 
 Name:           pycolumnize
-Version:        0.3.10
-Release:        21%{?dist}
+Version:        3.11
+Release:        1%{?dist}
 Summary:        Python module to align in columns a simple list
 
 License:        MIT

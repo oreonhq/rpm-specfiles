@@ -9,7 +9,7 @@
 %global imaplib2_shortcommit %(c=%{imaplib2_commit}; echo ${c:0:7})
 
 Name:           offlineimap
-Version:        8.0.1
+Version:        8.0.3
 Release:        %{baserelease}%{?dist}
 Summary:        Powerful IMAP/Maildir synchronization and reader support
 

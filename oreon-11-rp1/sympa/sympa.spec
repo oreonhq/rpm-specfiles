@@ -88,7 +88,7 @@ ExcludeArch: %{ix86}
 #global pre_rel b.2
 
 Name:        sympa
-Version:     6.2.76
+Version:     6.2.80
 Release:     %{?pre_rel:0.}1%{?pre_rel:.%pre_rel}%{?dist}.4
 Summary:     Powerful multilingual List Manager
 Summary(fr): Gestionnaire de listes électroniques

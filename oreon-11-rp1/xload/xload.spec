@@ -1,8 +1,8 @@
 %global source0_hash 0d3b84d22d2d85e9c3c152e48871e490dfcaad420f8836333f1323c5a690d55f
 
 Name:       xload
-Version:    1.2.0
-Release:    5%{?dist}
+Version:    1.2.2
+Release:    1%{?dist}
 Summary:    Tool to display system load average
 
 License:    X11

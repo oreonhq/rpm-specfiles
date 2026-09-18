@@ -1,8 +1,8 @@
 %global source0_hash c812f2f4446fd5de16734e13c02ea9aa25ba4e3ba9f72b732c0ff90f9ba34935
 
 Name:             zathura-pdf-poppler
-Version:          0.3.3
-Release:          4%{?dist}
+Version:          2026.07.18
+Release:          1%{?dist}
 Summary:          PDF support for zathura via poppler
 License:          Zlib
 URL:              http://pwmt.org/projects/%{name}
@@ -22,7 +22,7 @@ BuildRequires:    zathura-devel >= 0.5.3
 
 Requires:         zathura >= 0.5.3
 # Old plugins used alternatives
-Conflicts:        zathura-pdf-mupdf < 0.3.3
+Conflicts:        zathura-pdf-mupdf < 2026.07.18
 
 %description
 The zathura-pdf-poppler plugin adds PDF support to zathura by using

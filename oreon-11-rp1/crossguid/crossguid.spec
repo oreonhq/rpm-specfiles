@@ -5,8 +5,8 @@
 %global commit_date 20160908
 
 Name:           crossguid
-Version:        0
-Release:        0.28.%{commit_date}git%{short_commit}%{?dist}
+Version:        0.2.2
+Release:        1.28.%{commit_date}git%{short_commit}%{?dist}
 Summary:        Lightweight cross platform C++ GUID/UUID library
 
 License:        MIT

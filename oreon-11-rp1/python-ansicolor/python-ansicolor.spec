@@ -1,115 +1,56 @@
-%global source0_hash f66c4e3446d419813de1bfd011f6dab3d96de9369388727fed434a63e7d8edbd
+%global source0_hash none
 
-%global srcname ansicolor
-%global desc %{srcname} is a library to produce ANSI color output, colored highlighting\
-and diffing.
+Name:           python-ansicolor
+Version:        0.3.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A library to produce ansi color output and colored highlighting and diffing
 
-%if 0%{?fedora}
-  %bcond_without python3
-  %if 0%{?fedora} > 29
-    %bcond_with python2
-  %else
-    %bcond_without python2
-  %endif
-%else
-  %if 0%{?rhel} > 7
-    %bcond_with    python2
-    %bcond_without python3
-  %else
-    %bcond_without python2
-    %bcond_with    python3
-  %endif
-%endif
-
-Name:           python-%{srcname}
-Version:        0.2.4
-Release:        37%{?dist}
-Summary:        A library to produce ANSI color output
-
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
-License:        Apache-2.0
-URL:            https://github.com/numerodix/%{srcname}
-Source0:        https://github.com/numerodix/%{srcname}/archive/%{version}/%{srcname}-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/numerodix/ansicolor
+Source:         %{pypi_source ansicolor}
 
 BuildArch:      noarch
-BuildRequires:  make
-%if %{with python2}
-BuildRequires:  python2-devel
-BuildRequires:  python2-pytest
-BuildRequires:  python2-setuptools
-BuildRequires:  python2-sphinx
-%endif
-%if %{with python3}
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-sphinx
-%endif
 
-%description
-%{desc}
 
-%if %{with python2}
-%package -n python2-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'ansicolor' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-ansicolor
 Summary:        %{summary}
-%{?python_provide:%python_provide python2-%{srcname}}
 
-%description -n python2-%{srcname}
-%{desc}
-%endif
+%description -n python3-ansicolor %_description
 
-%if %{with python3}
-%package -n python3-%{srcname}
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
-
-%description -n python3-%{srcname}
-%{desc}
-%endif
-
-%package doc
-Summary:        Documentation for %{name}
-
-%description doc
-This package contains the documentation for %{name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n ansicolor-%{version}
 
-%autosetup -n %{srcname}-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%{?with_python2:%py2_build}
-%{?with_python3:%py3_build}
+%pyproject_wheel
 
-PYTHONPATH=$(pwd) ./build_docs.sh
-rm -f docs/_build/html/.buildinfo
 
 %install
-%{?with_python2:%py2_install}
-%{?with_python3:%py3_install}
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{?with_python2:py.test-%{python2_version} -v}
-%{?with_python3:py.test-%{python3_version} -v}
+%_pyproject_check_import_allow_no_modules -t
 
-%if %{with python2}
-%files -n python2-%{srcname}
-%license LICENSE
-%doc README.rst
-%{python2_sitelib}/*
-%endif
 
-%if %{with python3}
-%files -n python3-%{srcname}
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/*
-%endif
-
-%files doc
-%license LICENSE
-%doc docs/_build/html/*
+%files -n python3-ansicolor -f %{pyproject_files}
 
 %changelog
 %autochangelog

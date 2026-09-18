@@ -1,59 +1,64 @@
-%global source0_hash 7dd66878c5b7b41ac790775d82b8fccdfdb1deb80d6c95306e90ad3e8c3538ed
+%global source0_hash none
 
-%global pypi_name click-repl
-
-Name:           python-%{pypi_name}
-Version:        0.3.0
+Name:           python-click-repl
+Version:        0.4.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        REPL plugin for Click
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/untitaker/click-repl
-Source0:        %{url}/archive/%{version}.tar.gz
-BuildArch:      noarch
+URL:            https://github.com/click-contrib/click-repl
+Source:         %{pypi_source click_repl}
 
-# Fix compatibility with click 8.2+
-# Sent upstream
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'click-repl' generated automatically by pyp2spec.}
+
 Patch:          https://github.com/click-contrib/click-repl/pull/132.patch
 
-BuildRequires:  python3-devel
-BuildRequires:  python3-click
-BuildRequires:  python3-pytest
-BuildRequires:  python3-prompt-toolkit
-BuildRequires:  python3-six
+%description %_description
 
-%description
-%{summary}
-
-%package -n     python3-%{pypi_name}
+%package -n     python3-click-repl
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-%{summary}
+%description -n python3-click-repl %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-click-repl testing
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n click_repl-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
-# Remove --cov from pytest
-sed -i '/addopts = \[/,/]/ s/"--cov=[^"]*",\?//g' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x testing
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l click_repl
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-click-repl -f %{pyproject_files}
 
 %changelog
 %autochangelog

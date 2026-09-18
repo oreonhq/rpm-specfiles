@@ -1,111 +1,64 @@
-%global source0_hash c5e83a13af5864027af13f5d10ef29b9b7e9f5bc6d8e13d7791855667fd19c33
+%global source0_hash none
 
-%global with_docs 1
-%global with_check 1
-%global with_django 1
+Name:           python-whitenoise
+Version:        6.12.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Radically simplified static file serving for WSGI applications
 
-%global srcname whitenoise
-%global owner evansd
-
-%if 0%{?rhel} == 9
-%undefine with_check
-%undefine with_django
-%endif
-
-Name:           python-%{srcname}
-Version:        6.4.0
-Release:        12%{?dist}
-Summary:        Static file serving for Python web apps
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            http://whitenoise.evans.io/
-# pypi source does not contain tests
-Source0:        https://github.com/evansd/whitenoise/archive/refs/tags/%{version}.tar.gz
-Patch:          whitenoise-6.4.0-default-docs-theme.patch
+URL:            https://github.com/evansd/whitenoise
+Source:         %{pypi_source whitenoise}
 
 BuildArch:      noarch
-
-%description
-Radically simplified static file serving for python web apps. with a couple of
-lines of config whitenoise allows your web app to serve its own static files,
-making it a self-contained unit that can be deployed anywhere without relying
-on nginx, amazon s3 or any other external service. (Especially useful on
-Heroku, OpenShift and other PaaS providers.)
-
-%package -n python3-%{srcname}
-Summary:        Static file serving for Python web apps
-License:        MIT
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-brotli
-%if 0%{?with_django}
-BuildRequires:  python3-django
-%endif
 
-#for tests
-BuildRequires:  python3-pytest
 
-%description -n python3-%{srcname}
-Radically simplified static file serving for python web apps. with a couple of
-lines of config whitenoise allows your web app to serve its own static files,
-making it a self-contained unit that can be deployed anywhere without relying
-on nginx, amazon s3 or any other external service. (especially useful on
-heroku, openshift and other paas providers.)
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'whitenoise' generated automatically by pyp2spec.}
 
-%if 0%{?with_docs}
-%package -n python3-%{srcname}-doc
-Summary:        Documentation for the Python Whitenoise module
-BuildRequires:  python3-sphinx
-BuildRequires:  python3-sphinx_rtd_theme
+Patch:          whitenoise-6.4.0-default-docs-theme.patch
 
-%description -n python3-%{srcname}-doc
-Documentation for the Python Whitenoise module
-%endif
+%description %_description
+
+%package -n     python3-whitenoise
+Summary:        %{summary}
+
+%description -n python3-whitenoise %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-whitenoise brotli
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n whitenoise-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
-# remove dangling doc symlink
-rm docs/changelog.rst
-# copy common doc files to top dir
-cp -pr docs/ README.rst LICENSE ../
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x brotli
+
 
 %build
 %pyproject_wheel
 
-# Build documentation
-%if 0%{?with_docs}
-pushd docs
-sphinx-build-3 -b html -d build/doctrees . html
-# remove unneeded files which create rpmlint warnings
-rm -f html/.buildinfo
-popd
-%endif
 
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files whitenoise
 
-%if 0%{?with_check}
 %check
-export DJANGO_SETTINGS_MODULE=tests.django_settings
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
-%license LICENSE
 
-%if 0%{?with_docs}
-%files -n python3-%{srcname}-doc
-%doc docs/html
-%license LICENSE
-%endif
+%files -n python3-whitenoise -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           xbean
-Version:        4.24
+Version:        5.0.0
 Release:        %autorelease
 Summary:        Java plugin based web server
 License:        Apache-2.0
@@ -17,7 +17,7 @@ Patch:        0001-Unbundle-ASM.patch
 Patch:        0002-Remove-dependency-on-log4j-and-commons-logging.patch
 
 # TODO Remove in Fedora 47
-Obsoletes:      %{name}-javadoc < 4.24-9
+Obsoletes:      %{name}-javadoc < 5.0.0-9
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

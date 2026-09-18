@@ -1,185 +1,61 @@
-%global source0_hash 70db594dae2bd5f48285f927c18797fb7ff73f8d86fb2dda9eb23125ef53b512
-
-# These are problematic, sometimes they randomly fail or hang
-%bcond xvfb_tests 0
-
-%global desc \
-The fslpy project is a FSL programming library written in Python. It is used by \
-FSLeyes.
-
-%global forgeurl https://github.com/pauldmccarthy/fslpy
+%global source0_hash none
 
 Name:           python-fslpy
-Version:        3.27.0
+Version:        3.29.1
 Release:        %autorelease
-Summary:        The FSL Python Library
+# Fill in the actual package summary to submit package to Fedora
+Summary:        FSL Python library
 
-%global tag %{version}
-
-%forgemeta
-
-License:        Apache-2.0
-URL:            %forgeurl
-Source0:        %forgesource
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://git.fmrib.ox.ac.uk/fsl/fslpy/
+Source:         %{pypi_source fslpy}
 
 BuildArch:      noarch
-# fsleyes dropped it already, so this is a leaf package
-# F40+
-ExcludeArch:    %{ix86}
-
 BuildRequires:  python3-devel
-BuildRequires:  help2man
 
-BuildRequires:  dcm2niix
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist wxpython}
-%if %{with xvfb_tests}
-BuildRequires:  xorg-x11-server-Xvfb
-%endif
 
-%description
-%{desc}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'fslpy' generated automatically by pyp2spec.}
 
-%package -n python3-fslpy
+%description %_description
+
+%package -n     python3-fslpy
 Summary:        %{summary}
 
-%description -n python3-fslpy
-%{desc}
+%description -n python3-fslpy %_description
 
-%pyproject_extras_subpkg -n python3-fslpy extra
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-fslpy doc,extra,style,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n fslpy-%{version}
 
-%forgesetup
-
-# Don't run coverage when calling `pytest`
-sed -i 's/--cov=fsl //' pyproject.toml
-
-# remove unneeded shebangs
-find . -type f -name "*.py" -exec sed -i '/^#![  ]*\/usr\/bin\/env python$/ d' {} 2>/dev/null ';'
-sed -i '/^#![  ]*\/usr\/bin\/env python3$/ d' fsl/wrappers/tbss.py
-# some scripts have the shebang, so we correct these
-find . -type f -name "*.py" -exec sed -i 's/#![  ]*\/usr\/bin\/env python$/#!\/usr\/bin\/python3/' {} 2>/dev/null ';'
 
 %generate_buildrequires
-export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
-%pyproject_buildrequires -x extra
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,extra,style,test
+
 
 %build
-export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l fsl
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# generate man pages
-# - tmpnam has no --help option or usage message
-for binary in \
-    Text2Vest \
-    Vest2Text \
-    atlasq \
-    atlasquery \
-    fsl_abspath \
-    fsl_apply_x5 \
-    fsl_convert_x5 \
-    fsl_ents \
-    fslchfiletype \
-    imcp \
-    imln \
-    immv \
-    imtest \
-    remove_ext \
-    resample_image
-do
-    echo "Generating man page for ${binary// /-/}"
-    %{py3_test_envvars} help2man \
-        --no-info \
-        --no-discard-stderr \
-        --name="${binary}" \
-        --version-string="${binary} %{version}" \
-        --output="${binary// /-}.1" \
-        "${binary}"
-    cat "${binary// /-}.1"
-    install -t '%{buildroot}%{_mandir}/man1' -p -m 0644 -D "${binary// /-}.1"
-done
-
-# do not have a --help
-for binary in imglob imrm
-do
-    echo "Generating man page for ${binary// /-/}"
-    %{py3_test_envvars} help2man \
-        --help-option=" " \
-        --no-info \
-        --no-discard-stderr \
-        --name="${binary}" \
-        --version-string="${binary} %{version}" \
-        --output="${binary// /-}.1" \
-        "${binary}"
-    cat "${binary// /-}.1"
-    install -t '%{buildroot}%{_mandir}/man1' -p -m 0644 -D "${binary// /-}.1"
-done
 
 %check
-%pyproject_check_import -e fsl.tests*
-%if %{with xvfb_tests}
-# From https://git.fmrib.ox.ac.uk/fsl/fslpy/blob/master/.ci/test_template.sh
-%{py3_test_envvars} xvfb-run pytest fsl/tests/test_idle.py
-sleep 10
-%{py3_test_envvars} xvfb-run pytest fsl/tests/test_platform.py
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-# Disable tests we cannot run using markers as per
-# https://github.com/pauldmccarthy/fslpy/issues/17
-#
-# From pyproject.toml, as of 3.20.0:
-#   fsltest:    Requires FSL
-# We cannot package the non-free FSL (FMRIB Software Library),
-# https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/
-m="${m-}${m+ and }not fsltest"
-#   wxtest:     Requires wxPython
-#m="${m-}${m+ and }not wxtest"
-#   dicomtest:  Requires dcm2niix
-#   meshtest:   Requires trimesh and rtree
-#   igziptest:  Requires indexed_gzip
-#   piltest:    Requires Pillow
-#   noroottest: Need to be executed as non-root user (will fail otherwise)
-# RPM builds using mock are executed as the root user within the chroot.
-m="${m-}${m+ and }not noroottest"
-#   longtest:   Takes a long time
-# The “longtest” tests do not run by default anyway, so we would have to run
-# them separately, but this would require atlases from the non-free FSL.
-#   unixtest:   Only works on *nix systems
-# Exclude tests requiring network (URLError)
-k="${k-}${k+ and }not test_enabled"
-k="${k-}${k+ and }not test_installedVersion"
-k="${k-}${k+ and }not test_loadSeries"
-k="${k-}${k+ and }not test_scanDir"
-# Requires a (non-free) FSL installation; see notes about the fsltest marker
-k="${k-}${k+ and }not test_cluster"
-# Require a (non-free) fsl_mrs installation; see notes about the fsltest marker
-ignore="${ignore-} --ignore=fsl/tests/test_wrappers/test_fsl_mrs.py"
-
-# See: “TEST: Some kind of regression in pytest 8.2 w.r.t. namespace packages”
-# https://github.com/pauldmccarthy/fslpy/commit/048e33cb23b06f1b6d315b124ee544147d520643
-touch fsl/__init__.py
-
-# Ignore tests that were (conditionally) run under xvfb-run.
-ignore="${ignore-} --ignore=fsl/tests/test_idle.py"
-ignore="${ignore-} --ignore=fsl/tests/test_platform.py"
-
-%{pytest} ${k+-k }"${k-}" ${m+-m }"${m-}" ${ignore-}
-
-# Remove test packages that are installed in site packages
-# We do that here, since above tests require the installed tests and data
-rm -rvf %{buildroot}%{python3_sitelib}/fsl/tests
-sed -r -i '/\bfsl\/tests\b/d' %{pyproject_files}
 
 %files -n python3-fslpy -f %{pyproject_files}
-%doc README.rst
-%{_bindir}/Text2Vest
-%{_bindir}/Vest2Text
 %{_bindir}/atlasq
 %{_bindir}/atlasquery
 %{_bindir}/fsl_abspath
@@ -187,6 +63,7 @@ sed -r -i '/\bfsl\/tests\b/d' %{pyproject_files}
 %{_bindir}/fsl_convert_x5
 %{_bindir}/fsl_ents
 %{_bindir}/fslchfiletype
+%{_bindir}/fslchpixdim
 %{_bindir}/imcp
 %{_bindir}/imglob
 %{_bindir}/imln
@@ -195,26 +72,9 @@ sed -r -i '/\bfsl\/tests\b/d' %{pyproject_files}
 %{_bindir}/imtest
 %{_bindir}/remove_ext
 %{_bindir}/resample_image
+%{_bindir}/text2vest
 %{_bindir}/tmpnam
-%{_mandir}/man1/Text2Vest.1*
-%{_mandir}/man1/Vest2Text.1*
-%{_mandir}/man1/atlasq.1*
-%{_mandir}/man1/atlasquery.1*
-%{_mandir}/man1/fsl_abspath.1*
-%{_mandir}/man1/fsl_apply_x5.1*
-%{_mandir}/man1/fsl_convert_x5.1*
-%{_mandir}/man1/fsl_ents.1*
-%{_mandir}/man1/fslchfiletype.1*
-%{_mandir}/man1/imcp.1*
-%{_mandir}/man1/imglob.1*
-%{_mandir}/man1/imln.1*
-%{_mandir}/man1/immv.1*
-%{_mandir}/man1/imrm.1*
-%{_mandir}/man1/imtest.1*
-%{_mandir}/man1/remove_ext.1*
-%{_mandir}/man1/resample_image.1*
-# - tmpnam has no --help option or usage message
-# %%{_mandir}/man1/tmpnam.1*
+%{_bindir}/vest2text
 
 %changelog
 %autochangelog

@@ -1,65 +1,62 @@
-%global source0_hash f95dac4cd48ea0f6e21f22249cba8c0b867285eb7995ec3cc485a3a65280368a
-
-%global _description %{expand:
-Nature inspired algorithms for hyper-parameter tuning of scikit-learn models.
-This package uses algorithms implementation from NiaPy.
-
-Documentation is available at:
-https://sklearn-nature-inspired-algorithms.readthedocs.io/en/stable/ }
+%global source0_hash none
 
 Name:           python-sklearn-nature-inspired-algorithms
-Version:        0.12.0
+Version:        0.15.0
 Release:        %autorelease
-Summary:        Nature-inspired algorithms for scikit-learn
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Search using nature inspired algorithms over specified parameter values for an sklearn estimator.
 
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/timzatko/Sklearn-Nature-Inspired-Algorithms
-Source:         %{url}/archive/v%{version}/Sklearn-Nature-Inspired-Algorithms-%{version}.tar.gz
+Source:         %{pypi_source sklearn_nature_inspired_algorithms}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  tomcli
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sklearn-nature-inspired-algorithms' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-sklearn-nature-inspired-algorithms
+%package -n     python3-sklearn-nature-inspired-algorithms
 Summary:        %{summary}
 
 %description -n python3-sklearn-nature-inspired-algorithms %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sklearn-nature-inspired-algorithms dev
+
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sklearn_nature_inspired_algorithms-%{version}
 
-%autosetup -p1 -n Sklearn-Nature-Inspired-Algorithms-%{version}
-rm -fv poetry.lock
-
-# Drop version pinning (we use the versions available in Fedora)
-for DEP in $(tomcli get -F newline-keys pyproject.toml tool.poetry.dependencies)
-do
-    tomcli set pyproject.toml replace tool.poetry.dependencies.${DEP} ".*" "*"
-done
-# Remove 'toml' dependency. It's deprecated and not needed by the package.
-tomcli set pyproject.toml del tool.poetry.dependencies.toml
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files sklearn_nature_inspired_algorithms
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{py3_test_envvars} %{python3} -m unittest tests
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-sklearn-nature-inspired-algorithms -f %{pyproject_files}
-%license LICENSE
-%doc README.md
 
 %changelog
 %autochangelog

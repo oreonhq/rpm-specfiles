@@ -1,89 +1,62 @@
-%global source0_hash 49d6a30b8a11c5f3fd54f7b8c77485e671e4c8605c5d850cad2059a61ae8721e
+%global source0_hash none
 
-%global srcname elasticsearch
-%global _desc %{expand: \
-Low level client for Elasticsearch. It's goal is to provide common ground\
-for all Elasticsearch-related code in Python. The client's features include:\
-\
-- Translating basic Python data types to and from json\
-- Configurable automatic discovery of cluster nodes\
-- Persistent connections\
-- Load balancing (with pluggable selection strategy) across all available nodes\
-- Failed connection penalization (time based - failed connections wont be\
-  retried until a timeout is reached)\
-- Thread safety\
-- Pluggable architecture.}
+Name:           python-elasticsearch
+Version:        9.5.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python client for Elasticsearch
 
-Name:		python-elasticsearch
-Version:	9.1.0
-Release:	%autorelease
-Summary:	Client for Elasticsearch
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0
+URL:            https://github.com/elastic/elasticsearch-py
+Source:         %{pypi_source elasticsearch}
 
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
-License:	Apache-2.0
-URL:		https://github.com/elasticsearch/elasticsearch-py
-Source0:	%{url}/archive/v%{version}/%{srcname}-py-%{version}.tar.gz
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildArch:	noarch
 
-BuildRequires:	python3-devel
-BuildRequires:	python3-pytest
-BuildRequires:	python3-sphinx_rtd_theme
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'elasticsearch' generated automatically by pyp2spec.}
 
-%description %{_desc}
+%description %_description
 
-%package -n python3-%{srcname}
-Summary:	Python 3 Client for Elasticsearch
+%package -n     python3-elasticsearch
+Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_desc}
+%description -n python3-elasticsearch %_description
 
-%package -n python-%{srcname}-doc
-Summary:    Documentation for Python Elasticsearch
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-elasticsearch async,dev,docs,orjson,pyarrow,requests,vectorstore-mmr
 
-%description -n python-%{srcname}-doc
-%{summary}
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n elasticsearch-%{version}
 
-%autosetup -n %{srcname}-py-%{version}
-
-# missing test dependencies
-sed -i '/unasync/d' pyproject.toml
-sed -i '/mapbox-vector-tile/d' pyproject.toml
-sed -i '/simsimd/d' pyproject.toml
-sed -i '/pyright/d' pyproject.toml
-sed -i '/sentence_transformers/d' pyproject.toml
-sed -i '/types-python-dateutil/d' pyproject.toml
-sed -i '/types-tqdm/d' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires -r -x dev
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x async,dev,docs,orjson,pyarrow,requests,vectorstore-mmr
+
 
 %build
 %pyproject_wheel
 
-# Generate the HTML documentation.
-PYTHONPATH=${PWD} sphinx-build-3 docs/sphinx html
-# Remove the sphinx-build leftovers.
-rm -rf html/.{doctrees,buildinfo}
 
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v -k 'not test_missing_required_field_raises_validation_exception and not test_boolean_doesnt_treat_false_as_empty and not test_accessing_known_fields_returns_empty_value' --ignore=test_elasticsearch/test_dsl/test_integration/test_examples/_async/test_vectors.py \
-	--ignore=test_elasticsearch/test_dsl/test_integration/test_examples/_sync/test_vectors.py \
-	--ignore=test_elasticsearch/test_dsl/_async/test_document.py \
-	--ignore=test_elasticsearch/test_dsl/_sync/test_document.py
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc CHANGELOG.md CONTRIBUTING.md README.md
 
-%files -n python-%{srcname}-doc
-%license LICENSE
-%doc html examples 
+%files -n python3-elasticsearch -f %{pyproject_files}
 
 %changelog
 %autochangelog

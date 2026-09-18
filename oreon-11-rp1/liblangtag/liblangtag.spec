@@ -6,8 +6,8 @@
 %global soversion_gobject 0
 
 Name: liblangtag
-Version: 0.6.7
-Release: 7%{?dist}
+Version: 0.6.8
+Release: 1%{?dist}
 Summary: An interface library to access tags for identifying languages
 
 License: LGPL-3.0-or-later OR MPL-2.0

@@ -1,27 +1,26 @@
-%global source0_hash ba7620b27f0de0777cdaacf398340b34f8745eae4d555b3c31a13e02629da42e
+%global source0_hash none
 
 Name:           python-flufl-i18n
-Version:        5.1.0
+Version:        6.0.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        A high level API for internationalizing Python libraries and applications
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://gitlab.com/warsaw/flufl.i18n
+URL:            https://flufli18n.readthedocs.io
 Source:         %{pypi_source flufl_i18n}
-Patch:          flufl_i18n-no-covtest.diff
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
-# see tool.hatch.envs.test in pyproject.toml
-BuildRequires:  python3dist(sybil)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The `flufl.i18n` library provides a convenient API for managing translation
-contexts in Python applications. It provides facilities not only for
-single-context applications like command line scripts, but also more
-sophisticated management of multiple-context applications such as Internet
-servers.}
+This is package 'flufl-i18n' generated automatically by pyp2spec.}
+
+Patch:          flufl_i18n-no-covtest.diff
 
 %description %_description
 
@@ -30,27 +29,31 @@ Summary:        %{summary}
 
 %description -n python3-flufl-i18n %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n flufl_i18n-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l flufl
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-flufl-i18n -f %{pyproject_files}
-%doc README.rst docs/*.rst
 
 %changelog
 %autochangelog

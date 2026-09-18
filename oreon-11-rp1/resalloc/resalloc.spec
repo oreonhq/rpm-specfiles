@@ -51,7 +51,7 @@ the purposes of CI/CD tasks.
 
 Name:       %srcname
 Summary:    %sum - client tooling
-Version:    6.1
+Version:    6.3
 Release:    1%{?dist}
 License:    GPL-2.0-or-later
 URL:        https://github.com/praiskup/resalloc

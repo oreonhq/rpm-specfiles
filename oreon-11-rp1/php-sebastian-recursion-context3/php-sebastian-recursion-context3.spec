@@ -28,8 +28,8 @@
 # NOTICE: used by phpunit 6, 7 and 8
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        3.0.2
-Release:        5%{?dist}
+Version:        8.0.1
+Release:        1%{?dist}
 Summary:        Recursively process PHP variables, version %{major}
 
 License:        BSD-3-Clause

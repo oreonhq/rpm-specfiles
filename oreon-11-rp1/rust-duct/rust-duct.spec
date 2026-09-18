@@ -10,7 +10,7 @@
 %global crate duct
 
 Name:           rust-duct
-Version:        0.13.7
+Version:        1.1.2
 Release:        %autorelease
 Summary:        Library for running child processes
 

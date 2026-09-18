@@ -5,7 +5,7 @@
 %global sover 13
 
 Name:           kpmcore
-Version:        26.04.3
+Version:        26.08.1
 Release:        1%{?dist}
 Summary:        Library for managing partitions by KDE programs
 License:        GPL-3.0-or-later AND MIT AND CC-BY-4.0 AND CC0-1.0

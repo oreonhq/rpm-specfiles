@@ -13,8 +13,8 @@
 %bcond jailer   %{lua:print(rpm.expand("%{?cargo_target}"):find("musl") or 0)}
 
 Name:           firecracker
-Version:        1.13.1
-Release:        2%{?dist}
+Version:        1.17.0
+Release:        1%{?dist}
 
 Summary:        Secure and fast microVMs for serverless computing
 SourceLicense:  Apache-2.0

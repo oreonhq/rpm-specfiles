@@ -10,7 +10,7 @@
 # testsuite missing deps: quickcheck-classes
 
 Name:           %{pkg_name}
-Version:        0.18.0
+Version:        0.18.1
 Release:        %autorelease
 Summary:        A tiling window manager
 

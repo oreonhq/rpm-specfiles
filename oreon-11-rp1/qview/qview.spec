@@ -4,8 +4,8 @@
 %global upstream_name qView
 
 Name:           qview
-Version:        6.1
-Release:        8%{?dist}
+Version:        7.1
+Release:        1%{?dist}
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 Summary:        Practical and minimal image viewer

@@ -1,91 +1,57 @@
-%global source0_hash a9b69a53fdd8d8fda042b9ed7bbb09969d6e3aa22243459958891cb7e9ce3524
+%global source0_hash none
 
-%global pypi_name XStatic-Json2yaml
+Name:           python-xstatic-json2yaml
+Version:        0.1.1.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Json2yaml 0.1.1 _XStatic packaging standard_
 
-Name:           python-%{pypi_name}
-Version:        0.1.1.0
-Release:        28%{?dist}
-Summary:        Json2yaml (XStatic packaging standard)
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/jeffsu/json2yaml
-Source0:        https://files.pythonhosted.org/packages/source/X/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source xstatic_json2yaml}
+
 BuildArch:      noarch
-
-%description
-Json2yaml JavaScript library packaged for setup-tools (easy_install) / pip.
-
-This package is intended to be used by any project that needs these files.
-
-It intentionally does not provide any extra code except some metadata
-nor has any extra requirements.
-
-%package -n xstatic-json2yaml-common
-Summary:        %{summary}
-
-BuildRequires:  web-assets-devel
-Requires:       web-assets-filesystem
-
-%description -n xstatic-json2yaml-common
-Json2yaml JavaScript library packaged for setup-tools (easy_install) / pip.
-
-This package is intended to be used by any project that needs these files.
-
-It intentionally does not provide any extra code except some metadata
-nor has any extra requirements.
-
-This package contains the JavaScript files.
-
-%package -n python3-%{pypi_name}
-Summary:        %{summary}
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
 
-Requires:       python3-XStatic
-Requires:       xstatic-json2yaml-common
 
-%{?python_provide:%python_provide python3-%{pypi_name}}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'xstatic-json2yaml' generated automatically by pyp2spec.}
 
-%description -n python3-%{pypi_name}
-Json2yaml JavaScript library packaged for setup-tools (easy_install) / pip.
+%description %_description
 
-This package is intended to be used by any project that needs these files.
+%package -n     python3-xstatic-json2yaml
+Summary:        %{summary}
 
-It intentionally does not provide any extra code except some metadata
-nor has any extra requirements.
+%description -n python3-xstatic-json2yaml %_description
 
-This package provides Python 3 build of %{pypi_name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n xstatic_json2yaml-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
 
-# Patch to use webassets directory
-sed -i "s|^BASE_DIR = .*|BASE_DIR = '%{_jsdir}/json2yaml'|" xstatic/pkg/json2yaml/__init__.py
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-mkdir -p %{buildroot}/%{_jsdir}/json2yaml
-mv %{buildroot}/%{python3_sitelib}/xstatic/pkg/json2yaml/data/json2yaml.js %{buildroot}/%{_jsdir}/json2yaml
-rmdir %{buildroot}%{python3_sitelib}/xstatic/pkg/json2yaml/data/
 
-%files -n xstatic-json2yaml-common
-%doc README.txt
-%{_jsdir}/json2yaml
+%check
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%doc README.txt
-%{python3_sitelib}/xstatic/pkg/json2yaml
-%{python3_sitelib}/XStatic_Json2yaml-%{version}-py3.*.egg-info
-%{python3_sitelib}/XStatic_Json2yaml-%{version}-py3.*-nspkg.pth
+
+%files -n python3-xstatic-json2yaml -f %{pyproject_files}
 
 %changelog
 %autochangelog

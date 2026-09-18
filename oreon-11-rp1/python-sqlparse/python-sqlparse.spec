@@ -1,20 +1,23 @@
-%global source0_hash 09f67787f56a0b16ecdbde1bfc7f5d9c3371ca683cfeaa8e6ff60b4807ec9272
+%global source0_hash none
 
 Name:           python-sqlparse
-Version:        0.5.3
+Version:        0.6.0
 Release:        %autorelease
-Summary:        A non-validating SQL parser
-License:        BSD-3-Clause
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A non-validating SQL parser.
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/andialbrecht/sqlparse
 Source:         %{pypi_source sqlparse}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-sqlparse is a non-validating SQL parser for Python. It provides support for
-parsing, splitting and formatting SQL statements.}
+This is package 'sqlparse' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -23,29 +26,36 @@ Summary:        %{summary}
 
 %description -n python3-sqlparse %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sqlparse dev,doc
+
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sqlparse-%{version}
 
-%autosetup -n sqlparse-%{version}
-
-# fix ambiguous python shebang
-%py3_shebang_fix sqlparse/cli.py
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,doc
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l sqlparse
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v tests
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-sqlparse -f %{pyproject_files}
-%doc CHANGELOG README.rst
 %{_bindir}/sqlformat
 
 %changelog

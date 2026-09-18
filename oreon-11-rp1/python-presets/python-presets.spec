@@ -1,57 +1,64 @@
-%global source0_hash 1204462b6e63b89b04414bb0311d43e233c31bb6603b68bb4d82da84cbf67fe2
+%global source0_hash none
 
-%global pypi_name presets
-%global pypi_version 0.1.3
+Name:           python-presets
+Version:        1.0.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A python module to manipulate default parameters of a module_s functions
 
-Name:           python-%{pypi_name}
-Version:        %{pypi_version}
-Release:        9%{?dist}
-Summary:        A python module to manipulate default parameters of a module's functions
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ISC
 URL:            http://github.com/bmcfee/presets
-Source0:        https://github.com/bmcfee/presets/archive/%{version}/presets-%{version}.tar.gz
-# https://github.com/bmcfee/presets/pull/16
-Patch0:         importlib.patch
+Source:         %{pypi_source presets}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(six)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-cov)
 
-%description
-A python module to manipulate default parameters of a module's functions
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'presets' generated automatically by pyp2spec.}
+
+Patch0:         importlib.patch
+
+%description %_description
+
+%package -n     python3-presets
 Summary:        %{summary}
 
-Requires:       python3dist(numpydoc)
-Requires:       python3dist(six)
-%description -n python3-%{pypi_name}
-A python module to manipulate default parameters of a module's functions
+%description -n python3-presets %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-presets docs,tests
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n presets-%{version}
 
-%autosetup -n %{pypi_name}-%{pypi_version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,tests
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name} -l
-sed -e '1d' -i %{buildroot}%{python3_sitelib}/presets/__init__.py
-sed -e '1d' -i %{buildroot}%{python3_sitelib}/presets/version.py
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
+
+%files -n python3-presets -f %{pyproject_files}
 
 %changelog
 %autochangelog

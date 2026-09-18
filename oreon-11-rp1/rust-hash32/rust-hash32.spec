@@ -7,7 +7,7 @@
 %global crate hash32
 
 Name:           rust-hash32
-Version:        0.3.1
+Version:        1.0.0
 Release:        %autorelease
 Summary:        32-bit hashing algorithms
 

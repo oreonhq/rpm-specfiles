@@ -22,8 +22,8 @@ This version of stapler is Fred Wenzel's fork of the project, with
 a completely refactored source code, tests, and added functionality.}
 
 Name:           pdf-stapler
-Version:        1.0.0
-Release:        0.27.%{commitdate}git%{shortcommit}%{?dist}
+Version:        1.0.0b1
+Release:        1.27.%{commitdate}git%{shortcommit}%{?dist}
 Summary:        Tool for manipulating PDF documents from the command line
 License:        BSD-3-Clause
 URL:            https://github.com/hellerbarde/stapler

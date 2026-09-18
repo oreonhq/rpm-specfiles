@@ -6,8 +6,8 @@
 %global giturl     https://github.com/muffinmad/%{gitname}
 
 Name:		gnome-shell-extension-pidgin
-Version:	47
-Release:	5%{?dist}
+Version:	48
+Release:	1%{?dist}
 Summary:	Make Pidgin IM conversations appear in the Gnome Shell message tray
 
 License:	GPL-2.0-or-later

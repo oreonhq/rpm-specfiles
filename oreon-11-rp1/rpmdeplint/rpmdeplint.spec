@@ -1,7 +1,7 @@
 %global source0_hash c502fdd83ad59dcbcda34d4ae4f61a1a4c11baa7a69adc3445675f26b1b042c1
 
 Name:           rpmdeplint
-Version:        2.0
+Version:        2.1
 Release:        %autorelease
 Summary:        Tool to find errors in RPM packages in the context of their dependency graph
 License:        GPL-2.0-or-later

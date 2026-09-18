@@ -1,8 +1,8 @@
 %global source0_hash e759c4bae0b17b202a7c0f8281ff016f819b502780d3e77b46fe8767e7498e43
 
 Name:           gpredict
-Version:        2.2.1
-Release:        24%{?dist}
+Version:        2.5.2
+Release:        1%{?dist}
 Summary:        Real-time satellite tracking and orbit prediction program
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

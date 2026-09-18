@@ -1,30 +1,26 @@
-%global source0_hash 65b195f89eda477e4160218d928744933868b1b9a6388b515305bb4fe54c9618
-
-%global date            20250215
-%global commit          6a7b6776be95040d67bc6f709ab9ec8937b5be27
-%global shortcommit     %(c=%{commit}; echo ${c:0:7})
+%global source0_hash none
 
 Name:           python-pytest-golden
-Version:        0.2.2^%{date}git%{shortcommit}
+Version:        1.0.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Plugin for pytest that offloads expected outputs to data files
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/oprypin/pytest-golden
-# PyPI tarball doesn't include tests
-#Source:         %%{url}/archive/v%%{version}/pytest-golden-%%{version}.tar.gz
-# latest release too old, will ask upstream to mergee PR =#8 and release
-Source:         %{url}/archive/%{commit}/pytest-golden-%{version}.tar.gz
-# Drop deprecated atomicwrites dependency
-Patch:          https://github.com/oprypin/pytest-golden/pull/8.patch#/pytest-golden-drop-atomicwrites.patch
+Source:         %{pypi_source pytest_golden}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package provides a plugin for pytest that offloads expected outputs to
-data files.}
+This is package 'pytest-golden' generated automatically by pyp2spec.}
+
+Patch:          https://github.com/oprypin/pytest-golden/pull/8.patch#/pytest-golden-drop-atomicwrites.patch
 
 %description %_description
 
@@ -33,28 +29,31 @@ Summary:        %{summary}
 
 %description -n python3-pytest-golden %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-#autosetup -p1 -n pytest-golden-%%{version}
-%autosetup -p1 -n pytest-golden-%{commit}
+%prep
+%autosetup -p1 -n pytest_golden-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -L pytest_golden
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pytest-golden -f %{pyproject_files}
-%license LICENSE.md
-%doc README.md
 
 %changelog
 %autochangelog

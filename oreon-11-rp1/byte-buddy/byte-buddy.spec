@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           byte-buddy
-Version:        1.17.7
+Version:        1.18.14-jdk5
 Release:        %autorelease
 Summary:        Runtime code generation for the Java virtual machine
 License:        Apache-2.0

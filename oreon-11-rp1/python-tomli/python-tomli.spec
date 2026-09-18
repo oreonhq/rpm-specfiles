@@ -1,51 +1,35 @@
-%global source0_hash 6d9e3a3f690db54a42eb9e98591ec5e9731779d3650c39668a220982f587a699
-
-# Whether to build extension modules with mypyc:
-%bcond          mypyc 1
+%global source0_hash none
 
 Name:           python-tomli
-Version:        2.4.0
+Version:        2.4.1
 Release:        %autorelease
-Summary:        A little TOML parser for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A lil_ TOML parser
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pypi.org/project/tomli/
-Source0:        https://github.com/hukkin/tomli/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+URL:            https://github.com/hukkin/tomli
+Source:         %{pypi_source tomli}
 
 BuildRequires:  python3-devel
-
-%if %{with mypyc}
 BuildRequires:  gcc
-# scripts/use_setuptools.py uses tomli-w.
-BuildRequires:  python3-tomli-w
-%else
-BuildArch:      noarch
-%endif
 
-# The test suite uses the stdlib's unittest framework, but we use %%pytest
-# as the test runner.
-BuildRequires:  python3-pytest
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Tomli is a Python library for parsing TOML.
-Tomli is fully compatible with TOML v1.0.0.}
-
+This is package 'tomli' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-tomli
+%package -n     python3-tomli
 Summary:        %{summary}
 
 %description -n python3-tomli %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n tomli-%{version}
-%if %{with mypyc}
-# Taken from .github/workflows/tests.yaml, uses tomli-w, required for mypyc.
-%{python3} scripts/use_setuptools.py
-%endif
 
 
 %generate_buildrequires
@@ -53,29 +37,21 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %build
-%if %{with mypyc}
-export TOMLI_USE_MYPYC=1
-%endif
 %pyproject_wheel
 
 
 %install
 %pyproject_install
-# There is a top-level <hash>_mypyc module:
-# https://github.com/hukkin/tomli/issues/268
-%pyproject_save_files tomli %{?with_mypyc:'*_mypyc'}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
 
 %files -n python3-tomli -f %{pyproject_files}
-%doc README.md
-%doc CHANGELOG.md
-%license LICENSE
-
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.0-1

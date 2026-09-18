@@ -6,8 +6,8 @@
 %global archivename lua-argparse-%{version}
 
 Name:           lua-argparse
-Version:        0.7.1
-Release:        7%{?dist}
+Version:        0.7.2
+Release:        1%{?dist}
 Summary:        Feature-rich command line parser for Lua
 
 License:        MIT

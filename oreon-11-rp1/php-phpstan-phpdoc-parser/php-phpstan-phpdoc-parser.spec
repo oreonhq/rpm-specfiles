@@ -21,7 +21,7 @@
 %global major        %nil
 
 Name:           php-%{gh_owner}-%{gh_project}%{major}
-Version:        2.3.2
+Version:        2.3.5
 Release:        1%{?dist}
 Summary:        PHPDoc parser with support for nullable, intersection and generic types
 

@@ -1,8 +1,8 @@
 %global source0_hash 82837455dc9f44f43dc7658d330c71cf09c38d794addacab1da936fdcdbefdca
 
 Name:		cqrlog
-Version:	2.5.2
-Release:	22%{?dist}
+Version:	3.1.0
+Release:	1%{?dist}
 Summary:	An amateur radio contact logging program
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.

@@ -4,7 +4,7 @@
 %global git_commit 7818ac9e7a4f1af60e8b9d84a6ad27552d530f4b
 
 Name:		erlang-%{realname}
-Version:	1
+Version:	2.1.7
 Release:	%autorelease
 BuildArch:	noarch
 Summary:	A library for Lucene-like query syntax parsing

@@ -21,8 +21,8 @@ ExcludeArch: %{ix86}
 %endif
 
 Name:			gpaw
-Version:		25.7.0
-Release:		5%{?dist}
+Version:		26.7
+Release:		1%{?dist}
 Summary:		A grid-based real-space PAW method DFT code
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

@@ -4,7 +4,7 @@
 %global commit fa209998b981460003349194b5ba1237d9804ea8
 
 Name:    copyq
-Version: 13.0.0
+Version: 16.0.0
 Release: %autorelease
 Summary: Advanced clipboard manager
 License: GPL-3.0-or-later

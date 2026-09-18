@@ -16,8 +16,8 @@
 %global psr0         ReCaptcha
 
 Name:           php-%{gh_owner}-%{gh_project}
-Version:        1.3.1
-Release:        3%{?dist}
+Version:        1.5
+Release:        1%{?dist}
 Summary:        reCAPTCHA PHP client library
 
 License:        BSD-3-Clause

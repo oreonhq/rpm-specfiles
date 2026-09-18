@@ -5,8 +5,8 @@
 %global artifactId  clojure-maven-plugin
 
 Name:           %{artifactId}
-Version:        1.9.3
-Release:        6%{?dist}
+Version:        1.9.4
+Release:        1%{?dist}
 Summary:        Clojure plugin for Maven
 
 License:        EPL-1.0

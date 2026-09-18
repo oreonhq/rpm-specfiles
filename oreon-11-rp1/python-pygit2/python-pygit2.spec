@@ -1,53 +1,36 @@
-%global source0_hash 85f41fea3d6bd10676e6f0ee1803995fab456897215dde3f23c32f7d59189917
+%global source0_hash none
 
-%global pkgname pygit2
-
-Name:           python-%{pkgname}
-Version:        1.19.1
+Name:           python-pygit2
+Version:        1.20.1
 Release:        %autorelease
-Summary:        Python bindings for libgit2
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python bindings for libgit2.
 
-License:        GPL-2.0-only WITH GCC-exception-2.0
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://www.pygit2.org/
-Source0:        https://github.com/libgit2/pygit2/archive/v%{version}.tar.gz#/%{pkgname}-%{version}.tar.gz
-# mock (by default) and koji builds never have network access, but testing
-# that capability through a DNS resolution is not always accurate.
-# Forcefully disable all network tests to avoid unnecessary build failures.
+Source:         %{pypi_source pygit2}
+
+BuildRequires:  python3-devel
+BuildRequires:  gcc
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pygit2' generated automatically by pyp2spec.}
+
 Patch:          python-pygit2-network-tests.patch
 
-BuildRequires:  make
-BuildRequires:  gcc
-BuildRequires:  (libgit2-devel >= 1.9.0 with libgit2-devel < 1.10.0)
+%description %_description
 
-%description
-pygit2 is a set of Python bindings to the libgit2 library, which implements
-the core of Git.
+%package -n     python3-pygit2
+Summary:        %{summary}
 
-
-%package -n     python3-%{pkgname}
-Summary:        Python 3 bindings for libgit2
-BuildRequires:  python3-pytest
-
-%description -n python3-%{pkgname}
-pygit2 is a set of Python bindings to the libgit2 library, which implements
-the core of Git.
-
-The python3-%{pkgname} package contains the Python 3 bindings.
-
-
-%package        doc
-Summary:        Documentation for %{name}
-BuildArch:      noarch
-BuildRequires:  /usr/bin/sphinx-build
-BuildRequires:  python3-sphinx_rtd_theme
-
-%description    doc
-Documentation for %{name}.
+%description -n python3-pygit2 %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{pkgname}-%{version} -p1
+%autosetup -p1 -n pygit2-%{version}
 
 
 %generate_buildrequires
@@ -57,33 +40,19 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 %pyproject_wheel
 
-make -C docs html
-find %{_builddir} -name '.buildinfo' -print -delete
-
 
 %install
 %pyproject_install
-%pyproject_save_files -l %{pkgname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-# This is horrible, but otherwise pytest does not use pygit2 from site-packages
-rm -f pygit2/__init__.py
-# https://github.com/libgit2/pygit2/issues/812
-%ifarch ppc64 s390x
-%pytest -v -k "not (test_no_context_lines or test_diff_blobs)"
-%else
-%pytest -v
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files -n python3-%{pkgname} -f %{pyproject_files}
-%doc README.md
-
-%files doc
-%license COPYING
-%doc docs/_build/html/*
-
+%files -n python3-pygit2 -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.19.1-1

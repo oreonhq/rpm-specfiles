@@ -7,7 +7,7 @@
 %global crate nu-cli
 
 Name:           rust-nu-cli
-Version:        0.99.1
+Version:        0.115.1
 Release:        %autorelease
 Summary:        CLI-related functionality for Nushell
 

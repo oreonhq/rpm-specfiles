@@ -2,8 +2,8 @@
 
 Summary:        Generic RADIUS proxy with RadSec support
 Name:           radsecproxy
-Version:        1.11.2
-Release:        3%{?dist}
+Version:        1.11.4
+Release:        1%{?dist}
 License:        BSD-3-Clause
 URL:            https://radsecproxy.github.io/
 Source0:        https://github.com/radsecproxy/radsecproxy/releases/download/%{version}/%{name}-%{version}.tar.gz

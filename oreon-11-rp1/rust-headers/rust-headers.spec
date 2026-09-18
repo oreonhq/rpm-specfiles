@@ -7,7 +7,7 @@
 %global crate headers
 
 Name:           rust-headers
-Version:        0.3.9
+Version:        0.4.1
 Release:        %autorelease
 Summary:        typed HTTP headers
 

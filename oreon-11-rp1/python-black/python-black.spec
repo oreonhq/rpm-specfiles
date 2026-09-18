@@ -1,98 +1,69 @@
-%global source0_hash 33496d5cd1222ad73391352b4ae8da15253c5de89b93a80b3e2c8d9a19ec2666
+%global source0_hash none
 
 Name:           python-black
-Version:        25.1.0
+Version:        26.5.1
 Release:        %autorelease
-Summary:        The uncompromising code formatter
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The uncompromising code formatter.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/psf/black
 Source:         %{pypi_source black}
 
-# Fix f-string format test failure with Python 3.14 and 3.13.4+
-Patch:          https://github.com/psf/black/commit/5977532781.patch
+BuildRequires:  python3-devel
+BuildRequires:  gcc
 
-# Upstream fixes for click 8.2+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'black' generated automatically by pyp2spec.}
+
+Patch:          https://github.com/psf/black/commit/5977532781.patch
 Patch:          https://github.com/psf/black/commit/14e1de805a.patch
 Patch:          https://github.com/psf/black/commit/ed64d89faa.patch
 Patch:          https://github.com/psf/black/commit/b0f36f5b42.patch
 
-BuildArch:      noarch
-
-BuildRequires:  python3-devel
-
-# test requirements (upstream mixed with coverage, we hand-pick what we need only):
-BuildRequires:  python3-pytest
-
-# the black[jupyter] extra is allowed by default
-# disable to avoid the ipython-black bootstrap loop
-# note that tests/test_no_ipynb.py only runs without jupyter
-# extra paranoid packagers can build this both with and without to run all tests
-%bcond jupyter  1
-
-# uvloop not ready for Python 3.14: https://bugzilla.redhat.com/2326210
-%bcond uvloop   %[ 0%{?fedora} < 43 && 0%{?rhel} < 11 ]
-
-%global _description %{expand:
-Black is the uncompromising Python code formatter. By using it, you agree to
-cease control over minutiae of hand-formatting. In return, Black gives you
-speed, determinism, and freedom from pycodestyle nagging about formatting.
-You will save time and mental energy for more important matters.}
-
 %description %_description
 
-%package -n     black
+%package -n     python3-black
 Summary:        %{summary}
-Recommends:     black+d = %{version}-%{release}
-%py_provides    python3-black
 
-# The [python2] extra was removed in 22.1.0
-# This can be safely removed in Fedora 39+
-Obsoletes:      black+python2 < 22.1.0
+%description -n python3-black %_description
 
-%if %{without uvloop}
-# The [uvloop] extra was temporarily removed in 25.1.0
-# This can be safely removed once it is back or in Fedora 45+
-Obsoletes:      black+uvloop < 25.1.0
-%endif
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-black colorama,d,jupyter,uvloop
 
-%description -n black %_description
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n black-%{version}
 
-%autosetup -n black-%{version} -p1
 
 %generate_buildrequires
-%global extras_without_d colorama%{?with_jupyter:,jupyter}%{?with_uvloop:,uvloop}
-%pyproject_buildrequires -rx d,%{extras_without_d}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x colorama,d,jupyter,uvloop
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files 'black*' '_black*' blib2to3
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-for exe in black blackd; do
-  ln -sr %{buildroot}%{_bindir}/${exe}{,-%{python3_version}}
-done
 
 %check
-export PIP_INDEX_URL=http://host.invalid./
-export PIP_NO_DEPS=yes
-%pytest -Wdefault -rs --run-optional %{!?with_jupyter:no_}jupyter
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n black -f %{pyproject_files}
-%license LICENSE
-%doc README.md
+
+%files -n python3-black -f %{pyproject_files}
 %{_bindir}/black
-%{_bindir}/black-%{python3_version}
-
-%pyproject_extras_subpkg -n black d
 %{_bindir}/blackd
-%{_bindir}/blackd-%{python3_version}
-
-%pyproject_extras_subpkg -n black %{extras_without_d}
 
 %changelog
 %autochangelog

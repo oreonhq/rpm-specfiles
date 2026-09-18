@@ -7,7 +7,7 @@
 %global crate fax
 
 Name:           rust-fax
-Version:        0.2.7
+Version:        0.3.0
 Release:        %autorelease
 Summary:        Decoder and Encoder for CCITT Group 3 and 4 bi-level image encodings...
 

@@ -2,7 +2,7 @@
 
 # Packager: Paul Pfeister <code@pfeister.dev> (GitHub @ppfeister)
 Name:           sherlock-project
-Version:        0.15.0
+Version:        0.16.2
 Release:        %autorelease
 Summary:        Hunt down social media accounts by username across social networks
 

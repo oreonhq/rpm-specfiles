@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/cvec
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        2.8.4
+Version:        2.8.5
 Release:        %autorelease
 Summary:        Compact vectors over finite fields
 

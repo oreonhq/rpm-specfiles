@@ -1,52 +1,57 @@
-%global source0_hash 934b0e6a39d95995062c193f7eaeed8a8ffa06ff1bcef4b62b0dc74a708bacc1
+%global source0_hash none
 
-%global srcname pytest-dependency
-
-Name:           python-%{srcname}
-Version:        0.6.0
+Name:           python-pytest-dependency
+Version:        0.6.1
 Release:        %autorelease
-Summary:        Pytest plugin to manage dependencies of tests
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Manage dependencies of tests
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/RKrahl/pytest-dependency
-Source:         %{pypi_source}
+Source:         %{pypi_source pytest_dependency}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This module is a plugin for the popular Python testing framework pytest.
-It manages dependencies of tests: you may mark some tests as dependent from
-other tests. These tests will then be skipped if any of the dependencies did
-fail or has been skipped.}
+This is package 'pytest-dependency' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{srcname}
+%package -n     python3-pytest-dependency
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-pytest-dependency %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_dependency-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pytest_dependency
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst CHANGES.rst
+
+%files -n python3-pytest-dependency -f %{pyproject_files}
 
 %changelog
 %autochangelog

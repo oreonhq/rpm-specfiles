@@ -1,7 +1,7 @@
 %global source0_hash 240ebc834c51aae41ca9215d3190cc372fd132b9c5c8aa2d5f19ca0c325e28f9
 
 Name:           capstone
-Version:        5.0.6
+Version:        5.0.9
 Release:        %autorelease
 Summary:        A lightweight multi-platform, multi-architecture disassembly framework
 License:        BSD-3-Clause AND BSD-4-Clause AND APSL-2.0 AND NCSA AND MIT

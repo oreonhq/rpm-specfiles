@@ -3,7 +3,7 @@
 %global realname webmachine
 
 Name:		erlang-%{realname}
-Version:	1.12.0
+Version:	1.13.0
 Release:	%autorelease
 BuildArch:	noarch
 Summary:	A REST-based system for building web applications

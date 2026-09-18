@@ -1,8 +1,8 @@
 %global source0_hash be8abdfcd7a17aa5196f63e0136fdbc693e93d9f2f0ec66f2bdacacfc22b9ca8
 
 Name:           rkward
-Version:        0.8.2
-Release:        2%{?dist}
+Version:        0.8.3
+Release:        1%{?dist}
 Summary:        Graphical frontend for R language
 
 License:        GPL-2.0-or-later AND LGPL-2.1-or-later AND MIT

@@ -7,7 +7,7 @@
 %global crate gix-commitgraph
 
 Name:           rust-gix-commitgraph
-Version:        0.31.0
+Version:        0.39.0
 Release:        %autorelease
 Summary:        Read-only access to the git commitgraph file format
 

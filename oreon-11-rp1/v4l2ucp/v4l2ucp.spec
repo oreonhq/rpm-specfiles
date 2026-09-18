@@ -1,8 +1,8 @@
 %global source0_hash 4c488bd804e8272da28857da27ebd37b17770160d31ceaccfe719e0a912a13b9
 
 Name:           v4l2ucp
-Version:        2.0.1
-Release:        37%{?dist}
+Version:        2.0.2
+Release:        1%{?dist}
 Summary:        Video4linux universal control panel
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

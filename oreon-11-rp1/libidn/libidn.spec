@@ -10,8 +10,8 @@
 
 Summary: Internationalized Domain Name support library
 Name: libidn
-Version: 1.43
-Release: 4%{?dist}
+Version: 1.44
+Release: 1%{?dist}
 URL: http://www.gnu.org/software/libidn/
 License: (LGPL-3.0-or-later OR GPL-2.0-or-later) AND GPL-3.0-or-later AND GFDL-1.3-or-later
 Source0:        https://mirrors.kernel.org/gnu/libidn/libidn-%{version}.tar.gz

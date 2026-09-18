@@ -8,7 +8,7 @@
 %global goipath         code.forgejo.org/forgejo/runner/v12
 %global forgeurl        https://code.forgejo.org/forgejo/runner
 %global archivename     %{name}-%{version}
-Version:                12.7.1
+Version:                13.1.0
 
 %gometa -L -f
 

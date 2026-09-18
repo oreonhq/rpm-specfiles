@@ -10,7 +10,7 @@
 %global crate uu_sort
 
 Name:           rust-uu_sort
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        sort ~ (uutils) sort input lines
 

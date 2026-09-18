@@ -1,66 +1,57 @@
-%global source0_hash 458aa59339dc868fb784d73364f17dbce8836e906cd75fd471a325cba02e0245
+%global source0_hash none
 
 Name:           python-jupyter-lsp
-Version:        2.3.0
+Version:        2.3.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Multi-Language Server WebSocket proxy for Jupyter Notebook/Lab server
-# SPDX
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://pypi.org/project/jupyter-lsp/
+URL:            https://github.com/jupyter-lsp/jupyterlab-lsp
 Source:         %{pypi_source jupyter_lsp}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  python3-pytest-asyncio
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Multi-Language Server WebSocket proxy for your Jupyter notebook or lab server.
-For Python 3.6+.}
+This is package 'jupyter-lsp' generated automatically by pyp2spec.}
 
 %description %_description
 
 %package -n     python3-jupyter-lsp
 Summary:        %{summary}
 
-Requires:       python-jupyter-filesystem
-
 %description -n python3-jupyter-lsp %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n jupyter_lsp-%{version}
 
-sed -i "/--cov /d" setup.cfg
-sed -i "/--cov-report/d" setup.cfg
-sed -i "/--flake8/d" setup.cfg
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files jupyter_lsp
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-install -m 0755 -p -d %{buildroot}%{_sysconfdir}/jupyter/jupyter_server_config.d
-mv -v %{buildroot}{%{_prefix},}%{_sysconfdir}/jupyter/jupyter_server_config.d/jupyter-lsp-jupyter-server.json
 
 %check
-# test_r_package_detection fails if R language server is not installed
-# test_listener and test_session were silently skipped until pytest 8.4+ made them fail
-# we are skipping them for the time being
-# upstream report: github.com/jupyter-lsp/jupyterlab-lsp/issues/1159
-%pytest -k "not test_r_package_detection" \
-        --ignore jupyter_lsp/tests/test_listener.py \
-        --ignore jupyter_lsp/tests/test_session.py
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-jupyter-lsp -f %{pyproject_files}
-%doc README.md
-%config(noreplace) %{_sysconfdir}/jupyter/jupyter_server_config.d/jupyter-lsp-jupyter-server.json
 
 %changelog
 %autochangelog

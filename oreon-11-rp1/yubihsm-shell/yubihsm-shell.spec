@@ -3,7 +3,7 @@
 %undefine __cmake_in_source_build
 
 Name:		yubihsm-shell
-Version:	2.7.2
+Version:	2.8.0
 Release:	1%{?dist}
 Summary:	Tools to interact with YubiHSM 2
 

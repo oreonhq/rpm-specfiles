@@ -5,8 +5,8 @@
 %global pkgname yaml-cpp
 
 Name:           mingw-%{pkgname}
-Version:        0.8.0
-Release:        2%{?dist}
+Version:        0.9.0
+Release:        1%{?dist}
 Summary:        A YAML parser and emitter for C++
 License:        MIT
 URL:            https://github.com/jbeder/yaml-cpp

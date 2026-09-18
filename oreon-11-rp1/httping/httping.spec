@@ -3,8 +3,8 @@
 %global debug_package %{nil}
 
 Name:           httping
-Version:        3.6
-Release:        4%{?dist}
+Version:        4.4.0
+Release:        1%{?dist}
 Summary:        Ping alike tool for http requests
 
 License:        GPL-1.0-or-later AND OpenSSL

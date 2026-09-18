@@ -23,8 +23,8 @@ Server Features \
     * A number of backing contexts (database, redis, a slave device)
 
 Name: pymodbus
-Version: 3.9.2
-Release: 5%{?dist}
+Version: 3.15.0
+Release: 1%{?dist}
 Summary: %{sum}
 
 License: BSD-3-Clause

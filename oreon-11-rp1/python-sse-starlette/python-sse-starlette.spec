@@ -3,7 +3,7 @@
 %global extras daphne,uvicorn,examples
 
 Name:           python-sse-starlette
-Version:        3.2.0
+Version:        3.4.11
 Release:        %autorelease
 Summary:        SSE plugin for Starlette
 

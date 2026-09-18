@@ -5,8 +5,8 @@
 #%%global gitrev .%%{gitdate}git%%(c=%%{gitcommit}; echo ${c:0:7})
 
 Name:           igt-gpu-tools
-Version:        2.2
-Release:        2%{?dist}
+Version:        2.5
+Release:        1%{?dist}
 Summary:        Test suite and tools for DRM drivers
 
 # MIT AND ISC:

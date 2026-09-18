@@ -1,48 +1,62 @@
-%global source0_hash 4d9073782aea441872e13bdfd220147be68eab952e17bf910cc242d3b9efea59
+%global source0_hash none
 
-%global srcname mailmerge
-%{?python_enable_dependency_generator}
+Name:           python-mailmerge
+Version:        2.3.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A simple, command line mail merge tool
 
-Name:          python-%{srcname}
-Version:       2.2.1
-Release:       17%{?dist}
-Summary:       Simple command line mail merge tool
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/awdeorio/mailmerge/
+Source:         %{pypi_source mailmerge}
 
-License:       MIT
-URL:           https://github.com/awdeorio/mailmerge
-Source0:       %{pypi_source}
-BuildArch:     noarch
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-%{summary}.
 
-%package -n python3-%{srcname}
-Summary:       %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
-Provides:      %{srcname} = %{version}-%{release}
-BuildRequires: python3-devel
-BuildRequires: python3-setuptools
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'mailmerge' generated automatically by pyp2spec.}
 
-%description -n python3-%{srcname}
-%{summary}.
+%description %_description
+
+%package -n     python3-mailmerge
+Summary:        %{summary}
+
+%description -n python3-mailmerge %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-mailmerge dev,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n mailmerge-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,test
+
 
 %build
-%{py3_build}
+%pyproject_wheel
+
 
 %install
-%{py3_install}
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{srcname}
-%doc README.md
-%license LICENSE
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-mailmerge -f %{pyproject_files}
 %{_bindir}/mailmerge
-%{python3_sitelib}/mailmerge/
-%{python3_sitelib}/mailmerge-*.egg-info/
 
 %changelog
 %autochangelog

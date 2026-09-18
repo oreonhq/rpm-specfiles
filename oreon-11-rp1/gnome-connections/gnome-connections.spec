@@ -8,7 +8,7 @@
 %global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           gnome-connections
-Version:        50.0
+Version:        51.0
 Release:        %autorelease
 Summary:        A remote desktop client for the GNOME desktop environment
 

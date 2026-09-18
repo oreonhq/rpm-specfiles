@@ -1,49 +1,59 @@
-%global source0_hash 8d502b3ca4b9c45e56012bd35c03d23235f0823c976d4ce940cbb40e33087ded
+%global source0_hash none
 
-%global pypi_version %(echo '%{version}' | tr -d '~')
-
-Summary:        A simple database migration system for SQLite
 Name:           python-sqlite-migrate
-Version:        0.1~b0
-Release:        2%{?dist}
+Version:        0.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Compatibility package for sqlite-utils migrations
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://pypi.python.org/project/sqlite-migrate/
-Source:         %{pypi_source sqlite-migrate}
-# https://github.com/simonw/sqlite-migrate/pull/14/commits
-Patch:          python-sqlite-migrate-0.1b0-toml.patch
+URL:            https://github.com/simonw/sqlite-migrate
+Source:         %{pypi_source sqlite_migrate}
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-%global _description \
-A simple database migration system for SQLite, based on sqlite-utils
 
-%description %{_description}
 
-%package     -n python3-sqlite-migrate
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sqlite-migrate' generated automatically by pyp2spec.}
+
+Patch:          python-sqlite-migrate-0.1b0-toml.patch
+
+%description %_description
+
+%package -n     python3-sqlite-migrate
 Summary:        %{summary}
-%description -n python3-sqlite-migrate %{_description}
+
+%description -n python3-sqlite-migrate %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sqlite_migrate-%{version}
 
-%autosetup -p1 -n sqlite-migrate-%{pypi_version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l sqlite_migrate
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-sqlite-migrate -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

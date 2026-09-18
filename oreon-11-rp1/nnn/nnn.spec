@@ -1,7 +1,7 @@
 %global source0_hash cb31dd220f74d15744e3fcbf402a99a426301b207babc6ffe7a6e33a06b1bd0c
 
 Name:       nnn
-Version:    5.2
+Version:    5.3
 Release:    %autorelease
 Summary:    The missing terminal file browser for X
 

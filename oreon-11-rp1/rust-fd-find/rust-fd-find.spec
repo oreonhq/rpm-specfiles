@@ -6,7 +6,7 @@
 %global crate fd-find
 
 Name:           rust-fd-find
-Version:        10.4.2
+Version:        10.5.0
 Release:        %autorelease
 Summary:        Fd is a simple, fast and user-friendly alternative to find
 

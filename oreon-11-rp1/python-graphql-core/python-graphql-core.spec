@@ -1,69 +1,57 @@
-%global source0_hash b9351bd8112b96eb7986c807ec587299bdcfc4941e91bfe5c2242df30f5fdb1d
+%global source0_hash none
 
-%global pypi_name graphql-core
-
-Name:           python-%{pypi_name}
-Version:        3.2.7
+Name:           python-graphql-core
+Version:        3.2.12
 Release:        %autorelease
-Summary:        GraphQL implementation for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        GraphQL implementation for Python, a port of GraphQL.js, the JavaScript reference implementation for GraphQL.
 
-%global forgeurl https://github.com/graphql-python/graphql-core
-%global tag v%{version}
-%forgemeta
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            %forgeurl
-Source:         %forgesource
+URL:            https://github.com/graphql-python/graphql-core
+Source:         %{pypi_source graphql_core}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  tomcli
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-GraphQL-core-3 is a Python port of GraphQL.js, the JavaScript reference
-implementation for GraphQL, a query language for APIs.}
+This is package 'graphql-core' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-graphql-core
 Summary:        %{summary}
-Obsoletes:      python3-%{pypi_name}-doc < %{version}-%{release}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-graphql-core %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n graphql_core-%{version}
 
-%forgeautosetup
-
-# Relax version constraints
-tomcli set pyproject.toml arrays replace \
-    build-system.requires '(.+)>=[0-9.].*' '\1'
-
-# Relax version constraints for test dependencies and remove linters.
-# and other unused / unavailable plugins.
-sed -r \
-    -e 's/(pytest.*)>=[0-9.]+.*/\1/g' \
-    -e '/pytest-cov/d' \
-    -e '/pytest-describe/d' \
-    -i tox.ini
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files graphql
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -r fEs
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.md
+
+%files -n python3-graphql-core -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -3,11 +3,11 @@
 %global source2_key_fpr 63191CE94183098689CAB8DB7EF137EC935B0EAF
 
 %define ruby_inc %(pkg-config --cflags ruby)
-%define libsepolver 3.10-1
+%define libsepolver 3.11-1
 
 Summary: SELinux library and simple utilities
 Name: libselinux
-Version: 3.10
+Version: 3.11
 Release: 1%{?dist}
 License: LicenseRef-Fedora-Public-Domain
 # https://github.com/SELinuxProject/selinux/wiki/Releases
@@ -20,7 +20,7 @@ Source4: selinuxdefcon.8
 Url: https://github.com/SELinuxProject/selinux/wiki
 # $ git clone https://github.com/fedora-selinux/selinux.git
 # $ cd selinux
-# $ git format-patch -N 3.10 -- libselinux
+# $ git format-patch -N 3.11 -- libselinux
 # $ i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
 # Patch list start
 Patch0001: 0001-Use-SHA-2-instead-of-SHA-1.patch

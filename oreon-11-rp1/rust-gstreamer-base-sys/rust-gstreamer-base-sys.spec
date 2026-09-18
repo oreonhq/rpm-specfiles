@@ -7,7 +7,7 @@
 %global crate gstreamer-base-sys
 
 Name:           rust-gstreamer-base-sys
-Version:        0.25.0
+Version:        0.25.3
 Release:        %autorelease
 Summary:        FFI bindings to libgstbase-1.0
 

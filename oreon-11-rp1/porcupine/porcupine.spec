@@ -1,8 +1,8 @@
 %global source0_hash 1291a47e9ff1cb9f27d3d98d5a6d8a71293cdc806a4309906312f597660098ea
 
 Name:           porcupine
-Version:        0.1.0
-Release:        28%{?dist}
+Version:        0.2.2
+Release:        1%{?dist}
 Summary:        Web browser to copy URL to clipboard
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

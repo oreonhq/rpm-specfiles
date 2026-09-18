@@ -1,90 +1,56 @@
-%global source0_hash 37c44f1b8ed811e08ca18f49e3363bb7b25665370f4d5e0c0b670ae91ac1c037
-
-%global upstream_name easygui
+%global source0_hash none
 
 Name:           python-easygui
-Version:        0.96
-Release:        51%{?dist}
-Summary:        Very simple, very easy GUI programming in Python
+Version:        0.98.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        EasyGUI is a module for very simple, very easy GUI programming in Python.  EasyGUI is different from other GUI generators in that EasyGUI is NOT event-driven.  Instead, all GUI interactions are invoked by simple function calls.
 
-#License file, says CC 2.0 upstream website says with this version they moved to BSD.
-License:        BSD-3-Clause
-URL:            http://easygui.sourceforge.net/
-# Source doesn't follow the normal SF convention since upstream isn't using the SF Files system.
-Source0:        http://easygui.sourceforge.net/download/version%{version}/easygui_v%{version}_docs.tar.gz
-Source1:        easygui-LICENSE.txt
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/robertlugg/easygui
+Source:         %{pypi_source easygui}
 
 BuildArch:      noarch
-BuildRequires: python%{python3_pkgversion}-devel
+BuildRequires:  python3-devel
 
-%global _description\
-Experienced Pythonistas need support for quick and dirty GUI features. New\
-Python programmers need GUI capabilities that don't require any knowledge\
-of Tkinter, frames, widgets, callbacks or lambda. This is what EasyGUI\
-provides. Using EasyGUI, all GUI interactions are invoked by simple\
-function calls.\
-\
-EasyGUI is different from other GUIs in that EasyGUI is NOT event-driven.\
-It allows you to program in a traditional linear fashion, and to put up\
-dialogs for simple input and output when you need to. If you have not yet\
-learned the event-driven paradigm for GUI programming, EasyGUI will allow\
-you to be productive with very basic tasks immediately. Later, if you\
-wish to make the transition to an event-driven GUI paradigm, you can do\
-so with a more powerful GUI package such as anygui, PythonCard, Tkinter,\
-wxPython, etc.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'easygui' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python%{python3_pkgversion}-%{upstream_name}
-Summary:        Very simple, very easy GUI programming in Python3
-Requires:       python%{python3_pkgversion}-setuptools
-Requires:       python%{python3_pkgversion}-tkinter
+%package -n     python3-easygui
+Summary:        %{summary}
 
-%description -n python%{python3_pkgversion}-%{upstream_name}
-Experienced Pythonistas need support for quick and dirty GUI features. New 
-Python programmers need GUI capabilities that don't require any knowledge 
-of Tkinter, frames, widgets, callbacks or lambda. This is what EasyGUI 
-provides. Using EasyGUI, all GUI interactions are invoked by simple 
-function calls.
+%description -n python3-easygui %_description
 
-EasyGUI is different from other GUIs in that EasyGUI is NOT event-driven. 
-It allows you to program in a traditional linear fashion, and to put up 
-dialogs for simple input and output when you need to. If you have not yet 
-learned the event-driven paradigm for GUI programming, EasyGUI will allow 
-you to be productive with very basic tasks immediately. Later, if you 
-wish to make the transition to an event-driven GUI paradigm, you can do 
-so with a more powerful GUI package such as anygui, PythonCard, Tkinter, 
-wxPython, etc. 
-This package allows for use of easygui with Python 3.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n easygui-%{version}
 
-%setup -qc %{upstream_name}-%{version}
-
-rm -rf %{py3dir}
-cp -a . %{py3dir}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
-pushd %{py3dir}
 %pyproject_wheel
-popd
+
 
 %install
-pushd %{py3dir}
 %pyproject_install
-popd
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-install -m 644 %{SOURCE1} .
 
-%files -n python%{python3_pkgversion}-%{upstream_name}
-%doc easygui_license_info.txt cookbook/ easygui_pydoc.html easygui_version_info.html epydoc/ faq/ pydoc/ tutorial/
-%doc easygui-LICENSE.txt
-%{python3_sitelib}/easygui*
-%{python3_sitelib}/__pycache__/easygui.cpython-3*.py*
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-easygui -f %{pyproject_files}
 
 %changelog
 %autochangelog

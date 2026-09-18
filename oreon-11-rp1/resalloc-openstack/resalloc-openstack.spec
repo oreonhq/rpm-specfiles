@@ -17,8 +17,8 @@
 
 Name:       %srcname
 Summary:    Resource allocator scripts for OpenStack
-Version:    9.8
-Release:    10%{?dist}
+Version:    9.10
+Release:    1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:    GPL-2.0-or-later
 URL:        https://github.com/praiskup/resalloc-openstack

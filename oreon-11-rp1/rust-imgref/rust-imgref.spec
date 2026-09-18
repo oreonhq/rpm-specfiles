@@ -7,7 +7,7 @@
 %global crate imgref
 
 Name:           rust-imgref
-Version:        1.12.2
+Version:        1.12.3
 Release:        %autorelease
 Summary:        A basic 2-dimensional slice for safe and convenient handling of pixel...
 

@@ -1,66 +1,68 @@
-%global source0_hash 5a48b9165146a02cb86a8073832df4ca177fbf4a7dbd707909279fbfad8a4032
+%global source0_hash none
 
-%global pkg_name flask-security-too
+Name:           python-flask-security-too
+Version:        5.8.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Quickly add security features to your Flask application.
 
-Name:           python-%{pkg_name}
-Version:        5.6.2
-Release:        6%{?dist}
-Summary:        Simple security for Flask apps
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
+URL:            https://github.com/pallets-eco/flask-security
+Source:         %{pypi_source flask_security_too}
 
 BuildArch:      noarch
-URL:            https://github.com/Flask-Middleware/flask-security
-Source0:        %{pypi_source flask_security_too}
-# Drop missing test deps
-Patch0:         python-flask-security-too_testdeps.patch
-# Use phonenumbers instead of phonenumberslite
-Patch1:         python-flask-security-too_phonenumbers.patch
-# FIXME Temporarily drop sqlalchemy-utils dependency and bundle required functions
-# (fedora package requires flask-sqlalchemy-1.x which conflicts with required flask-sqlalchemy-3.x)
-Patch2:         python-flask-security-too_no-sqla-utils.patch
-# Relax flask-sqlalchemy version requirement
-Patch3:         python-flask-security-too_flask-sqla.patch
-# libpass is not packaged
-Patch4:         python-flask-security-too_no-libpass.patch
-
 BuildRequires:  python3-devel
 
-%description
-Flask-Security quickly adds security features to your Flask application.
 
-%package -n python3-%{pkg_name}
-Summary:        Simple security for Flask apps
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'flask-security-too' generated automatically by pyp2spec.}
 
-%description -n python3-%{pkg_name}
-Flask-Security quickly adds security features to your Flask application.
+Patch0:         python-flask-security-too_testdeps.patch
+Patch1:         python-flask-security-too_phonenumbers.patch
+Patch2:         python-flask-security-too_no-sqla-utils.patch
+Patch3:         python-flask-security-too_flask-sqla.patch
+Patch4:         python-flask-security-too_no-libpass.patch
 
-# Skip mfa extra, webauthn is not packaged
-%pyproject_extras_subpkg -n python3-%{pkg_name} babel fsqla common
+%description %_description
+
+%package -n     python3-flask-security-too
+Summary:        %{summary}
+
+%description -n python3-flask-security-too %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-flask-security-too babel,common,fsqla,low,mfa
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n flask_security_too-%{version}
-ln -sf pyproject-too.toml pyproject.toml
+
 
 %generate_buildrequires
-# Skip mfa extra, webauthn is not packaged
-%pyproject_buildrequires -x babel,fsqla,common -r requirements/tests.txt
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x babel,common,fsqla,low,mfa
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files flask_security
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Expected fail in DNS resolve (requires network)
-%pytest -k "not test_login_email_whatever"
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pkg_name} -f %{pyproject_files}
-%license LICENSE.txt
-%doc README.rst AUTHORS
+
+%files -n python3-flask-security-too -f %{pyproject_files}
 
 %changelog
 %autochangelog

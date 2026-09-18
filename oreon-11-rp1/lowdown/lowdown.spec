@@ -1,7 +1,7 @@
 %global source0_hash 9718c0f6c99a2cef923357feced0e0f86d8047260238c5c37fd2b51ca620e373
 
 Name:           lowdown
-Version:        2.0.2
+Version:        3_1_1
 Release:        %autorelease
 Summary:        Simple markdown translator
 

@@ -1,7 +1,7 @@
 %global source0_hash 3460d8a3e10a86e7fe0228d5d9abcda589713b8ed3ee007ce061ae01f8c2e1ea
 
 Name:           calceph
-Version:        4.0.5
+Version:        5.0.0
 Release:        %autorelease
 Summary:        Astronomical library to access planetary ephemeris files
 

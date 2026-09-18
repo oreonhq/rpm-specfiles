@@ -1,58 +1,64 @@
-%global source0_hash c257cb6b90ea7e6f8fef3158121d430543412c9a87df30b5dde6ec8b9b57a2b6
+%global source0_hash none
 
 Name:           python-testscenarios
-Version:        0.5.0
+Version:        0.7.0
 Release:        %autorelease
-Summary:        Testscenarios, a pyunit extension for dependency injection
-License:        Apache-2.0 AND BSD-3-Clause
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Testscenarios, a unittest extension for dependency injection
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0 OR BSD-3-Clause
 URL:            https://github.com/testing-cabal/testscenarios
 Source:         %{pypi_source testscenarios}
 
-# Fix load_tests interface
-Patch:          https://github.com/testing-cabal/testscenarios/pull/1.patch
-
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-testscenarios provides clean dependency injection for python unittest style
-tests. This can be used for interface testing (testing many implementations via
-a single test suite) or for classic dependency injection (provide tests with
-dependencies externally to the test code itself, allowing easy testing in
-different situations).}
+This is package 'testscenarios' generated automatically by pyp2spec.}
 
-%description %{_description}
+Patch:          https://github.com/testing-cabal/testscenarios/pull/1.patch
 
-%package -n python3-testscenarios
+%description %_description
+
+%package -n     python3-testscenarios
 Summary:        %{summary}
 
-%description -n python3-testscenarios %{_description}
+%description -n python3-testscenarios %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-testscenarios dev,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n testscenarios-%{version}
-# Remove unknown test options from setup.py
-sed -i '/^buffer = 1$/d' setup.cfg
-sed -i '/^catch = 1$/d' setup.cfg
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files testscenarios
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{py3_test_envvars} %{python3} -m testtools.run testscenarios.test_suite
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-testscenarios -f %{pyproject_files}
-%license Apache-2.0 BSD
-%doc GOALS HACKING NEWS README doc/
 
 %changelog
 %autochangelog

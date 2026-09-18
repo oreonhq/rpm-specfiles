@@ -7,7 +7,7 @@
 %global crate peg
 
 Name:           rust-peg
-Version:        0.5.7
+Version:        0.8.6
 Release:        %autorelease
 Summary:        A simple Parsing Expression Grammar (PEG) parser generator.
 

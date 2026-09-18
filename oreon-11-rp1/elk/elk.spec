@@ -43,8 +43,8 @@ ExclusiveArch:          x86_64 %{ix86} aarch64 %{arm} %{power64}
 %endif
 
 Name:			elk
-Version:		9.2.12
-Release:		8%{?dist}
+Version:		11.0.2
+Release:		1%{?dist}
 Summary:		An all-electron full-potential linearised augmented-plane wave code
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

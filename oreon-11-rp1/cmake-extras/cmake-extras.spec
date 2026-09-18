@@ -4,7 +4,7 @@
 %bcond check 1
 
 Name:           cmake-extras
-Version:        1.9
+Version:        1.10
 Release:        %autorelease
 Summary:        A collection of add-ons for the CMake build tool
 License:        LGPL-3.0-or-later AND BSD-2-Clause

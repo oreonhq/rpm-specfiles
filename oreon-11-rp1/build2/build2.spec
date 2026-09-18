@@ -9,8 +9,8 @@
 %undefine _auto_set_build_flags
 
 Name:           build2
-Version:        0.17.0
-Release:        7%{?dist}
+Version:        2.4.10
+Release:        1%{?dist}
 Summary:        Cross-platform build toolchain for developing and packaging C++ code
 
 License:        MIT

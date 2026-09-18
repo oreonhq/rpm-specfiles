@@ -34,7 +34,7 @@
 %global __provides_exclude_from ^%{python3_sitearch}/.*/lib.*\\.so$
 
 Name:		root
-Version:	6.38.04
+Version:	6.40.04
 %global libversion %(cut -d. -f 1-2 <<< %{version})
 Release:	1%{?dist}
 Summary:	Numerical data analysis framework

@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    yakuake
-Version: 26.08.0
+Version: 26.08.1
 Release: 1%{?dist}
 Summary: A drop-down terminal emulator
 

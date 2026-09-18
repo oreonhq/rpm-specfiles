@@ -7,7 +7,7 @@
 %global crate synstructure
 
 Name:           rust-synstructure
-Version:        0.13.2
+Version:        0.14.0
 Release:        %autorelease
 Summary:        Helper methods and macros for custom derives
 

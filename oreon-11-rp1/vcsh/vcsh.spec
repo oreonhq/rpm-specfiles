@@ -1,8 +1,8 @@
 %global source0_hash 560440defe4f20ac22ce65e873c7ff60ca0c08318524afe6dae86adc4b13d714
 
 Name:           vcsh
-Version:        2.0.8
-Release:        6%{?dist}
+Version:        2.0.10
+Release:        1%{?dist}
 Summary:        Version Control System for $HOME
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

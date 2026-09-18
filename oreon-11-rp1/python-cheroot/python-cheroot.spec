@@ -1,133 +1,62 @@
-%global source0_hash b93428476884c802ea817497633259254bb3fcf2450934bbb8f1a7a099738a31
+%global source0_hash none
 
-# Created by pyp2rpm-3.2.2
-%global pypi_name cheroot
-%bcond_without docs
-
-Name:           python-%{pypi_name}
-Version:        11.1.1
+Name:           python-cheroot
+Version:        11.1.2
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Highly-optimized, pure-python HTTP server
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://github.com/cherrypy/cheroot
-Source0:        %{pypi_source}
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://cheroot.cherrypy.dev
+Source:         %{pypi_source cheroot}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-Cheroot is the high-performance, pure-Python HTTP server used by CherryPy.
 
-%package -n python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cheroot' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-cheroot
 Summary:        %{summary}
-Requires:       python3dist(six) >= 1.11
-Requires:       python3dist(more-itertools) >= 2.6
-Requires:       python3-pyOpenSSL
-Requires:       python3dist(jaraco-functools)
 
-BuildRequires:  python3-devel
-BuildRequires:  python3-pyOpenSSL
-BuildRequires:  python3dist(jaraco-functools)
-BuildRequires:  python3dist(jaraco-text)
-BuildRequires:  python3dist(portend)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-mock)
-BuildRequires:  python3dist(pytest-forked)
-BuildRequires:  python3dist(pytest-rerunfailures)
-BuildRequires:  python3dist(requests-toolbelt)
+%description -n python3-cheroot %_description
 
-%if 0%{?el8}
-BuildRequires:  python3dist(more-itertools) >= 2.6
-%endif
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-cheroot docs
 
-BuildRequires:  python3dist(requests)
-BuildRequires:  python3dist(requests-unixsocket)
-BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
-BuildRequires:  python3dist(trustme)
-%{?python_provide:%python_provide python3-%{pypi_name}}
-
-%description -n python3-%{pypi_name}
-Cheroot is the high-performance, pure-Python HTTP server used by CherryPy.
-
-%if %{with docs}
-%package -n python-%{pypi_name}-doc
-Summary:        cheroot documentation
-
-BuildRequires:  python3dist(sphinx)
-BuildRequires:  python3-sphinx-theme-alabaster
-BuildRequires:  python3-sphinx-tabs
-BuildRequires:  python3-sphinxcontrib-apidoc
-BuildRequires:  python3dist(rst-linker)
-BuildRequires:  python3dist(jaraco-packaging)
-BuildRequires:  python3dist(docutils)
-
-%description -n python-%{pypi_name}-doc
-Documentation for cheroot
-%endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n cheroot-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-
-# Remove pytest processes directive
-sed -i 's/ --numprocesses=auto//' pytest.ini
-# Remove optional pytest-cov dependency
-sed -i -e '/pytest_cov/d' -e /--cov/d -e '/--no-cov-on-fail/d' pytest.ini
-# drop setuptools_scm_git_archive
-sed -i '/setuptools_scm_git_archive/d' setup.cfg
-# RHEL 9 has setuptools_scm 6
-sed -i 's/setuptools_scm >= 7.0.0/setuptools_scm >= 6.0.0/' setup.cfg
-
-# Remove development bin directory with ambiguous shebang
-rm -rf bin/
-
-# Remove optional/problematic sphinx extensions
-sed -i "/sphinxcontrib.towncrier.ext/d" docs/conf.py
-sed -i "/spelling_stub_ext/d" docs/conf.py
-sed -i "/jaraco.packaging.sphinx/d" docs/conf.py
-# Use alabaster theme instead of furo (not packaged)
-sed -i "s/html_theme = 'furo'/html_theme = 'alabaster'/" docs/conf.py
-
-# doctor a few tests because of unpackaged deps in fedora
-# pypytools
-sed -i '/pypytools/d' cheroot/test/test_server.py
-sed -i "/getfixturevalue('_garbage_bin')/d" cheroot/test/test_server.py
-# jaraco.context
-sed -i '/jaraco.context/d' cheroot/test/test_wsgi.py
-sed -i '39 i @pytest.mark.skip()' cheroot/test/test_wsgi.py
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs
+
 
 %build
 %pyproject_wheel
-%if %{with docs}
-sphinx-build -vvv docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
-%endif
+
 
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
-# Remove docs source that shouldn't be in site-packages
-rm -rf %{buildroot}%{python3_sitelib}/docs/
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-LANG=C.utf-8 %{__python3} -m pytest --ignore=build -W ignore::DeprecationWarning -p no:unraisableexception
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE.md
-%doc README.rst
+
+%files -n python3-cheroot -f %{pyproject_files}
 %{_bindir}/cheroot
-
-%if %{with docs}
-%files -n python-%{pypi_name}-doc
-%license LICENSE.md
-%doc html
-%endif
 
 %changelog
 %autochangelog

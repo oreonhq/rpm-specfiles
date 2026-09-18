@@ -7,7 +7,7 @@
 %global crate roxmltree
 
 Name:           rust-roxmltree
-Version:        0.20.0
+Version:        0.21.1
 Release:        %autorelease
 Summary:        Represent an XML as a read-only tree
 

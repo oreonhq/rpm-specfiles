@@ -60,7 +60,7 @@ Obsoletes: %{name}-pionilliumtext22l-medium-fonts < %{version}-%{release}
 
 Name: pioneer
 Summary: A game of lonely space adventure
-Version: 20260203
+Version: 20260907
 Release: %autorelease
 
 ## Main license: GPLv3

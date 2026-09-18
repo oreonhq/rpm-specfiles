@@ -1,49 +1,57 @@
-%global source0_hash de6646eb9891b59657d183c7fc9ffa823b8523856b942446707e2a8615f4866f
+%global source0_hash none
 
-%global srcname justbases
-Name:       python-%{srcname}
-Version:    0.15.2
-Release:    %autorelease
-Summary:    A small library for precise conversion between arbitrary bases
+Name:           python-justbases
+Version:        0.15.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        conversion of ints and rationals to any base
 
-License:    LGPL-2.1-or-later
-URL:        http://pypi.python.org/pypi/justbases
-Source0:        https://pypi.io/packages/source/j/%{srcname}/%{srcname}-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        LGPL-2.1-or-later
+URL:            https://github.com/mulkieran/justbases
+Source:         %{pypi_source justbases}
 
-BuildArch:  noarch
-
-%description
-A small library for precise conversion between arbitrary bases and native
-Python numbers.
-
-%package -n python3-%{srcname}
-Summary:    A small library for precise conversion between arbitrary bases
-
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%description -n python3-%{srcname}
-A small library for precise conversion between arbitrary bases and native
-Python numbers.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'justbases' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-justbases
+Summary:        %{summary}
+
+%description -n python3-justbases %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{srcname}-%{version}
+%autosetup -p1 -n justbases-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l justbases
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
+
+%files -n python3-justbases -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.15.2-1

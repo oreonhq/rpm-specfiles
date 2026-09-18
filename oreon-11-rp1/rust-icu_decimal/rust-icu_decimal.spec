@@ -7,7 +7,7 @@
 %global crate icu_decimal
 
 Name:           rust-icu_decimal
-Version:        2.1.1
+Version:        2.3.0
 Release:        %autorelease
 Summary:        API for formatting basic decimal numbers in a locale-sensitive way
 

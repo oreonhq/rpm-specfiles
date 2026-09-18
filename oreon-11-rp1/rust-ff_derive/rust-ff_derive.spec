@@ -7,7 +7,7 @@
 %global crate ff_derive
 
 Name:           rust-ff_derive
-Version:        0.13.1
+Version:        0.14.0
 Release:        %autorelease
 Summary:        Procedural macro library used to build custom prime field implementat...
 

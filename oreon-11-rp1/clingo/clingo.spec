@@ -1,7 +1,7 @@
 %global source0_hash 4ddd5975e79d7a0f8d126039f1b923a371b1a43e0e0687e1537a37d6d6d5cc7c
 
 Name:       clingo
-Version:    5.8.0
+Version:    5.8.2
 Release:    %autorelease
 Summary:    A grounder and solver for logic programs
 

@@ -7,7 +7,7 @@
 %global crate gix-sec
 
 Name:           rust-gix-sec
-Version:        0.12.2
+Version:        0.14.2
 Release:        %autorelease
 Summary:        A crate of the gitoxide project providing a shared trust model
 

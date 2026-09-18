@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/loops
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        3.4.4
+Version:        3.4.5
 Release:        %autorelease
 Summary:        Computing with quasigroups and loops
 

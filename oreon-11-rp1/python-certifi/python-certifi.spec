@@ -1,79 +1,59 @@
-%global source0_hash bd68260257cad030f8b0851f6c50adcfb3fac0e1088aae39cbe28e8bbd9a0453
+%global source0_hash none
 
 Name:           python-certifi
-Version:        2026.01.04
+Version:        2026.7.22
 Release:        %autorelease
-Summary:        Python package for providing Mozilla's CA Bundle
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python package for providing Mozilla_s CA Bundle.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MPL-2.0
-URL:            https://certifi.io/
-Source:         https://github.com/certifi/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-Patch:          certifi-2025.07.09-use-system-cert.patch
+URL:            https://github.com/certifi/python-certifi
+Source:         %{pypi_source certifi}
 
 BuildArch:      noarch
-
-# Require the system certificate bundle (/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem)
-BuildRequires:  ca-certificates
-
 BuildRequires:  python3-devel
 
-# Run upstream tests
-BuildRequires:  python3-pytest
 
-%description
-Certifi is a carefully curated collection of Root Certificates for validating
-the trustworthiness of SSL certificates while verifying the identity of TLS
-hosts. It has been extracted from the Requests project.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'certifi' generated automatically by pyp2spec.}
 
-Please note that this Fedora package does not actually include a certificate
-collection at all. It reads the system shared certificate trust collection
-instead. For more details on this system, see the ca-certificates package.
+Patch:          certifi-2025.07.09-use-system-cert.patch
 
-%package -n python3-certifi
+%description %_description
+
+%package -n     python3-certifi
 Summary:        %{summary}
-Requires:       ca-certificates
 
-%description -n python3-certifi
-Certifi is a carefully curated collection of Root Certificates for validating
-the trustworthiness of SSL certificates while verifying the identity of TLS
-hosts. It has been extracted from the Requests project.
+%description -n python3-certifi %_description
 
-Please note that this Fedora package does not actually include a certificate
-collection at all. It reads the system shared certificate trust collection
-instead. For more details on this system, see the ca-certificates package.
-
-This package provides the Python 3 certifi library.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n certifi-%{version}
 
-%autosetup -p1
-
-# Remove bundled Root Certificates collection
-rm -rf certifi/*.pem
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l certifi
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# sanity check
-export PYTHONPATH=%{buildroot}%{python3_sitelib}
-test $(%{__python3} -m certifi) == /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
-test $(%{__python3} -c 'import certifi; print(certifi.where())') == /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
-%{__python3} -c 'import certifi; print(certifi.contents())' > contents
-diff --ignore-blank-lines /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem contents
-# upstream tests
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-certifi -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

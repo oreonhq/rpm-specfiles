@@ -7,7 +7,7 @@
 %global crate parse-zoneinfo
 
 Name:           rust-parse-zoneinfo
-Version:        0.4.1
+Version:        0.5.0
 Release:        %autorelease
 Summary:        Parse zoneinfo files from the IANA database
 

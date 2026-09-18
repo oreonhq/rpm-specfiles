@@ -1,57 +1,56 @@
-%global source0_hash 55f542c371209e03cd5862299b74e52e4fbcba8250ba611ad94276b369b6a85f
-
-%bcond tests 1
+%global source0_hash none
 
 Name:           python-billiard
-Version:        4.2.4
+Version:        4.3.0
 Release:        %autorelease
-Epoch:          1
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Python multiprocessing fork with improvements and bugfixes
 
-License:        BSD-3-Clause
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/celery/billiard
 Source:         %{pypi_source billiard}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
-BuildArch:      noarch
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-billiard is a fork of the Python multiprocessing package. The multiprocessing
-package itself is a renamed and updated version of R Oudkerk’s pyprocessing
-package. This standalone variant draws its fixes/improvements from python-trunk
-and provides additional bug fixes and improvements.}
+This is package 'billiard' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-billiard
+%package -n     python3-billiard
 Summary:        %{summary}
 
-%description -n python3-billiard %{_description}
+%description -n python3-billiard %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n billiard-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:requirements/test.txt}
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l billiard
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import -e billiard.popen_spawn_win32
-%if %{with tests}
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-billiard -f %{pyproject_files}
-%doc CHANGES.txt README.rst
 
 %changelog
 %autochangelog

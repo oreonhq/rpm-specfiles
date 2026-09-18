@@ -1,8 +1,8 @@
 %global source0_hash a61d1c1faa9c411c75292a5710999182b918831b8f0f200c87149e3ff353bea9
 
 Name:		qmmp
-Version:	2.3.1
-Release:	2%{?dist}
+Version:	2.4.2
+Release:	1%{?dist}
 Summary:	Qt-based multimedia player
 
 License:	GPL-2.0-or-later AND CC-BY-SA-4.0

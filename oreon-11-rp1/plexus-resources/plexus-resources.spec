@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           plexus-resources
-Version:        1.3.0
+Version:        1.4.0
 Release:        %autorelease
 Summary:        Plexus Resource Manager
 License:        Apache-2.0 AND MIT
@@ -25,7 +25,7 @@ BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.3.0-13
+Obsoletes:      %{name}-javadoc < 1.4.0-13
 
 %description
 The Plexus project seeks to create end-to-end developer tools for

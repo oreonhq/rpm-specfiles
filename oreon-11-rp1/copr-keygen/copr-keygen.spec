@@ -4,8 +4,8 @@
 %global copr_common_version 0.16.3.dev
 
 Name:       copr-keygen
-Version:    2.2
-Release:    4%{?dist}
+Version:    2.3-1
+Release:    1%{?dist}
 Summary:    Part of Copr build system. Aux service that generate keys for signd
 
 License:    GPL-2.0-or-later

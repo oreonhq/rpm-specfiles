@@ -1,8 +1,8 @@
 %global source0_hash b3f307f06c3b969bd65151d39729b97a767af42fddd3d9bab971135c0e7cd873
 
 Name:           inxi
-Version:        3.3.40
-Release:        2%{?dist}
+Version:        3.3.41-1
+Release:        1%{?dist}
 Summary:        A full featured system information script
 
 License:        GPL-3.0-or-later

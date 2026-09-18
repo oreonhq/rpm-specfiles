@@ -4,7 +4,7 @@
 
 Name:           bcvk
 # Replaced by cargo xtask spec
-Version: 0.10.0
+Version: 0.20.0
 Release:        1%{?dist}
 Summary:        Bootable container VM toolkit
 

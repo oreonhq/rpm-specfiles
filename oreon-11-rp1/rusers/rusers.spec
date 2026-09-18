@@ -6,8 +6,8 @@
 
 Summary: Displays the users logged into machines on the local network
 Name: rusers
-Version: 0.17
-Release: 106%{?dist}
+Version: 4.0.1
+Release: 1%{?dist}
 License: BSD
 Url: http://rstatd.sourceforge.net/
 Source: http://ftp.linux.org.uk/pub/linux/Networking/netkit/netkit-rusers-%{version}.tar.gz

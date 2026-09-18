@@ -1,83 +1,57 @@
 %global source0_hash none
 
-%global         pypi_name       pygmtools
-%global         forgeurl        https://github.com/Thinklab-SJTU/pygmtools
-Version:        0.5.5
-%global         tag             %{version}
-%forgemeta
+Name:           python-pygmtools
+Version:        0.6.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        pygmtools provides graph matching solvers in Python API and supports numpy and pytorch backends. pygmtools also provides dataset API for standard graph matching benchmarks.
 
-Name:           python-%{pypi_name}
-Release:        3%{?dist}
-Summary:        A library of Python graph matching solvers
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MulanPSL-2.0
-URL:            https://pygmtools.readthedocs.io/en/latest/
-Source:         %{forgesource}
+URL:            https://pygmtools.readthedocs.io/
+Source:         %{pypi_source pygmtools}
 
 BuildRequires:  python3-devel
-# Documentation
-#BuildRequires:  python3-sphinx
-#BuildRequires:  python3-sphinx-design
-#BuildRequires:  python3-sphinx-gallery
-# Need to package m2r2
-#BuildRequires:  python3-m2r2
-BuildArch: noarch
+BuildRequires:  gcc
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-pygmtools (Python Graph Matching Tools) provides graph matching
-solvers in Python.
-
-Graph matching is a fundamental yet challenging problem in pattern
-recognition, data mining, and others. Graph matching aims to find
-node-to-node correspondence among multiple graphs, by solving an
-NP-hard combinatorial optimization problem.
-
-Doing graph matching in Python used to be difficult, and this library
-wants to make researchers' lives easier.}
+This is package 'pygmtools' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{pypi_name}
+%package -n     python3-pygmtools
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-pygmtools %_description
 
-%package doc
-Summary:        %{summary}
-
-%description doc
-Documentation files for %{pypi_name}
 
 %prep
-%forgeautosetup -p 1
-# Remove for now, but maybe needed when Pytorch is available
-rm -f %{pypi_name}/astar/priority_queue.hpp
+%autosetup -p1 -n pygmtools-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
-# Build documentation
-#sphinx-build -b man -D plot_gallery=0 -b man docs man1
 
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Only check import of main module, as other modules
-# have dependencies that may not be available
-%pyproject_check_import -t pygmtools
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
 
-%files doc
-%license LICENSE
-%doc docs/guide/*.rst
-%doc examples
+%files -n python3-pygmtools -f %{pyproject_files}
 
 %changelog
 %autochangelog

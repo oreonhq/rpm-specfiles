@@ -1,8 +1,8 @@
 %global source0_hash 852548310b8fecfd97fcfa4a4aca9d6952e299adc785170cb3a827a8abec512d
 
 Name:           scim-m17n
-Version:        0.2.3
-Release:        38%{?dist}
+Version:        1.4.18
+Release:        1%{?dist}
 Summary:        SCIM IMEngine for m17n-lib
 
 License:        GPL-2.0-or-later

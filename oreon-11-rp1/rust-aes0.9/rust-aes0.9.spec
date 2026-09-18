@@ -7,7 +7,7 @@
 %global crate aes
 
 Name:           rust-aes0.9
-Version:        0.9.1
+Version:        0.9.3
 Release:        %autorelease
 Summary:        Pure Rust implementation of the Advanced Encryption Standard (a.k.a....
 

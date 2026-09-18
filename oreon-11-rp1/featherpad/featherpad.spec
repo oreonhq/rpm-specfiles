@@ -3,8 +3,8 @@
 %global github_name FeatherPad
 
 Name:           featherpad
-Version:        1.6.2
-Release:        3%{?dist}
+Version:        1.6.4
+Release:        1%{?dist}
 Summary:        Lightweight Qt Plain-Text Editor
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

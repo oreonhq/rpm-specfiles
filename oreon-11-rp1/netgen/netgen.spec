@@ -1,8 +1,8 @@
 %global source0_hash d785f8f4a3ad3750d9de282a2fe4b4802360f7c7f223584bcfabc0ea33693928
 
 Name:             netgen
-Version:          1.3.7
-Release:          55%{?dist}
+Version:          1.6.3
+Release:          1%{?dist}
 Summary:          LVS netlist comparison tool for VLSI
 
 License:          GPL-1.0-or-later

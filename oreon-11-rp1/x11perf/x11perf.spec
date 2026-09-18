@@ -1,8 +1,8 @@
 %global source0_hash 1c7e0b8ffc2794b4ccf11e04d551823abe0ea47b4f7db0637390db6fbe817c34
 
 Name:       x11perf
-Version:    1.6.1
-Release:    13%{?dist}
+Version:    1.7.0
+Release:    1%{?dist}
 Summary:    X11 server performance test program
 
 License:    SMLNJ AND HPND

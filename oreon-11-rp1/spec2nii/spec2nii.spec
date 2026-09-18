@@ -14,7 +14,7 @@
 # seems to consider the command-line tool to be the primary interface, so we
 # use application naming guidelines.
 Name:           spec2nii
-Version:        0.8.7
+Version:        0.8.15
 Release:        %autorelease
 Summary:        Multi-format in vivo MR spectroscopy conversion to NIFTI
 

@@ -1,7 +1,7 @@
 %global source0_hash e263c03b36c3fa60d9edca39c72332036c75bbaeb8e69630e10e321d1a985133
 
 Name:       git-autofixup
-Version:    0.005
+Version:    0.005000
 Release:    %autorelease
 
 Summary:    Autofixup - create fixup commits for topic branches

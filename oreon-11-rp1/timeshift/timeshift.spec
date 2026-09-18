@@ -8,7 +8,7 @@
 %global _hardened_build 1
 
 Name:           timeshift
-Version:        22.11.2
+Version:        25.12.4
 Release:        %autorelease
 Summary:        System restore tool for Linux
 

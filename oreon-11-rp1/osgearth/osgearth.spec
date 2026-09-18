@@ -5,8 +5,8 @@
 %global with_docs 1
 
 Name:          osgearth
-Version:       3.7.2
-Release:       5%{?dist}
+Version:       3.8.1
+Release:       1%{?dist}
 Summary:       Dynamic map generation toolkit for OpenSceneGraph
 
 License:       LGPL-3.0-only

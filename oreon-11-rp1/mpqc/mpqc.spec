@@ -2,8 +2,8 @@
 
 Name:           mpqc
 Summary:        Ab-inito chemistry program
-Version:        2.3.1
-Release:        67%{?dist}
+Version:        3.0.0-cadflink
+Release:        1%{?dist}
 # Automatically converted from old format: GPLv2+ and LGPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later AND LicenseRef-Callaway-LGPLv2+
 URL:            http://www.mpqc.org/

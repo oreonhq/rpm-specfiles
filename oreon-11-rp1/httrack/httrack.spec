@@ -1,7 +1,7 @@
 %global source0_hash 3477a0e5568e241c63c9899accbfcdb6aadef2812fcce0173688567b4c7d4025
 
 Name:           httrack
-Version:        3.49.2
+Version:        3.50.2
 Release:        %autorelease
 Summary:        Website copier and offline browser
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

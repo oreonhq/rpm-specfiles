@@ -1,7 +1,7 @@
 %global source0_hash 21f4e24bbd7b24c31ba13ddb10600db3a61565f20f2ccf2347f4e114e6e34596
 
-Version:        3.052
-Release:        9%{?dist}
+Version:        3.052R
+Release:        1%{?dist}
 URL:            https://github.com/adobe-fonts/source-sans
 
 %global foundry adobe

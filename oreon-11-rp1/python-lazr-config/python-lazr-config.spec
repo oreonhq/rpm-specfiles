@@ -1,28 +1,25 @@
-%global source0_hash a14e4f6cc09aebc1d40b176158aea0eee2252c14003b8d0ef0b31c7c514c3644
+%global source0_hash none
 
 Name:           python-lazr-config
-Version:        3.0
+Version:        4.0.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Create configuration schemas, and process and validate configurations.
 
-License:        LGPL-3.0-only
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://launchpad.net/lazr.config
-Source:         %{pypi_source lazr.config}
-# /usr/bin/zope-testrunner could not find lazr.config due to lazr.delegates being in
-# a different directory *and* being invoked with python -sP
-Patch:          lazr.config-avoid-python-sP.diff
+Source:         %{pypi_source lazr_config}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%global _description %{expand:
-The LAZR config system is typically used to manage process configuration.
-Process configuration is for saying how things change when we run systems on
-different machines, or under different circumstances.
 
-This system uses ini-like file format of section, keys, and values. The config
-file supports inheritance to minimize duplication of information across files.
-The format supports schema validation.}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'lazr-config' generated automatically by pyp2spec.}
+
+Patch:          lazr.config-avoid-python-sP.diff
 
 %description %_description
 
@@ -31,27 +28,36 @@ Summary:        %{summary}
 
 %description -n python3-lazr-config %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-lazr-config docs,test
 
-%autosetup -p1 -n lazr.config-%{version}
+
+%prep
+%autosetup -p1 -n lazr_config-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files lazr
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%tox
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-lazr-config -f %{pyproject_files}
-%{python3_sitelib}/lazr.config-%{version}-py%{python3_version}-nspkg.pth
 
 %changelog
 %autochangelog

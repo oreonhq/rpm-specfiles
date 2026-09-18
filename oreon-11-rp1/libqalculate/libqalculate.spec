@@ -6,7 +6,7 @@
 
 Summary:	Multi-purpose calculator library
 Name:		libqalculate
-Version:	5.9.0
+Version:	5.12.0
 Release:        1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:	GPL-2.0-or-later

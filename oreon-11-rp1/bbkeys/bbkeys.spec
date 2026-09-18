@@ -2,7 +2,7 @@
 
 Summary: Completely configurable key-combo grabber for blackbox
 Name: bbkeys
-Version: 0.9.0
+Version: 0.9.1
 Release: %autorelease
 License: MIT
 URL: http://bbkeys.sourceforge.net/

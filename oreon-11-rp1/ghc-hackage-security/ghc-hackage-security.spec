@@ -11,7 +11,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        0.6.3.2
+Version:        0.6.4.0
 Release:        %autorelease
 Summary:        Hackage security library
 

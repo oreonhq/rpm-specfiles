@@ -1,22 +1,24 @@
-%global source0_hash 65731e1e4ec6d719693e24fee9340f5516460b2b7244d2a89bed4ce3cfa6a173
+%global source0_hash none
 
 Name:           python-mkdocs-static-i18n
-Version:        1.3.0
+Version:        1.3.1
 Release:        %autorelease
-Summary:        MkDocs i18n plugin using static translation Markdown files
+# Fill in the actual package summary to submit package to Fedora
+Summary:        MkDocs i18n plugin using static translation markdown files
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://ultrabug.github.io/mkdocs-static-i18n/
+URL:            https://github.com/ultrabug/mkdocs-static-i18n
 Source:         %{pypi_source mkdocs_static_i18n}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The mkdocs-static-i18n plugin allows you to support multiple languages of your
-documentation by adding static translation files to your existing documentation
-pages.}
+This is package 'mkdocs-static-i18n' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -25,28 +27,36 @@ Summary:        %{summary}
 
 %description -n python3-mkdocs-static-i18n %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
 %pyproject_extras_subpkg -n python3-mkdocs-static-i18n material
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n mkdocs_static_i18n-%{version}
 
+
 %generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
 %pyproject_buildrequires -x material
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l mkdocs_static_i18n
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-mkdocs-static-i18n -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

@@ -6,8 +6,8 @@
 
 Name:          mingw-python-%{pypi_name}
 Summary:       MinGW Windows Python %{pypi_name}
-Version:       3.11
-Release:       2%{?dist}
+Version:       3.20
+Release:       1%{?dist}
 BuildArch:     noarch
 
 License:       BSD-3-Clause

@@ -10,7 +10,7 @@
 %endif
 
 Name:           gnome-shell
-Version:        50.0
+Version:        51.0
 Release:        %autorelease
 Summary:        Window management and application launching for GNOME
 

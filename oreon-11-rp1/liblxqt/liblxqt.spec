@@ -6,8 +6,8 @@
 %endif
 
 Name:		liblxqt
-Version:	2.3.0
-Release:	2%{?dist}
+Version:	2.4.0
+Release:	1%{?dist}
 # Automatically converted from old format: LGPLv2 - review is highly recommended.
 License:	LicenseRef-Callaway-LGPLv2
 Summary:	Core shared library for LXQt desktop suite

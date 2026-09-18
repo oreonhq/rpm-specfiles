@@ -4,8 +4,8 @@
 %global _smp_mflags -j1
 
 Name:           opendbx
-Version:        1.4.6
-Release:        43%{?dist}
+Version:        1.5.0
+Release:        1%{?dist}
 Summary:        Lightweight but extensible database access library written in C
 
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later

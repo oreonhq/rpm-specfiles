@@ -1,7 +1,7 @@
 %global source0_hash 79334ef3dadddb03ec0483fbf49bf690fb8902d5c2732d977b2c116651484cc6
 
 Name:		rkcommon
-Version:	1.14.2
+Version:	1.15.4
 Release:	%autorelease
 Summary:	Intel renderKit common C++/CMake infrastructure
 

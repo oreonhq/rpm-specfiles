@@ -1,7 +1,7 @@
 %global source0_hash 034f6a100b7e4d3755e2d7320bf4685bc1d8e9a84f18737e143b61b29ff57aa3
 
 %global forgeurl https://github.com/luebking/phototonic
-Version:        3.1.0
+Version:        3.2.0
 %forgemeta
 
 Name:           phototonic

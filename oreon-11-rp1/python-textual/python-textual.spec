@@ -1,70 +1,62 @@
 %global source0_hash none
 
 Name:           python-textual
-Version:        4.0.0
-Release:        4%{?dist}
-Summary:        TUI (Text User Interface) framework for Python
+Version:        8.2.8
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Modern Text User Interface framework
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/Textualize/textual
-Source0:        %{url}/archive/v%{version}/textual-%{version}.tar.gz
+Source:         %{pypi_source textual}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-# Test dependencies:
-BuildRequires:  pytest
-BuildRequires:  python3-jinja2
-BuildRequires:  python3-syrupy
-BuildRequires:  python3-time-machine
-BuildRequires:  python3-pytest-asyncio
-BuildRequires:  python3-aiohttp
-BuildRequires:  python3-pytest-aiohttp
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Textual is a TUI (Text User Interface) framework for Python inspired
-by modern web development. Currently a Work in Progress.}
+This is package 'textual' generated automatically by pyp2spec.}
 
-%description
-%{_description}
+%description %_description
 
-%package -n python3-textual
+%package -n     python3-textual
 Summary:        %{summary}
 
-%description -n python3-textual
-%{_description}
+%description -n python3-textual %_description
 
-%package -n python3-textual-doc
-Summary:        Docs and examples for python3-textual
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-textual syntax
 
-%description -n python3-textual-doc
-%{_description}
 
 %prep
-%autosetup -n textual-%{version}
+%autosetup -p1 -n textual-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -r -x dev
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x syntax
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files textual
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# skip these tests until https://github.com/Textualize/pytest-textual-snapshot
-# is packaged
-rm -rf tests/snapshot_tests
-rm -rf tests/test_slug.py
-%pytest -k "not test_textual_env_var and not test_softbreak_split_links_rendered_correctly and not test_setting_unknown_language and not test_register_language and not test_update_highlight_query"
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-textual -f %{pyproject_files}
-%license LICENSE
-
-%files -n python3-textual-doc
-%license LICENSE
-%doc README.md docs/ examples/
 
 %changelog
 %autochangelog

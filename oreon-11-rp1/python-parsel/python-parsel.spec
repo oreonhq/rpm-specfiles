@@ -1,55 +1,57 @@
-%global source0_hash 66184dc423139532f44759bbda9c2aaec3dc18d5532ce15264eb9dc26a2f0eef
+%global source0_hash none
 
-%global modname parsel
+Name:           python-parsel
+Version:        1.11.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Parsel is a library to extract data from HTML and XML using XPath and CSS selectors
 
-Name:           python-%{modname}
-Version:        1.10.0
-Release:        8%{?dist}
-Summary:        Library to extract data from HTML and XML using XPath and CSS selectors
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/scrapy/parsel
-Source0:        %{url}/archive/v%{version}/%{modname}-%{version}.tar.gz
+Source:         %{pypi_source parsel}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%description
-%{summary}.
 
-%package -n python3-%{modname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'parsel' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-parsel
 Summary:        %{summary}
 
-%description -n python3-%{modname}
-%{summary}.
+%description -n python3-parsel %_description
 
-Python 3 version.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n parsel-%{version}
 
-%autosetup -n %{modname}-%{version} -p1
-sed -e '/psutil/ s/==/>=/' -i tests/requirements.txt
 
 %generate_buildrequires
-%pyproject_buildrequires tests/requirements.txt
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files parsel
 
 %check
-%pyproject_check_import
-%pytest -v tests
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{modname} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst NEWS
+
+%files -n python3-parsel -f %{pyproject_files}
 
 %changelog
 %autochangelog

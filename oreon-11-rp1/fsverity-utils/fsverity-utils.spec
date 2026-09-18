@@ -1,8 +1,8 @@
 %global source0_hash c7aa6b17a8a069224321ff94e46fb91a6426828ca78170a879a52cef2597abb7
 
 Name: fsverity-utils
-Version: 1.6
-Release: 4%{?dist}
+Version: 1.7
+Release: 1%{?dist}
 Summary: fsverity utilities
 
 # Automatically converted from old format: BSD - review is highly recommended.

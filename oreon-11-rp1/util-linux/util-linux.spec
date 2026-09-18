@@ -3,7 +3,7 @@
 ### Header
 Summary: Collection of basic system utilities
 Name: util-linux
-Version: 2.41.3
+Version: 2.42.3
 # -p -e rc1
 Release: %autorelease -b7
 License: GPL-1.0-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause-UC AND LicenseRef-Fedora-Public-Domain
@@ -11,7 +11,7 @@ URL: https://en.wikipedia.org/wiki/Util-linux
 
 ### Macros
 %global upstream_version %{version}
-# First two numeric components (e.g. 2.41.3 -> 2.41). sed %%global was expanding wrong for spectool; kernel.org uses v2.41/ not v2.41.3/
+# First two numeric components (e.g. 2.42.3 -> 2.41). sed %%global was expanding wrong for spectool; kernel.org uses v2.41/ not v2.41.3/
 %global upstream_major %(echo %{version} | cut -d. -f1-2)
 
 %global compldir %{_datadir}/bash-completion/completions/

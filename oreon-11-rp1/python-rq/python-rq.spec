@@ -1,75 +1,61 @@
-%global source0_hash 60fbefacfaf54de5df6ea0ddad663ecbf62fca6af319d5e5e020c543dd76b059
+%global source0_hash none
 
-%global srcname rq
-%bcond_without tests
+Name:           python-rq
+Version:        2.12.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        RQ is a simple, lightweight, library for creating background jobs, and processing them.
 
-Name:           python-%{srcname}
-Version:        2.6.1
-Release:        1%{?dist}
-Summary:        Simple, lightweight, library for creating background jobs, and processing them
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
-URL:            https://python-rq.org
-Source:         https://github.com/rq/rq/archive/v%{version}/%{srcname}-%{version}.tar.gz
+URL:            https://python-rq.org/
+Source:         %{pypi_source rq}
 
-# Backport upstream fixes for python3.14 multiprocessing
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'rq' generated automatically by pyp2spec.}
+
 Patch: https://github.com/rq/rq/pull/2359.patch
 Patch: https://github.com/rq/rq/commit/df29cf6.patch
 Patch: https://github.com/rq/rq/commit/615525b.patch
 
-BuildArch:      noarch
+%description %_description
 
-BuildRequires:  python3-devel
-%if %{with tests}
-BuildRequires:  python3-pytest
-BuildRequires:  python3-psutil
-BuildRequires:  redis
-%endif
-
-%global _description %{expand:
-RQ (Redis Queue) is a simple Python library for queueing jobs
-and processing them in the background with workers.
-It is backed by Redis and it is designed to have a low barrier to entry.
-It should be integrated in your web stack easily.}
-
-%description %{_description}
-
-%package     -n python3-%{srcname}
+%package -n     python3-rq
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
-Python 3 version.
+%description -n python3-rq %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n rq-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-%{_bindir}/redis-server --bind 127.0.0.1 --port 6379 &
-REDIS_SERVER_PID=$!
-# Set the default timezone to UTC otherwise unit tests fail.
-export TZ=UTC
-%pytest -v
-%{_bindir}/redis-cli shutdown nosave force now
-# Wait for redis-server termination (the command above is async)
-wait $REDIS_SERVER_PID
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %pyproject_files
-%license LICENSE
-%doc README.md
+
+%files -n python3-rq -f %{pyproject_files}
 %{_bindir}/rq
 %{_bindir}/rqinfo
 %{_bindir}/rqworker

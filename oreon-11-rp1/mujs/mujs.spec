@@ -5,8 +5,8 @@
 %global ucddir      %{unicodedir}/ucd
 
 Name:           mujs
-Version:        1.3.7
-Release:        2%{?dist}
+Version:        1.3.10
+Release:        1%{?dist}
 Summary:        An embeddable Javascript interpreter
 License:        ISC
 URL:            https://mujs.com/

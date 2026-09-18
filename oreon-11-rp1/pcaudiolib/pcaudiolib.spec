@@ -1,15 +1,15 @@
 %global source0_hash 699a5a347b1e12dc5b122e192e19f4db01621826bf41b9ebefb1cbc63ae2180b
 
 Name:           pcaudiolib
-Version:        1.1
-Release:        19%{?dist}
+Version:        1.3
+Release:        1%{?dist}
 Summary:        Portable C Audio Library
 
 # pcaudiolib bundles TPCircularBuffer with Cube license, which is only used
 # by coreaudio support, which we do not build. The rest is GPLv3+.
 License:        GPL-3.0-or-later
 URL:            https://github.com/rhdunn/pcaudiolib
-Source0:        https://github.com/rhdunn/pcaudiolib/archive/refs/tags/1.1.tar.gz#/pcaudiolib-1.1.tar.gz
+Source0:        https://github.com/rhdunn/pcaudiolib/archive/refs/tags/1.3.tar.gz#/pcaudiolib-1.1.tar.gz
 
 BuildRequires:  gcc make autoconf automake libtool pkgconfig
 BuildRequires:  alsa-lib-devel pulseaudio-libs-devel

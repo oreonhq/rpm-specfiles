@@ -1,73 +1,57 @@
-%global source0_hash 21ea7acfaab99725129f741ae34225fe82d15e13318b7ffa26b7714a209fa302
+%global source0_hash none
 
 Name:           python-norpm
-Version:        1.9
-Release:        1%?dist
+Version:        1.11
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        RPM Macro Expansion in Python
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-2.1-or-later
 URL:            https://github.com/praiskup/norpm
-Source:         %pypi_source norpm
+Source:         %{pypi_source norpm}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%global _description %{expand:
-Parse RPM macro and spec files, expanding macros safely—without any potential
-Turing-complete side effects.
 
-This is a standalone library and set of tools that depend only on the standard
-Python library and PLY (used for expression parsing).
-}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'norpm' generated automatically by pyp2spec.}
 
 %description %_description
 
 %package -n     python3-norpm
-Summary:        %summary
+Summary:        %{summary}
 
 %description -n python3-norpm %_description
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n norpm-%{version}
 
-%autosetup -p1 -n norpm-%version
-
-%if 0%{?rhel} == 9
-cat > setup.py <<EOF
-from setuptools import setup
-setup(
-    name='norpm',
-    version='%version',
-    packages=['norpm', 'norpm.cli'],
-    install_requires=['lark-parser'],
-    entry_points={
-        'console_scripts': [
-            'norpm-expand-specfile = norpm.cli.expand_specfile:_main',
-            'norpm-conditions-for-arch-statements = norpm.cli.conditions_for_arch_statements:_main',
-        ],
-    },
-)
-EOF
-%endif
 
 %generate_buildrequires
-%pyproject_buildrequires -g test
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l norpm
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-norpm -f %pyproject_files
-%doc README.md
-%_bindir/norpm-conditions-for-arch-statements
-%_bindir/norpm-expand-specfile
+
+%files -n python3-norpm -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -11,8 +11,8 @@ License: GPL-2.0-or-later
 %global with_tools 1
 %global with_tests 1
 
-Version: 0.16.0
-Release: 15%{?dist}
+Version: 1.0.4
+Release: 1%{?dist}
 
 URL: https://github.com/pasdoc/pasdoc
 Source0: %{URL}/archive/v%{version}/pasdoc-%{version}.tar.gz

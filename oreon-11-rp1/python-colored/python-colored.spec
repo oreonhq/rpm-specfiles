@@ -1,51 +1,57 @@
-%global source0_hash e727d9c76aa6811ebf8e68fbe5eb4488e3c6b89082703cfe68c6765050301f54
+%global source0_hash none
 
 Name:           python-colored
-Version:        2.2.4
-Release:        11%{?dist}
-Summary:        Library for color and formatting in terminal
+Version:        2.3.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Simple python library for color and formatting to terminal
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://gitlab.com/dslackw/colored
-Source:         https://gitlab.com/dslackw/colored/-/archive/%{version}/colored-%{version}.tar.gz
+URL:            https://dslackw.gitlab.io/colored/
+Source:         %{pypi_source colored}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Very simple Python library for color and formatting in terminal.
-Collection of color codes and names for 256 color terminal setups.}
+This is package 'colored' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-colored
+%package -n     python3-colored
 Summary:        %{summary}
 
 %description -n python3-colored %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n colored-%{version}
-# remove shebangs
-sed -i '/#!\/usr\/bin\/env python/d' colored/*.py
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files colored
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# tests from upstream appear to be incomplete and/or things that must be run manually.
-%pyproject_check_import colored
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-colored -f %{pyproject_files}
-%doc README.* CHANGES.md
 
 %changelog
 %autochangelog

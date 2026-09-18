@@ -1,8 +1,8 @@
 %global source0_hash 1c7641278d2cfa4875742e9d2330f28a9a49dd2c949ecd8e69721a433407f4f8
 
 Name:           qarma
-Version:        1.0.0
-Release:        3%{?dist}
+Version:        1.1.1
+Release:        1%{?dist}
 Summary:        Tool for creating Qt dialog boxes
 
 License:        GPL-2.0-only

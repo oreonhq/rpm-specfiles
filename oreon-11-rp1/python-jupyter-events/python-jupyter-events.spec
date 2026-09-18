@@ -1,23 +1,23 @@
-%global source0_hash fc3fce98865f6784c9cd0a56a20644fc6098f21c8c33834a8d9fe383c17e554b
+%global source0_hash none
 
 Name:           python-jupyter-events
-Version:        0.12.0
+Version:        0.12.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Jupyter Event System library
-License:        BSD-3-Clause
-URL:            https://jupyter.org
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            http://jupyter.org
 Source:         %{pypi_source jupyter_events}
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# Manual test deps - upstream contains coverage, pre-commit, …
-BuildRequires:  python3-click
-BuildRequires:  python3-rich
-BuildRequires:  python3-pytest
-BuildRequires:  python3-pytest-asyncio
-BuildRequires:  python3-pytest-console-scripts
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-An event system for Jupyter Applications and extensions.}
+This is package 'jupyter-events' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -26,27 +26,36 @@ Summary:        %{summary}
 
 %description -n python3-jupyter-events %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-jupyter-events cli,docs,test
 
+
+%prep
 %autosetup -p1 -n jupyter_events-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x cli,docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files jupyter_events
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# For now ignore DeprecationWarnings coming from python-pytest-asyncio 0.26
-%pytest -W ignore::DeprecationWarning
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-jupyter-events -f %{pyproject_files}
-%doc README.md
 %{_bindir}/jupyter-events
 
 %changelog

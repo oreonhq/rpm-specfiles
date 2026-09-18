@@ -1,50 +1,56 @@
-%global source0_hash feaebecc5292eed08a9c73c20417a4bb9ab2578a0782ecfca39af7c79e88d4c6
+%global source0_hash none
 
-%global srcname funcy
+Name:           python-funcy
+Version:        2.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A fancy and practical functional tools
 
-Name:           python-%{srcname}
-Version:        1.17
-Release:        14%{?dist}
-Summary:        Fancy and practical functional tools
-
-License:        BSD-3-Clause
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/Suor/funcy
-Source:		https://github.com/Suor/%{srcname}/archive/%{version}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source funcy}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildRequires:	python3-devel
 
-%global _description \
-A collection of fancy functional tools focused on practicality.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'funcy' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package     -n python3-%{srcname}
+%package -n     python3-funcy
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-funcy %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n funcy-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# we're skipping the tests because python-whatever is retired
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst CHANGELOG
+
+%files -n python3-funcy -f %{pyproject_files}
 
 %changelog
 %autochangelog

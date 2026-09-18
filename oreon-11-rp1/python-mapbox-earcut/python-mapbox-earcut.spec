@@ -1,7 +1,7 @@
 %global source0_hash 0c4bd6330334b86ad4bdbc6a1fe04ddcfdb6e119b00e826daef9ab6767a32351
 
 Name:           python-mapbox-earcut
-Version:        2.0.0
+Version:        2.1.0
 Release:        %autorelease
 Summary:        Python bindings to the mapbox earcut C++ library
 

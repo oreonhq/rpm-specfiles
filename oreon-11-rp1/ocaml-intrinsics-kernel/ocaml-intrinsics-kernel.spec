@@ -1,7 +1,7 @@
 %global source0_hash c988b7769a59749631c3c98ba5edd1d2fe91f5dc380b5e0593c073c92f4bee01
 
 Name:           ocaml-intrinsics-kernel
-Version:        0.17.1
+Version:        0.17.2
 Release:        %autorelease
 Summary:        OCaml interface to CPU intrinsics
 

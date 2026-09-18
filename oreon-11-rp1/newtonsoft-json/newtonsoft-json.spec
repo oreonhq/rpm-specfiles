@@ -13,8 +13,8 @@
 %endif
 
 Name:           newtonsoft-json
-Version:        9.0.1
-Release:        34%{?dist}
+Version:        13.0.4
+Release:        1%{?dist}
 Summary:        Popular high-performance JSON framework
 
 # almost all files are licensed as MIT/X11, but BSD for LinqBridge.cs
@@ -127,7 +127,7 @@ mkdir -p %{buildroot}/%{_libdir}/pkgconfig
 cat <<EOT >>%{buildroot}/%{_libdir}/pkgconfig/%{name}.pc
 Name: %{libname}
 Description: %{summary}
-Version: 9.0.1
+Version: 13.0.4
 Requires: mono 
 Libs: -r:%{_monodir}/%{name}/%{libname}.dll
 Libraries=%{_monodir}/%{name}/%{libname}.dll

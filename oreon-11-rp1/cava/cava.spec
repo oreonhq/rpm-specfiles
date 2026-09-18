@@ -1,8 +1,8 @@
 %global source0_hash 853ee78729ed3501d0cdf9c1947967ad3bfe6526d66a029b4ddf9adaa6334d4f
 
 Name:           cava
-Version:        0.10.2
-Release:        7%{?dist}
+Version:        1.0.0
+Release:        1%{?dist}
 Summary:        Console-based Audio Visualizer for Alsa
 
 License:        MIT

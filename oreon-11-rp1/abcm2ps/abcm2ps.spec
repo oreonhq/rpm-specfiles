@@ -1,8 +1,8 @@
 %global source0_hash 5f02ac6203c4226cfbc6206935dca715ed7c45328535ee23e776c9da0219c822
 
 Name:           abcm2ps
-Version:        8.14.15
-Release:        9%{?dist}
+Version:        8.14.18
+Release:        1%{?dist}
 Summary:        A program to typeset ABC tunes into Postscript
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

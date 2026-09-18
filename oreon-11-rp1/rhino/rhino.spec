@@ -5,8 +5,8 @@
 %global test262_shortcommit %(c=%{test262_commit}; echo ${c:0:7})
 
 Name:           rhino
-Version:        1.7.14
-Release:        17%{?dist}
+Version:        1.9.1
+Release:        1%{?dist}
 Summary:        Rhino
 
 # rhino itself is MPLv2.0 but use other codes, breakdown:

@@ -1,62 +1,63 @@
-%global source0_hash 51832f9c2e81fa95addb74be627dac27b4883ec2c8627ec8471d99cfea787555
+%global source0_hash none
 
 Name:           python-avro
-Version:        1.12.0
-Release:        6%{?dist}
-Summary:        Python bindings for Apache Avro data serialization system
+Version:        1.12.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Avro is a serialization and RPC framework.
 
-License:        Apache-2.0
-URL:            https://github.com/apache/avro
-Source:         https://github.com/apache/avro/archive/refs/tags/release-%{version}.tar.gz
-Patch0:         0001-remove-ipc-tests-as-they-require-internet-connection.diff
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://avro.apache.org/
+Source:         %{pypi_source avro}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(wheel)
-BuildRequires:  python3dist(tox)
-BuildRequires:  python3dist(black)
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-pytest
-BuildRequires:  python3dist(tox-current-env)
-BuildRequires:  python3dist(coverage)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Apache Avro is a data serialization system.
-This package is Python bindings for Apache Avro.}
+This is package 'avro' generated automatically by pyp2spec.}
+
+Patch0:         0001-remove-ipc-tests-as-they-require-internet-connection.diff
 
 %description %_description
 
-%package -n python3-avro
-Summary: %{summary}
+%package -n     python3-avro
+Summary:        %{summary}
 
 %description -n python3-avro %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-avro snappy,zstandard
 
-%autosetup -p1 -n avro-release-%{version}
+
+%prep
+%autosetup -p1 -n avro-%{version}
+
 
 %generate_buildrequires
-cd lang/py
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x snappy,zstandard
+
 
 %build
-cd lang/py
 %pyproject_wheel
 
+
 %install
-cd lang/py
 %pyproject_install
-%pyproject_save_files avro
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-cd lang/py
-%tox
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-avro -f %{pyproject_files}
-%doc README.*
-%license LICENSE.txt
 %{_bindir}/avro
 
 %changelog

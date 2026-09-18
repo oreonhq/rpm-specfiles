@@ -1,8 +1,8 @@
 %global source0_hash 1583bb15673d48794a71fa12c3447f89046a1ff0ad89d414b5b25013b7751a91
 
 Name:           drraw
-Version:        2.2
-Release:        0.37.b2%{?dist}
+Version:        2.2b2
+Release:        1.37.b2%{?dist}
 Summary:        Web based presentation front-end for RRDtool
 
 # Automatically converted from old format: BSD - review is highly recommended.

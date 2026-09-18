@@ -4,8 +4,8 @@
 %global debug_package %{nil}
 
 Name:           reposurgeon
-Version:        5.3
-Release:        3%{?dist}
+Version:        5.11
+Release:        1%{?dist}
 Summary:        SCM Repository Manipulation Tool
 License:        BSD-2-Clause
 URL:            http://www.catb.org/~esr/reposurgeon/

@@ -1,65 +1,62 @@
-%global source0_hash fb1fecc2fd95c7492e224528da38c36b6b20044f5eca975cb7ae25e0b92aac2d
+%global source0_hash none
 
-%global         srcname         ebooklib
-%global         forgeurl        https://github.com/aerkalov/ebooklib
-Version:        0.18
-%global         tag             v%{version}
-%forgemeta
-
-Name:           python-%{srcname}
+Name:           python-ebooklib
+Version:        0.20
 Release:        %autorelease
-Summary:        Library for handling books in EPUB2/EPUB3 format
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Ebook library which can handle EPUB2/EPUB3 format
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        AGPL-3.0-or-later
-URL:            %{forgeurl}
-Source:         %{forgeurl}/archive/%{tag}/%{srcname}-%{version}.tar.gz
+URL:            https://github.com/aerkalov/ebooklib
+Source:         %{pypi_source ebooklib}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
-# Documentation
-BuildRequires:  python3-sphinx
 
-BuildArch: noarch
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-EbookLib is a Python library for managing EPUB2/EPUB3 and Kindle files.
-It's capable of reading and writing EPUB files programmatically.
-
-The API is designed to be as simple as possible, while at the same time
-making complex things possible too. It has support for covers, table of
-contents, spine, guide, metadata and etc.}
+This is package 'ebooklib' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-ebooklib
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-ebooklib %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-ebooklib dev,docs,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n ebooklib-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
-# TODO: build documentation
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files ebooklib -L
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
-%doc AUTHORS.txt
-%doc CHANGES.txt
-%doc samples
-%license LICENSE.txt
+
+%files -n python3-ebooklib -f %{pyproject_files}
 
 %changelog
 %autochangelog

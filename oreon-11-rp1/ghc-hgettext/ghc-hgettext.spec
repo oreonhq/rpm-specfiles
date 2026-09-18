@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.1.40.2
+Version:        0.1.40.3
 Release:        %autorelease
 Summary:        Haskell binding to libintl
 

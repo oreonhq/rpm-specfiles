@@ -1,65 +1,59 @@
-%global source0_hash 1f4c76af24e907593487c904ef5eba1993beb38ed385af82adb25a858f2d658d
+%global source0_hash none
 
-%global srcname lmdb
-
-Name:           python-%{srcname}
-Version:        1.4.1
+Name:           python-lmdb
+Version:        2.3.0
 Release:        %autorelease
-Summary:        Python binding for the LMDB 'Lightning' Database (CPython & CFFI included)
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Universal Python binding for the LMDB _Lightning_ Database
 
-# Automatically converted from old format: OpenLDAP - review is highly recommended.
-License:        LicenseRef-Callaway-OpenLDAP
-URL:            https://github.com/dw/py-lmdb
-Source0:        %{pypi_source lmdb}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        OLDAP-2.8
+URL:            http://github.com/jnwatson/py-lmdb/
+Source:         %{pypi_source lmdb}
+
+BuildRequires:  python3-devel
+BuildRequires:  gcc
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'lmdb' generated automatically by pyp2spec.}
 
 Patch:          https://github.com/jnwatson/py-lmdb/pull/368.patch
 
-BuildRequires:  gcc
-BuildRequires:  python3-devel
-BuildRequires:  lmdb-devel
-BuildRequires:  python3-pytest
+%description %_description
 
-%description
-%{summary}.
-
-%package -n python3-%{srcname}
+%package -n     python3-lmdb
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
 
-%description -n python3-%{srcname}
-%{summary}.
+%description -n python3-lmdb %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n lmdb-%{version}
 
+
 %generate_buildrequires
-export LMDB_FORCE_SYSTEM=1
-unset LMDB_FORCE_CFFI
 %pyproject_buildrequires
 
+
 %build
-# do not use bundled LMDB library
-export LMDB_FORCE_SYSTEM=1
-unset LMDB_FORCE_CFFI
 %pyproject_wheel
 
-%install
-export LMDB_FORCE_SYSTEM=1
-unset LMDB_FORCE_CFFI
-%pyproject_install
 
-%pyproject_save_files lmdb
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-export LMDB_FORCE_SYSTEM=1
-unset LMDB_FORCE_CFFI
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc ChangeLog
+
+%files -n python3-lmdb -f %{pyproject_files}
 
 %changelog
 %autochangelog

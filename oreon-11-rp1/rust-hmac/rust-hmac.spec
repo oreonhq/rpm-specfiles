@@ -7,7 +7,7 @@
 %global crate hmac
 
 Name:           rust-hmac
-Version:        0.12.1
+Version:        0.13.0
 Release:        %autorelease
 Summary:        Generic implementation of Hash-based Message Authentication Code (HMAC)
 

@@ -1,25 +1,24 @@
-%global source0_hash 4c81d917d1bfaf418ddacbb9dad848ff941b5f75466660e5168d4b89506496d8
-
-%global forgeurl https://github.com/marcomusy/vedo
-Version:        2024.5.2
-%forgemeta
-
-%bcond check 1
+%global source0_hash none
 
 Name:           python-vedo
+Version:        2026.6.1
 Release:        %autorelease
-Summary:        A python module for scientific analysis and visualization of 3D objects
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A python module for scientific visualization, analysis of 3D objects and point clouds.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            %{forgeurl}
-Source0:        %{forgesource}
+URL:            https://github.com/marcomusy/vedo
+Source:         %{pypi_source vedo}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A python module for scientific analysis of 3D objects and point clouds based on
-VTK and numpy.}
+This is package 'vedo' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -28,30 +27,36 @@ Summary:        %{summary}
 
 %description -n python3-vedo %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-vedo all
 
+
+%prep
 %autosetup -p1 -n vedo-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files vedo
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%py3_shebang_fix %{buildroot}%{python3_sitelib}
 
 %check
-%if %{with check}
-%{py3_test_envvars} %{python3} tests/common/test_*.py
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-vedo -f %{pyproject_files}
-%{_bindir}/vedo
 
 %changelog
 %autochangelog

@@ -3,14 +3,14 @@
 %global pypi_name sip
 
 Name:           sip6
-Version:        6.15.1
+Version:        6.16.1
 Release:        1%{?dist}
 Summary:        SIP - Python/C++ Bindings Generator
 %py_provides    python3-sip6
 
 License:        BSD-2-Clause
 URL:            https://github.com/Python-SIP/sip
-Source0:        https://github.com/Python-SIP/sip/archive/refs/tags/6.15.1.tar.gz#/sip-6.15.1.tar.gz
+Source0:        https://github.com/Python-SIP/sip/archive/refs/tags/6.16.1.tar.gz#/sip-6.15.1.tar.gz
 
 BuildArch:      noarch
 

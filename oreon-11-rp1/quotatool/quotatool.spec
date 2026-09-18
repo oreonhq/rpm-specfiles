@@ -1,7 +1,7 @@
 %global source0_hash 37ffd4c49b049194d50de66c0e4ea5e7df81f58e56a939b2d02fcb10cea6e3f1
 
 Name:           quotatool
-Version:        1.7.1
+Version:        1.8.0
 Release:        1%{?dist}
 Summary:        Command-line utility for filesystem quotas
 # Automatically converted from old format: GPLv2 - review is highly recommended.

@@ -8,8 +8,8 @@
 
 Name:           mingw-gtk3
 # Drop Source2 on next update!
-Version:        3.24.51
-Release:        2%{?dist}
+Version:        4.24.0
+Release:        1%{?dist}
 Summary:        MinGW Windows GTK+ library
 
 License:        LGPL-2.0-or-later

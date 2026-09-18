@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.1.7
+Version:        0.1.8
 Release:        %autorelease
 Summary:        Network byte order utilities
 

@@ -1,7 +1,7 @@
 %global source0_hash 01899a46f9420cdc1385d52fcfc84cce2806f9c996b787081a90d7dfc85eafa3
 
 Name: bcftools
-Version: 1.23.1
+Version: 1.24
 Release: 1%{?dist}
 Summary: Tools for genomic variant calling and manipulating VCF/BCF files
 

@@ -31,9 +31,9 @@
 # testsuite missing deps: lua-arbitrary quickcheck-instances tasty-hslua
 
 Name:           ghc-%{pkg_name}
-Version:        2.3.1
+Version:        2.5.0
 # can only be reset when all subpkgs bumped
-Release:        6%{?dist}
+Release:        1%{?dist}
 Summary:        Bindings to Lua, an embeddable scripting language
 
 License:        MIT

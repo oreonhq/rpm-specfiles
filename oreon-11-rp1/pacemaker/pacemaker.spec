@@ -42,7 +42,7 @@
 ## Upstream pacemaker version, and its package version (baserelease
 ## can be incremented to build packages reliably considered "newer"
 ## than previously built packages with the same pcmkversion)
-%global pcmkversion 3.0.1
+%global pcmkversion 3.0.3
 %global baserelease 15
 
 ## Upstream commit (full commit ID, abbreviated commit ID, or tag) to build

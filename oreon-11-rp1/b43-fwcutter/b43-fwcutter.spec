@@ -1,7 +1,7 @@
 %global source0_hash d6ea85310df6ae08e7f7e46d8b975e17fc867145ee249307413cfbe15d7121ce
 
 Name:           b43-fwcutter
-Version:        019
+Version:        020
 Release:        %autorelease
 Summary:        Firmware extraction tool for Broadcom wireless driver
 License:        BSD-2-Clause

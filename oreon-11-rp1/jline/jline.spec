@@ -3,7 +3,7 @@
 %bcond bootstrap 0
 
 Name:           jline
-Version:        3.30.4
+Version:        4.4.5
 Release:        %autorelease
 Summary:        Java library for handling console input
 License:        BSD-3-Clause AND Apache-2.0

@@ -7,7 +7,7 @@
 %global crate bootc-internal-blockdev
 
 Name:           rust-bootc-internal-blockdev
-Version:        0.0.0
+Version:        1.16.13
 Release:        %autorelease
 Summary:        Internal implementation component of bootc; do not use
 

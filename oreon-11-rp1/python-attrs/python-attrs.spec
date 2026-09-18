@@ -1,61 +1,57 @@
-%global source0_hash 2bff06c2afd09911e10e8ab8126ae0eeb3d13b7fed5db66bf7e021682cc2d9f0
-
-# Avoid unwanted/unavailable dependencies in RHEL builds.
-# Turn the tests off when bootstrapping Python, because pytest requires attrs
-%bcond tests %{undefined rhel}
+%global source0_hash none
 
 Name:           python-attrs
-Version:        25.4.0
+Version:        26.1.0
 Release:        %autorelease
-Summary:        Python attributes without boilerplate
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Classes Without Boilerplate
 
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            http://www.attrs.org/
-BuildArch:      noarch
-Source:        https://github.com/python-attrs/attrs/archive/refs/tags/%{version}.tar.gz#/attrs-%{version}.tar.gz
+URL:            https://github.com/python-attrs/attrs
+Source:         %{pypi_source attrs}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-attrs is an MIT-licensed Python package with class decorators that
-ease the chores of implementing the most common attribute-related
-object protocols.}
+This is package 'attrs' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-attrs
+%package -n     python3-attrs
 Summary:        %{summary}
 
-%description -n python3-attrs %{_description}
+%description -n python3-attrs %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n attrs-%{version}
-# Remove undesired/optional test dependency on pympler
-sed -i '/"pympler",/d' pyproject.toml
 
-# Remove tests-mypy extra from tests-no-zope extra
-sed -i "/attrs\[tests-mypy\]/d" pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-g tests}
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l attr attrs
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%if %{with tests}
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-attrs -f %{pyproject_files}
-%doc README.md
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.4.0-1

@@ -3,7 +3,7 @@
 %global irr_version 1.9.0mt13
 %global minetest_game_version 5.8.0
 Name:     minetest
-Version:  5.15.1
+Version:  5.17.0
 Release:  1%{?dist}
 Summary:  Multiplayer infinite-world block sandbox with survival mode
 

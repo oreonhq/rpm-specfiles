@@ -10,7 +10,7 @@
 %global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:		gnome-characters
-Version:	50.0
+Version:	51.0
 Release:	%autorelease
 Summary:	Character map application for GNOME
 # Files from gtk-js-app are licensed under 3-clause BSD.

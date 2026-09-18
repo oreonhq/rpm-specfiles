@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           plexus-pom
-Version:        18
+Version:        22
 Release:        %autorelease
 Summary:        Root Plexus Projects POM
 License:        Apache-2.0

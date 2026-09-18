@@ -1,8 +1,8 @@
 %global source0_hash 24d365bbac02f5ae3300024d84928484852d962712b6acc1f1ed7d92f2f59b2f
 
 Name:           xdg-desktop-portal-wlr
-Version:        0.8.1
-Release:        2%{?dist}
+Version:        0.8.4
+Release:        1%{?dist}
 Summary:        xdg-desktop-portal backend for wlroots
 
 License:        MIT

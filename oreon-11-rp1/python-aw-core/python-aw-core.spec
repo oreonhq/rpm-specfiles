@@ -1,60 +1,59 @@
-%global source0_hash ba5f6d36cd5a87e6fc8fe95c43bc5ddf8309ca00df5f1e43032a62304a5a758e
+%global source0_hash none
 
-%global srcname aw-core
-
-Name:           python-%{srcname}
-Version:        0.5.17
+Name:           python-aw-core
+Version:        0.5.18
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Core library for ActivityWatch
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MPL-2.0
-URL:            https://github.com/ActivityWatch/aw-core
-Source:         %{url}/archive/v%{version}/%{srcname}-%{version}.tar.gz
-
-Patch:          https://github.com/ActivityWatch/aw-core/pull/127.patch
+URL:            https://activitywatch.net/
+Source:         %{pypi_source aw_core}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  help2man
-BuildRequires:  python3dist(pytest)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Core library for ActivityWatch.}
+This is package 'aw-core' generated automatically by pyp2spec.}
 
-%description %{_description}
+Patch:          https://github.com/ActivityWatch/aw-core/pull/127.patch
 
-%package -n python3-%{srcname}
-Summary:    %{summary}
+%description %_description
 
-%description -n python3-%{srcname} %{_description}
+%package -n     python3-aw-core
+Summary:        %{summary}
+
+%description -n python3-aw-core %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n aw_core-%{version}
 
-%autosetup -p 1 -n %{srcname}-%{version}
-
-# works also with 3.9 on f39 and 3.11 on f40, so unpinning
-sed -ri 's/platformdirs = "3.10"/platformdirs = ">=3.9"/' pyproject.toml
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -L {aw_cli,aw_core,aw_datastore,aw_transform,aw_query}
-mkdir -p %{buildroot}%{_mandir}/man1
-export PYTHONPATH="$PYTHONPATH:%{buildroot}%{python3_sitelib}"
-help2man --no-discard-stderr %{buildroot}%{_bindir}/aw-cli -o %{buildroot}%{_mandir}/man1/aw-cli.1
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
-%{_mandir}/man1/aw-cli.1*
+
+%files -n python3-aw-core -f %{pyproject_files}
 %{_bindir}/aw-cli
 
 %changelog

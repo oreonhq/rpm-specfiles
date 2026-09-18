@@ -4,7 +4,7 @@
 %global mod_name alternative-toolbar
 
 Name:		rhythmbox-alternative-toolbar
-Version:	0.20.4
+Version:	0.21.0
 Release:	%autorelease
 Summary:	Client-side decorated compact toolbar for Rhythmbox
 License:	GPL-3.0-or-later

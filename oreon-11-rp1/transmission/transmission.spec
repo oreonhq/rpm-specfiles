@@ -1,8 +1,8 @@
 %global source0_hash e743283ee03a42c4d0b08fed2bd52b554aa6c9f65b4d4d45b795c32d98762a79
 
 Name:           transmission
-Version:        4.1.1
-Release:        2%{?dist}
+Version:        4.1.3
+Release:        1%{?dist}
 Summary:        A lightweight GTK+ BitTorrent client
 # See COPYING. This licensing situation is... special.
 License:        MIT and GPL-2.0-only

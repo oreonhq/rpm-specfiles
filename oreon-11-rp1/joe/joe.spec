@@ -2,8 +2,8 @@
 
 Summary: An easy to use, modeless text editor
 Name: joe
-Version: 4.6
-Release: 24%{?dist}
+Version: 4.8
+Release: 1%{?dist}
 License: GPL-2.0-or-later
 URL: http://sourceforge.net/projects/joe-editor/
 Source: http://downloads.sourceforge.net/joe-editor/joe-%{version}.tar.gz

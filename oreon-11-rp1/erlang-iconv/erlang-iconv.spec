@@ -4,7 +4,7 @@
 %global p1_utils_ver 1.0.19
 
 Name:       erlang-%{srcname}
-Version:    1.0.13
+Version:    1.0.14
 Release:    %autorelease
 Summary:    Fast encoding conversion library for Erlang / Elixir
 License:    Apache-2.0

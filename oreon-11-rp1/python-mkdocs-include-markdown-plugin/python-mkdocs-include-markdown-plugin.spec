@@ -1,21 +1,24 @@
-%global source0_hash 4ecbd20083563c219cc53a21c5fdbde0497c6a30acef8450cb2b1374e3f8a6e1
+%global source0_hash none
 
 Name:           python-mkdocs-include-markdown-plugin
-Version:        7.2.0
+Version:        7.3.0
 Release:        %autorelease
-Summary:        Mkdocs Markdown includer plugin
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Mkdocs Markdown includer plugin.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/mondeja/mkdocs-include-markdown-plugin
-# PyPI tarball doesn't include tests
-Source:         %{url}/archive/v%{version}/mkdocs-include-markdown-plugin-%{version}.tar.gz
+Source:         %{pypi_source mkdocs_include_markdown_plugin}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package provides an Mkdocs Markdown includer plugin.}
+This is package 'mkdocs-include-markdown-plugin' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -24,45 +27,36 @@ Summary:        %{summary}
 
 %description -n python3-mkdocs-include-markdown-plugin %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
 %pyproject_extras_subpkg -n python3-mkdocs-include-markdown-plugin cache
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n mkdocs-include-markdown-plugin-%{version}
+%prep
+%autosetup -p1 -n mkdocs_include_markdown_plugin-%{version}
+
 
 %generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
 %pyproject_buildrequires -x cache
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l mkdocs_include_markdown_plugin
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Disable tests that require Internet access
-%pytest -v \
-  --deselect='tests/test_integration/test_cache_integration.py::test_page_included_by_url_is_cached[directive=include-https://raw.githubusercontent.com/mondeja/mkdocs-include-markdown-plugin/master/examples/basic/mkdocs.yml-site_name: Foo\nplugins:\n ' \
-  --deselect='tests/test_integration/test_cache_integration.py::test_page_included_by_url_is_cached[directive=include-https://raw.githubusercontent.com/mondeja/mkdocs-include-markdown-plugin/master/examples/basic/docs/included.md-Some ignored content.\n\n<--start-->\n\nSome included content.\n]' \
-  --deselect='tests/test_integration/test_cache_integration.py::test_page_included_by_url_is_cached[directive=include-markdown-https://raw.githubusercontent.com/mondeja/mkdocs-include-markdown-plugin/master/examples/basic/mkdocs.yml-site_name: Foo\nplugins:\n ' \
-  --deselect='tests/test_integration/test_cache_integration.py::test_page_included_by_url_is_cached[directive=include-markdown-https://raw.githubusercontent.com/mondeja/mkdocs-include-markdown-plugin/master/examples/basic/docs/included.md-Some ignored content.\n\n<--start-->\n\nSome included content.\n]' \
-  --deselect='tests/test_integration/test_examples.py::test_examples_subprocess[http-cache-dir]' \
-  --deselect='tests/test_integration/test_examples.py::test_examples_subprocess[http-cache]' \
-  --deselect='tests/test_integration/test_examples.py::test_examples_api[http-cache-dir]' \
-  --deselect='tests/test_integration/test_examples.py::test_examples_api[http-cache]' \
-  --deselect='tests/test_unit/test_include.py::test_include[url]' \
-  --deselect='tests/test_unit/test_include_markdown.py::test_include_markdown[url]' \
-  --deselect='tests/test_unit/test_process.py::test_read_url_cached_content' \
-  --deselect='tests/test_unit/test_order.py::test_natural_order_by_extension[directive=include]' \
-  --deselect='tests/test_unit/test_order.py::test_natural_order_by_extension[directive=include-markdown]' \
-  --deselect='tests/test_unit/test_order.py::test_natural_order_by_extension_reverse[directive=include]' \
-  --deselect='tests/test_unit/test_order.py::test_natural_order_by_extension_reverse[directive=include-markdown]' \
-  %{nil}
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-mkdocs-include-markdown-plugin -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

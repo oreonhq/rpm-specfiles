@@ -1,10 +1,13 @@
-%global source0_hash b0a06219f628c6527b2f8ce770a4f47550e00d3e8c3ad83e2dc31bc6e6eda95d
+%global source0_hash none
 
 Name:           python-types-setuptools
-Version:        69.0.0.0
+Version:        73.0.0.20240822
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Typing stubs for setuptools
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/python/typeshed
 Source:         %{pypi_source types-setuptools}
@@ -12,14 +15,10 @@ Source:         %{pypi_source types-setuptools}
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%global _description %{expand:
-This is a PEP 561 type stub package for the boto package. It can be used by
-type-checking tools like mypy, PyCharm, pytype etc. to check code that uses
-boto. The source for this package can be found at
-https://github.com/python/typeshed/tree/master/stubs/boto. All fixes for types
-and metadata should be contributed there.
 
-See https://github.com/python/typeshed/blob/master/README.md for more details.}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'types-setuptools' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -28,27 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-types-setuptools %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n types-setuptools-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%py3_check_import setuptools-stubs
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-types-setuptools
-%{python3_sitelib}/setuptools-stubs
-%{python3_sitelib}/pkg_resources-stubs
-%{python3_sitelib}/types_setuptools-%{version}.dist-info/
+
+%files -n python3-types-setuptools -f %{pyproject_files}
 
 %changelog
 %autochangelog

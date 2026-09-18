@@ -1,58 +1,57 @@
-%global source0_hash 800f072d39d892f69cdfd29e88499320993450ec4cdcd545067a628d69c36886
+%global source0_hash none
 
 Name:           python-repoze-tm2
-Version:        2.2.0
-Release:        17%{?dist}
-Summary:        Zope-like transaction manager via WSGI middleware
+Version:        2.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Per-request transactions via WSGI middleware
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://pypi.python.org/pypi/repoze.tm2
-Source0:        https://pypi.python.org/packages/source/r/repoze.tm2/repoze.tm2-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        LicenseRef-Repoze-BSD-derived
+URL:            https://github.com/repoze/repoze.tm2
+Source:         %{pypi_source repoze_tm2}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%global _description\
-The ZODB transaction manager is a completely generic transaction manager.  It\
-can be used independently of the actual "object database" part of ZODB.  One\
-of the purposes of creating repoze.tm was to allow for systems other than\
-Zope to make use of two-phase commit transactions in a WSGI context.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'repoze-tm2' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-repoze-tm2
-Summary: Zope-like transaction manager via WSGI middleware
-BuildRequires: python3-devel
-BuildRequires: python3-transaction
+%package -n     python3-repoze-tm2
+Summary:        %{summary}
 
-%description -n python3-repoze-tm2
-The ZODB transaction manager is a completely generic transaction manager.  It
-can be used independently of the actual "object database" part of ZODB.  One
-of the purposes of creating repoze.tm was to allow for systems other than
-Zope to make use of two-phase commit transactions in a WSGI context.
+%description -n python3-repoze-tm2 %_description
 
-This package contains the python3 version of the library.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n repoze_tm2-%{version}
 
-%setup -q -n repoze.tm2-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l repoze
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-repoze-tm2 -f %{pyproject_files}
-%doc README.rst COPYRIGHT.txt CHANGES.rst
-%{python3_sitelib}/repoze.tm2-%{version}-py*-nspkg.pth
 
 %changelog
 %autochangelog

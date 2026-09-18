@@ -3,8 +3,8 @@
 %global vagrant_plugin_name vagrant-digitalocean
 
 Name: vagrant-digitalocean
-Version: 0.9.0
-Release: 20%{?dist}
+Version: 0.9.6
+Release: 1%{?dist}
 Summary: Vagrant plugin for having Digital Ocean as an provider
 License: MIT
 URL: https://github.com/devopsgroup-io/vagrant-digitalocean

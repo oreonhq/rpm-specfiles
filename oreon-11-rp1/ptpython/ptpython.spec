@@ -5,7 +5,7 @@
 %endif
 
 Name:           ptpython
-Version:        3.0.31
+Version:        3.0.32
 Release:        %autorelease
 Summary:        Python REPL build on top of prompt_toolkit
 License:        BSD-3-Clause

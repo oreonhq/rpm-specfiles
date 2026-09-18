@@ -7,7 +7,7 @@
 %global crate gdk-pixbuf-sys
 
 Name:           rust-gdk-pixbuf-sys
-Version:        0.22.0
+Version:        0.22.9
 Release:        %autorelease
 Summary:        FFI bindings to libgdk_pixbuf-2.0
 

@@ -1,7 +1,7 @@
 %global source0_hash 603dafa5085b6b964c74d5f57a154a1489af2b415dd20c6ff1447815d02c094f
 
 Name:           rauc
-Version:        1.15.1
+Version:        1.15.2
 Release:        %autorelease -b 1
 Summary:        Safe and secure software updates for embedded Linux
 

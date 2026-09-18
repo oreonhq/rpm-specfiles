@@ -1,24 +1,25 @@
-%global source0_hash c5784d5ce6dd506c2d2460e652ff57b0eea46b1abde06207be290d2ff5fabe24
+%global source0_hash none
 
 Name:           python-bravado-core
-Version:        6.1.0
+Version:        6.4.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Library for adding Swagger support to clients and servers
 
-License:        BSD-3-Clause
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/Yelp/bravado-core
-# PyPI tarball is missing tests
-Source:         %{url}/archive/v%{version}/bravado-core-%{version}.tar.gz
-# https://github.com/Yelp/bravado-core/pull/393
-Patch:          0001-Use-standard-library-mock-when-possible.patch
+Source:         %{pypi_source bravado_core}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-bravado-core is a Python library that adds client-side and server-side support
-for the OpenAPI Specification v2.0.}
+This is package 'bravado-core' generated automatically by pyp2spec.}
+
+Patch:          0001-Use-standard-library-mock-when-possible.patch
 
 %description %_description
 
@@ -27,30 +28,31 @@ Summary:        %{summary}
 
 %description -n python3-bravado-core %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n bravado-core-%{version} -p 1
+%prep
+%autosetup -p1 -n bravado_core-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l bravado_core
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Recursive tests seem to hang forever, skip for now
-# Profiling tests require pytest-benchmark[histogram], skip for now
-%pytest -v \
-    -k 'not recursive' \
-    --ignore tests/profiling
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-bravado-core -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

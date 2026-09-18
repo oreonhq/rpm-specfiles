@@ -3,8 +3,8 @@
 %global udevdir %(pkg-config --variable=udevdir udev)
 
 Name:       fbterm
-Version:    1.7
-Release:    34%{?dist}
+Version:    1.8
+Release:    1%{?dist}
 License:    GPL-2.0-or-later
 URL:        http://code.google.com/p/fbterm/
 Source0:    https://github.com/fujiwarat/fbterm/releases/download/v%{version}/%{name}-%{version}.tar.gz

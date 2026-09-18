@@ -1,7 +1,7 @@
 %global source0_hash 29ed592d5ece35a3029004d8c46f3002f92970870a96c11e38baf7f1122b8b5f
 
 Name:           xrefresh
-Version:        1.1.0
+Version:        1.1.1
 Release:        %autorelease
 Summary:        Refresh all or part of an X screen
 

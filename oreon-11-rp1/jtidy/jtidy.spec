@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:             jtidy
-Version:          1.0
-Release:          0.50.20100930svn1125%{?dist}
+Version:          1.0.3
+Release:          1.50.20100930svn1125%{?dist}
 Epoch:            2
 Summary:          HTML syntax checker and pretty printer
 License:          zlib

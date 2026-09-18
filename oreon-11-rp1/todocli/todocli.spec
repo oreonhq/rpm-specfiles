@@ -7,8 +7,8 @@
 %global date 20171025
 
 Name:           todocli
-Version:        0.1
-Release:        39.%{date}git%{shortcommit}%{?dist}
+Version:        1.0
+Release:        1.%{date}git%{shortcommit}%{?dist}
 Summary:        Command line To Do application
 
 License:        MIT

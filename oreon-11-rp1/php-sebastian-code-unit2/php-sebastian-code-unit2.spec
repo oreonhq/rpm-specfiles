@@ -26,8 +26,8 @@
 %global ns_project   CodeUnit
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        2.0.0
-Release:        9%{?dist}
+Version:        3.0.0
+Release:        1%{?dist}
 Summary:        Collection of value objects that represent the PHP code units, version %{major}
 
 License:        BSD-3-Clause
@@ -50,7 +50,7 @@ BuildRequires:  phpunit10
 # from composer.json, "require": {
 #        "php": ">=8.1"
 Requires:       php(language) >= 8.1
-# From phpcompatinfo report for 2.0.0
+# From phpcompatinfo report for 3.0.0
 Requires:       php-reflection
 Requires:       php-spl
 # Autoloader

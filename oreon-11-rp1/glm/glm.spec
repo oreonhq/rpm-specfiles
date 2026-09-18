@@ -4,8 +4,8 @@
 %global debug_package %{nil}
 
 Name:           glm
-Version:        1.0.1
-Release:        6%{?dist}
+Version:        1.0.3
+Release:        1%{?dist}
 Summary:        C++ mathematics library for graphics programming
 
 License:        MIT

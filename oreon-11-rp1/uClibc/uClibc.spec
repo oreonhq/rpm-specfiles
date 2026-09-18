@@ -1,8 +1,8 @@
 %global source0_hash 62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587
 
 Name: uClibc
-Version: 0.9.33.2
-Release: 34%{?dist}
+Version: 1.0.59
+Release: 1%{?dist}
 Summary: C library for embedded Linux
 
 # Automatically converted from old format: LGPLv2 - review is highly recommended.

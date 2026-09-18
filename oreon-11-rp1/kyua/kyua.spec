@@ -4,8 +4,8 @@
 %global _make_args pkgtestsdir=%{_testsdir} testsdir=%{_testsdir}
 
 Name:           kyua
-Version:        0.13
-Release:        21%{?dist}
+Version:        0.14.1
+Release:        1%{?dist}
 Summary:        Testing framework for infrastructure software
 
 # Automatically converted from old format: BSD - review is highly recommended.

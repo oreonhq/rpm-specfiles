@@ -49,7 +49,7 @@
 
 Summary: System for algebraic geometry and commutative algebra
 Name:    Macaulay2
-Version: 1.25.11
+Version: 1.26.06
 Release: %autorelease
 
 # GPL-2.0-only OR GPL-3.0-only:

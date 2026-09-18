@@ -1,7 +1,7 @@
 %global source0_hash 1f96465c0ac3f9245fda7c9eb173e97e60eed9cda084a51f9021b72624e7d2e6
 
 Name:           retis
-Version:        1.6.4
+Version:        1.7.0
 Release:        %autorelease
 Summary:        Tracing packets in the Linux networking stack
 License:        GPL-2.0-only

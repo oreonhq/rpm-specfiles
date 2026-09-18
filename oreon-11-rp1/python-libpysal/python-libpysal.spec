@@ -1,100 +1,63 @@
-%global source0_hash 28825c0f95d21e7eb332123936ed83b02b3063d5d8b3aa6299af85e06618e887
+%global source0_hash none
 
-%global srcname libpysal
-
-Name:           python-%{srcname}
-Version:        4.14.1
+Name:           python-libpysal
+Version:        4.15.0
 Release:        %autorelease
-Summary:        Python Spatial Analysis Library core components
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Core components of PySAL - A library of spatial analysis functions
 
-License:        BSD-3-Clause
-URL:            https://pysal.org
-Source0:        %pypi_source %{srcname}
-# Test example datasets.
-Source1:        https://geodacenter.github.io/data-and-lab/data/ncovr.zip
-Source2:        https://github.com/sjsrey/newHaven/archive/master/newHaven.zip
-Source3:        https://github.com/sjsrey/rio_grande_do_sul/archive/master/rio_grande_do_sul.zip
-Source4:        https://github.com/sjsrey/taz/archive/master/taz.zip
-# The real pandoc is installed, no need for the Python package.
-Patch:          0001-Remove-unused-build-requirements.patch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/pysal/libpysal
+Source:         %{pypi_source libpysal}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-BuildRequires:  python3dist(networkx)
-#BuildRequires:  python3dist(numba)
-BuildRequires:  python3dist(rtree) >= 0.8
-BuildRequires:  python3dist(sqlalchemy)
-BuildRequires:  python3dist(xarray)
 
-%description
-Core components of PySAL - A library of spatial analysis functions. Modules
-include computational geometry, input and output, spatial weights, and built-in
-example datasets.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'libpysal' generated automatically by pyp2spec.}
 
-%package -n     python3-%{srcname}
+Patch:          0001-Remove-unused-build-requirements.patch
+
+%description %_description
+
+%package -n     python3-libpysal
 Summary:        %{summary}
 
-%description -n python3-%{srcname}
-Core components of PySAL - A library of spatial analysis functions. Modules
-include computational geometry, input and output, spatial weights, and built-in
-example datasets.
+%description -n python3-libpysal %_description
 
-%package -n     python-%{srcname}-doc
-Summary:        Documentation for python-libpysal
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-libpysal dev,docs,plus,tests
 
-BuildRequires:  pandoc
-# Needed for the ipython3 pygments lexer.
-BuildRequires:  python3dist(ipython)
-
-%description -n python-%{srcname}-doc
-Documentation files for python-libpysal
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n libpysal-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
-
-pushd docs
-# We aren't yet installed in a way that importlib.metadata will find the
-# version, so manually set it.
-sed -i 's/libpysal.__version__/"%{version}"/g' conf.py
-# Make notebooks visible to docs.
-ln -s ../notebooks
-popd
-
-mkdir -p pysal_data/pysal
-unzip %SOURCE1 -d pysal_data/pysal/NCOVR
-unzip %SOURCE2 -d pysal_data/pysal/newHaven
-unzip %SOURCE3 -d pysal_data/pysal/Rio_Grande_do_Sul
-unzip %SOURCE4 -d pysal_data/pysal/taz
 
 %generate_buildrequires
-%pyproject_buildrequires -x docs,tests
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs,plus,tests
+
 
 %build
 %pyproject_wheel
 
-# generate html docs
-PYTHONPATH="$PWD/build/lib" sphinx-build-3 docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
 
 %install
 %pyproject_install
-%pyproject_save_files -l %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-export XDG_DATA_HOME=$PWD/pysal_data
-%{pytest} -m 'not network'
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
 
-%files -n python-%{srcname}-doc
-%doc html libpysal/examples
-%license LICENSE.txt
+%files -n python3-libpysal -f %{pyproject_files}
 
 %changelog
 %autochangelog

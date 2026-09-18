@@ -3,8 +3,8 @@
 %global pypi_name Pykka
 
 Name:             pykka
-Version:          4.2.0
-Release:          6%{?dist}
+Version:          4.4.2
+Release:          1%{?dist}
 Summary:          Python library that provides concurrency using actor model
 
 License:          Apache-2.0

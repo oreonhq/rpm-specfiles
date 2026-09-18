@@ -7,7 +7,7 @@
 %global crate capnpc
 
 Name:           rust-capnpc
-Version:        0.25.3
+Version:        0.27.0
 Release:        %autorelease
 Summary:        Cap'n Proto code generation
 

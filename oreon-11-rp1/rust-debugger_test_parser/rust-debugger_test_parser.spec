@@ -7,7 +7,7 @@
 %global crate debugger_test_parser
 
 Name:           rust-debugger_test_parser
-Version:        0.1.3
+Version:        0.2.0
 Release:        %autorelease
 Summary:        Provides a library for parsing the output of a debugger and
 

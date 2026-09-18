@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        0.4.3.17
+Version:        0.4.3.18
 Release:        %autorelease
 Summary:        Automatic generation of record lenses for microlens
 

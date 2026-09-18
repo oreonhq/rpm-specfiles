@@ -8,7 +8,7 @@
 %global git 0
 
 Name:       sse2neon
-Version:    1.8.0
+Version:    1.9.1
 Release:    %autorelease
 Summary:    A translator from Intel SSE intrinsics to Arm/Aarch64 NEON implementation
 License:    MIT

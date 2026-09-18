@@ -7,7 +7,7 @@
 %global crate crossbeam
 
 Name:           rust-crossbeam
-Version:        0.8.4
+Version:        0.8.5
 Release:        %autorelease
 Summary:        Tools for concurrent programming
 

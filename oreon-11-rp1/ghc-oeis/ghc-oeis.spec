@@ -10,7 +10,7 @@
 # testsuite missing deps: test-framework test-framework-hunit
 
 Name:           ghc-%{pkg_name}
-Version:        0.3.10.1
+Version:        0.3.10.2
 Release:        %autorelease
 Summary:        Interface to the Online Encyclopedia of Integer Sequences
 

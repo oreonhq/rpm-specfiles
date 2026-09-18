@@ -1,7 +1,7 @@
 %global source0_hash 7a418b9bacff174f1dedc3d517179e1dc62b7a1a9956d1b7c2585be8fd1cb3c9
 
 Name:     primesieve
-Version:  12.12
+Version:  12.15
 Release:  1%{?dist}
 Summary:  Fast prime number generator
 License:  LicenseRef-Callaway-BSD

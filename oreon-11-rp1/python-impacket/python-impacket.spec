@@ -2,7 +2,7 @@
 
 Name:           python-impacket
 Summary:        Collection of Python classes providing access to network packets
-Version:        0.12.0
+Version:        0_13_1
 
 License:        Apache-1.1 AND Zlib
 URL:            https://github.com/fortra/impacket
@@ -143,7 +143,7 @@ mv examples/split.py examples/splitpcap.py
 sed -i -e "s%/split.py%/splitpcap.py%" impacket.egg-info/SOURCES.txt
 
 # Drop useles dependency on future
-# https://github.com/fortra/impacket/commit/d7b5e3 - will be fixed in 0.12.0
+# https://github.com/fortra/impacket/commit/d7b5e3 - will be fixed in 0_13_1
 sed -i "s/'future',//" setup.py
 
 #===== Build

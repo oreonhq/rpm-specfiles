@@ -1,58 +1,61 @@
-%global source0_hash 7d2d623b2c0e172ca7cdb93bf38e0672c90a0b131f31e71bafdbde298d4f26f8
+%global source0_hash none
 
 Name:           python-asttokens
-Version:        3.0.1
+Version:        3.0.2
 Release:        %autorelease
-Summary:        Module to annotate Python abstract syntax trees with source code positions
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Annotate AST trees with source code positions
 
-License:        Apache-2.0
-URL:            https://pypi.python.org/pypi/asttokens
-Source:         https://github.com/gristlabs/asttokens/archive/v%{version}/asttokens-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://asttokens.readthedocs.io/en/latest/index.html
+Source:         %{pypi_source asttokens}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The asttokens module annotates Python abstract syntax trees (ASTs) with the
-positions of tokens and text in the source code that generated them. This makes
-it possible for tools that work with logical AST nodes to find the particular
-text that resulted in those nodes, for example for automated refactoring or
-highlighting.}
+This is package 'asttokens' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package     -n python3-asttokens
+%package -n     python3-asttokens
 Summary:        %{summary}
 
 %description -n python3-asttokens %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-asttokens astroid,test
 
+
+%prep
 %autosetup -p1 -n asttokens-%{version}
 
-# Drop dependency on pytest-cov, not useful for distro builds
-sed -r -i '/pytest-cov/d' setup.cfg
 
 %generate_buildrequires
-# Let setuptools_scm determine version outside of SCM
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x astroid,test
+
 
 %build
-# Let setuptools_scm determine version outside of SCM
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l asttokens
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest tests/ -v "${TEST_ARGS[@]}"
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-asttokens -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

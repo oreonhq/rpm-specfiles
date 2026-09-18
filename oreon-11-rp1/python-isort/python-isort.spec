@@ -1,63 +1,64 @@
-%global source0_hash 5513527951aadb3ac4292a41a16cbc50dd1642432f5e8c20057d414bdafb4187
+%global source0_hash none
 
-%global modname isort
-%global srcname isort
+Name:           python-isort
+Version:        9.0.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Python utility / library to sort Python imports.
 
-Name:               python-%{modname}
-Version:            7.0.0
-Release:            2%{?dist}
-Summary:            Python utility / library to sort Python imports
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://isort.readthedocs.io/
+Source:         %{pypi_source isort}
 
-License:            MIT
-URL:                https://github.com/timothycrosley/%{modname}
-Source0:            %pypi_source
-BuildArch:          noarch
+BuildRequires:  python3-devel
+BuildRequires:  gcc
 
-%description
-%{summary}.
 
-%package -n python%{python3_pkgversion}-%{modname}
-Summary:            %{summary}
-BuildRequires:      python%{python3_pkgversion}-devel
-BuildRequires:      python%{python3_pkgversion}-pytest
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'isort' generated automatically by pyp2spec.}
 
-%description -n python%{python3_pkgversion}-%{modname}
-%{summary}.
+%description %_description
 
-Python %{python3_pkgversion} version.
+%package -n     python3-isort
+Summary:        %{summary}
+
+%description -n python3-isort %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-isort colors
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n isort-%{version}
 
-%autosetup -n %{modname}-%{version}
-
-# Drop shebang
-#sed -i -e '1{\@^#!.*@d}' %{modname}/main.py
-#chmod -x LICENSE
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x colors
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{modname}
-mv %{buildroot}%{_bindir}/%{modname}{,-%{python3_version}}
-ln -s %{modname}-%{python3_version} %{buildroot}%{_bindir}/%{modname}-%{python3_pkgversion}
-ln -s %{modname}-3 %{buildroot}%{_bindir}/%{modname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Re-enable once pylama is in Fedora.
-#%check
-#%{__python3} setup.py test
 
-%files -n python%{python3_pkgversion}-%{modname} -f %{pyproject_files}
-%doc *.md
-%{_bindir}/%{modname}
-%{_bindir}/%{modname}-%{python3_pkgversion}
-%{_bindir}/%{modname}-%{python3_version}
-%{_bindir}/%{modname}-identify-imports
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-isort -f %{pyproject_files}
+%{_bindir}/isort
+%{_bindir}/isort-identify-imports
 
 %changelog
 %autochangelog

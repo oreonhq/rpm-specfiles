@@ -5,11 +5,11 @@
 %global build_type_safety_c 0
 
 Name:           atlas
-Version:        3.10.3
+Version:        3.11.41
 %if "%{?enable_native_atlas}" != "0"
 %define dist .native
 %endif
-Release:        33%{?dist}
+Release:        1%{?dist}
 Summary:        Automatically Tuned Linear Algebra Software
 
 License:        BSD-3-Clause
@@ -53,19 +53,19 @@ BuildRequires: make
 BuildRequires:  gcc-gfortran, lapack-static, gcc
 
 %ifarch x86_64
-Obsoletes:      atlas-sse3 < 3.10.3-1
+Obsoletes:      atlas-sse3 < 3.11.41-1
 %endif
 
 %ifarch %{ix86}
-Obsoletes:      atlas-3dnow < 3.10.3-1
-Obsoletes:      atlas-sse < 3.10.3-1
-Obsoletes:      atlas-sse2 < 3.10.3-1
-Obsoletes:      atlas-sse3 < 3.10.3-1
+Obsoletes:      atlas-3dnow < 3.11.41-1
+Obsoletes:      atlas-sse < 3.11.41-1
+Obsoletes:      atlas-sse2 < 3.11.41-1
+Obsoletes:      atlas-sse3 < 3.11.41-1
 %endif
 
 %ifarch s390 s390x
-Obsoletes:      atlas-z10 < 3.10.3-11
-Obsoletes:      atlas-z196 < 3.10.3-11
+Obsoletes:      atlas-z10 < 3.11.41-11
+Obsoletes:      atlas-z196 < 3.11.41-11
 %endif
 
 
@@ -93,19 +93,19 @@ Requires(posttrans):	/usr/sbin/alternatives
 Requires(postun):	/usr/sbin/alternatives
 
 %ifarch x86_64
-Obsoletes:      atlas-sse3-devel < 3.10.3-1
+Obsoletes:      atlas-sse3-devel < 3.11.41-1
 %endif
 
 %ifarch %{ix86}
-Obsoletes:      atlas-3dnow-devel < 3.10.3-1
-Obsoletes:      atlas-sse-devel < 3.10.3-1
-Obsoletes:      atlas-sse2-devel < 3.10.3-1
-Obsoletes:      atlas-sse3-devel < 3.10.3-1
+Obsoletes:      atlas-3dnow-devel < 3.11.41-1
+Obsoletes:      atlas-sse-devel < 3.11.41-1
+Obsoletes:      atlas-sse2-devel < 3.11.41-1
+Obsoletes:      atlas-sse3-devel < 3.11.41-1
 %endif
 
 %ifarch s390 s390x
-Obsoletes:      atlas-z10-devel < 3.10.3-11
-Obsoletes:      atlas-z196-devel < 3.10.3-11
+Obsoletes:      atlas-z10-devel < 3.11.41-11
+Obsoletes:      atlas-z196-devel < 3.11.41-11
 %endif
 
 %description devel
@@ -119,19 +119,19 @@ Requires(posttrans):	/usr/sbin/alternatives
 Requires(postun):	/usr/sbin/alternatives
 
 %ifarch x86_64
-Obsoletes:      atlas-sse3-static < 3.10.3-1
+Obsoletes:      atlas-sse3-static < 3.11.41-1
 %endif
 
 %ifarch %{ix86}
-Obsoletes:      atlas-3dnow-static < 3.10.3-1
-Obsoletes:      atlas-sse-static < 3.10.3-1
-Obsoletes:      atlas-sse2-static < 3.10.3-1
-Obsoletes:      atlas-sse3-static < 3.10.3-1
+Obsoletes:      atlas-3dnow-static < 3.11.41-1
+Obsoletes:      atlas-sse-static < 3.11.41-1
+Obsoletes:      atlas-sse2-static < 3.11.41-1
+Obsoletes:      atlas-sse3-static < 3.11.41-1
 %endif
 
 %ifarch s390 s390x
-Obsoletes:      atlas-z10-static < 3.10.3-11
-Obsoletes:      atlas-z196-static  < 3.10.3-11
+Obsoletes:      atlas-z10-static < 3.11.41-11
+Obsoletes:      atlas-z196-static  < 3.11.41-11
 %endif
 
 %description static

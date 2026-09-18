@@ -3,7 +3,7 @@
 %global _hardened_build 1
 
 Name:             3proxy
-Version:          0.9.5
+Version:          1.0.0
 Release:          %autorelease
 
 Summary:          Tiny but very powerful proxy

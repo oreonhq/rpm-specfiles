@@ -6,8 +6,8 @@
 %global release_version %(echo %{version} | awk -F. '{print $1"."$2}')
 
 Name:		mingw-libsoup
-Version:	2.74.3
-Release:	17%{?dist}
+Version:	3.7.3
+Release:	1%{?dist}
 Summary:	MinGW library for HTTP and XML-RPC functionality
 
 License:	LGPL-2.0-only

@@ -1,59 +1,62 @@
-%global source0_hash 98c5152ea30f103fc4b3d7b62a3e510cb87bf899a54775b619719a967749e295
+%global source0_hash none
 
-%global pypi_name fastbencode
+Name:           python-fastbencode
+Version:        0.3.11
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Implementation of bencode with optional fast Rust extensions
 
-Name:           python-%{pypi_name}
-Version:        0.3.2
-Release:        5%{?dist}
-Summary:        Implementation of bencode with optional fast C extensions
-
-License:        GPL-2.0-or-later AND MIT
-#fastbencode is licensed under GPLv2+
-#_bencode_py.py is licensed under MIT
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0
 URL:            https://github.com/breezy-team/fastbencode
-Source:         %{url}/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source fastbencode}
 
 BuildRequires:  python3-devel
 BuildRequires:  gcc
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-fastbencode is an implementation of the bencode serialization format 
-originally used by BitTorrent.
-The package includes both a pure-Python version and an optional C extension 
-based on Cython.
-Both provide the same functionality, but the C extension provides 
-significantly better performance.
-}
+This is package 'fastbencode' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-fastbencode
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-fastbencode %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-fastbencode dev,rust
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n fastbencode-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires -x cext
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,rust
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{py3_test_envvars} %{python3} -m unittest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%license COPYING
-%doc README.md
-%{python3_sitearch}/%{pypi_name}/
-%{python3_sitearch}/%{pypi_name}-%{version}.dist-info/
+
+%files -n python3-fastbencode -f %{pyproject_files}
 
 %changelog
 %autochangelog

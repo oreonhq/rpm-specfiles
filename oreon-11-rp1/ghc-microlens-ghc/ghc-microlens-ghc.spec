@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.4.15.1
+Version:        0.4.15.2
 Release:        %autorelease
 Summary:        Microlens + array, bytestring, containers, transformers
 

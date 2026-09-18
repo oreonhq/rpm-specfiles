@@ -18,7 +18,7 @@
 
 Name:           osc
 Summary:        Open Build Service Commander
-Version:        1.25.0
+Version:        1.27.3
 # Bump the release as necessary to ensure we're one level up from upstream
 Release:        %{obsrel}.%{baserelease}%{?dist}
 License:        GPL-2.0-or-later

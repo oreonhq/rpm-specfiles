@@ -1,106 +1,65 @@
-%global source0_hash 5f8fba10cfc946fe1b4037e986458fc89430397207b21d741dc399d3d42951d4
-
-# Unset -s on python shebang - ensure that extensions installed with pip
-# to user locations are seen and properly loaded
-%undefine _py3_shebang_s
+%global source0_hash none
 
 Name:           python-jupyter-core
-Version:        5.9.0
+Version:        5.9.1
 Release:        %autorelease
-Summary:        The base package for Jupyter projects
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Jupyter core package. A base package on which Jupyter projects rely.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            http://jupyter.org
+URL:            https://jupyter.org
 Source:         %{pypi_source jupyter_core}
-BuildArch:      noarch
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%bcond tests    1
-%if %{with tests}
-BuildRequires:  python3-pytest
-%endif
 
-%description
-Core common functionality of Jupyter projects.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'jupyter-core' generated automatically by pyp2spec.}
 
-This package contains base application classes and configuration inherited by
-other projects.
+%description %_description
 
 %package -n     python3-jupyter-core
-Summary:        The base package for Jupyter projects
-Obsoletes:      python-jupyter-core-doc < 5.7.2-4
+Summary:        %{summary}
 
-%description -n python3-jupyter-core
-Core common functionality of Jupyter projects.
+%description -n python3-jupyter-core %_description
 
-This package contains base application classes and configuration inherited by
-other projects.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-jupyter-core docs,test
 
-%package -n python-jupyter-filesystem
-Summary:        Jupyter filesystem layout
-
-%description -n python-jupyter-filesystem
-This package provides directories required by other packages that add
-extensions to Jupyter.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n jupyter_core-%{version}
-%py3_shebang_fix jupyter_core/troubleshoot.py
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l jupyter jupyter_core
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Create directories for python-jupyter-filesystem package
-mkdir -p %{buildroot}%{_datadir}/jupyter
-mkdir %{buildroot}%{_datadir}/jupyter/kernels
-mkdir -p %{buildroot}%{_datadir}/jupyter/labextensions/@jupyter
-mkdir %{buildroot}%{_datadir}/jupyter/nbextensions
-mkdir -p %{buildroot}%{_sysconfdir}/jupyter
-mkdir %{buildroot}%{_sysconfdir}/jupyter/jupyter_notebook_config.d
-mkdir %{buildroot}%{_sysconfdir}/jupyter/jupyter_server_config.d
-mkdir %{buildroot}%{_sysconfdir}/jupyter/nbconfig
-mkdir %{buildroot}%{_sysconfdir}/jupyter/nbconfig/common.d
-mkdir %{buildroot}%{_sysconfdir}/jupyter/nbconfig/edit.d
-mkdir %{buildroot}%{_sysconfdir}/jupyter/nbconfig/notebook.d
-mkdir %{buildroot}%{_sysconfdir}/jupyter/nbconfig/terminal.d
-mkdir %{buildroot}%{_sysconfdir}/jupyter/nbconfig/tree.d
 
 %check
-%pyproject_check_import
-%if %{with tests}
-# deselected tests unset PATH env variables and can only run when installed
-# test_jupyter_path_(no)_user_site are deselected because we change
-# user install location path in Fedora, for reference see:
-# https://src.fedoraproject.org/rpms/python3.10/blob/rawhide/f/00251-change-user-install-location.patch
-%pytest -Wdefault -v \
-    --deselect "tests/test_command.py::test_not_on_path" \
-    --deselect "tests/test_command.py::test_path_priority" \
-    --deselect "tests/test_command.py::test_argv0" \
-    --deselect "tests/test_paths.py::test_jupyter_path_prefer_env" \
-    --deselect "tests/test_paths.py::test_jupyter_path_user_site" \
-    --deselect "tests/test_paths.py::test_jupyter_path_no_user_site" \
-;
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-jupyter-core -f %{pyproject_files}
-%doc README.md
 %{_bindir}/jupyter
 %{_bindir}/jupyter-migrate
 %{_bindir}/jupyter-troubleshoot
-
-%files -n python-jupyter-filesystem
-%{_datadir}/jupyter
-%{_sysconfdir}/jupyter
 
 %changelog
 %autochangelog

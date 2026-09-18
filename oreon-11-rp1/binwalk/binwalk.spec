@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           binwalk
-Version:        2.3.4
-Release:        17%{?dist}
+Version:        3.1.0
+Release:        1%{?dist}
 Summary:        Firmware analysis tool
 License:        MIT
 URL:            https://github.com/ReFirmLabs/binwalk

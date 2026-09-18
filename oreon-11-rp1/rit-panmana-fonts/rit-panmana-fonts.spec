@@ -1,8 +1,8 @@
 %global source0_hash 31d0322192f72f410b695025c7c4a7b4d1ac01773b88ba5e0c5ddbac005b94ec
 
 # SPDX-License-Identifier: MIT
-Version:    1.4.2
-Release:    4%{?dist}
+Version:    1.4.3
+Release:    1%{?dist}
 URL:        https://gitlab.com/rit-fonts/%{fontfamily}
 
 %global foundry         RIT

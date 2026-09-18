@@ -1,83 +1,57 @@
-%global source0_hash ab3d9c379af6e0f082695910a5131f3be1ef8a6e514011bc89dc90f5b963d141
+%global source0_hash none
 
-%global pypi_name ast-monitor
-
-%bcond tests 1
-
-Name:           python-%{pypi_name}
-Version:        0.5.5
+Name:           python-ast-monitor
+Version:        0.5.6
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        AST-Monitor is a wearable Raspberry Pi computer for cyclists
 
-%global forgeurl https://github.com/firefly-cpp/AST-Monitor
-%global tag %{version}
-%forgemeta
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            %forgeurl
-Source:         %forgesource
+URL:            https://github.com/firefly-cpp/AST-Monitor
+Source:         %{pypi_source ast_monitor}
 
 BuildArch:      noarch
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/#_noarch_with_unported_dependencies
-# This package requires python3dist(pyqtwebengine).
-ExclusiveArch: %{qt6_qtwebengine_arches} noarch
-
 BuildRequires:  python3-devel
-# For qt6_qtwebengine_arches macro:
-BuildRequires:  qt6-srpm-macros
-BuildRequires:  tomcli
-%if %{with tests}
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist pytest-qt}
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-AST-monitor is a low-cost and efficient embedded device for monitoring the
-realization of sport training sessions that is dedicated to monitor cycling
-training sessions. AST-Monitor is a part of Artificial Sport Trainer (AST)
-system.}
+This is package 'ast-monitor' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{pypi_name}
+%package -n     python3-ast-monitor
 Summary:        %{summary}
-Obsoletes:      python-ast-monitor-doc < 0.5.2-2
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-ast-monitor %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n ast_monitor-%{version}
 
-%forgeautosetup -p1
-rm -fv poetry.lock
-
-# Drop version pinning (we use the versions available in Fedora)
-for DEP in $(tomcli get -F newline-keys pyproject.toml tool.poetry.dependencies)
-do
-    tomcli set pyproject.toml replace tool.poetry.dependencies.${DEP} ".*" "*"
-done
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files ast_monitor
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-# test_gui.py segfaults with PyQt 3.9.0 (F42+)
-%pytest -r fEs --ignore tests/test_gui.py
-%else
-%pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.md CHANGELOG.md CITATION.cff HARDWARE_CONFIGURATION.md
+
+%files -n python3-ast-monitor -f %{pyproject_files}
 
 %changelog
 %autochangelog

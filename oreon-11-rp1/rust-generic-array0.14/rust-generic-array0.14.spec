@@ -7,7 +7,7 @@
 %global crate generic-array
 
 Name:           rust-generic-array0.14
-Version:        0.14.7
+Version:        0.14.9
 Release:        %autorelease
 Summary:        Generic types implementing functionality of arrays
 

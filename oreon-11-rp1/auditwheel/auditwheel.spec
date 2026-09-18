@@ -1,7 +1,7 @@
 %global source0_hash 277f3b315ad0b04df0a2be2d126c3fd39930bc265df0f9589d78c970ff06f52b
 
 Name:           auditwheel
-Version:        6.6.0
+Version:        6.8.2
 Release:        %autorelease
 Summary:        Cross-distribution Linux wheels auditing and relabeling
 

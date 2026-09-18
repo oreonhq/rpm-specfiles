@@ -1,8 +1,8 @@
 %global source0_hash 31153772d8860c3d30412ed205fd7601ad44a0f3618cb7822cafadc5c9a4be80
 
 Name:       loook
-Version:    0.9.0
-Release:    7%{?dist}
+Version:    0.9.1
+Release:    1%{?dist}
 Summary:    OpenOffice.org document search tool
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

@@ -1,8 +1,8 @@
 %global source0_hash 7e5f02f7761299dfbc9409565a915b6241baa05f8452cb0ca9bb3d2446c8d60f
 
 Name:		python-utmp
-Version:	0.8.2
-Release:	33%{?dist}
+Version:	0.9.orig
+Release:	1%{?dist}
 Summary:	Python modules for umtp records
 
 License:	LicenseRef-Fedora-UltraPermissive

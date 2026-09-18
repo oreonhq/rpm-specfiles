@@ -2,8 +2,8 @@
 
 Name:		globus-xio-udt-driver
 %global _name %(tr - _ <<< %{name})
-Version:	2.3
-Release:	11%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Globus XIO UDT Driver
 
 License:	Apache-2.0

@@ -2,8 +2,8 @@
 
 Name:    qtxdg-tools
 Summary: User tools for libqtxdg
-Version: 4.3.0
-Release: 2%{?dist}
+Version: 4.4.0
+Release: 1%{?dist}
 License: LGPL-2.0-or-later
 URL:     https://lxqt-project.org/
 Source0: https://github.com/lxqt/%{name}/archive/%{version}/%{name}-%{version}.tar.gz

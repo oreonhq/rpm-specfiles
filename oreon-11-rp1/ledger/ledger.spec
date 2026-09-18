@@ -3,7 +3,7 @@
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 Name:             ledger
-Version:          3.3.2
+Version:          3.4.1
 Release:          %autorelease
 Summary:          A powerful command-line double-entry accounting system
 License:          BSD-3-Clause

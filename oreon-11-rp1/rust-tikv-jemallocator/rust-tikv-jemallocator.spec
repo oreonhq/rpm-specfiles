@@ -7,7 +7,7 @@
 %global crate tikv-jemallocator
 
 Name:           rust-tikv-jemallocator
-Version:        0.6.1
+Version:        0.7.0
 Release:        %autorelease
 Summary:        Rust allocator backed by jemalloc
 

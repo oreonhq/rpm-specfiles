@@ -11,7 +11,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        0.18.1.0
+Version:        0.19.0.0
 Release:        %autorelease
 Summary:        Utilities and combinators for parsing command line options
 

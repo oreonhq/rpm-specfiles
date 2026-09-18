@@ -8,7 +8,7 @@
 %global crate scroll_derive
 
 Name:           rust-scroll_derive
-Version:        0.13.1
+Version:        0.13.2
 Release:        %autorelease
 Summary:        Derive implementation for scroll::Pread and scroll::Pwrite traits
 

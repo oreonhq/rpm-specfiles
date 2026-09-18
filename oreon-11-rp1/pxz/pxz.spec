@@ -6,8 +6,8 @@
 
 Summary:        Parallel LZMA compressor using XZ
 Name:           pxz
-Version:        4.999.9
-Release:        32.beta.%{git_date}git%{?dist}
+Version:        4.999.9beta.20091201git
+Release:        1.beta.%{git_date}git%{?dist}
 License:        GPL-2.0-or-later
 URL:            https://jnovy.fedorapeople.org/pxz/
 Source0:        https://github.com/jnovy/%{name}/archive/%{commit}/%{name}-%{version}beta.%{git_date}git%{shortcommit}.tar.gz

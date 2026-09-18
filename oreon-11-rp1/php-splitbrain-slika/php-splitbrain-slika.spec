@@ -4,8 +4,8 @@
 %global project  slika
 Name: php-%{author}-%{project}
 
-Version: 1.0.7
-Release: 5%{?dist}
+Version: 1.2.1
+Release: 1%{?dist}
 
 Summary: Image handling library for PHP
 License: MIT

@@ -7,7 +7,7 @@
 %global crate k256
 
 Name:           rust-k256
-Version:        0.13.4
+Version:        0.14.0
 Release:        %autorelease
 Summary:        Secp256k1 elliptic curve library written in pure Rust
 

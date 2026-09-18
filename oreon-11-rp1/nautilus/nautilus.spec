@@ -11,7 +11,7 @@
 %global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           nautilus
-Version:        50.0
+Version:        51.0.1
 Release:        %autorelease
 Summary:        File manager for GNOME
 

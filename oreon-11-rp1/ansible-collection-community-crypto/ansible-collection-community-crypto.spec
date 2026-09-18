@@ -3,8 +3,8 @@
 %bcond tests %{undefined rhel}
 
 Name:           ansible-collection-community-crypto
-Version:        2.22.1
-Release:        5%{?dist}
+Version:        3.4.0
+Release:        1%{?dist}
 Summary:        The community.crypto collection for Ansible
 
 # See the LICENSES directory and the summary in the README

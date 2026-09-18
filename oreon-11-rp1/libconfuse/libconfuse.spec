@@ -1,8 +1,8 @@
 %global source0_hash 3a59ded20bc652eaa8e6261ab46f7e483bc13dad79263c15af42ecbb329707b8
 
 Name:           libconfuse
-Version:        3.3
-Release:        16%{?dist}
+Version:        3.4
+Release:        1%{?dist}
 Summary:        A configuration file parser library
 
 License:        ISC

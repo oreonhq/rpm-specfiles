@@ -8,7 +8,7 @@
 
 Name:    eric
 Summary: Python IDE
-Version: 25.6.1
+Version: 26.8
 Release: %autorelease
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

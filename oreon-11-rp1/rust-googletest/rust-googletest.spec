@@ -7,7 +7,7 @@
 %global crate googletest
 
 Name:           rust-googletest
-Version:        0.11.0
+Version:        0.14.3
 Release:        %autorelease
 Summary:        Rich assertion and matcher library inspired by GoogleTest for C++
 

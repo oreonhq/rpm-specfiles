@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/float
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.0.9
+Version:        1.0.10
 Release:        %autorelease
 Summary:        GAP access to mpfr, mpfi, mpc, fplll and cxsc
 

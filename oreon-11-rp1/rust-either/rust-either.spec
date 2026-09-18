@@ -6,7 +6,7 @@
 %global crate either
 
 Name:           rust-either
-Version:        1.16.0
+Version:        1.18.0
 Release:        %autorelease
 Summary:        General purpose sum type with two cases
 

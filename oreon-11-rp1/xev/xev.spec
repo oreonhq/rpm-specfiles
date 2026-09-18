@@ -2,8 +2,8 @@
 
 Summary:    X Event utility
 Name:       xev
-Version:    1.2.6
-Release:    12%{?dist}
+Version:    1.2.7
+Release:    1%{?dist}
 License:    MIT
 URL:        https://www.x.org
 

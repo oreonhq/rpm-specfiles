@@ -1,64 +1,57 @@
-%global source0_hash 4b29e4a385fb96fd6b8ffee82f42d1f49f5e2275e4e7ee57f889fe3111eb82b4
+%global source0_hash none
 
-%{?python_enable_dependency_generator}
+Name:           python-pytest-multihost
+Version:        3.4
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Utility for writing multi-host tests for pytest
 
-%global srcname pytest-multihost
-%global modulename pytest_multihost
-%global srcversion 3.0
-%global versionedname %{srcname}-%{srcversion}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-3.0-or-later
+URL:            https://pagure.io/python-pytest-multihost
+Source:         %{pypi_source pytest-multihost}
 
-Name: python-%{srcname}
-Version: %{srcversion}
-Release: 32%{?dist}
-Summary: Utility for writing multi-host tests for pytest
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
-License:       GPL-3.0-or-later
-URL:           https://github.com/encukou/pytest-multihost
-Source0:       %{url}/archive/v%{srcversion}/%{versionedname}.tar.gz
 
-BuildArch:     noarch
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pytest-multihost' generated automatically by pyp2spec.}
 
-%description
-Allows pytest tests to run commands on several machines.
-The machines to run on are described on the command line, the tests
-specify how many machines they need and commands/checks to run on them.
+%description %_description
 
-%package -n python3-%{srcname}
-Summary: Utility for writing multi-host tests for pytest
-%{?python_provide:%python_provide python3-%{srcname}}
-BuildRequires: python3-devel
-BuildRequires: python3-setuptools
-BuildRequires: python3-pytest
-# These are not *strictly* required, but are part of the default workflow.
-Recommends:    python%{python3_version}dist(pyyaml)
-Recommends:    python%{python3_version}dist(paramiko)
+%package -n     python3-pytest-multihost
+Summary:        %{summary}
 
-%description -n python3-%{srcname}
-Allows pytest tests to run commands on several machines.
-The machines to run on are described on the command line, the tests
-specify how many machines they need and commands/checks to run on them.
+%description -n python3-pytest-multihost %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest-multihost-%{version}
 
-%autosetup -n %{versionedname}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
 
-%check
-# Do not run the test that needs passwordless SSH to localhost set up
-%{__python3} -m pytest -m "not needs_ssh"
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{srcname}
-%license COPYING
-%doc README.rst
-%{python3_sitelib}/%{modulename}-*.egg-info/
-%{python3_sitelib}/%{modulename}/
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-pytest-multihost -f %{pyproject_files}
 
 %changelog
 %autochangelog

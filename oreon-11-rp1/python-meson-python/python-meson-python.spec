@@ -1,97 +1,41 @@
-%bcond_without check
-%global source0_hash 9959d198aa69b57fcfd354a34518c6f795b781a73ed0656f4d01660160cc2553
-
-%bcond tests 1
-# The python-pytest-mock and wheel dependencies are unwanted on RHEL;
-# we can omit them and still run most of the tests.
-%bcond pytest_mock %{undefined rhel}
-%bcond wheel %{undefined rhel}
-# RHEL will not have patchelf (which is used for adjusting RPATH in shared
-# libraries bundled in wheels); that is OK because the package is
-# buildroot-only there and the packages built with python-meson-python will not
-# bundle shared libraries. In Fedora and EPEL, we must depend on patchelf to
-# ship a full-featured package.
-%bcond patchelf %{expr:%{undefined rhel} || %{defined epel}}
+%global source0_hash none
 
 Name:           python-meson-python
-Summary:        Meson Python build backend (PEP 517)
-Version:        0.19.0
-Release:        2%{?dist}
+Version:        0.21.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The Python build backend for Meson projects
 
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/mesonbuild/meson-python
 Source:         %{pypi_source meson_python}
-# Downstream-only patch to remove the patchelf dependency (and corresponding
-# functionality), controlled by the patchelf build conditional
-Patch100:        meson-python-0.18.0-remove-patchelf.patch
-
-# LICENSE duplicates LICENSES/MIT.txt, which is handled automatically.
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros >= 1.15.1
 
-%if %{with tests}
-BuildRequires:  cmake
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-BuildRequires:  git-core
-BuildRequires:  meson
-BuildRequires:  ninja-build
-%endif
 
-%global common_description %{expand:
-meson-python is a Python build backend built on top of the Meson build system.
-It enables to use Meson for the configuration and build steps of Python
-packages. Meson is an open source build system meant to be both extremely fast,
-and, even more importantly, as user friendly as possible. meson-python is best
-suited for building Python packages containing extension modules implemented in
-languages such as C, C++, Cython, Fortran, Pythran, or Rust. Consult the
-documentation for more details.}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'meson-python' generated automatically by pyp2spec.}
 
-%description %{common_description}
+Patch100:        meson-python-0.18.0-remove-patchelf.patch
 
+%description %_description
 
 %package -n     python3-meson-python
 Summary:        %{summary}
 
-# When patchelf is not in the PATH, mesonpy.get_requires_for_build_wheel() adds
-# https://pypi.org/project/patchelf/ to the dependencies. We always want to use
-# the system patchelf.
-%if %{with patchelf}
-BuildRequires:  /usr/bin/patchelf
-Requires:       /usr/bin/patchelf
-%endif
-
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_provides_for_importable_modules
-%py_provides    python3-mesonpy
-
-%description -n python3-meson-python %{common_description}
+%description -n python3-meson-python %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-# need “-S git” because test_reproducible uses “meson dist,” which only
-# works in a git or mercurial repo.
-%autosetup -n meson_python-%{version} -N -S git
-%if %{without patchelf}
-%patch 100 -p1
-%endif
-# build: used only by skipped PEP 518 test
-# pytest-cov: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-sed -r -i "s/^  '(build|pytest-cov)/#&/" pyproject.toml
-%if %{without pytest_mock}
-sed -r -i "s/^  '(pytest-mock)/#&/" pyproject.toml
-%endif
-%if %{without wheel}
-sed -r -i "s/^  '(wheel)/#&/" pyproject.toml
-%endif
+%autosetup -p1 -n meson_python-%{version}
 
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-g test}
+%pyproject_buildrequires
 
 
 %build
@@ -100,43 +44,16 @@ sed -r -i "s/^  '(wheel)/#&/" pyproject.toml
 
 %install
 %pyproject_install
-%pyproject_save_files mesonpy
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
-%check -a
-%if %{with tests}
-# Note: tests are *not* safe for parallel execution with pytest-xdist.
-
-# PEP 518 tests require network access.
-ignore="${ignore-} --ignore=tests/test_pep518.py"
-
-%if %{without pytest_mock}
-k="${k-}${k+ and }not test_invalid_build_dir"
-k="${k-}${k+ and }not test_use_ansi_escapes"
-%endif
-%if %{without wheel}
-ignore="${ignore-} --ignore=tests/test_editable.py"
-ignore="${ignore-} --ignore=tests/test_wheel.py"
-ignore="${ignore-} --ignore=tests/test_wheelfile.py"
-%endif
-%if %{without patchelf}
-k="${k-}${k+ and }not test_contents"
-k="${k-}${k+ and }not test_local_lib"
-k="${k-}${k+ and }not test_rpath"
-k="${k-}${k+ and }not test_get_requires_for_build_wheel"
-k="${k-}${k+ and }not test_uneeded_rpath"
-%endif
-
-python3 -m pytest ${ignore-} -k "${k-}"
-%else
-%pyproject_check_import
-%endif
+%check
+%_pyproject_check_import_allow_no_modules -t
 
 
 %files -n python3-meson-python -f %{pyproject_files}
-%doc CHANGELOG.rst
-%doc README.rst
-
 
 %changelog
 %autochangelog

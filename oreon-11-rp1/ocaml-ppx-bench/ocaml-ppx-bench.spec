@@ -1,7 +1,7 @@
 %global source0_hash e5c120bf63446bff8bc87e9613160e53d54d4fd3c2e27ad5551812bc62e99b8d
 
 Name:           ocaml-ppx-bench
-Version:        0.17.1
+Version:        113.33.03
 Release:        %autorelease
 Summary:        Syntax extension for writing inline benchmarks in OCaml code
 

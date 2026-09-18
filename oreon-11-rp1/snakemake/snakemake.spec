@@ -48,7 +48,7 @@
 %bcond gcs_tests 1
 
 Name:           snakemake
-Version:        9.16.3
+Version:        9.27.0
 Release:        %autorelease
 Summary:        Workflow management system to create reproducible and scalable data analyses
 

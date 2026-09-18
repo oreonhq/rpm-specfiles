@@ -7,7 +7,7 @@
 %global crate io-lifetimes
 
 Name:           rust-io-lifetimes
-Version:        2.0.4
+Version:        3.0.1
 Release:        %autorelease
 Summary:        A low-level I/O ownership and borrowing library
 

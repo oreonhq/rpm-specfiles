@@ -1,79 +1,64 @@
-%global source0_hash 81b48ce4b8bbb2cc3af02047ceb19561f7b1dc0d4e52d1de7f02abfd15aa59b7
+%global source0_hash none
 
-%global srcname openai
-
-# Realtime support requires websockets >= 13.0.0, which is available on
-# Fedora 42+.
-%if 0%{?fedora} >= 42
-%bcond realtime 1
-%else
-%bcond realtime 0
-%endif
-
-Name:           python-%{srcname}
-Version:        2.21.0
+Name:           python-openai
+Version:        3.14.1
 Release:        %autorelease
-Summary:        The official Python library for the OpenAI API
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The official Python library for the openai API
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/openai/openai-python
-Source:         %{pypi_source}
-
-# Patch to relax hatchling version requirement
-Patch1:         0001-Relax-hatchling-requirement.patch
+Source:         %{pypi_source openai}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The OpenAI Python library provides convenient access to the OpenAI REST API 
-from any Python 3.8+ application. The library includes type definitions for 
-all request params and response fields, and offers both synchronous and 
-asynchronous clients powered by httpx. It is generated from OpenAI's OpenAPI 
-specification with Stainless.}
+This is package 'openai' generated automatically by pyp2spec.}
+
+Patch1:         0001-Relax-hatchling-requirement.patch
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-openai
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-openai %_description
 
-# Include realtime support subpackage for WebSocket connections
-%if %{with realtime}
-%pyproject_extras_subpkg -n python3-%{srcname} realtime
-%endif
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-openai aiohttp,bedrock,datalib,realtime,voice-helpers
 
-# The "aiohttp", "datalib" and "voice_helpers" extras are not available on
-# Fedora due to missing dependencies on "httpx_aiohttp", "pandas-stubs" and
-# "sounddevice", respectively. We are skipping them for now.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n openai-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_realtime:-x realtime}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x aiohttp,bedrock,datalib,realtime,voice-helpers
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Run import tests to verify the package can be imported
-%pyproject_check_import %{srcname} -e openai.helpers -e openai.helpers.*
+%_pyproject_check_import_allow_no_modules -t
 
-# Note: Full test suite requires network access and API keys
-# so we only run basic import tests
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md CHANGELOG.md CONTRIBUTING.md
-%license LICENSE
-%{_bindir}/openai
+%files -n python3-openai -f %{pyproject_files}
 
 %changelog
 %autochangelog

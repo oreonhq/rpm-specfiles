@@ -10,7 +10,7 @@
 # testsuite missing deps: hspec-meta
 
 Name:           ghc-%{pkg_name}
-Version:        2.11.16
+Version:        2.11.17
 Release:        %autorelease
 Summary:        A Testing Framework for Haskell
 

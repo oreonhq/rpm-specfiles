@@ -4,7 +4,7 @@
 %bcond_with     testsuite
 
 Name:           checksec
-Version:        2.7.1
+Version:        3.2.0
 Release:        %autorelease
 Summary:        Tool to check system for binary-hardening
 

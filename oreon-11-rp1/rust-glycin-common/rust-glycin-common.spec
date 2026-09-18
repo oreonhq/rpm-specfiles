@@ -7,7 +7,7 @@
 %global crate glycin-common
 
 Name:           rust-glycin-common
-Version:        1.0.4
+Version:        2.0.0
 Release:        %autorelease
 Summary:        Sandboxed image decoding
 

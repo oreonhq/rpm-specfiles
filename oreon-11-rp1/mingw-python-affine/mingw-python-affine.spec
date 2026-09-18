@@ -6,8 +6,8 @@
 
 Name:          mingw-python-%{pypi_name}
 Summary:       MinGW Windows Python %{pypi_name}
-Version:       2.4.0
-Release:       9%{?dist}
+Version:       3.0.1
+Release:       1%{?dist}
 BuildArch:     noarch
 
 # Automatically converted from old format: BSD - review is highly recommended.

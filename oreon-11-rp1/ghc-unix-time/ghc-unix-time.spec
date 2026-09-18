@@ -10,7 +10,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        0.4.17
+Version:        0.5.0
 Release:        %autorelease
 Summary:        Unix time parser/formatter and utilities
 

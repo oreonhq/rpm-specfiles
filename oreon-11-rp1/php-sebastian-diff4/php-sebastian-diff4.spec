@@ -26,8 +26,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        4.0.6
-Release:        5%{?dist}
+Version:        8.1.7
+Release:        1%{?dist}
 Summary:        Diff implementation, version %{major}
 
 License:        BSD-3-Clause

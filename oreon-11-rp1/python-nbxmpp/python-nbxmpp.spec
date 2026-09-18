@@ -1,52 +1,57 @@
-%global source0_hash 77a8b7823cd09405a0eed92b99d4366431517f8ce0296032d6037eeaa223b92c
+%global source0_hash none
 
 Name:           python-nbxmpp
-Version:        4.5.4
-Release:        7%{?dist}
-Summary:        Python library for non-blocking use of Jabber/XMPP
-# Automatically converted from old format: GPLv3 - review is highly recommended.
-License:        GPL-3.0-only
-URL:            https://dev.gajim.org/gajim/python-nbxmpp/
-Source0:        https://dev.gajim.org/gajim/python-nbxmpp/-/archive/%{version}/python-nbxmpp-%{version}.tar.bz2
+Version:        7.4.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        XMPP Library
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-3.0-or-later
+URL:            https://dev.gajim.org/gajim/python-nbxmpp
+Source:         %{pypi_source nbxmpp}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%global desc %{expand:
-python-nbxmpp is a Python library that provides a way for Python applications
-to use Jabber/XMPP networks in a non-blocking way.}
 
-%description
-%{desc}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'nbxmpp' generated automatically by pyp2spec.}
 
-%package -n python3-nbxmpp
+%description %_description
+
+%package -n     python3-nbxmpp
 Summary:        %{summary}
-Requires:       python3-gobject >= 3.42.0
-Requires:       glib2 >= 2.66
-Requires:       libsoup3
-Recommends:     python3-gssapi
-Obsoletes:      python-nbxmpp-doc < 1.0.0
 
-%description -n python3-nbxmpp
-%{desc}
+%description -n python3-nbxmpp %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n nbxmpp-%{version}
 
-%autosetup
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files nbxmpp
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-nbxmpp -f %{pyproject_files}
-%doc README.md ChangeLog
 
 %changelog
 %autochangelog

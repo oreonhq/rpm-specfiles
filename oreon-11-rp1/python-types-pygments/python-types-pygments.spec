@@ -1,25 +1,24 @@
-%global source0_hash 4241c5f1b7448e559cd820143a564cf10de626a95ab10e2daa463449d16864e7
+%global source0_hash none
 
 Name:           python-types-pygments
-Version:        2.17.0.0
+Version:        2.21.0.20260819
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Typing stubs for Pygments
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://pypi.org/project/types-Pygments/
-Source:         %{pypi_source types-Pygments}
+URL:            https://github.com/python/typeshed
+Source:         %{pypi_source types_pygments}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%global _description %{expand:
-This is a PEP 561 type stub package for the boto package. It can be used by
-type-checking tools like mypy, PyCharm, pytype etc. to check code that uses
-boto. The source for this package can be found at
-https://github.com/python/typeshed/tree/master/stubs/boto. All fixes for types
-and metadata should be contributed there.
 
-See https://github.com/python/typeshed/blob/master/README.md for more details.}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'types-pygments' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -28,23 +27,34 @@ Summary:        %{summary}
 
 %description -n python3-types-pygments %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-types-pygments all,docutils
 
-%autosetup -p1 -n types-Pygments-%{version}
+
+%prep
+%autosetup -p1 -n types_pygments-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,docutils
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pygments-stubs
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import pygments-stubs
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-types-pygments -f %{pyproject_files}
 

@@ -1,77 +1,62 @@
-%global source0_hash 1aa8e7304b2e171a90d64dd269b648cacac4e46fe5de54ac0db24776c0c4a19f
+%global source0_hash none
 
-%global pypi_name asteval
+Name:           python-asteval
+Version:        1.0.10
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Safe, minimalistic evaluator of python expression using ast module
 
-Name:           python-%{pypi_name}
-Version:        1.0.6
-Release:        5%{?dist}
-Summary:        Evaluator of Python expression using ast module
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            http://github.com/newville/asteval
-Source0:        %{pypi_source}
+URL:            https://github.com/lmfit/asteval
+Source:         %{pypi_source asteval}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-ASTEVAL is a safe(ish) evaluator of Python expressions and statements,
-using Python's ast module. The idea is to provide a simple, safe, and robust
-miniature mathematical language that can handle user-input. The emphasis here
-is on mathematical expressions, and so many functions from numpy are imported
-and used if available.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'asteval' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-asteval
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-cov)
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(setuptools-scm)
+%description -n python3-asteval %_description
 
-%description -n python3-%{pypi_name}
-ASTEVAL is a safe(ish) evaluator of Python expressions and statements,
-using Python's ast module. The idea is to provide a simple, safe, and robust
-miniature mathematical language that can handle user-input. The emphasis here
-is on mathematical expressions, and so many functions from numpy are imported
-and used if available.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-asteval all,dev,doc,test
 
-%package -n python-%{pypi_name}-doc
-Summary:        The %{name} documentation
-
-BuildRequires:  python3-sphinx
-
-%description -n python-%{pypi_name}-doc
-Documentation for %{name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n asteval-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-rm -rf %{pypi_name}.egg-info
-sed -i -e '/^#!\//, 1d' asteval/asteval.py
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,dev,doc,test
+
 
 %build
 %pyproject_wheel
-PYTHONPATH=${PWD} sphinx-build-3 doc html
-rm -rf html/.{doctrees,buildinfo} html/_static/empty
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v tests
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n %files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
 
-%files -n python-%{pypi_name}-doc
-%doc html
-%license LICENSE
+%files -n python3-asteval -f %{pyproject_files}
 
 %changelog
 %autochangelog

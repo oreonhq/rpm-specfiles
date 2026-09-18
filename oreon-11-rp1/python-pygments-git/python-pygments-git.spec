@@ -1,55 +1,57 @@
-%global source0_hash e588fdcbd03e58287ffb5495d8f38f36ebacc5ddeb615146f0d00e009a830587
-
-%global _description %{expand:
-Pygments lexers for Git output and files.}
+%global source0_hash none
 
 Name:           python-pygments-git
-Version:        1.6.0
-Release:        %{autorelease}
-Summary:        Pygments lexers for Git output and files
+Version:        1.9.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Pygments lexers for Git output and files.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/adamchainz/pygments-git
-Source0:        %{url}/archive/%{version}/pygments-git-%{version}.tar.gz
+Source:         %{pypi_source pygments_git}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pygments-git' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-pygments-git
+%package -n     python3-pygments-git
 Summary:        %{summary}
-BuildRequires:  python3-devel
 
 %description -n python3-pygments-git %_description
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pygments_git-%{version}
 
-%autosetup -n pygments-git-%{version}
-
-# Comment out to remove /usr/bin/env shebangs
-# Can use something similar to correct/remove /usr/bin/python shebangs also
-# find . -type f -name "*.py" -exec sed -i '/^#![  ]*\/usr\/bin\/env.*$/ d' {} 2>/dev/null ';'
-
-# we use the template because we don't want the strict versioning
-sed -i "s|-r requirements/{envname}.txt|-r requirements/requirements.in|" tox.ini
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pygments_git
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%tox
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pygments-git -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

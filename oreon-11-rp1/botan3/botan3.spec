@@ -3,7 +3,7 @@
 %global major_version 3
 
 Name:           botan3
-Version:        3.9.0
+Version:        3.13.0
 Release:        %autorelease
 Summary:        Crypto and TLS for C++
 

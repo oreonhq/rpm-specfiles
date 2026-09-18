@@ -15,7 +15,7 @@
 %global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           papers
-Version:        49.6
+Version:        51.0
 Release:        %autorelease
 Summary:        View multipage documents
 

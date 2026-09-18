@@ -2,8 +2,8 @@
 %global source1_hash 164a251e86a8e5fc76b9bf074b2d91b4a876ba10b45c45d8017b53fd96415226
 
 Name:           js-jquery
-Version:        3.7.1
-Release:        8%{?dist}
+Version:        4.0.0.slim
+Release:        1%{?dist}
 Summary:        JavaScript DOM manipulation, event handling, and AJAX library
 BuildArch:      noarch
 

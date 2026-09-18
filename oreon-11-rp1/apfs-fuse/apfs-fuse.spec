@@ -12,8 +12,8 @@
 
 Name:          apfs-fuse
 Summary:       A read-only FUSE driver for Apple's APFS
-Version:       0
-Release:       33.%{date}git%{short_gittag}%{?dist}
+Version:       20260917
+Release:       1.%{date}git%{short_gittag}%{?dist}
 License:       GPL-2.0-or-later
 URL:           https://github.com/sgan81/apfs-fuse
 Source0:       https://github.com/sgan81/%{name}/archive/%{short_gittag}/%{name}-%{short_gittag}.tar.gz

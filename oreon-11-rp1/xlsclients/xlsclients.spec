@@ -2,7 +2,7 @@
 
 Summary:    X client list utility
 Name:       xlsclients
-Version:    1.1.5
+Version:    1.1.6
 Release:    %autorelease
 License:    MIT
 URL:        https://www.x.org

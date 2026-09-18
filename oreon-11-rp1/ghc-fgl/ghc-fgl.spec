@@ -11,7 +11,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        5.8.3.0
+Version:        5.8.3.1
 Release:        %autorelease
 Summary:        Martin Erwig's Functional Graph Library
 

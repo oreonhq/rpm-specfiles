@@ -8,7 +8,7 @@
 %global crate compose_spec
 
 Name:           rust-compose_spec
-Version:        0.2.0
+Version:        0.3.0
 Release:        %autorelease
 Summary:        Types for (de)serializing from/to the compose-spec
 

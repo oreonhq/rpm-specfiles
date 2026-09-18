@@ -1,7 +1,7 @@
 %global source0_hash f377b2efd79e892450d099d6e142f86d4789dd5a61a2bbc36b441b2ad5ad2496
 
 Name:           python-pykeepass
-Version:        4.1.1.post1
+Version:        4.2.0
 Release:        %autorelease
 Epoch:          1
 Summary:        Python library to interact with keepass databases

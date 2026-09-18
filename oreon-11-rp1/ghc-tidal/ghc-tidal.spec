@@ -18,9 +18,9 @@
 %endif
 
 Name:           ghc-%{pkg_name}
-Version:        1.10.1
+Version:        1.10.3
 # can only be reset when all subpkgs bumped
-Release:        7%{?dist}
+Release:        1%{?dist}
 Summary:        Pattern language for improvised music
 
 License:        GPL-3.0-or-later

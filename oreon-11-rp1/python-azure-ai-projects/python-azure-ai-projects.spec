@@ -1,49 +1,57 @@
-%global source0_hash b5f03024ccf0fd543fbe0f5abcc74e45b15eccc1c71ab87fc71c63061d9fd63c
+%global source0_hash none
 
 Name:           python-azure-ai-projects
-Version:        1.0.0
+Version:        2.6.1
 Release:        %autorelease
-Summary:        Azure AI Projects client library for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Microsoft Corporation Azure AI Projects Client Library for Python
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pypi.org/project/azure-ai-projects/
-Source:         %{pypi_source azure_ai_projects %{version}}
+URL:            https://aka.ms/azsdk/azure-ai-projects-v2/python/code
+Source:         %{pypi_source azure_ai_projects}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The AI Projects client library is part of the Azure AI Foundry SDK, and
-provides easy access to resources in your Azure AI Foundry Project.}
+This is package 'azure-ai-projects' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-azure-ai-projects
+%package -n     python3-azure-ai-projects
 Summary:        %{summary}
 
-%description -n python3-azure-ai-projects %{_description}
+%description -n python3-azure-ai-projects %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n azure_ai_projects-%{version}
 
-%autosetup -n azure_ai_projects-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l azure
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Like other Azure SDK packages, the tests expect Azure to be available
+
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-azure-ai-projects -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

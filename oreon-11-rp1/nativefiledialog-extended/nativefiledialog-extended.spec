@@ -1,8 +1,8 @@
 %global source0_hash 443697a857c4efacbe08cdaf5182724fa9d9b9a79b8feff2a1601bde1df46b07
 
 Name:           nativefiledialog-extended
-Version:        1.2.1
-Release:        4%{?dist}
+Version:        1.4.0
+Release:        1%{?dist}
 Summary:        Native file dialog library with C and C++ bindings
 
 License:        Zlib

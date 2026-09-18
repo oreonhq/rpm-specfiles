@@ -3,7 +3,7 @@
 %?mingw_package_header
 
 Name:           mingw-cmocka
-Version:        1.1.8
+Version:        2.0.2
 Release:        %autorelease
 Summary:        MinGW Lightweight library to simplify and generalize unit tests for C
 

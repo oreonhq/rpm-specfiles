@@ -1,7 +1,7 @@
 %global source0_hash c55ec5cddc952e2563586ac76014be072c9dedb5094c6675889afa90b8df23e2
 
 Name:           gerbera
-Version:        3.2.0
+Version:        3.2.1
 Release:        1%{?dist}
 Summary:        UPnP Media Server
 License:        GPL-2.0-only AND MIT AND OFL-1.1

@@ -7,7 +7,7 @@
 %global crate drop-tracker
 
 Name:           rust-drop-tracker
-Version:        0.1.3
+Version:        0.2.0
 Release:        %autorelease
 Summary:        To check when a variable gets dropped
 

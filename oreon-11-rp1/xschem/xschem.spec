@@ -5,8 +5,8 @@
 %global rpm_has_recommends    %(rpm --version | awk -e '{print ($3 > 4.12)}')
 #
 Name:           xschem
-Version:        3.1.0
-Release:        6%{?dist}
+Version:        3.4.7
+Release:        1%{?dist}
 Summary:        Schematic capture and Netlisting EDA tool
 
 License:        GPL-2.0-or-later

@@ -1,73 +1,62 @@
-%global source0_hash 4f77cc558fecffac04377ba758ac4e23f076dc1c54e2cf2515f85bc15cbde5c6
+%global source0_hash none
 
-# All tests in 3.2.0 require networking, but this is corrected in future
-# versions. However, the cosmos requirement from azure-cli is stuck at 3.2.0.
-%bcond_with     tests
-
-%global         srcname     azure-cosmos
-
-Name:           python-%{srcname}
-Version:        3.2.0
+Name:           python-azure-cosmos
+Version:        4.17.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Microsoft Azure Cosmos Client Library for Python
-License:        MIT
-URL:            https://pypi.org/project/%{srcname}/
-Source0:        %pypi_source
 
-Epoch:          1
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/Azure/azure-sdk-for-python
+Source:         %{pypi_source azure_cosmos}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%if %{with tests}
-BuildRequires:  python3dist(azure-devtools)
-BuildRequires:  python3dist(azure-mgmt-keyvault)
-BuildRequires:  python3dist(azure-mgmt-resource)
-BuildRequires:  python3dist(azure-sdk-tools)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-aiohttp)
-BuildRequires:  python3dist(python-dotenv)
-%endif
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Microsoft Azure Cosmos Client Library for Python}
+This is package 'azure-cosmos' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-azure-cosmos
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-azure-cosmos %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-azure-cosmos aio
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n azure_cosmos-%{version}
 
-%autosetup -n %{srcname}-%{version}
-
-# Fix wrong-file-end-of-line-encoding.
-sed -i 's/\r$//' README.md
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x aio
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files azure
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%if %{with tests}
-%pytest
-%endif
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md samples
-%license LICENSE.txt
+%files -n python3-azure-cosmos -f %{pyproject_files}
 
 %changelog
 %autochangelog

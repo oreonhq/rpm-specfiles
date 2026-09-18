@@ -1,8 +1,8 @@
 %global source0_hash 2d93c9afd721aaf8aa9108be20a394578a7965d92c89df7c85cf85e9aa65e832
 
 Name:		tzclock
-Version:	3.1.7
-Release:	18%{?dist}
+Version:	4.9
+Release:	1%{?dist}
 Summary:	GTK+ graphical Clock displaying the time around the world
 
 # SPDX confirmed

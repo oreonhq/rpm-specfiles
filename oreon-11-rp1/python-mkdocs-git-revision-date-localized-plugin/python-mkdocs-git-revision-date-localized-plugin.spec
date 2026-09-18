@@ -1,89 +1,57 @@
-%global source0_hash 17345ccfdf69a1905dc96fb1070dce82d03a1eb6b0d48f958081a7589ce3c248
-
-%bcond tests 1
-%global forgeurl https://github.com/timvink/mkdocs-git-revision-date-localized-plugin
+%global source0_hash none
 
 Name:           python-mkdocs-git-revision-date-localized-plugin
-Version:        1.5.0
+Version:        1.6.0
 Release:        %autorelease
-Summary:        Mkdocs plugin to display the last git modification date
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Mkdocs plugin that enables displaying the localized date of the last git modification of a markdown file.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://timvink.github.io/mkdocs-git-revision-date-localized-plugin/
+URL:            https://github.com/timvink/mkdocs-git-revision-date-localized-plugin
 Source:         %{pypi_source mkdocs_git_revision_date_localized_plugin}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-%if 0%{?el10}
-BuildRequires:  sed
-%endif
-%if %{with tests}
-BuildRequires:  git-core
-BuildRequires:  mkdocs-material
-BuildRequires:  python3dist(mkdocs-gen-files)
-BuildRequires:  python3dist(mkdocs-monorepo-plugin)
-BuildRequires:  python3dist(mkdocs-static-i18n)
-BuildRequires:  python3dist(pytest)
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package is a MkDocs plugin that enables displaying the date of the last
-git modification of a page. The plugin uses babel and timeago.js to provide
-different localized date formats. It was originally forked from
-mkdocs-git-revision-date-plugin.}
+This is package 'mkdocs-git-revision-date-localized-plugin' generated automatically by pyp2spec.}
 
 %description %_description
 
 %package -n     python3-mkdocs-git-revision-date-localized-plugin
 Summary:        %{summary}
-# no longer in 1.5.0
-Obsoletes:      python3-mkdocs-git-revision-date-localized-plugin+all < 1.5.0
-Obsoletes:      python3-mkdocs-git-revision-date-localized-plugin+base < 1.5.0
 
 %description -n python3-mkdocs-git-revision-date-localized-plugin %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n mkdocs_git_revision_date_localized_plugin-%{version}
-%if 0%{?el10}
-sed -i 's:setuptools>=70.0:setuptools>=69.0:' pyproject.toml
-%endif
+
 
 %generate_buildrequires
-%pyproject_buildrequires -x dev
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l mkdocs_git_revision_date_localized_plugin
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-git config --global user.email mock-build@example.com
-git config --global user.name 'Mock build'
-# Disable tests that need to be run inside a git repository
-%pytest -v \
-  --deselect='tests/test_builds.py::test_tags_are_replaced[mkdocs file: basic_project/mkdocs_theme_timeago_locale.yml]' \
-  --deselect='tests/test_builds.py::test_tags_are_replaced[mkdocs file: basic_project/mkdocs_theme_timeago.yml]' \
-  --deselect='tests/test_builds.py::test_tags_are_replaced[mkdocs file: basic_project/mkdocs_theme_timeago_override.yml]' \
-  --deselect='tests/test_builds.py::test_tags_are_replaced[mkdocs file: basic_project/mkdocs_theme_timeago_instant.yml]' \
-  --deselect='tests/test_builds.py::test_tags_are_replaced[mkdocs file: basic_project/mkdocs_timeago_locale.yml]' \
-  --deselect='tests/test_builds.py::test_tags_are_replaced[mkdocs file: basic_project/mkdocs_timeago.yml]' \
-  --deselect='tests/test_builds.py::test_tags_are_replaced[mkdocs file: techdocs-core/mkdocs.yml]' \
-  --deselect=tests/test_builds.py::test_build_material_theme \
-  --deselect=tests/test_builds.py::test_material_theme_locale \
-  --deselect=tests/test_builds.py::test_material_theme_no_locale \
-  --deselect=tests/test_builds.py::test_exclude_pages \
-  %{nil}
-%else
-%pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-mkdocs-git-revision-date-localized-plugin -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

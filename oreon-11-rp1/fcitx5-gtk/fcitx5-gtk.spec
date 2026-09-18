@@ -1,7 +1,7 @@
 %global source0_hash e5301bd55ba281cfcdf4cd30a30affea5b1ed31964954294f99ef56c9b7c4562
 
 Name:           fcitx5-gtk
-Version:        5.1.6
+Version:        5.1.7
 Release:        %autorelease
 Summary:        Gtk im module and glib based dbus client library
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

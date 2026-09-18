@@ -6,7 +6,7 @@
 %global liftoff_ver 0.5.0
 
 Name:           wlroots
-Version:        0.20.0
+Version:        0.20.2
 Release:        1%{?dist}
 Summary:        A modular Wayland compositor library
 

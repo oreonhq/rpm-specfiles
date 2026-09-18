@@ -2,7 +2,7 @@
 
 Summary:	LaTeX editor
 Name:		texmaker
-Version:	6.0.1
+Version:	6.0.2
 Release:	%{autorelease}
 Epoch:		1
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

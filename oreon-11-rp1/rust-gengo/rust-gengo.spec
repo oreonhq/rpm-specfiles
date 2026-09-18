@@ -7,7 +7,7 @@
 %global crate gengo
 
 Name:           rust-gengo
-Version:        0.14.2
+Version:        0.15.0
 Release:        %autorelease
 Summary:        Get the language distribution stats of your repository
 

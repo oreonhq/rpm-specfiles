@@ -7,7 +7,7 @@
 %global crate tree-sitter-proto
 
 Name:           rust-tree-sitter-proto
-Version:        0.2.0
+Version:        0.6.0
 Release:        %autorelease
 Summary:        Parser for proto2 and proto3 files
 

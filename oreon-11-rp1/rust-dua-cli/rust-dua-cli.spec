@@ -7,7 +7,7 @@
 %global crate dua-cli
 
 Name:           rust-dua-cli
-Version:        2.32.2
+Version:        2.45.0
 Release:        %autorelease
 Summary:        Tool to conveniently learn about the disk usage of directories
 
@@ -21,7 +21,7 @@ Source:         %{crates_source}
 Patch:          dua-cli-fix-metadata.diff
 # * Replace atty dependency with Rust 1.70+ stdlib functionality,
 #   https://github.com/Byron/dua-cli/pull/317; source-code changes only, rebased
-#   on 2.32.2, without Cargo.toml/Cargo.lock changes
+#   on 2.45.0, without Cargo.toml/Cargo.lock changes
 Patch11:        dua-cli-2.32.2-no-atty.patch
 
 BuildRequires:  cargo-rpm-macros >= 24

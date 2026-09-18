@@ -3,7 +3,7 @@
 %global forgeurl https://github.com/PierreLvx/qpress
 
 Name:           qpress
-Version:        20220819
+Version:        20260802
 Release:        %autorelease
 Summary:        A portable file archiver using QuickLZ
 

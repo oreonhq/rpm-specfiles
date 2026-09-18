@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        0.10.1
+Version:        0.10.2
 Release:        %autorelease
 Summary:        Analysis and generation of C code
 

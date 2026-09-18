@@ -1,7 +1,7 @@
 %global source0_hash 244861a1526f7a734647e8e5ca5698fe9105fbc28ae6904e9c32475980d16686
 
 Name:           python-uharfbuzz
-Version:        0.53.3
+Version:        0.56.1
 Release:        %autorelease
 Summary:        Streamlined Cython bindings for the harfbuzz shaping engine
 

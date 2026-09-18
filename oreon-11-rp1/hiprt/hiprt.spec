@@ -26,7 +26,7 @@
 ExclusiveArch: x86_64
 
 Name:           hiprt
-Version:        3.0
+Version:        3.1.0.cb09c56
 %global xver    4fea77f
 Release:        %autorelease -e %{xver}
 

@@ -4,7 +4,7 @@
 %global tag %{version}
 
 Name:           hcxtools
-Version:        7.1.0
+Version:        7.1.2
 %forgemeta
 Release:        %autorelease
 Summary:        Set of tools to convert packets from capture files to hash files

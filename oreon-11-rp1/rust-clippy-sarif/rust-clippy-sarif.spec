@@ -6,7 +6,7 @@
 %global crate clippy-sarif
 
 Name:           rust-clippy-sarif
-Version:        0.5.0
+Version:        0.8.0
 Release:        %autorelease
 Summary:        Convert clippy output to SARIF
 

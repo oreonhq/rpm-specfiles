@@ -7,7 +7,7 @@
 %global crate gix-ignore
 
 Name:           rust-gix-ignore
-Version:        0.18.0
+Version:        0.22.1
 Release:        %autorelease
 Summary:        A crate of the gitoxide project dealing .gitignore files
 

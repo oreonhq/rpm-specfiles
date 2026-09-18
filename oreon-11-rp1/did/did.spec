@@ -1,8 +1,8 @@
 %global source0_hash 3c2d3b108eb70240afa48ed7efcdc24a304e1f974e06f9e91c7aeb020653d882
 
 Name: did
-Version: 0.22
-Release: 7%{?dist}
+Version: 0.23
+Release: 1%{?dist}
 
 Summary: What did you do last week, month, year?
 License: GPL-2.0-or-later

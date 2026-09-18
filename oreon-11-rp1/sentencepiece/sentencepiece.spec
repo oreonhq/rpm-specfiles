@@ -1,7 +1,7 @@
 %global source0_hash 9970f0a0afee1648890293321665e5b2efa04eaec9f1671fcf8048f456f5bb86
 
 Name:		sentencepiece
-Version:	0.2.0
+Version:	1.0.0
 Release:	%autorelease
 Summary:	An unsupervised text tokenizer for Neural Network-based text generation
 

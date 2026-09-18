@@ -2,8 +2,8 @@
 
 Name:		globus-xioperf
 %global _name %(tr - _ <<< %{name})
-Version:	5.1
-Release:	17%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - XIO Performance Tool
 
 License:	Apache-2.0

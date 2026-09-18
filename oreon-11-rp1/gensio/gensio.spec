@@ -1,6 +1,6 @@
 %global source0_hash 1781aa049845da89c8fb902ea755123a6710f2b38282a338035caa6211997d14
 
-Version:        3.0.2
+Version:        3.0.4
 
 %global forgeurl https://github.com/cminyard/gensio
 %forgemeta

@@ -9,7 +9,7 @@
 %global crate wiremix
 
 Name:           rust-wiremix
-Version:        0.7.0
+Version:        0.11.0
 Release:        %autorelease
 Summary:        TUI mixer for PipeWire
 

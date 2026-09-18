@@ -1,8 +1,8 @@
 %global source0_hash 2fcc1f80871f404f005e9db458ffaec95bb28a19516a0245278cd3175b63a6b2
 
 Name:           multicharge
-Version:        0.3.0
-Release:        6%{?dist}
+Version:        0.5.0
+Release:        1%{?dist}
 Summary:        Electronegativity equilibration model for atomic partial charges
 License:        Apache-2.0
 URL:            https://github.com/grimme-lab/multicharge

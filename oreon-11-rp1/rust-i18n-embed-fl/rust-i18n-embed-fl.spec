@@ -7,7 +7,7 @@
 %global crate i18n-embed-fl
 
 Name:           rust-i18n-embed-fl
-Version:        0.10.0
+Version:        0.10.1
 Release:        %autorelease
 Summary:        Perform compile time checks when using i18n-embed with fluent
 

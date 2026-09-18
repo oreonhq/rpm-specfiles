@@ -7,7 +7,7 @@
 %global crate tree-sitter-scheme
 
 Name:           rust-tree-sitter-scheme
-Version:        0.24.7
+Version:        0.24.7-1-1
 Release:        %autorelease
 Summary:        Scheme grammar for tree-sitter
 

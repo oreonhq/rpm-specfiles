@@ -1,7 +1,7 @@
 %global source0_hash fa833311543dc535b60cb7ab83c64ab5ee31128dbaaaa13dde341984e542b428
 
 Name:           task-spooler
-Version:        1.0.3
+Version:        1.0.4
 Release:        1%{?dist}
 Summary:        Personal job scheduler
 

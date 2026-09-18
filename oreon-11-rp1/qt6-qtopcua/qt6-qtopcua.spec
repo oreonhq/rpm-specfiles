@@ -12,7 +12,7 @@
 
 Summary: Qt6 - OPC UA component
 Name:    qt6-%{qt_module}
-Version: 6.10.2
+Version: 6.11.2
 Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0

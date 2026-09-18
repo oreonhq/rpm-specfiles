@@ -1,57 +1,56 @@
-%global source0_hash cf1780fe53d367efc1f2642cb77c57246106ea7517f8c2d1126f0a36ee26567a
+%global source0_hash none
 
 Name:           python-ly
-Version:        0.9.9
-Release:        7%{?dist}
-Summary:        Tool and library for manipulating LilyPond files
+Version:        1.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        This is just a test module
 
-License:        GPL-2.0-or-later
-URL:            https://pypi.python.org/pypi/python-ly
-Source0:        https://pypi.python.org/packages/source/p/python-ly/python_ly-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://pypi.org/project/ly/
+Source:         %{pypi_source ly}
 
 BuildArch:      noarch
-BuildRequires: python3-devel
+BuildRequires:  python3-devel
 
-%global _description\
-This package provides a Python library ly containing various Python modules\
-to parse, manipulate or create documents in LilyPond format. A command line\
-program ly is also provided that can be used to do various manipulations\
-with LilyPond files.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'ly' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-ly
-Summary:        Tool and library for manipulating LilyPond files
-Requires:       python3-setuptools
-Requires:       python3-tkinter
+%package -n     python3-ly
+Summary:        %{summary}
 
-%description -n python3-ly
-This package provides a Python library ly containing various Python modules
-to parse, manipulate or create documents in LilyPond format. A command line
-program ly is also provided that can be used to do various manipulations
-with LilyPond files.
+%description -n python3-ly %_description
 
-This package allows for use of python-ly with Python 3.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n ly-%{version}
 
-%setup -qn python_ly-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files '*'
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-ly -f %{pyproject_files}
-%doc CHANGELOG.md README.rst
-%{_bindir}/ly
-%{_bindir}/ly-server
 
 %changelog
 %autochangelog

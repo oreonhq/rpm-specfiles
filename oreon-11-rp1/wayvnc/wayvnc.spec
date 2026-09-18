@@ -5,8 +5,8 @@
 %global nvnc_version 0.9.0
 
 Name:     wayvnc
-Version:  0.9.1
-Release:  4%{?dist}
+Version:  0.10.1
+Release:  1%{?dist}
 Summary:  A VNC server for wlroots based Wayland compositors
 License:  ISC
 URL:      https://github.com/any1/wayvnc

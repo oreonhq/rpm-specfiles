@@ -1,71 +1,57 @@
-%global source0_hash 0c37efa5bd158b1b873f530cceea2c645611d55bd2dc2a4758b09f185749b6fd
+%global source0_hash none
 
 Name:           python-bytecode
-Version:        0.17.0
+Version:        0.19.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Python module to generate and modify bytecode
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/MatthieuDartiailh/bytecode
 Source:         %{pypi_source bytecode}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# Tests
-BuildRequires:  python3dist(pytest)
-# Documentation
-BuildRequires:  make
-BuildRequires:  texinfo
-BuildRequires:  python3dist(docutils)
-BuildRequires:  python3dist(sphinx)
-BuildRequires:  python3dist(sphinx-rtd-theme)
-BuildRequires:  python3dist(sphinx-tabs)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-bytecode is a Python module to generate and modify bytecode.}
+This is package 'bytecode' generated automatically by pyp2spec.}
 
 %description %_description
 
 %package -n     python3-bytecode
 Summary:        %{summary}
-Requires:       python3-libs
 
 %description -n python3-bytecode %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n bytecode-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
-pushd doc
-make texinfo
-pushd build
-pushd texinfo
-makeinfo --docbook bytecode.texi
-popd	
-popd	
-popd
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l bytecode
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-mkdir -p %{buildroot}%{_datadir}/help/en/python-bytecode
-install -m644 doc/build/texinfo/bytecode.xml %{buildroot}%{_datadir}/help/en/python-bytecode
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-bytecode -f %{pyproject_files}
-%doc README.rst
-%dir  %{_datadir}/help/en
-%lang(en) %{_datadir}/help/en/python-bytecode
 
 %changelog
 %autochangelog

@@ -1,7 +1,7 @@
 %global source0_hash 391b9e90bbb760b4cbda5498549ae9a16fa5818d6bbea50aa4de2d0e8f57c61c
 
 %global forgeurl https://github.com/glotzerlab/gsd
-Version:        4.2.0
+Version:        5.0.1
 %forgemeta
 
 Name:           python-gsd

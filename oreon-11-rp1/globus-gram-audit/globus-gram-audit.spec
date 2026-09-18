@@ -2,8 +2,8 @@
 
 Name:		globus-gram-audit
 %global _name %(tr - _ <<< %{name})
-Version:	5.1
-Release:	11%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - GRAM Jobmanager Auditing
 
 License:	Apache-2.0

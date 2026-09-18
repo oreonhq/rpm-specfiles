@@ -3,8 +3,8 @@
 %global shortname looks
 
 Name:           jgoodies-looks
-Version:        2.7.0
-Release:        17%{?dist}
+Version:        3.10.0
+Release:        1%{?dist}
 Summary:        Free high-fidelity Windows and multi-platform appearance
 
 # Automatically converted from old format: BSD - review is highly recommended.

@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    bluedevil
 Summary: Bluetooth stack for KDE
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later

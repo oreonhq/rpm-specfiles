@@ -2,7 +2,7 @@
 
 Name:          libdwarf
 Epoch:         1
-Version:       2.3.1
+Version:       2.3.2
 Release:       %autorelease
 Summary:       Library to access the DWARF Debugging file format 
 

@@ -1,88 +1,58 @@
-%global source0_hash 292a0b7e5f0781f5288bede73a18317e56894eee3cb87cd3e67f68dd1dbfa003
+%global source0_hash none
 
-Name:		python-pytest-steps
-Version:	1.7.2
-Release:	%autorelease
-Summary:	Create step-wise / incremental tests in pytest
+Name:           python-pytest-steps
+Version:        1.8.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Create step-wise / incremental tests in pytest.
 
-License:	BSD-3-Clause
-URL:		https://pypi.org/project/pytest-steps/
-Source0:	%{pypi_source pytest-steps}
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/smarie/python-pytest-steps
+Source:         %{pypi_source pytest-steps}
 
-# Downstream-only: remove setup_requires on pytest-runner
-#
-# A full migration away from pytest-runner, tests_require, and "setup.py
-# test" would require a more significant change, so this patch is
-# inadequate for offering as a PR to upstream.
-#
-# The pytest-runner dependency and "setup.py test" are obsolete
-# https://github.com/smarie/python-pytest-steps/issues/55
-#
-# https://fedoraproject.org/wiki/Changes/DeprecatePythonPytestRunner
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pytest-steps' generated automatically by pyp2spec.}
+
 Patch:          pytest-steps-1.7.2-no-pytest-runner.patch
 
-BuildArch:	noarch
-BuildRequires:	pyproject-rpm-macros
-BuildRequires:	python3dist(pytest)
+%description %_description
 
-%description
-%{summary}.
+%package -n     python3-pytest-steps
+Summary:        %{summary}
 
-%package -n python3-pytest-steps
-Summary: %{summary}
-%{?python_provide:%python_provide python3-pytest-steps}
+%description -n python3-pytest-steps %_description
 
-%description -n python3-pytest-steps
-%{summary}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest-steps-%{version}
 
-%autosetup -n pytest-steps-%{version} -p1
-
-# upstream has a pyproject.toml file, but it does not have enough stuff.
-cat >pyproject.toml <<EOF
-[build-system]
-requires = ["pytest-harvest",
-	    "setuptools_scm",
-	    "pypandoc",
-	    "six",
-	    "wheel",
-	    "wrapt",
-	    "pandas",
-	    "tabulate"]
-build-backend = "setuptools.build_meta"
-EOF
-
-sed -r -i "s/'pandoc', //" setup.py
-sed -r -i "s/(TESTS_REQUIRE = \[.*)\]/\1, 'wrapt'\]/" setup.py
-
-mv -i -v pytest_steps/tests/conftest.py .
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-args=(
-  --ignore=pytest_steps/tests/test_with_cases.py # avoid circular dep
+%_pyproject_check_import_allow_no_modules -t
 
-  # Those fail with python-pandas-2.2.1-4.fc41~bootstrap
-  --deselect=pytest_steps/tests/test_steps_harvest.py::test_synthesis
-  --deselect=pytest_steps/tests/test_docs_example_with_harvest.py::test_synthesis_df
-)
-PYTHONPATH=%{buildroot}/%{python3_sitelib} %{__python3} -m pytest -v "${args[@]}"
 
-%files -n python3-pytest-steps
-%license LICENSE
-%doc README.md
-%{python3_sitelib}/pytest_steps/
-%{python3_sitelib}/pytest_steps-%{version}.dist-info/
+%files -n python3-pytest-steps -f %{pyproject_files}
 
 %changelog
 %autochangelog

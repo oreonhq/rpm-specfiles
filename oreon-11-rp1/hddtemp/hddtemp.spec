@@ -4,8 +4,8 @@
 %global beta    beta15
 
 Name:           hddtemp
-Version:        0.3
-Release:        0.60.%{beta}%{?dist}
+Version:        0.4.4
+Release:        1.60.%{beta}%{?dist}
 Summary:        Hard disk temperature tool
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

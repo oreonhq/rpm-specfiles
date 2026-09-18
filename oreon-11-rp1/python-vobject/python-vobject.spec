@@ -4,8 +4,8 @@
 %global sum A python library for manipulating vCard and vCalendar files
 
 Name:           python-vobject
-Version:        0.9.8
-Release:        7%{?dist}
+Version:        0.9.9
+Release:        1%{?dist}
 Summary:        %{sum}
 
 License:        Apache-2.0

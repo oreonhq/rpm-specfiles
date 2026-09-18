@@ -1,8 +1,8 @@
 %global source0_hash f80a2e16d553e4b119634fd0e85ff86fc42afb4c9cc4569077854d1b6f5ef4f9
 
 Name:           monocypher
-Version:        3.1.2
-Release:        13%{?dist}
+Version:        4.0.3
+Release:        1%{?dist}
 Summary:        Boring crypto that simply works
 
 # Automatically converted from old format: BSD or CC0 - review is highly recommended.

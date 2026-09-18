@@ -7,7 +7,7 @@
 %global crate gix-dir
 
 Name:           rust-gix-dir
-Version:        0.19.0
+Version:        0.29.1
 Release:        %autorelease
 Summary:        A crate of the gitoxide project dealing with directory walks
 

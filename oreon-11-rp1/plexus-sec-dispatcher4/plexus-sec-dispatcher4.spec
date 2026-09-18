@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           plexus-sec-dispatcher4
-Version:        4.1.0
+Version:        4.2.0
 Release:        %autorelease
 Summary:        Plexus Security Dispatcher Component
 License:        Apache-2.0
@@ -38,7 +38,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -p1 -n plexus-sec-dispatcher-plexus-sec-dispatcher-%{version}
 cp %{SOURCE1} .
-%mvn_compat_version : 4.1.0
+%mvn_compat_version : 4.2.0
 
 %build
 # XXX Some tests may hang in some cases.

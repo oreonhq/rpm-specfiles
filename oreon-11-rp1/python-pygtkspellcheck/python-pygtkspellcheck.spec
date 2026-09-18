@@ -1,80 +1,62 @@
-%global source0_hash 1d9f28465ab6094cea6915caea0fb9924fdfff75e87f0a82a36f43e18045b4d5
+%global source0_hash none
 
-%global         srcname         pygtkspellcheck
-%global         forgeurl        https://github.com/koehlma/pygtkspellcheck
-Version:        5.0.3
-%global         tag             %{version}
-%forgemeta
-
-Name:           python-%{srcname}
+Name:           python-pygtkspellcheck
+Version:        5.0.4
 Release:        %autorelease
-Summary:        Spellchecking library for GTK
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A simple but quite powerful spellchecking library for GTK written in pure Python.
 
-# All code GPL-3.0-or-later
-# LGPL-2.1-or-later files below
-# pygtkspellcheck-5.0.3/utils/locales/databases/iso3166.xml
-# pygtkspellcheck-5.0.3/utils/locales/databases/iso639.xml
-License:        GPL-3.0-or-later AND LGPL-2.1-or-later
-URL:            %{forgeurl}
-Source:         %{forgeurl}/archive/v%{version}/%{srcname}-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-3.0-or-later
+URL:            https://github.com/koehlma/pygtkspellcheck
+Source:         %{pypi_source pygtkspellcheck}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
-# Documentation dependencies
-BuildRequires:  python3-myst-parser
-BuildRequires:  python3-sphinx
-# Check dependency
-BuildRequires:  python3-gobject-devel
-BuildRequires:  gtk3-devel
 
-BuildArch: noarch
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Python GTK Spellcheck is a simple but quite powerful spellchecking
-library for GTK written in pure Python. It's spellchecking component
-is based on Enchant and it supports both GTK 3 and 4 via PyGObject.
-
-Features
-
-- spellchecking based on Enchant for GtkTextView
-- support for word, line, and multiline ignore regular expressions
-- support for both GTK 3 and 4 via PyGObject for Python 3
-- configurable extra word characters such as '
-- localized names of the available languages based on ISO-Codes
-- support for custom ignore tags and hot swap of GtkTextBuffer
-- support for Hunspell (LibreOffice) and Aspell (GNU) dictionaries
-}
+This is package 'pygtkspellcheck' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-pygtkspellcheck
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-pygtkspellcheck %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pygtkspellcheck docs
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pygtkspellcheck-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs
+
 
 %build
 %pyproject_wheel
-# TODO: build documentation
+
 
 %install
 %pyproject_install
-%pyproject_save_files gtkspellcheck -L
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%check 
-%pyproject_check_import
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
-%doc CHANGELOG
-%license LICENSE
-%doc examples
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-pygtkspellcheck -f %{pyproject_files}
 
 %changelog
 %autochangelog

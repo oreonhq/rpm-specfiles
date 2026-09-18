@@ -1,7 +1,7 @@
 %global source0_hash 7f521490495e43561f70fe8b6317fd5cc13d4083413f1abf891f50cbabe12238
 
 Name:           vulkan-validation-layers
-Version:        1.4.341.0
+Version:        1.4.362
 Release:        %autorelease
 Summary:        Vulkan validation layers
 

@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           vmaf
-Version:        3.0.0
-Release:        5%{?dist}
+Version:        3.2.1
+Release:        1%{?dist}
 Summary:        Video Multi-Method Assessment Fusion
 
 License:        BSD-2-Clause-Patent

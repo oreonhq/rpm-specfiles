@@ -1,7 +1,7 @@
 %global source0_hash 994388d308fb06e4498365ce78d222bf4f3570b6df4ec95738431f61510c971b
 
 Name:           python-spnego
-Version:        0.11.2
+Version:        0.12.2
 Release:        %autorelease
 Summary:        Windows Negotiate Authentication Client and Server
 # SPDX License

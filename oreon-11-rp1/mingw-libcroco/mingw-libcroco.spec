@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-libcroco
-Version:        0.6.12
-Release:        23%{?dist}
+Version:        0.6.13
+Release:        1%{?dist}
 Summary:        A CSS2 parsing library for MinGW
 
 # Automatically converted from old format: LGPLv2 - review is highly recommended.

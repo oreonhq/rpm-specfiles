@@ -4,8 +4,8 @@
 #global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name: qmapshack
-Version: 1.17.1
-Release: 21%{?dist}
+Version: 1.21.1
+Release: 1%{?dist}
 Summary: GPS mapping and management tool
 
 # src/animation = WTFPL

@@ -11,7 +11,7 @@ requests-ratelimiter.readthedocs.io.
 }
 
 Name:           python-requests-ratelimiter
-Version:        0.8
+Version:        0.10
 Release:        %autorelease
 Summary:        Convenient integration with the requests library
 License:        MIT

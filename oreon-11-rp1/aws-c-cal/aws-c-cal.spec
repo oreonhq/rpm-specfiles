@@ -5,8 +5,8 @@ AWS Crypto Abstraction Layer: Cross-Platform, C99 wrapper for
 cryptography primitives}
 
 Name:           aws-c-cal
-Version:        0.9.0
-Release:        5%{?dist}
+Version:        1.0.0
+Release:        1%{?dist}
 Summary:        AWS Crypto Abstraction Layer
 
 License:        Apache-2.0

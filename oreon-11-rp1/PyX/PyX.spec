@@ -1,8 +1,8 @@
 %global source0_hash 4d8e3e471cd3e9a9bd13d5086cdf7c0af1b0c3f3e195e74f5f63318dc40a66d8
 
 Name:           PyX
-Version:        0.16
-Release:        15%{?dist}
+Version:        0.17
+Release:        1%{?dist}
 Summary:        Python graphics package
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

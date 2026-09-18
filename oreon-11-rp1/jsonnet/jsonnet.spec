@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           jsonnet
-Version:        0.21.0
-Release:        6%{?dist}
+Version:        0.22.0
+Release:        1%{?dist}
 Summary:        A data templating language based on JSON
 
 # The entire source is Apache-2.0, except:

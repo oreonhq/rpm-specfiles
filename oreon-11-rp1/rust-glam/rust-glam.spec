@@ -7,7 +7,7 @@
 %global crate glam
 
 Name:           rust-glam
-Version:        0.21.3
+Version:        0.33.7
 Release:        %autorelease
 Summary:        A simple and fast 3D math library for games and graphics
 

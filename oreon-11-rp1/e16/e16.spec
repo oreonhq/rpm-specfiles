@@ -2,8 +2,8 @@
 
 Summary:       The Enlightenment window manager, DR16
 Name:          e16
-Version:       1.0.31
-Release:       3%{?dist}
+Version:       1.0.32
+Release:       1%{?dist}
 # Automatically converted from old format: MIT with advertising and GPLv2+ - review is highly recommended.
 License:       LicenseRef-Callaway-MIT-with-advertising AND GPL-2.0-or-later
 URL:           http://www.enlightenment.org/

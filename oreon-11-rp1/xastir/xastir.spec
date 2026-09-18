@@ -3,8 +3,8 @@
 Summary: Amateur Station Tracking and Reporting system for amateur radio
 Name:    xastir
 Epoch:   1
-Version: 2.2.0
-Release: 6%{?dist}
+Version: 2.2.4
+Release: 1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 Source0: https://github.com/Xastir/Xastir/archive/Release-%{version}.tar.gz

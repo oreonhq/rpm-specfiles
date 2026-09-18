@@ -17,7 +17,7 @@
 %bcond_without       tests
 
 Name:           php-%{gh_owner}-%{gh_project}
-Version:        2.4.24
+Version:        2.16.2
 Release:        1%{?dist}
 Summary:        PHP library to generate linear and bidimensional barcodes
 

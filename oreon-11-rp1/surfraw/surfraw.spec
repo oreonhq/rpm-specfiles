@@ -1,8 +1,8 @@
 %global source0_hash ad0420583c8cdd84a31437e59536f8070f15ba4585598d82638b950e5c5c3625
 
 Name:           surfraw
-Version:        2.3.0
-Release:        17%{?dist}
+Version:        2.3.0.orig.orig
+Release:        1%{?dist}
 Summary:        Shell Users Revolutionary Front Rage Against the Web
 License:        LicenseRef-Fedora-Public-Domain
 URL:            https://gitlab.com/surfraw/Surfraw

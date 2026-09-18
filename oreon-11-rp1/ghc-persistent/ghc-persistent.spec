@@ -15,9 +15,9 @@
 # testsuite missing deps: quickcheck-instances
 
 Name:           ghc-%{pkg_name}
-Version:        2.17.1.0
+Version:        2.18.1.0
 # can only be reset when all subpkgs bumped
-Release:        6%{?dist}
+Release:        1%{?dist}
 Summary:        Type-safe, multi-backend data serialization
 
 License:        MIT

@@ -5,8 +5,8 @@
 
 Summary: Utilities for devices that use SCSI command sets
 Name:    sg3_utils
-Version: 1.48
-Release: 8%{?dist}
+Version: 1.49
+Release: 1%{?dist}
 License: GPL-2.0-or-later AND BSD-2-Clause
 URL:     https://sg.danny.cz/sg/sg3_utils.html
 Source0:        https://sg.danny.cz/sg/p/sg3_utils-%{version}.tar.xz

@@ -1,58 +1,59 @@
-%global source0_hash 7d9b1ef25b10eece48fdf29d8ac52f9b6252abff983ac614ade4f3276294019e
+%global source0_hash none
 
-# Created by pyp2rpm-3.2.3
-%global pypi_name croniter
+Name:           python-croniter
+Version:        6.2.4
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        croniter provides iteration for datetime object with cron like format
 
-Name:           python-%{pypi_name}
-Version:        5.0.1
-Release:        7%{?dist}
-Summary:        Iteration for datetime object with cron like format
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/kiorky/croniter
-Source0:        %{pypi_source}
-# Maintainers, please upstream
-Patch0:         python-croniter-rm-python-mock-usage.diff
-BuildArch:      noarch
+URL:            https://github.com/pallets-eco/croniter
+Source:         %{pypi_source croniter}
 
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-croniter provides iteration for the datetime object with a cron like format.}
+This is package 'croniter' generated automatically by pyp2spec.}
+
+Patch0:         python-croniter-rm-python-mock-usage.diff
 
 %description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-croniter
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{pypi_name}}
- 
-Requires:       python3-dateutil
-%description -n python3-%{pypi_name} %_description
+
+%description -n python3-croniter %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n croniter-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
-
-sed -i '/-e ./d' requirements/base.txt
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+%pyproject_buildrequires
 
-# Remove reundant script header to avoid rpmlint warnings
-find -name \*.py -exec sed -i '/\/usr\/bin\/env python/{d;q}' {} +
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
+
+%files -n python3-croniter -f %{pyproject_files}
 
 %changelog
 %autochangelog

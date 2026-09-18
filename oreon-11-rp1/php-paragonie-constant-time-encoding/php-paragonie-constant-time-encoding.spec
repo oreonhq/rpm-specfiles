@@ -11,8 +11,8 @@
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 Name:       php-%{composer_vendor}-constant-time-encoding
-Version:    2.8.2
-Release:    2%{?dist}
+Version:    3.1.3
+Release:    1%{?dist}
 Summary:    Constant-time Implementations of RFC 4648 Encoding
 
 License:    MIT

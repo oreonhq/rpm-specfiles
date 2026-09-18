@@ -1,8 +1,8 @@
 %global source0_hash 16c76689fa0ea8ece4fca6abcf942f236c48440387bee1d9331ea937ccd7b87d
 
 Name:       libloc
-Version:    0.9.18
-Release:    7%{?dist}
+Version:    0.9.19
+Release:    1%{?dist}
 Summary:    Library to determine a location of an IP address in the Internet
 # bash-completion/location: LGPL-2.1-or-later
 # COPYING:                  LGPL-2.1 text
@@ -97,7 +97,7 @@ SourceLicense:  LGPL-2.1-or-later AND CC-BY-SA-4.0 AND (GPL-1.0-or-later OR Arti
 URL:        https://location.ipfire.org/
 Source0:    https://source.ipfire.org/releases/%{name}/%{name}-%{version}.tar.gz
 # Fix endianess when fetching octets from an IPv4 address,
-# upstream bug #13828, in upstream after 0.9.18
+# upstream bug #13828, in upstream after 0.9.19
 Patch0:     libloc-0.9.18-address-Fix-endianess-problem-when-fetching-octets-i.patch
 BuildRequires:  asciidoc
 BuildRequires:  autoconf >= 2.60

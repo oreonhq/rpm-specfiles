@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:		proxmark3
-Version:	4.21128
+Version:	4.23346
 Release:	%autorelease
 Summary:	The Swiss Army Knife of RFID Research - RRG/Iceman repo
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

@@ -27,9 +27,9 @@
 # testsuite missing deps: nothunks tasty-golden
 
 Name:           ghc-%{pkg_name}
-Version:        2.2.3.0
+Version:        2.3.2.0
 # can only be reset when all subpkgs bumped
-Release:        12%{?dist}
+Release:        1%{?dist}
 Summary:        Fast JSON parsing and encoding
 
 License:        BSD-3-Clause

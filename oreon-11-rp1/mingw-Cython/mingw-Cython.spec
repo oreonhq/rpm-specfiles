@@ -10,7 +10,7 @@
 
 Name:          mingw-%{mod_name}
 Summary:       MinGW Windows Python %{mod_name} library
-Version:       3.2.4
+Version:       3.3.0
 Release:       1%{?dist}
 
 License:       Apache-2.0

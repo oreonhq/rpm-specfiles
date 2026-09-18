@@ -1,22 +1,24 @@
-%global source0_hash edd1d1f22d11ebf7a2ccae713bc3838931e31002410d19910d9d7ca9c4911fe1
+%global source0_hash none
 
-%global srcname cma
 Name:           python-cma
-Version:        4.4.2
+Version:        4.5.0
 Release:        %autorelease
-Summary:        Covariance Matrix Adaptation Evolution Strategy numerical optimizer
+# Fill in the actual package summary to submit package to Fedora
+Summary:        CMA-ES, Covariance Matrix Adaptation Evolution Strategy for non-linear numerical optimization in Python
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://cma-es.github.io/
-Source0:        %{pypi_source}
+URL:            https://github.com/CMA-ES/pycma
+Source:         %{pypi_source cma}
 
-BuildRequires:  python3-devel
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A stochastic numerical optimization algorithm for difficult (non-convex,
-ill-conditioned, multi-modal, rugged, noisy) optimization problems in continuous
-search spaces, implemented in Python.}
+This is package 'cma' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -25,29 +27,36 @@ Summary:        %{summary}
 
 %description -n python3-cma %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-cma constrained-solution-tracking,plotting,statistical-tests
 
-%autosetup -n cma-%{version}
-#Fix line-endings
-sed -i 's/\r//' README.rst
-#Remove unneeded shebang
-sed -i '1d' cma/{bbobbenchmarks.py,purecma.py,test.py}
+
+%prep
+%autosetup -p1 -n cma-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x constrained-solution-tracking,plotting,statistical-tests
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files -l cma
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-cma -f %{pyproject_files}
-%doc README.rst
-%license LICENSE
 
 %changelog
 %autochangelog

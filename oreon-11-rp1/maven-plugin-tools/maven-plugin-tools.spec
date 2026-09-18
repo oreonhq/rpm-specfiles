@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           maven-plugin-tools
-Version:        3.9.0
+Version:        3.16.0
 Release:        %autorelease
 Summary:        Maven Plugin Tools
 License:        Apache-2.0
@@ -44,7 +44,7 @@ BuildRequires:  mvn(org.ow2.asm:asm-commons)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-build-api)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.9.0-22
+Obsoletes:      %{name}-javadoc < 3.16.0-22
 
 %description
 The Maven Plugin Tools contains the necessary tools to be able to produce Maven

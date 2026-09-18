@@ -1,7 +1,7 @@
 %global source0_hash fc03d7f56e5b2a617668167f8927948cce54f93097e7ccd9f056077f479ed37b
 
 Name:       rgb
-Version:    1.1.0
+Version:    1.1.1
 Release:    %autorelease
 Summary:    X color name database
 

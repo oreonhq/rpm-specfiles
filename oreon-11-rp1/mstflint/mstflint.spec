@@ -4,7 +4,7 @@
 
 Name:		mstflint
 Summary:	Mellanox firmware burning tool
-Version:	4.34.0
+Version:	4.37.0-1.1
 Release:	%autorelease
 # COPYING says the license is your choice of OpenIB.org BSD or GPLv2.
 # kernel/Makefile has the 3-clause BSD.

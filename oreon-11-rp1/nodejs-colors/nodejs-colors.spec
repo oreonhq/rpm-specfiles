@@ -5,8 +5,8 @@
 %global enable_tests 1
 
 Name:           nodejs-colors
-Version:        1.2.1
-Release:        17%{?dist}
+Version:        1.4.0
+Release:        1%{?dist}
 Summary:        Get colors in your Node.js console
 
 License:        MIT

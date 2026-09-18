@@ -6,7 +6,7 @@
 %global snapdate 20260304
 
 Name:           yosys
-Version:        0.63
+Version:        0.69
 Release:        1.%{snapdate}git%{shortcommit0}%{?dist}
 Summary:        Yosys Open SYnthesis Suite, including Verilog synthesizer
 License:        ISC and MIT
@@ -41,7 +41,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  cxxopts-devel
 BuildRequires:  bison flex readline-devel pkgconfig
 BuildRequires:  tcl-devel libffi-devel
-BuildRequires:  yosyshq-abc >= 0.63
+BuildRequires:  yosyshq-abc >= 0.69
 BuildRequires:  iverilog >= 12.0
 BuildRequires:  python%{python3_pkgversion}
 BuildRequires:  python3-devel
@@ -66,7 +66,7 @@ BuildRequires: rsync
 
 Requires:       %{name}-share = %{version}-%{release}
 Requires:       graphviz python-click python-xdot
-Requires:       yosyshq-abc >= 0.63
+Requires:       yosyshq-abc >= 0.69
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval :
 ExcludeArch: %{ix86}

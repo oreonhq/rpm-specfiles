@@ -1,8 +1,8 @@
 %global source0_hash 8d44fbc9e57f3bac9f761c3b12ce102d47d717f0dd846657fb988e0bb5d1ea33
 
 Name:           dumb
-Version:        0.9.3
-Release:        46%{?dist}
+Version:        2.0.3
+Release:        1%{?dist}
 Summary:        IT, XM, S3M and MOD player library
 License:        zlib
 URL:            http://dumb.sourceforge.net/

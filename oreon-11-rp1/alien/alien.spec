@@ -2,8 +2,8 @@
 
 Summary:        Converter between the rpm, dpkg, stampede slp, and Slackware tgz file formats
 Name:           alien
-Version:        8.95
-Release:        30%{?dist}
+Version:        8.95.9
+Release:        1%{?dist}
 
 License:        GPL-2.0-or-later
 URL:            https://sourceforge.net/projects/alien-pkg-convert/

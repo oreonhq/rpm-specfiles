@@ -10,7 +10,7 @@
 # testsuite missing deps: quickcheck-instances
 
 Name:           ghc-%{pkg_name}
-Version:        0.12.4
+Version:        0.12.6
 Release:        %autorelease
 Summary:        Generic HTTP types for Haskell
 

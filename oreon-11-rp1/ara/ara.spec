@@ -9,8 +9,8 @@
 %global _python_no_extras_requires 1
 
 Name:           ara
-Version:        1.7.4
-Release:        3%{?dist}
+Version:        1.8.0
+Release:        1%{?dist}
 Summary:        Records Ansible playbooks and makes them easier to understand and troubleshoot
 
 License:        GPL-3.0-or-later

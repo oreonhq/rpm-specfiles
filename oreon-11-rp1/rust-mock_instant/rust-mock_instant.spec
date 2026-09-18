@@ -7,7 +7,7 @@
 %global crate mock_instant
 
 Name:           rust-mock_instant
-Version:        0.5.3
+Version:        0.6.1
 Release:        %autorelease
 Summary:        Simple way to mock an std::time::Instant
 

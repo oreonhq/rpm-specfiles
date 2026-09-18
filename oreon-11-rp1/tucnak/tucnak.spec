@@ -1,7 +1,7 @@
 %global source0_hash 4dd76d7a3ac3d1c31ae093a15dc9e6f2d805fc9ae89b18e87f47b108b164b3ce
 
 Name:		tucnak
-Version:	4.71
+Version:	4.74
 Release:	1%{?dist}
 Summary:	HF/VHF contest logging program
 License:	GPL-2.0-only

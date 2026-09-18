@@ -5,7 +5,7 @@
 %endif
 
 Name:           ocaml-uucd
-Version:        17.0.0
+Version:        18.0.0
 Release:        %autorelease
 Summary:        Unicode character database decoder for OCaml
 

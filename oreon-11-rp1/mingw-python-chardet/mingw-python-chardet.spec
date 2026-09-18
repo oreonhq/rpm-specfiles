@@ -6,8 +6,8 @@
 
 Name:          mingw-python-%{pypi_name}
 Summary:       MinGW Windows Python %{pypi_name}
-Version:       5.2.0
-Release:       8%{?dist}
+Version:       7.6.0
+Release:       1%{?dist}
 BuildArch:     noarch
 
 # Automatically converted from old format: LGPLv2 - review is highly recommended.

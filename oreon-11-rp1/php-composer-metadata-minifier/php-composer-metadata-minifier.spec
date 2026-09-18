@@ -20,8 +20,8 @@
 %global ns_project   MetadataMinifier
 
 Name:           php-%{gh_owner}-%{gh_project}
-Version:        1.0.0
-Release:        12%{?gh_date:.%{gh_date}git%{gh_short}}%{?dist}
+Version:        1.0.1
+Release:        1%{?gh_date:.%{gh_date}git%{gh_short}}%{?dist}
 Summary:        Library that handles metadata minification and expansion
 
 License:        MIT

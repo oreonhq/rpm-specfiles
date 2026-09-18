@@ -1,77 +1,61 @@
-%global source0_hash 8ef8180c374e12368e5c83a692abfb3bab8d71efcd17c5560b5c40c9b6f2f600
+%global source0_hash none
 
 Name:           python-matrix-nio
-Version:        0.25.2
+Version:        0.26.0
 Release:        %autorelease
-Summary:        A Matrix client library
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Python Matrix client library, designed according to sans I/O principles.
 
-# ASL:
-# matrix_nio-0.21.2//nio/crypto/attachments.py: Apache License 2.0
-# matrix_nio-0.21.2//nio/crypto/key_export.py: Apache License 2.0
-# matrix_nio-0.21.2//nio/store/database.py: Apache License 2.0
-# matrix_nio-0.21.2//nio/store/models.py: Apache License 2.0
-
-# All other files: ISC
-
-License:        ISC and Apache-2.0
-URL:            https://pypi.python.org/pypi/matrix-nio
-Source0:        %{pypi_source matrix_nio}
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/matrix-nio/matrix-nio
+Source:         %{pypi_source matrix_nio}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-nio is a multilayered Matrix client library. The underlying base layer doesn't
-do any network IO on its own, but on top of that is a full fledged
-batteries-included asyncio layer using aiohttp. File IO is only done if you
-enable end-to-end encryption (E2EE).}
+This is package 'matrix-nio' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-matrix-nio
+%package -n     python3-matrix-nio
 Summary:        %{summary}
-BuildRequires:  python3-devel
-BuildRequires:  python3-logbook
 
 %description -n python3-matrix-nio %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-matrix-nio docs,e2e
+
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n matrix_nio-%{version}
 
-%autosetup -n matrix_nio-%{version}
-# Update BRs
-sed \
-    -e 's/"aiohttp-socks.*"/"aiohttp-socks"/' \
-    -e 's/"aiofiles.*"/"aiofiles"/' \
-    -e 's/"cachetools.*"/"cachetools"/' \
-    -e 's/"h11.*"/"h11"/' \
-    -e 's/"h2.*"/"h2"/' \
-    -e 's/"pycryptodome.*"/"pycryptodomex"/' \
-    -e 's/"jsonschema.*"/"jsonschema"/' \
-    -i pyproject.toml
-
-# Remove backup file
-rm -fv nio/events/room_events.py.orig
-
-# use cryptodomex instead of crypto
-# https://bugzilla.redhat.com/show_bug.cgi?id=2061832
-find . -name "*.py" -exec sed -i 's/^from Crypto/from Cryptodome/'  '{}' \;
 
 %generate_buildrequires
-%pyproject_buildrequires -x e2e
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,e2e
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files nio
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-matrix-nio  -f %{pyproject_files}
-%license LICENSE.md
-%doc README.md
+
+%files -n python3-matrix-nio -f %{pyproject_files}
 
 %changelog
 %autochangelog

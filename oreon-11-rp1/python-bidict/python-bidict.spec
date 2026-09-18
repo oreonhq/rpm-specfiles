@@ -1,7 +1,7 @@
 %global source0_hash b3619436e1e1e3cba15856839666edcb769fce97b47f5bba5e2789b03eed3156
 
 Name:           python-bidict
-Version:        0.23.1
+Version:        0.24.1
 Release:        %autorelease
 Summary:        Bidirectional mapping library for Python
 
@@ -14,7 +14,7 @@ BuildOption(install):   -l bidict
 
 BuildArch:      noarch
 
-# In 0.23.1, test dependencies are in dev-deps/test.in. Later, they are moved
+# In 0.24.1, test dependencies are in dev-deps/test.in. Later, they are moved
 # to a test dependency group in pyproject.toml. In either case, we must curate
 # them: we don’t want benchmarks, coverage analysis, linters, etc, and
 # pytest-sphinx, while perhaps potentially useful, is not packaged. See

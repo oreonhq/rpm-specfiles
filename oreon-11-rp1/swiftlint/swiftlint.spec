@@ -15,7 +15,7 @@
 
 Name:           swiftlint
 # To update: bump this Version, then run swiftlint-get-bundled-deps.sh
-Version:        0.61.0
+Version:        0.65.1
 Release:        %autorelease
 Summary:        Tool to enforce Swift style and conventions
 

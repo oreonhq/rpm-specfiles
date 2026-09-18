@@ -11,8 +11,8 @@
 %endif
 
 Name:           links
-Version:        2.20.2
-Release:        18%{?dist}
+Version:        2.30
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Web browser running in both graphics and text mode
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

@@ -1,10 +1,13 @@
-%global source0_hash 60d696200ddae28677e7d88cdebd6e960294e85adefbaafe0f6e5d0e7b4c1963
+%global source0_hash none
 
 Name:           python-types-psutil
-Version:        7.0.0.20251001
+Version:        7.2.2.20260906
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Typing stubs for psutil
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/python/typeshed
 Source:         %{pypi_source types_psutil}
@@ -12,10 +15,10 @@ Source:         %{pypi_source types_psutil}
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is a PEP 561 type stub package for the psutil package. It can be used by
-type-checking tools like mypy, pyright, pytype, PyCharm, etc. to check code
-that uses psutil.}
+This is package 'types-psutil' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -24,20 +27,29 @@ Summary:        %{summary}
 
 %description -n python3-types-psutil %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n types_psutil-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -L psutil-stubs
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-types-psutil -f %{pyproject_files}
 

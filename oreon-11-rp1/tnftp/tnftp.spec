@@ -1,8 +1,8 @@
 %global source0_hash be0134394bd7d418a3b34892b0709eeb848557e86474e1786f0d1a887d3a6580
 
 Name:          tnftp
-Version:       20230507
-Release:       7%{?dist}
+Version:       20260211
+Release:       1%{?dist}
 Summary:       FTP (File Transfer Protocol) client from NetBSD
 
 License:       0BSD AND BSD-2-Clause AND BSD-3-Clause AND ISC

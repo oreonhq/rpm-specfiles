@@ -16,9 +16,9 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        1.6.4.0
+Version:        1.6.5.0
 # can only be reset when all subpkgs bumped
-Release:        6%{?dist}
+Release:        1%{?dist}
 Summary:        Robust, reliable performance measurement and analysis
 
 License:        BSD-3-Clause

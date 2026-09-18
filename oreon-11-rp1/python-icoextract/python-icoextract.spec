@@ -1,96 +1,65 @@
-%global source0_hash 1bbb9fcbd1e5cf584f2d41df83ceb901a9594110487a670d453dabcf453cfacc
+%global source0_hash none
 
-%global pypi_name icoextract
-%global pypi_version 0.2.0
-
-# NOTE: 'icoextract' itself required for tests
-%bcond_with tests
-
-Name:           python-%{pypi_name}
-Version:        %{pypi_version}
+Name:           python-icoextract
+Version:        0.3.0
 Release:        %autorelease
-Summary:        Extract icons from Windows PE files (.exe/.dll)
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Windows EXE icon extractor
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/jlu5/icoextract
-# Tests not available on PyPI
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+URL:            ...
+Source:         %{pypi_source icoextract}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-%if %{with tests}
-BuildRequires:  ImageMagick
-BuildRequires:  make
-BuildRequires:  mingw32-gcc
-BuildRequires:  mingw64-gcc
-BuildRequires:  python3-icoextract
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-icoextract is an icon extractor for Windows PE files (.exe/.dll/.mun), written
-in Python. It also includes a thumbnailer script (exe-thumbnailer) for Linux
-desktops.
+This is package 'icoextract' generated automatically by pyp2spec.}
 
-This project is inspired by extract-icon-py, icoutils, and others.
+%description %_description
 
-icoextract aims to be:
-
-  * Lightweight
-  * Portable (cross-platform)
-  * Fast on large files}
-
-%description %{_description}
-
-%package -n     python3-%{pypi_name}
+%package -n     python3-icoextract
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{pypi_name}}
-Requires:       python3dist(pefile)
-Requires:       python3dist(pillow)
-Requires:       python3dist(setuptools)
-%description -n python3-%{pypi_name} %{_description}
+
+%description -n python3-icoextract %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-icoextract dev,thumbnailer,win16
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n icoextract-%{version}
 
-%autosetup -n %{pypi_name}-%{pypi_version}
+
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,thumbnailer,win16
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# https://bugzilla.redhat.com/show_bug.cgi?id=2353972
-install -D -p -m 0644 exe-thumbnailer.thumbnailer %{buildroot}%{_datadir}/thumbnailers/exe-thumbnailer.thumbnailer
 
-# Exec permission
-pushd %{buildroot}%{python3_sitelib}/%{pypi_name}
-chmod a+x __init__.py
-popd
-
-pushd %{buildroot}%{python3_sitelib}/%{pypi_name}/scripts
-chmod a+x {extract,icolist,thumbnailer}.py
-popd
-
-%if %{with tests}
 %check
-pushd tests
-make
-%{python3} test_extract.py
-%{python3} test_thumbnailer.py
-popd
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.md CHANGELOG.md
-%{_bindir}/%{pypi_name}
+
+%files -n python3-icoextract -f %{pyproject_files}
 %{_bindir}/exe-thumbnailer
+%{_bindir}/icoextract
 %{_bindir}/icolist
-%{_datadir}/thumbnailers/exe-thumbnailer.thumbnailer
 
 %changelog
 %autochangelog

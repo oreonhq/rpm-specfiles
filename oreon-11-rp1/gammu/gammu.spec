@@ -4,8 +4,8 @@
 %bcond_without tests
 
 Name:           gammu
-Version:        1.42.0
-Release:        21%{?dist}
+Version:        1.45.0
+Release:        1%{?dist}
 Summary:        Command Line utility to work with mobile phones
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

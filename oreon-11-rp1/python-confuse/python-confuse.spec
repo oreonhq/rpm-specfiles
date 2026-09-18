@@ -1,50 +1,62 @@
-%global source0_hash 5f02ad279a783b305a0e6a28acebd55dd344dc1fd5a9623180f9cbd7d8333fc5
+%global source0_hash none
 
 Name:           python-confuse
-Version:        2.2.0
+Version:        2.2.1
 Release:        %autorelease
-Summary:        A Python module for handling YAML configuration files
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Painless YAML config files
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/beetbox/confuse
-Source0:        %{url}/archive/v%{version}/confuse-%{version}.tar.gz
+Source:         %{pypi_source confuse}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  %{py3_dist pytest}
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Confuse is a configuration library for Python that uses YAML. It takes care of
-defaults, overrides, type checking, command-line integration, environment
-variable support, human-readable errors, and standard OS-specific locations.}
+This is package 'confuse' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-confuse
+%package -n     python3-confuse
 Summary:        %{summary}
 
-%description -n python3-confuse %{_description}
+%description -n python3-confuse %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-confuse docs
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n confuse-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files confuse
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-confuse -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
 
 %changelog
 %autochangelog

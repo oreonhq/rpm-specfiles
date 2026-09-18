@@ -8,7 +8,7 @@
 %global crate clap-cargo
 
 Name:           rust-clap-cargo
-Version:        0.15.2
+Version:        0.19.0
 Release:        %autorelease
 Summary:        Re-usable CLI flags for `cargo` plugins
 

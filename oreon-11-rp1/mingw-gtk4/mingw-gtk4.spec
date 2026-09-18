@@ -7,8 +7,8 @@
 %define release_version %(echo %{version} | awk -F. '{print $1"."$2}')
 
 Name:           mingw-gtk4
-Version:        4.21.0
-Release:        3%{?dist}
+Version:        4.24.0
+Release:        1%{?dist}
 Summary:        MinGW Windows GTK+ library
 
 License:        LGPLv2+

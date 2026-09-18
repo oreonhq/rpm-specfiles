@@ -14,8 +14,8 @@
 # the GNU General Public License, version 3 or later.
 
 Name:           trader
-Version:        7.20
-Release:        5%{?dist}
+Version:        7.21
+Release:        1%{?dist}
 Summary:        Star Traders, a simple game of interstellar trading
 License:        GPL-3.0-or-later
 Url:            https://www.zap.org.au/projects/trader/

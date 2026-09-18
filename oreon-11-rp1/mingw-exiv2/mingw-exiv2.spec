@@ -5,8 +5,8 @@
 %global pkgname exiv2
 
 Name:          mingw-%{pkgname}
-Version:       0.28.7
-Release:       2%{?dist}
+Version:       0.28.9
+Release:       1%{?dist}
 Summary:       MinGW Windows %{pkgname} library
 License:       GPL-2.0-or-later
 BuildArch:     noarch

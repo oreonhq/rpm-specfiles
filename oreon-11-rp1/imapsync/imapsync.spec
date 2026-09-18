@@ -2,8 +2,8 @@
 
 Name: imapsync
 Summary: Tool to migrate email between IMAP servers
-Version: 2.229
-Release: 10%{?dist}
+Version: 2.314
+Release: 1%{?dist}
 License: NLPL
 
 URL: http://github.com/imapsync/imapsync

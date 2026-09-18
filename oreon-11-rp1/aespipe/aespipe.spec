@@ -2,8 +2,8 @@
 
 Summary:        AES-based encryption tool for tar/cpio and loop-aes imagemore
 Name:           aespipe
-Version:        2.4g
-Release:        8%{?dist}
+Version:        2.4j
+Release:        1%{?dist}
 License:        GPL-2.0-or-later
 URL:            http://loop-aes.sourceforge.net/
 Source:         %{url}/aespipe/aespipe-v%{version}.tar.bz2

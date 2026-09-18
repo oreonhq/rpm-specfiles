@@ -1,64 +1,57 @@
-%global source0_hash bceafaec359f032393ddd560ae2cc8d163613833ec63c93ce7189f85904e53d6
+%global source0_hash none
 
-%global srcname nagiosplugin
+Name:           python-nagiosplugin
+Version:        1.4.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Class library for writing Nagios _Icinga_ plugins
 
-Name:           python-%{srcname}
-Version:        1.3.3
-Release:        15%{?dist}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ZPL-2.1
-Summary:        Library for writing Nagios (Icinga) plugins
-
-URL:            https://nagiosplugin.readthedocs.io
-Source:         %{pypi_source}
-
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(pytest)
+URL:            https://github.com/mpounsett/nagiosplugin
+Source:         %{pypi_source nagiosplugin}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-nagiosplugin is a Python class library which helps writing Nagios (or Icinga)
-compatible plugins easily in Python. It cares for much of the boilerplate
-code and default logic commonly found in Nagios checks, including:
+This is package 'nagiosplugin' generated automatically by pyp2spec.}
 
-- Nagios 3 Plugin API compliant parameters and output formatting
-- Full Nagios range syntax support
-- Automatic threshold checking
-- Multiple independend measures
-- Custom status line to communicate the main point quickly
-- Long output and performance data
-- Timeout handling
-- Persistent “cookies” to retain state information between check runs
-- Resume log file processing at the point where the last run left}
+%description %_description
 
-%description %{_description}
-
-%package -n     python3-%{srcname}
+%package -n     python3-nagiosplugin
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-nagiosplugin %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n nagiosplugin-%{version}
 
-%autosetup -n %{srcname}-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname}
-%license LICENSE.txt
-%doc README.txt
-%{python3_sitelib}/nagiosplugin-*.egg-info/
-%{python3_sitelib}/nagiosplugin/
+
+%files -n python3-nagiosplugin -f %{pyproject_files}
 
 %changelog
 %autochangelog

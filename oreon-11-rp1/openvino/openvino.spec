@@ -8,7 +8,7 @@ various use cases, such as generative AI, video, audio, and language with
 models from popular frameworks like PyTorch, TensorFlow, ONNX, and more.}
 
 Name:		openvino
-Version:	2025.1.0
+Version:	2026.4.0
 Release:	%autorelease
 Summary:	Toolkit for optimizing and deploying AI inference
 

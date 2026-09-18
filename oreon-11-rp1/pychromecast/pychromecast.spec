@@ -1,8 +1,8 @@
 %global source0_hash 75571ef1bdb9808a52227ba47ae46281332bbe67eaebc26aee947cdc1e3e5a67
 
 Name:           pychromecast
-Version:        13.1.0
-Release:        11%{?dist}
+Version:        14.0.10
+Release:        1%{?dist}
 Summary:        Python library to communicate with the Google Chromecast
 
 License:        MIT

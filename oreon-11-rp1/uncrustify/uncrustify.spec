@@ -1,7 +1,7 @@
 %global source0_hash 3bb56ebdb16397d6c9dc6b5be8ed6e16ee158399019485d1c8fc4980f864a8bb
 
 Name:		uncrustify
-Version:	0.82.0
+Version:	0.83.0
 Release:	%autorelease
 Summary:	Reformat Source
 

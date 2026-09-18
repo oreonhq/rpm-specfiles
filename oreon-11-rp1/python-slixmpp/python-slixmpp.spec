@@ -1,108 +1,62 @@
-%global source0_hash f94dee171643798b4d7b2b1d649a35c187dcb52e2fb3e3242083a0fd3d171daf
-
-# set upstream name variable
-%global srcname slixmpp
+%global source0_hash none
 
 Name:           python-slixmpp
-Version:        1.12.0
-Release:        2%{?dist}
-Summary:        Slixmpp is an XMPP library for Python 3.5+
+Version:        1.17.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Slixmpp is an elegant Python library for XMPP _aka Jabber_.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://codeberg.org/poezio/%{srcname}
-Source0:        https://codeberg.org/poezio/%{srcname}/archive/slix-%{version}.tar.gz
+URL:            ...
+Source:         %{pypi_source slixmpp}
 
-BuildRequires:  make
 BuildRequires:  python3-devel
-# Optional dependencies
-BuildRequires:  python3-aiohttp
-BuildRequires:  python3-cryptography
-BuildRequires:  python3-defusedxml
-BuildRequires:  python3-emoji
-# for docs
-BuildRequires:  python3-sphinx
-BuildRequires:  python3-sphinx-autodoc-typehints
-BuildRequires:  python3-sphinx_rtd_theme
-BuildRequires:  texinfo
-# for tests
-BuildRequires:  python3-pytest
-# Rust jid
-BuildRequires:  cargo-rpm-macros
+BuildRequires:  gcc
 
-%description
-Slixmpp is an MIT licensed XMPP library for Python 3.5+. It is a fork
-of SleekXMPP. Goals is to only rewrite the core of the library (the low
-level socket handling, the timers, the events dispatching) in order to
-remove all threads.
 
-%package -n python3-%{srcname}
-Summary:        Slixmpp is an XMPP library for Python 3.5+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'slixmpp' generated automatically by pyp2spec.}
 
-%description -n python3-%{srcname}
-Slixmpp is an MIT licensed XMPP library for Python 3.5+. It is a fork
-of SleekXMPP. Goals is to only rewrite the core of the library (the low
-level socket handling, the timers, the events dispatching) in order to
-remove all threads.
+%description %_description
 
-%package -n python-%{srcname}-doc
-Summary:        Documentation for Slixmpp
-BuildArch:      noarch
-Requires:       python3-%{srcname} = %{version}-%{release}
+%package -n     python3-slixmpp
+Summary:        %{summary}
 
-%description -n python-%{srcname}-doc
-Slixmpp is an MIT licensed XMPP library for Python 3.4+. It is a fork
-of SleekXMPP. Goals is to only rewrite the core of the library (the low
-level socket handling, the timers, the events dispatching) in order to
-remove all threads.
+%description -n python3-slixmpp %_description
 
-This package contains documentation in docbook format.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-slixmpp safer-xml-parsing,xep-0363,xep-0444-compliance,xep-0454
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n slixmpp-%{version}
 
-%autosetup -n %{srcname}
-%cargo_prep
-sed -i '18d' slixmpp/plugins/xep_0055/search.py
-sed -i '17d' slixmpp/plugins/xep_0055/search.py
 
 %generate_buildrequires
-%cargo_generate_buildrequires -a -t
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x safer-xml-parsing,xep-0363,xep-0444-compliance,xep-0454
+
 
 %build
 %pyproject_wheel
-%{cargo_license_summary}
-%{cargo_license} > LICENSE.dependencies
 
-# Build sphinx documentation
-pushd docs/
-sphinx-build -b texinfo . texinfo
-pushd texinfo
-makeinfo --docbook slixmpp.texi
-popd # texinfo
-popd # docs
 
 %install
 %pyproject_install
-%pyproject_save_files -l slixmpp
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Install docbook docs
-install -pDm0644 docs/texinfo/slixmpp.xml \
- %{buildroot}%{_datadir}/help/en/python-slixmpp/slixmpp.xml
 
 %check
-%pyproject_check_import -t
-%python3 run_tests.py
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%license LICENSE.dependencies
-%doc CONTRIBUTING.rst README.rst
 
-%files -n python-%{srcname}-doc
-%doc examples/
-%dir  %{_datadir}/help/en/
-%lang(en) %{_datadir}/help/en/python-slixmpp/
+%files -n python3-slixmpp -f %{pyproject_files}
 
 %changelog
 %autochangelog

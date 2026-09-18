@@ -4,7 +4,7 @@
 %global tarball_name RELEASE_%(echo '%{version}' | tr . _)
 
 Name:           cglib
-Version:        3.3.0
+Version:        3_3_0
 Release:        %autorelease
 Summary:        Code Generation Library for Java
 # ASM MethodVisitor is based on ASM code and therefore
@@ -27,7 +27,7 @@ BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.ow2.asm:asm)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.3.0-38
+Obsoletes:      %{name}-javadoc < 3_3_0-38
 
 %description
 cglib is a powerful, high performance and quality code generation library

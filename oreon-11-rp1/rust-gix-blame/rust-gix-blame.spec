@@ -7,7 +7,7 @@
 %global crate gix-blame
 
 Name:           rust-gix-blame
-Version:        0.7.0
+Version:        0.17.1
 Release:        %autorelease
 Summary:        A crate of the gitoxide project dedicated to implementing a 'blame' a...
 

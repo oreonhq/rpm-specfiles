@@ -1,62 +1,62 @@
-%global source0_hash 6f17726fd8c8fc9e092a2e21244b3ecd4a291a5d5b88cc4d4541732b3cf86c27
+%global source0_hash none
 
-%global srcname sphinx-favicon
-%global modname sphinx_favicon
-
-Name:           python-%{srcname}
-Version:        1.0.1
+Name:           python-sphinx-favicon
+Version:        1.1.0
 Release:        %autorelease
-Summary:        Sphinx extension to add custom favicons
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Sphinx Extension adding support for custom favicons
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/tcmetzger/sphinx-favicon
-Source0:        %{url}/archive/v%{version}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source sphinx_favicon}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A Sphinx extension to add custom favicons
-
-With Sphinx Favicon, you can add custom favicons to your Sphinx html
-documentation quickly and easily.
-
-You can define favicons directly in your conf.py, with different rel
-attributes such as "icon" or "apple-touch-icon" and any favicon size.
-
-The Sphinx Favicon extension gives you more flexibility than the standard
-favicon.ico supported by Sphinx. It provides a quick and easy way to add the
-most important favicon formats for different browsers and devices.}
+This is package 'sphinx-favicon' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-sphinx-favicon
 Summary:        %{summary}
-BuildRequires:  python3-devel
 
-%description -n python3-%{srcname} %_description
+%description -n python3-sphinx-favicon %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sphinx-favicon dev,doc,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sphinx_favicon-%{version}
 
-%autosetup -n %{srcname}-%{version}
-sed -i -e 's/, "pytest-cov"//' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,doc,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{modname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# tests/test_options.py::test_list_of_three_icons_automated_values requires network access
-%pytest -v --deselect tests/test_options.py::test_list_of_three_icons_automated_values
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md CHANGELOG
+
+%files -n python3-sphinx-favicon -f %{pyproject_files}
 
 %changelog
 %autochangelog

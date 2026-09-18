@@ -10,7 +10,7 @@
 # testsuite missing deps: copilot-core test-framework test-framework-hunit test-framework-quickcheck2
 
 Name:           ghc-%{pkg_name}
-Version:        4.5.1
+Version:        4.8.1
 Release:        %autorelease
 Summary:        A compiler for Copilot targeting C99
 

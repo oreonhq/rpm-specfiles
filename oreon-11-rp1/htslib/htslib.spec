@@ -4,7 +4,7 @@
 %global so_version 3
 
 Name: htslib
-Version: 1.23.1
+Version: 1.24
 Release: 1%{?dist}
 Summary: C library for high-throughput sequencing data formats
 

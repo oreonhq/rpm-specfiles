@@ -1,8 +1,8 @@
 %global source0_hash 2de8652b23ee3e15398176e8b2aaa513aa89635368f2748fbc304f8aefe910a4
 
 Name:           cjose
-Version:        0.6.2.2
-Release:        10%{?dist}
+Version:        0.8.1
+Release:        1%{?dist}
 Summary:        C library implementing the Javascript Object Signing and Encryption (JOSE)
 
 License:        MIT

@@ -4,8 +4,8 @@
 %global debug_package %{nil}
 
 Name:           sprout
-Version:        0.0.26
-Release:        2%{?dist}
+Version:        0.0.28
+Release:        1%{?dist}
 Summary:        Configurable and programmable UEFI bootloader
 SourceLicense:  Apache-2.0
 # Apache-2.0

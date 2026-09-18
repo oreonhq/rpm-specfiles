@@ -1,96 +1,61 @@
-%global source0_hash 364658d3cabb7bf5a9e4dbbf7fdb8f9ef646c6af06a15c5a2cf8305666d5635a
+%global source0_hash none
 
-Name:          python-paramiko
-Version:       3.5.1
-Release:       7%{?dist}
-Summary:       SSH2 protocol library for python
+Name:           python-paramiko
+Version:        5.0.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        SSH2 protocol library
 
-# No version specified
-License:       LGPL-2.1-or-later
-URL:           https://github.com/paramiko/paramiko
-Source0:       %{url}/archive/%{version}/paramiko-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        LGPL-2.1
+URL:            https://github.com/paramiko/paramiko
+Source:         %{pypi_source paramiko}
 
-# Remove pytest-relaxed, which depends on pytest4
-# Can be removed when https://github.com/paramiko/paramiko/pull/1665/ is released
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'paramiko' generated automatically by pyp2spec.}
+
 Patch3:        0003-remove-pytest-relaxed-dep.patch
-
-# icecream not packaged in Fedora, nor needed for regular builds
 Patch4:        0004-remove-icecream-dep.patch
-
-# Avoid use of lexicon via invoke since we're avoiding invoke as a dependency;
-# instead, use lexicon directly
 Patch5:        0005-remove-invoke-dep.patch
 
-BuildArch:     noarch
+%description %_description
 
-%global paramiko_desc \
-Paramiko (a combination of the Esperanto words for "paranoid" and "friend") is\
-a module for python 2.3 or greater that implements the SSH2 protocol for secure\
-(encrypted and authenticated) connections to remote machines. Unlike SSL (aka\
-TLS), the SSH2 protocol does not require hierarchical certificates signed by a\
-powerful central authority. You may know SSH2 as the protocol that replaced\
-telnet and rsh for secure access to remote shells, but the protocol also\
-includes the ability to open arbitrary channels to remote services across an\
-encrypted tunnel (this is how sftp works, for example).
+%package -n     python3-paramiko
+Summary:        %{summary}
 
-%description
-%{paramiko_desc}
+%description -n python3-paramiko %_description
 
-%package -n python%{python3_pkgversion}-paramiko
-Summary:       SSH2 protocol library for python
-BuildRequires: python%{python3_pkgversion}-devel >= 3.6
-BuildRequires: %{py3_dist lexicon} >= 2.0.1
-BuildRequires: %{py3_dist pyasn1} >= 0.1.7
-BuildRequires: %{py3_dist pytest}
-Recommends:    %{py3_dist pyasn1} >= 0.1.7
 
-%description -n python%{python3_pkgversion}-paramiko
-%{paramiko_desc}
+%prep
+%autosetup -p1 -n paramiko-%{version}
 
-Python 3 version.
-
-%package doc
-Summary:       Docs and demo for SSH2 protocol library for python
-BuildRequires: /usr/bin/sphinx-build
-Requires:      %{name} = %{version}-%{release}
-
-%description doc
-%{paramiko_desc}
-
-This is the documentation and demos.
 
 %generate_buildrequires
 %pyproject_buildrequires
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n paramiko-%{version}
-
-chmod -c a-x demos/*
-sed -i -e '/^#!/,1d' demos/*
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-sphinx-build -b html sites/docs/ html/
-rm html/.buildinfo
-rm -r html/.doctrees
 
 %check
-PYTHONPATH=%{buildroot}%{python3_sitelib} pytest-%{python3_version}
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-paramiko
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/paramiko/
-%{python3_sitelib}/paramiko-%{version}.dist-info/
 
-%files doc
-%doc html/ demos/
+%files -n python3-paramiko -f %{pyproject_files}
 
 %changelog
 %autochangelog

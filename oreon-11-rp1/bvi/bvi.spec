@@ -1,8 +1,8 @@
 %global source0_hash 6540716a1a3b2b9711635108da14b26baea488881d4a682121c0bddbba6b74cb
 
 Name:           bvi
-Version:        1.5.0
-Release:        3%{?dist}
+Version:        1.5.0.src.src
+Release:        1%{?dist}
 Summary:        Display-oriented editor for binary files
 Summary(fr):    Afficheur orienté editeur pour fichiers binaires
 

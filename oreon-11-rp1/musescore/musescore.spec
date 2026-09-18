@@ -1,7 +1,7 @@
 %global source0_hash none
 
 # The version of MuseScore itself
-%global musescore_ver             4.6.5
+%global musescore_ver             4.7.5
 %global musescore_maj             %{gsub %musescore_ver ^(%d*%.%d*)%..*$ %1}
 %global giturl                    https://github.com/musescore/MuseScore
 
@@ -25,7 +25,7 @@
 Name:           musescore
 Summary:        Music Composition & Notation Software
 Version:        %{musescore_ver}
-Release:        37%{?dist}
+Release:        1%{?dist}
 
 # The MuseScore project itself is GPL-3.0-only WITH Font-exception-2.0.  Other
 # licenses in play:

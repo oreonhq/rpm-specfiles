@@ -1,19 +1,24 @@
-%global source0_hash d2ed8ebef04133d69bce09114bbf66be0d404d725597874a644318af6e0b3e28
+%global source0_hash none
 
 Name:           python-time-machine
-Version:        2.16.0
+Version:        3.5.1
 Release:        %autorelease
-Summary:        Travel through time in your Python tests
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Travel through time in your tests.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/adamchainz/time-machine
-Source:         %{url}/archive/%{version}/time-machine-%{version}.tar.gz
+Source:         %{pypi_source time_machine}
 
-BuildRequires:  gcc
 BuildRequires:  python3-devel
+BuildRequires:  gcc
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A Python library that allows to travel in time and freeze it as well.
-Includes a test-function decorator that sets time to an arbitrary value.}
+This is package 'time-machine' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -22,30 +27,36 @@ Summary:        %{summary}
 
 %description -n python3-time-machine %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-time-machine cli,dateutil
 
-%autosetup -p1 -n time-machine-%{version}
-sed -i '/coverage/d' tests/requirements/requirements.in
+
+%prep
+%autosetup -p1 -n time_machine-%{version}
+
 
 %generate_buildrequires
-# tox uses a pinned version of requirements/requirements.in and also uses coverage
-# so we bypass it.
-# This also saves us one dependency cycle as tox uses time-machine for tests.
-%pyproject_buildrequires tests/requirements/requirements.in
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x cli,dateutil
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files time_machine _time_machine
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-time-machine -f %{pyproject_files}
-%doc README.rst HISTORY.rst
 
 %changelog
 %autochangelog

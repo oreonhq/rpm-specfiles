@@ -8,8 +8,8 @@
 %bcond_without ed25519
 
 Name: vagrant
-Version: 2.3.4
-Release: 10%{?dist}
+Version: 2.4.9
+Release: 1%{?dist}
 Summary: Build and distribute virtualized development environments
 License: MIT
 URL: http://vagrantup.com

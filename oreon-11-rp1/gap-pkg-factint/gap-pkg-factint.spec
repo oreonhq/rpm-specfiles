@@ -5,7 +5,7 @@
 %global giturl      https://github.com/gap-packages/FactInt
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.6.3
+Version:        1.7.0
 Release:        %autorelease
 Summary:        Advanced methods for factoring integers
 

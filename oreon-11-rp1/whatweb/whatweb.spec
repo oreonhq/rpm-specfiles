@@ -1,7 +1,7 @@
 %global source0_hash 23feec4ca125ebd508280699b4284918c7db50b62305c327e482958080297d76
 
 Name:           whatweb
-Version:        0.6.3
+Version:        0.6.4
 Release:        %autorelease
 Summary:        Web scanner to identify what are the websites running
 License:        GPL-2.0-or-later

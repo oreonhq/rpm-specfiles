@@ -8,8 +8,8 @@
 %global libbacktrace_shortcommit %(c=%{libbacktrace_commit}; echo ${c:0:7})
 
 Name:           apitrace
-Version:        13.0
-Release:        6%{?commit:.git%{shortcommit}}%{?dist}
+Version:        14.0
+Release:        1%{?commit:.git%{shortcommit}}%{?dist}
 Summary:        Tools for tracing OpenGL
 
 License:        MIT

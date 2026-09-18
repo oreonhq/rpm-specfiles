@@ -6,7 +6,7 @@ ExclusiveArch: %{ocaml_native_compiler}
 %global _smp_ncpus_max 1
 
 Name: ocaml-camlpdf
-Version: 2.8.1
+Version: 2.9.2
 Release: %autorelease
 Summary: OCaml library for reading, writing and modifying PDFs
 

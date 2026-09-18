@@ -1,57 +1,59 @@
 %global source0_hash none
 
-%global srcname contextily
-
-# Some tests require the network.
-%bcond network 0
-
-Name:           python-%{srcname}
-Version:        1.7.0
+Name:           python-contextily
+Version:        1.7.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Context geo-tiles in Python
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/geopandas/contextily
-Source:         %pypi_source %{srcname}
-# https://github.com/geopandas/contextily/pull/273
-Patch:          0001-Mark-another-test-as-using-the-network.patch
+Source:         %{pypi_source contextily}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
 
-%description
-contextily is a small Python 3 package to retrieve and write to disk tile maps
-from the internet into geospatial raster files. Bounding boxes can be passed in
-both WGS84 (EPSG:4326) and Spheric Mercator (EPSG:3857).
 
-%package -n     python3-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'contextily' generated automatically by pyp2spec.}
+
+Patch:          0001-Mark-another-test-as-using-the-network.patch
+
+%description %_description
+
+%package -n     python3-contextily
 Summary:        %{summary}
 
-%description -n python3-%{srcname}
-contextily is a small Python 3 package to retrieve and write to disk tile maps
-from the internet into geospatial raster files. Bounding boxes can be passed in
-both WGS84 (EPSG:4326) and Spheric Mercator (EPSG:3857).
+%description -n python3-contextily %_description
+
 
 %prep
-%autosetup -n %{srcname}-%{version} -p1
+%autosetup -p1 -n contextily-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{pytest} %{!?with_network:-m 'not network'}
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-contextily -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,66 +1,61 @@
-%global source0_hash fe360676582b8a3dab584572480c456729e35a3927abc727d46e4ca84c4e8bd2
+%global source0_hash none
 
-%global srcname sphinx-gallery
-
-Name:           python-%{srcname}
-Version:        0.20.0
+Name:           python-sphinx-gallery
+Version:        0.22.0
 Release:        %autorelease
-Summary:        Sphinx extension to automatically generate an examples gallery
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Sphinx extension that builds an HTML gallery of examples from any set of Python scripts.
 
-License:        BSD-3-Clause
-URL:            https://sphinx-gallery.github.io/stable/index.html
-Source0:        https://github.com/sphinx-gallery/sphinx-gallery/archive/v%{version}/%{srcname}-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/sphinx-gallery/sphinx-gallery
+Source:         %{pypi_source sphinx_gallery}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-A Sphinx extension that builds an HTML version of any Python script and puts
-it into an examples gallery.
 
-%package -n     python%{python3_pkgversion}-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sphinx-gallery' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-sphinx-gallery
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-devel
-# For tests
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  python%{python3_pkgversion}-absl-py
-BuildRequires:  python%{python3_pkgversion}-lxml
-BuildRequires:  python%{python3_pkgversion}-matplotlib
 
-%description -n python%{python3_pkgversion}-%{srcname}
-A Sphinx extension that builds an HTML version of any Python script and puts
-it into an examples gallery.
+%description -n python3-sphinx-gallery %_description
 
-%pyproject_extras_subpkg -n python%{python3_pkgversion}-%{srcname} recommender
-%pyproject_extras_subpkg -n python%{python3_pkgversion}-%{srcname} show_api_usage
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sphinx-gallery animations,dev,jupyterlite,parallel,recommender,show-api-usage,show-memory
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sphinx_gallery-%{version}
 
-%autosetup -n %{srcname}-%{version}
-
-# No coverage report
-sed -i -e 's/"--cov[^ ]*//g' pyproject.toml
 
 %generate_buildrequires
-# extras with missing deps:
-#  "show_memory": ["memory_profiler"],
-#  "jupyterlite": ["jupyterlite_sphinx"],
-%pyproject_buildrequires -x recommender -x show_api_usage
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x animations,dev,jupyterlite,parallel,recommender,show-api-usage,show-memory
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files sphinx_gallery
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# test_dummy_image requires jupyterlite_sphinx optional dep
-# test_embed_code_links_get_data requires network
-%pytest -v -k 'not test_dummy_image and not test_embed_code_links_get_data'
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %pyproject_files
-%doc README.rst CHANGES.rst
+
+%files -n python3-sphinx-gallery -f %{pyproject_files}
 %{_bindir}/sphinx_gallery_py2jupyter
 
 %changelog

@@ -7,7 +7,7 @@
 %global crate icu_collator
 
 Name:           rust-icu_collator
-Version:        2.1.1
+Version:        2.3.1
 Release:        %autorelease
 Summary:        API for comparing strings according to language-dependent conventions
 

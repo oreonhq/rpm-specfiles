@@ -59,7 +59,7 @@
 
 Summary: A dynamic adaptive system tuning daemon
 Name: tuned
-Version: 2.27.0
+Version: 2.28.0
 Release: 1%{?prerel1}%{?git_suffix:.%{git_suffix}}%{?dist}
 License: GPL-2.0-or-later AND CC-BY-SA-3.0
 %if 0%{?git_commit:1}

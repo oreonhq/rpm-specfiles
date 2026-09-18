@@ -4,8 +4,8 @@
 %global vagrant_plugin_name vagrant-registration
 
 Name: %{vagrant_plugin_name}
-Version: 1.3.1
-Release: 20%{?dist}
+Version: 1.3.4
+Release: 1%{?dist}
 Summary: Automatic guest registration for Vagrant
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only

@@ -1,10 +1,10 @@
 %global source0_hash acf4c861af88608b9e802a76a4b05846bd30189e0085e826680cc179b6df4cd3
 
-%global minorver 1.7
+%global minorver 1.8
 %global _hardened_build 1
 
 Name:		xfce4-timer-plugin
-Version:	1.7.3
+Version:	1.8.0
 Release:	%autorelease
 Summary:	Timer for the Xfce panel
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

@@ -7,7 +7,7 @@
 %global crate proc-maps
 
 Name:           rust-proc-maps
-Version:        0.4.0
+Version:        0.5.0
 Release:        %autorelease
 Summary:        Helper crate for getting virtual memory maps from processes
 

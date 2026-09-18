@@ -4,7 +4,7 @@
 %global uuid appindicatorsupport@rgcjonas.gmail.com
 
 Name: gnome-shell-extension-appindicator
-Version: 64
+Version: 65
 %forgemeta
 Release: %autorelease
 Summary: AppIndicator/KStatusNotifierItem support for GNOME Shell

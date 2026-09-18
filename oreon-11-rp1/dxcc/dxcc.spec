@@ -1,8 +1,8 @@
 %global source0_hash a2fbd272b4b8494929a750df8f5eec704a8b469ee007d925b9ef20d7012aa274
 
 Name:           dxcc
-Version:        20080225
-Release:        55%{?dist}
+Version:        20191204
+Release:        1%{?dist}
 Summary:        Small utility which determines the ARRL DXCC entity of a ham radio callsign
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

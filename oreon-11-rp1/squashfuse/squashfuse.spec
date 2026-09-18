@@ -1,7 +1,7 @@
 %global source0_hash db0238c5981dabbd80ee09ae15387f390091668ca060a7bc38047912491443d3
 
 Name:     squashfuse
-Version:  0.5.2
+Version:  0.6.3
 Release:  %autorelease
 Summary:  FUSE filesystem to mount squashfs archives
 

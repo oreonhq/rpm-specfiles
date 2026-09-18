@@ -6,8 +6,8 @@
 %global somajor 0
 
 Name:           libeconf
-Version:        0.7.9
-Release:        4%{?dist}
+Version:        0.8.4
+Release:        1%{?dist}
 Summary:        Enhanced config file parser library
 
 License:        MIT

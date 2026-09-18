@@ -7,7 +7,7 @@
 %global crate tree-sitter-elm
 
 Name:           rust-tree-sitter-elm
-Version:        5.9.0
+Version:        5.9.4
 Release:        %autorelease
 Summary:        Elm grammar for tree-sitter
 

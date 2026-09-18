@@ -48,8 +48,8 @@
 # 0%%{?fedora}
 
 Name:           wine
-Version:        11.0
-Release:        3%{?dist}
+Version:        11.17
+Release:        1%{?dist}
 Summary:        A compatibility layer for windows applications
 
 License:        LGPL-2.1-or-later

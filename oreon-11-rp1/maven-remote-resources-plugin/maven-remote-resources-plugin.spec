@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           maven-remote-resources-plugin
-Version:        3.1.0
+Version:        3.3.0
 Release:        %autorelease
 Summary:        Maven Remote Resources Plugin
 License:        Apache-2.0
@@ -42,7 +42,7 @@ BuildRequires:  mvn(org.eclipse.aether:aether-util)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.1.0-18
+Obsoletes:      %{name}-javadoc < 3.3.0-18
 
 %description
 Process resources packaged in JARs that have been deployed to

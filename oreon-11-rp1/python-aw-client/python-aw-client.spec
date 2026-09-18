@@ -1,55 +1,57 @@
-%global source0_hash 3ad46b33b5ea201d73dd07779876af6d7a44cffabf9a4020a991fda4911f41ca
+%global source0_hash none
 
-%bcond check 0
-%global srcname aw-client
-
-Name:           python-%{srcname}
-Version:        0.5.14
+Name:           python-aw-client
+Version:        0.5.15
 Release:        %autorelease
-Summary:        Client library for ActivityWatch in Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Client library for ActivityWatch
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MPL-2.0
-URL:            https://github.com/ActivityWatch/aw-client
-Source:         %{url}/archive/refs/tags/v%{version}.tar.gz
+URL:            https://github.com/ActivityWatch/aw-client/
+Source:         %{pypi_source aw_client}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Client library for ActivityWatch in Python.}
+This is package 'aw-client' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-%{srcname}
-Summary:    %{summary}
+%package -n     python3-aw-client
+Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-aw-client %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n aw_client-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files aw_client
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# skip test_client.py due to a http connection error
-# skip test_failqueue.py due to missing aw_server dependency
-%pytest --ignore=tests/test_client.py \
-        --ignore=tests/test_failqueue.py
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
-%license LICENSE.txt
+
+%files -n python3-aw-client -f %{pyproject_files}
 %{_bindir}/aw-client
 
 %changelog

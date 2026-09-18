@@ -1,52 +1,62 @@
-%global source0_hash 36001524e936be45cd826f1cfbd4ebd839c2a7c087e4351c93ed044bdb2fef86
+%global source0_hash none
 
 Name:           python-kanboard
-Version:        1.1.7
-Release:        6%{?dist}
-Summary:        Client library for Kanboard API
+Version:        1.1.8
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python client library for Kanboard
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/kanboard/python-api-client
-Source0:        %{url}/archive/refs/tags/%{version}.tar.gz
+Source:         %{pypi_source kanboard}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%global _description %{expand:
-Kanboard is project management software that focuses on the Kanban
-methodology.
 
-This package provides client library for Kanboard API.
-}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'kanboard' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-kanboard
+%package -n     python3-kanboard
 Summary:        %{summary}
 
 %description -n python3-kanboard %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-kanboard dev
 
-%autosetup -p1 -n python-api-client-%{version}
+
+%prep
+%autosetup -p1 -n kanboard-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files kanboard
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{python3} -m unittest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-kanboard -f %{pyproject_files}
-%doc README.rst
-%doc LICENSE
 
 %changelog
 %autochangelog

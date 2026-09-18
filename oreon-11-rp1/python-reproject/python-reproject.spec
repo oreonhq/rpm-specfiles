@@ -1,69 +1,61 @@
-%global source0_hash 680bb92fc8eabae3da1d9c7a4d40b412cf658cc317e358eba2fff9de63ab972f
+%global source0_hash none
 
-%global srcname reproject
-%global sum Reproject astronomical images
-
-Name:           python-%{srcname}
-Version:        0.18.0
+Name:           python-reproject
+Version:        0.21.0
 Release:        %autorelease
-Summary:        %{sum}
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Reproject astronomical images
 
-License:        BSD-3-Clause
-URL:            https://reproject.readthedocs.io/
-Source0:        %{pypi_source}
-
-BuildRequires:  gcc
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://reproject.readthedocs.io
+Source:         %{pypi_source reproject}
 
 BuildRequires:  python3-devel
+BuildRequires:  gcc
 
-ExcludeArch: %{ix86}
 
-%description
-%{sum}.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'reproject' generated automatically by pyp2spec.}
 
-%package -n python3-%{srcname}
-Summary:        %{sum}
+%description %_description
 
-%description -n python3-%{srcname}
-%{sum}.
+%package -n     python3-reproject
+Summary:        %{summary}
+
+%description -n python3-reproject %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-reproject all,docs,test,testall
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n reproject-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,docs,test,testall
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files reproject
 
 %check
-export PYTEST_ADDOPTS='-p no:cacheprovider'
-# these fail in arm
-# reproject/healpix/tests/test_healpix.py::test_reproject_healpix_to_image_footprint[**]
-# TestHIPSDaskArray uses remote data
-%ifarch aarch64
-%pyproject_check_import -e '*.test*'
-%else
-# https://github.com/astropy/reproject/issues/552
-pushd %{buildroot}/%{python3_sitearch}
-  %pytest \
-   --deselect "reproject/interpolation/tests/test_core.py::test_reproject_parallel_broadcasting" \
-   --deselect "reproject/hips/tests/test_dask_array.py::TestHIPSDaskArray::test_roundtrip"  \
-   --deselect "reproject/hips/tests/test_dask_array.py::TestHIPSDaskArray::test_level_validation" \
-   reproject
-popd
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc CHANGES.md README.rst
+
+%files -n python3-reproject -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -7,7 +7,7 @@
 %global crate gix-fs
 
 Name:           rust-gix-fs
-Version:        0.18.2
+Version:        0.22.1
 Release:        %autorelease
 Summary:        A crate providing file system specific utilities to `gitoxide`
 

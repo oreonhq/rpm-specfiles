@@ -1,134 +1,59 @@
-%global source0_hash 1ba25e01d3a4c5a5cfa676bf6c28499f9f15c9d4879c4f7759b7595f0352fc27
+%global source0_hash none
 
-%global pypi_name PyKMIP
-%global sname pykmip
+Name:           python-pykmip
+Version:        0.11.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        KMIP library
 
-%if 0%{?fedora} || 0%{?rhel} > 7
-%bcond_with    python2
-%bcond_without python3
-%else
-%bcond_without python2
-%bcond_with    python3
-%endif
-
-Name:           python-%{sname}
-Version:        0.8.0
-Release:        28%{?dist}
-Summary:        Python implementation of the Key Management Interoperability Protocol
-
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
-License:        Apache-2.0
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/OpenKMIP/PyKMIP
-Source0:        https://pypi.python.org/packages/source/P/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
-Patch0:         enum34.patch
+Source:         %{pypi_source pykmip}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-PyKMIP is a Python implementation of the Key Management Interoperability
-Protocol (KMIP). KMIP is a client/server communication protocol for the
-storage and maintenance of key, certificate, and secret objects. The
-standard is governed by the `Organization for the Advancement of
-Structured InformationStandards`_ (OASIS).
 
-%if %{with python2}
-%package -n python2-%{sname}
-Summary:        Python implementation of the Key Management Interoperability Protocol
-%{?python_provide:%python_provide python2-%{sname}}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pykmip' generated automatically by pyp2spec.}
 
-BuildRequires:       python2-devel
-BuildRequires:       python2-six
-BuildRequires:       python2-setuptools
+Patch0:         enum34.patch
 
-%if 0%{?fedora} || 0%{?rhel} > 7
-BuildRequires:       python2-enum34
-%else
-BuildRequires:       python-enum34
-%endif
+%description %_description
 
-Requires:     python2-cryptography
-Requires:     python2-requests
-Requires:     python2-six
-Requires:     python2-sqlalchemy
+%package -n     python3-pykmip
+Summary:        %{summary}
 
-%if 0%{?fedora} || 0%{?rhel} > 7
-Requires:     python2-enum34
-%else
-Requires:     python-enum34
-%endif
+%description -n python3-pykmip %_description
 
-%description -n python2-%{sname}
-PyKMIP is a Python implementation of the Key Management Interoperability
-Protocol (KMIP). KMIP is a client/server communication protocol for the
-storage and maintenance of key, certificate, and secret objects. The
-standard is governed by the `Organization for the Advancement of
-Structured InformationStandards`_ (OASIS).
-%endif
-
-%if %{with python3}
-%package -n python3-%{sname}
-Summary:        Python implementation of the Key Management Interoperability Protocol
-%{?python_provide:%python_provide python3-%{sname}}
-
-BuildRequires:       python3-devel
-BuildRequires:       python3-six
-BuildRequires:       python3-setuptools
-
-Requires:     python3-cryptography
-Requires:     python3-requests
-Requires:     python3-six
-Requires:     python3-sqlalchemy
-
-%description -n python3-%{sname}
-PyKMIP is a Python implementation of the Key Management Interoperability
-Protocol (KMIP). KMIP is a client/server communication protocol for the
-storage and maintenance of key, certificate, and secret objects. The
-standard is governed by the `Organization for the Advancement of
-Structured InformationStandards`_ (OASIS).
-
-%endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pykmip-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%if %{with python2}
-%py2_build
-%endif
+%pyproject_wheel
 
-%if %{with python3}
-%py3_build
-%endif
 
 %install
-%if %{with python2}
-%py2_install
-%endif
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with python3}
-%py3_install
-%endif
 
-%if %{with python2}
-%files -n python2-%{sname}
-%doc README.rst
-%license LICENSE.txt
-%if !%{with python3}
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-pykmip -f %{pyproject_files}
 %{_bindir}/pykmip-server
-%endif
-%{python2_sitelib}/kmip
-%{python2_sitelib}/%{pypi_name}-%{version}-py?.?.egg-info
-%endif
-
-%if %{with python3}
-%files -n python3-%{sname}
-%doc README.rst
-%license LICENSE.txt
-%{_bindir}/pykmip-server
-%{python3_sitelib}/kmip
-%{python3_sitelib}/%{pypi_name}-%{version}-py%{python3_version}.egg-info
-%endif
 
 %changelog
 %autochangelog

@@ -1,109 +1,66 @@
-%global source0_hash ceb6fe4ee6f2f356196506814f4a7d22f7f232fb194e6d3cff91182a9c8480d3
+%global source0_hash none
 
-%global srcname rosdep
+Name:           python-rosdep
+Version:        0.27.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        rosdep package manager abstraction tool for ROS
 
-Name:           python-%{srcname}
-Version:        0.26.0
-Release:        5%{?dist}
-Summary:        ROS System Dependency Installer
-
-License:        BSD-3-Clause
-URL:            http://ros.org/wiki/%{srcname}
-Source0:        https://github.com/ros-infrastructure/%{srcname}/archive/%{version}/%{srcname}-%{version}.tar.gz
-
-# Merged upstream as ros-infrastructure/rosdep#1012
-Patch0:         intersphinx-mapping.patch
-# Merged upstream as ros-infrastructure/rosdep/1020
-Patch1:         drop-aggressive-asserts.patch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/ros-infrastructure/rosdep
+Source:         %{pypi_source rosdep}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-rosdep is a command-line tool for installing system dependencies. For
-end-users, rosdep helps you install system dependencies for software that
-you are building from source. For developers, rosdep simplifies the problem
-of installing system dependencies on different platforms. Instead of having to
-figure out which Debian package on Ubuntu Oneiric contains Boost, you can just
-specify a dependency on 'boost'.
 
-%package doc
-Summary:        HTML documentation for '%{name}'
-BuildRequires:  make
-BuildRequires:  python%{python3_pkgversion}-catkin-sphinx
-BuildRequires:  python%{python3_pkgversion}-sphinx
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'rosdep' generated automatically by pyp2spec.}
 
-%description doc
-HTML documentation for the '%{srcname}' python module
+Patch0:         intersphinx-mapping.patch
+Patch1:         drop-aggressive-asserts.patch
 
-%package -n python%{python3_pkgversion}-%{srcname}
-Summary:        ROS System Dependency Installer
-BuildRequires:  npm
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-pip
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  rubygems
-Requires:       python-srpm-macros
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
+%description %_description
 
-%if !0%{?rhel} || 0%{?rhel} >= 8
-Recommends:     python%{python3_pkgversion}-pip
-Recommends:     python%{python3_pkgversion}-rpm
-Suggests:       %{name}-doc = %{version}-%{release}
-Suggests:       npm
-Suggests:       rubygems
-%endif
+%package -n     python3-rosdep
+Summary:        %{summary}
 
-%description -n python%{python3_pkgversion}-%{srcname}
-rosdep is a command-line tool for installing system dependencies. For
-end-users, rosdep helps you install system dependencies for software that
-you are building from source. For developers, rosdep simplifies the problem
-of installing system dependencies on different platforms. Instead of having to
-figure out which Debian package on Ubuntu Oneiric contains Boost, you can just
-specify a dependency on 'boost'.
+%description -n python3-rosdep %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-rosdep test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n rosdep-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
-PYTHONPATH=$PWD/src %make_build -C doc man html SPHINXBUILD=sphinx-build-%{python3_version}
-rm doc/_build/html/.buildinfo
 
 %install
 %pyproject_install
-%pyproject_save_files -l rosdep2
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-#echo -n > py3_bins
-for f in `ls %{buildroot}%{_bindir}`; do
-    mv %{buildroot}%{_bindir}/$f %{buildroot}%{_bindir}/$f-%{python3_version}
-    ln -s $f-%{python3_version} %{buildroot}%{_bindir}/$f-3
-    ln -s $f-%{python3_version} %{buildroot}%{_bindir}/$f
-    echo -e "%{_bindir}/$f\n%{_bindir}/$f-3\n%{_bindir}/$f-%{python3_version}" >> %{pyproject_files}
-done
 
-install -D -p -m 0644 doc/man/rosdep.1 %{buildroot}%{_mandir}/man1/rosdep.1
-install -D -p -m 0644 /dev/null %{buildroot}%{_sysconfdir}/ros/rosdep/sources.list.d/20-default.list
-
-# Cannot currently run all of the tests because some need to query Github
 %check
-%pytest -m 'not online and not linter'
+%_pyproject_check_import_allow_no_modules -t
 
-%files doc
-%license LICENSE
-%doc doc/_build/html
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
-%doc README.md
-%{_mandir}/man1/%{srcname}.1.gz
-%dir %{_sysconfdir}/ros/rosdep/
-%dir %{_sysconfdir}/ros/rosdep/sources.list.d/
-%ghost %{_sysconfdir}/ros/rosdep/sources.list.d/20-default.list
+%files -n python3-rosdep -f %{pyproject_files}
+%{_bindir}/rosdep
+%{_bindir}/rosdep-source
 
 %changelog
 %autochangelog

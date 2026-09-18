@@ -1,96 +1,57 @@
-%global source0_hash 8440ffe49c4ae81a8df57c1ae1eb4b6bfa7acb830099bfb3e305b383005cc128
+%global source0_hash none
 
-%global sum()   A simple %* wrapper around inotify
-%global desc \
-inotify_simple is a simple Python wrapper around inotify. No fancy bells and \
-whistles, just a literal wrapper with ctypes. Only 122 lines of code!
+Name:           python-inotify-simple
+Version:        2.0.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A simple wrapper around inotify. No fancy bells and whistles, just a literal wrapper with ctypes. Under 100 lines of code!
 
-%if 0%{?fedora}
-  %bcond_without python3
-  %if 0%{?fedora} > 29
-    %bcond_with python2
-  %else
-    %bcond_without python2
-  %endif
-%else
-  %if 0%{?rhel} > 7
-    %bcond_with    python2
-    %bcond_without python3
-  %else
-    %bcond_without python2
-    %bcond_with    python3
-  %endif
-%endif
-
-%global sname inotify_simple
-
-Name:           python-%sname
-Version:        1.3.5
-Release:        17%{?dist}
-Summary:        %{sum Python}
-BuildArch:      noarch
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
-URL:            https://github.com/chrisjbillington/%sname
-Source0:        https://pypi.org/packages/source/i/%sname/%sname-%version.tar.gz
+URL:            https://github.com/chrisjbillington/inotify_simple.git
+Source:         %{pypi_source inotify_simple}
 
-%if %{with python2}
-BuildRequires: python2-devel
-BuildRequires: python2-enum34
-BuildRequires: python2-setuptools
-%endif
-%if %{with python3}
-BuildRequires: python3-devel
-BuildRequires: python3-setuptools
-%endif
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-%desc
 
-%if %{with python2}
-%package -n     python2-%sname
-Summary:        %{sum Python 2}
-Requires:       python2-enum34
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'inotify-simple' generated automatically by pyp2spec.}
 
-%description -n python2-%sname
-%{desc}
-%endif
+%description %_description
 
-%if %{with python3}
-%package -n     python3-%sname
-Summary:        %{sum Python 3}
+%package -n     python3-inotify-simple
+Summary:        %{summary}
 
-%description -n python3-%sname
-%{desc}
-%endif
+%description -n python3-inotify-simple %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n inotify_simple-%{version}
 
-%autosetup -n %sname-%version -p1
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%{?with_python2:%py2_build}
-%{?with_python3:%py3_build}
+%pyproject_wheel
+
 
 %install
-%{?with_python2:%py2_install}
-%{?with_python3:%py3_install}
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with python2}
-%files -n python2-%sname
-%license LICENSE
-%python2_sitelib/%sname.py*
-%python2_sitelib/%sname-%{version}*.egg-info
-%endif
 
-%if %{with python3}
-%files -n python3-%sname
-%license LICENSE
-%python3_sitelib/%sname.py
-%python3_sitelib/%sname-%{version}*.egg-info
-%python3_sitelib/__pycache__/inotify_simple*
-%endif
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-inotify-simple -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,8 +1,8 @@
 %global source0_hash dd5b0b3cc9c48d2b85e3948cd5f99b22577a429603d40de29ec6264d75d535b4
 
 Name:           rsvndump
-Version:        0.6.1
-Release:        10%{?dist}
+Version:        0.6.2
+Release:        1%{?dist}
 Summary:        Remote Subversion repository dumping tool
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

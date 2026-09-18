@@ -1,7 +1,7 @@
 %global source0_hash b62feaa195daf06cf0a5af0c44677823856934c7192fa7b91fe70b62d1b37fca
 
 Name: libfilezilla
-Version: 0.54.0
+Version: 403
 Release: 1%{?dist}
 URL: https://lib.filezilla-project.org/
 Summary: C++ Library for FileZilla

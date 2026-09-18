@@ -17,8 +17,8 @@ necessary. This allows it to be significantly faster on large codebases and\
 avoids unnecessarily invalidating builds.
 
 Name:           python-%{shortname}
-Version:        0.7.0
-Release:        17%{?dist}
+Version:        0.8.0
+Release:        1%{?dist}
 Summary:        Efficiently update, split, and rearrange git commits
 
 License:        MIT

@@ -2,10 +2,10 @@
 
 # Review: https://bugzilla.redhat.com/show_bug.cgi?id=473679
 
-%global majorversion 0.7
+%global majorversion 0.8
 
 Name:           xfburn
-Version:        0.7.2
+Version:        0.8.0
 Release:        %autorelease
 Summary:        Simple CD burning tool for Xfce
 

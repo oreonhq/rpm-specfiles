@@ -13,9 +13,9 @@
 %global subpkgs %{wcwidth}
 
 Name:           ghc-%{pkg_name}
-Version:        1.5.3
+Version:        1.5.4
 # can only be reset when subpkg bumped
-Release:        28%{?dist}
+Release:        1%{?dist}
 Summary:        Modern and extensible testing framework
 
 License:        MIT

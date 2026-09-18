@@ -3,7 +3,7 @@
 %global realname snappy
 
 Name:		erlang-%{realname}
-Version:	1.1.2
+Version:	1.2.1
 Release:	%autorelease
 Summary:	An Erlang NIF wrapper for Google's snappy library
 License:	Apache-2.0

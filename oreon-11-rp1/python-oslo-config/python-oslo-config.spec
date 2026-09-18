@@ -1,159 +1,66 @@
-%global source0_hash 9f05ef70e48d9a61a8d0c9bed389da24f2ef5a89df5b6e8deb7c741d6113667e
+%global source0_hash none
 
-%global repo_bootstrap 0
+Name:           python-oslo-config
+Version:        10.7.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Oslo Configuration API
 
-%{!?sources_gpg: %{!?dlrn:%global sources_gpg 1} }
-%global sources_gpg_sign 0xf8675126e2411e7748dd46662fc2093e4682645f
-%global sname oslo.config
-%global pypi_name oslo-config
-# doc and tests are enabled by default unless %%repo_bootstrap
-%bcond doc %[!0%{?repo_bootstrap}]
-%bcond tests %[!0%{?repo_bootstrap}]
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0
+URL:            https://docs.openstack.org/oslo.config
+Source:         %{pypi_source oslo_config}
 
-%{!?upstream_version: %global upstream_version %{version}%{?milestone}}
-# we are excluding some BRs from automatic generator
-%global excluded_brs doc8 bandit pre-commit hacking flake8-import-order
-%if %{without doc}
-# Exclude sphinx from BRs if docs are disabled
-%global excluded_brs %{excluded_brs} sphinx openstackdocstheme
-%if %{without tests}
-# Exclude oslo.log from BRs if docs and tests are disabled
-%global excluded_brs %{excluded_brs} oslo.log
-%endif
-%endif
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-Name:       python-oslo-config
-Epoch:      2
-Version:    9.6.0
-Release:    8%{?dist}
-Summary:    OpenStack common configuration library
 
-Group:      Development/Languages
-License:    Apache-2.0
-URL:        https://launchpad.net/%{sname}
-Source0:    https://tarballs.openstack.org/%{sname}/%{sname}-%{upstream_version}.tar.gz
-# Required for tarball sources verification
-%if 0%{?sources_gpg} == 1
-Source101:        https://tarballs.openstack.org/%{sname}/%{sname}-%{upstream_version}.tar.gz.asc
-Source102:        https://releases.openstack.org/_static/%{sources_gpg_sign}.txt
-%endif
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'oslo-config' generated automatically by pyp2spec.}
+
 Patch0001:  0001-Fix-test_sub_command_multiple-on-Python-3.12.5.patch
 
-BuildArch:  noarch
+%description %_description
 
-# Required for tarball sources verification
-%if 0%{?sources_gpg} == 1
-BuildRequires:  /usr/bin/gpgv2
-%endif
+%package -n     python3-oslo-config
+Summary:        %{summary}
 
-%description
-The Oslo project intends to produce a python library containing
-infrastructure code shared by OpenStack projects. The APIs provided
-by the project should be high quality, stable, consistent and generally
-useful.
+%description -n python3-oslo-config %_description
 
-The oslo-config library is a command line and configuration file
-parsing library from the Oslo project.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-oslo-config rst-generator
 
-%package -n python3-%{pypi_name}
-Summary:    OpenStack common configuration library
-Obsoletes: python2-%{pypi_name} < %{version}-%{release}
-
-BuildRequires: python3-devel
-BuildRequires: pyproject-rpm-macros
-BuildRequires: git-core
-
-%description -n python3-%{pypi_name}
-The Oslo project intends to produce a python library containing
-infrastructure code shared by OpenStack projects. The APIs provided
-by the project should be high quality, stable, consistent and generally
-useful.
-
-The oslo-config library is a command line and configuration file
-parsing library from the Oslo project.
-
-%if %{with doc}
-%package -n python-%{pypi_name}-doc
-Summary:    Documentation for OpenStack common configuration library
-
-%description -n python-%{pypi_name}-doc
-Documentation for the oslo-config library.
-%endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n oslo_config-%{version}
 
-# Required for tarball sources verification
-%if 0%{?sources_gpg} == 1
-%{gpgverify}  --keyring=%{SOURCE102} --signature=%{SOURCE101} --data=%{SOURCE0}
-%endif
-%autosetup -n %{sname}-%{upstream_version} -S git
-# Remove shebang from non executable file, it's used by the oslo-config-validator binary.
-sed -i '/\/usr\/bin\/env/d' oslo_config/validator.py
 
-# Remove tests requiring sphinx if sphinx is not available
-%if %{with doc} == 0
-rm oslo_config/tests/test_sphinxext.py
-rm oslo_config/tests/test_sphinxconfiggen.py
-%endif
-
-sed -i /^[[:space:]]*-c{env:.*_CONSTRAINTS_FILE.*/d tox.ini
-sed -i "s/^deps = -c{env:.*_CONSTRAINTS_FILE.*/deps =/" tox.ini
-sed -i /^minversion.*/d tox.ini
-sed -i /^requires.*virtualenv.*/d tox.ini
-
-# Exclude some bad-known BRs
-for pkg in %{excluded_brs}; do
-  for reqfile in doc/requirements.txt test-requirements.txt; do
-    if [ -f $reqfile ]; then
-      sed -i /^${pkg}.*/d $reqfile
-    fi
-  done
-done
-
-# Automatic BR generation
 %generate_buildrequires
-%pyproject_buildrequires %{?with_doc:-e docs} %{?with_tests:-e %{default_toxenv}}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x rst-generator
+
 
 %build
 %pyproject_wheel
 
-%if %{with doc}
-%tox -e docs
-# remove the sphinx-build-3 leftovers
-rm -rf doc/build/html/.{doctrees,buildinfo}
-%endif
 
 %install
 %pyproject_install
-pushd %{buildroot}/%{_bindir}
-for i in generator validator
-do
-ln -s oslo-config-$i oslo-config-$i-3
-done
-popd
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-# Re-enable when updated in a coordinated manner.
-#%%tox -e %%{default_toxenv}
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%doc README.rst
-%license LICENSE
+
+%files -n python3-oslo-config -f %{pyproject_files}
 %{_bindir}/oslo-config-generator
-%{_bindir}/oslo-config-generator-3
 %{_bindir}/oslo-config-validator
-%{_bindir}/oslo-config-validator-3
-%{python3_sitelib}/oslo_config
-%{python3_sitelib}/*.dist-info
-
-%if %{with doc}
-%files -n python-%{pypi_name}-doc
-%doc doc/build/html
-%license LICENSE
-%endif
 
 %changelog
 %autochangelog

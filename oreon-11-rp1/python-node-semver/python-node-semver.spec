@@ -1,56 +1,62 @@
-%global source0_hash bda71f31c2453fd3698d47dd62e7e9a49ba9c46217fb9223e143348544ceda16
+%global source0_hash none
 
-%global pypi_name node-semver
+Name:           python-node-semver
+Version:        0.9.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        port of node-semver
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        mit
+URL:            https://github.com/podhmo/python-node-semver
+Source:         %{pypi_source node_semver}
+
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Python version of node-semver library.
-
-A "version" is described by the v2.0.0 specification found at
-https://semver.org/.
-
-A leading "=" or "v" character is stripped off and ignored.}
-
-Name: python-%{pypi_name}
-Version: 0.9.0
-Release: 12%{?dist}
-
-License: MIT
-Summary: Python version of node-semver
-URL: https://github.com/podhmo/%{name}
-Source0: %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-BuildArch: noarch
-
-BuildRequires: python3-devel
-BuildRequires: python3-pytest
+This is package 'node-semver' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{pypi_name}
-Summary: %{summary}
+%package -n     python3-node-semver
+Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-node-semver %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-node-semver docs,testing
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n node_semver-%{version}
 
-%autosetup -p1
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,testing
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files nodesemver
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc CHANGES.txt README.rst
+
+%files -n python3-node-semver -f %{pyproject_files}
 
 %changelog
 %autochangelog

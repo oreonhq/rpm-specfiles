@@ -1,55 +1,57 @@
-%global source0_hash 6708f15329ebd986a8ed7c55faf59a879c5f7d8a88bb10a4c8872a1006e4a623
+%global source0_hash none
 
-%global pypi_name whois
+Name:           python-whois
+Version:        1.20240129.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python package for retrieving WHOIS information of domains.
 
-%global pypi_description Python wrapper for the "whois" command with \
-a simple interface to access parsed WHOIS data for a given domain, \
-able to extract data for all the popular TLDs (com, org, net, biz, info...).
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/mboot-github/WhoisDomain/
+Source:         %{pypi_source whois}
 
-Name: python-%{pypi_name}
-Summary: Python module for retrieving WHOIS information of domains
-License: MIT
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-Version: 0.9.27
-Release: 13%{?dist}
 
-URL: https://github.com/DannyCork/python-whois/
-Source0: %{URL}archive/%{version}/%{name}-%{version}.tar.gz
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'whois' generated automatically by pyp2spec.}
 
-BuildArch: noarch
-BuildRequires: python3-devel
-BuildRequires: python3-setuptools
+%description %_description
 
-Requires: whois
+%package -n     python3-whois
+Summary:        %{summary}
 
-%description
-%pypi_description
+%description -n python3-whois %_description
 
-%package -n python3-%{pypi_name}
-Summary: %{summary}
-
-%description -n python3-%{pypi_name}
-%pypi_description
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n whois-%{version}
 
-%setup -q
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-./test.sh
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%license license
-%doc README.md
-%{python3_sitelib}/%{pypi_name}/
-%{python3_sitelib}/%{pypi_name}-*.egg-info
+
+%files -n python3-whois -f %{pyproject_files}
 
 %changelog
 %autochangelog

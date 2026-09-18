@@ -7,7 +7,7 @@
 %global crate logos
 
 Name:           rust-logos
-Version:        0.14.4
+Version:        0.16.1
 Release:        %autorelease
 Summary:        Create ridiculously fast Lexers
 

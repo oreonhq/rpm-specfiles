@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/grpconst
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        2.6.5
+Version:        2.7.0
 Release:        %autorelease
 Summary:        Constructing groups of a given order
 

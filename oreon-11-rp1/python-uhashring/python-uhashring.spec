@@ -1,58 +1,57 @@
-%global source0_hash aeebb2a2b5014a78307d663807337c0de8be1ff27474ea6808928ca948e88381
+%global source0_hash none
 
-%global module uhashring
+Name:           python-uhashring
+Version:        2.5
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Full featured consistent hashing python library compatible with ketama.
 
-Name:           python-%{module}
-Version:        2.3
-Release:        14%{?dist}
-Summary:        Python module uhashring
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://github.com/ultrabug/uhashring/
-Source:         https://github.com/ultrabug/%{module}/archive/refs/tags/%{version}.tar.gz
+URL:            https://github.com/ultrabug/uhashring
+Source:         %{pypi_source uhashring}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# Required to run unit tests
-BuildRequires:  python3-pytest
-BuildRequires:  python3-memcached
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-uhashring implements consistent hashing in pure Python.}
+This is package 'uhashring' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{module}
+%package -n     python3-uhashring
 Summary:        %{summary}
 
-%description -n python3-%{module}
-%_description
+%description -n python3-uhashring %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n uhashring-%{version}
 
-%autosetup -p1 -n %{module}-%{version}
-
-sed -i 's/ *"black",//g' pyproject.toml
-sed -i 's/ *"flake8",//g' pyproject.toml
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files %{module}
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{module} -f %{pyproject_files}
-%doc README.rst
-%license LICENSE
+
+%files -n python3-uhashring -f %{pyproject_files}
 
 %changelog
 %autochangelog

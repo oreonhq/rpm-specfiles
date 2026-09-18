@@ -1,7 +1,7 @@
 %global source0_hash 5eb14bc7bc1407743478ebdbd83772bf3b927fd949136a2fbbde96fa6000b6e7
 
 Name:           moreutils
-Version:        0.68
+Version:        0.70
 Release:        %autorelease
 Summary:        Additional unix utilities
 # Automatically converted from old format: GPLv2 - review is highly recommended.

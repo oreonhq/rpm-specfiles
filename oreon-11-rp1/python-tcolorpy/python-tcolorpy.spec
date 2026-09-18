@@ -1,50 +1,62 @@
-%global source0_hash 43c1afe908f9968ff5ce59f129b62e392049b8e7cd6a8d3f416bd3d372bb5c7a
+%global source0_hash none
 
-Name:          python-tcolorpy
-Version:       0.1.3
-Release:       13%{?dist}
-Summary:       Python library to apply true color for terminal text
+Name:           python-tcolorpy
+Version:        0.1.7
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        tcolopy is a Python library to apply true color for terminal text.
 
-License:       MIT
-URL:           https://github.com/thombashi/tcolorpy
-Source0:       %{pypi_source tcolorpy}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/thombashi/tcolorpy
+Source:         %{pypi_source tcolorpy}
 
-BuildArch:     noarch
-BuildRequires: python3-devel
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-# Missing pytest-md-report, hence manually specifying pytest instead
-BuildRequires: python3dist(pytest)
 
-%description
-%{summary}.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'tcolorpy' generated automatically by pyp2spec.}
 
-%package -n python3-tcolorpy
+%description %_description
+
+%package -n     python3-tcolorpy
 Summary:        %{summary}
 
-%description -n python3-tcolorpy
-%{summary}.
+%description -n python3-tcolorpy %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-tcolorpy test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n tcolorpy-%{version}
 
-%autosetup -n tcolorpy-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files tcolorpy
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-tcolorpy -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

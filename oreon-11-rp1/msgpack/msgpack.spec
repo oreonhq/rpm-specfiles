@@ -1,8 +1,8 @@
 %global source0_hash 2ca2d36672927d7d353927c50be0a06434c0f0fcb9d96ffa0165d9ce40665a6a
 
 Name:		msgpack
-Version:	3.1.0
-Release:	23%{?dist}
+Version:	9.0.0
+Release:	1%{?dist}
 Summary:	Binary-based efficient object serialization library
 
 # Automatically converted from old format: Boost - review is highly recommended.

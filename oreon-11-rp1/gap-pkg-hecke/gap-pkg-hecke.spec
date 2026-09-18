@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/hecke
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.5.4
+Version:        1.6.0
 Release:        %autorelease
 Summary:        Calculating decomposition matrices of Hecke algebras
 

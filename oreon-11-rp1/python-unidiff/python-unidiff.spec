@@ -1,56 +1,60 @@
-%global source0_hash 2e5f0162052248946b9f0970a40e9e124236bf86c82b70821143a6fc1dea2574
+%global source0_hash none
 
-%global modname unidiff
-%global pypi_name unidiff
+Name:           python-unidiff
+Version:        1.0.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Unified diff parsing/metadata extraction library.
 
-Name:           python-%{modname}
-Version:        0.7.5
-Release:        12%{?dist}
-Summary:        Python library to parse and interact with unified diffs (patches)
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            http://github.com/matiasb/python-unidiff
-Source0:        %pypi_source
-BuildArch:      noarch
+URL:            https://github.com/matiasb/python-unidiff
+Source:         %{pypi_source unidiff}
 
-# use setuptools console_scripts for /usr/bin/unidiff
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'unidiff' generated automatically by pyp2spec.}
+
 Patch1: 0001-use-setuptools-console_scripts-for-usr-bin-unidiff.patch
 
-%description
-python-unidiff is a Python library to parse and interact with unified diffs 
-(patches).
+%description %_description
 
-%package -n python%{python3_pkgversion}-%{modname}
+%package -n     python3-unidiff
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-devel
 
-%description -n python%{python3_pkgversion}-%{modname}
-python-unidiff is a Python library to parse and interact with unified diffs 
-(patches).
+%description -n python3-unidiff %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n unidiff-%{version}
 
-%autosetup -n %{modname}-%{version} -p1
-rm -r unidiff.egg-info
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{modname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} -m unittest discover -s tests/
 
-%files -n python%{python3_pkgversion}-%{modname} -f %{pyproject_files}
-%doc README.rst HISTORY
-%{_bindir}/%{modname}
+%files -n python3-unidiff -f %{pyproject_files}
+%{_bindir}/unidiff
 
 %changelog
 %autochangelog

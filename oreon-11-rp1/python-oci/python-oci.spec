@@ -1,75 +1,63 @@
 %global source0_hash none
 
-%bcond_without  tests
-
-%global         reponame    oci-python-sdk
-%global         srcname     oci
-
-Name:           python-%{srcname}
-Version:        2.167.0
+Name:           python-oci
+Version:        2.186.0
 Release:        %autorelease
-Summary:        Oracle Cloud Infrastructure SDK for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Oracle Cloud Infrastructure Python SDK
 
-License:        UPL-1.0
-URL:            https://github.com/oracle/oci-python-sdk
-Source0:        %{url}/archive/v%{version}/%{reponame}-%{version}.tar.gz
-
-# Upstream tries to import a non-existent 'vcr_mods' module.
-# https://github.com/oracle/oci-python-sdk/pull/253
-Patch0:         https://patch-diff.githubusercontent.com/raw/oracle/oci-python-sdk/pull/253.patch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://docs.oracle.com/en-us/iaas/tools/python/latest/index.html
+Source:         %{pypi_source oci}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%if %{with tests}
-BuildRequires:  python3dist(docstring-parser)
-BuildRequires:  python3dist(pydantic)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(rich)
-BuildRequires:  python3dist(vcrpy)
-%endif
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is the Python SDK for Oracle Cloud Infrastructure. }
+This is package 'oci' generated automatically by pyp2spec.}
 
-%description %{_description}
+Patch0:         https://patch-diff.githubusercontent.com/raw/oracle/oci-python-sdk/pull/253.patch
 
-%package -n python3-%{srcname}
+%description %_description
+
+%package -n     python3-oci
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-oci %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-oci adk
+
 
 %prep
-%autosetup -n %{reponame}-%{version} -p1
+%autosetup -p1 -n oci-%{version}
 
-# Remove upper limits and pinned dependencies.
-sed -i -e 's/,[<= ]\+[0-9\.]\+//' -e 's/==/>=/' pyproject.toml
-
-# Compatibility with pytest 7.4.0
-# reported upstream: https://github.com/oracle/oci-python-sdk/issues/565
-sed -i 's/--config-file/--config-file-path/' tests/conftest.py
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x adk
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import -e 'oci.addons.*'
+%_pyproject_check_import_allow_no_modules -t
 
-%if %{with tests}
-%pytest tests/autogentest tests/unit tests/integ
-%endif
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE.txt THIRD_PARTY_LICENSES.txt THIRD_PARTY_LICENSES_DEV.txt
-%doc CHANGELOG.rst CONTRIBUTING.rst README.rst README-development.rst
+%files -n python3-oci -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -17,8 +17,8 @@ network-transparent interface between application programs and the set of
 physical devices (tracker, etc.) used in a virtual-reality (VR) system.}
 
 Name:           vrpn
-Version:        07.35
-Release:        9%{?dist}
+Version:        07.36
+Release:        1%{?dist}
 Summary:        Virtual-Reality Peripheral Network
 
 # According to upstream, linking to the wiiuse (GPLv3+) and gpm (GPLv2+)
@@ -73,7 +73,7 @@ BuildRequires:  python3-devel
 %else
 # Drop once f40 is EOL
 Provides:       python3-vrpn = %{version}-%{release}
-Obsoletes:      python3-vrpn < 07.35-5
+Obsoletes:      python3-vrpn < 07.36-5
 %endif
 BuildRequires:  wiiuse-devel
 

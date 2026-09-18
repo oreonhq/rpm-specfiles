@@ -3,7 +3,7 @@
 %{load:%{_sourcedir}/nodejs.srpm.macros}
 Name:           nodejs24
 Epoch:          1
-Version:        24.15.0
+Version:        24.21.0
 Release:        %{autorelease}
 
 Summary:        JavaScript runtime

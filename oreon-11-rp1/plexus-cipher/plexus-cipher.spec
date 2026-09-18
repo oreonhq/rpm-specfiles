@@ -3,7 +3,7 @@
 %bcond bootstrap 0
 
 Name:           plexus-cipher
-Version:        2.0
+Version:        3.0.0
 Release:        %autorelease
 Summary:        Plexus encryption/decryption component
 License:        Apache-2.0
@@ -23,7 +23,7 @@ BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 %endif
 
-Obsoletes:      %{name}-javadoc < 2.0-28
+Obsoletes:      %{name}-javadoc < 3.0.0-28
 
 %description
 Plexus Cipher is a Java-based library from the Plexus project,

@@ -2,8 +2,8 @@
 
 Name:		globus-callout
 %global _name %(tr - _ <<< %{name})
-Version:	4.3
-Release:	13%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Globus Callout Library
 
 License:	Apache-2.0

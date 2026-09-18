@@ -7,7 +7,7 @@
 %global crate diesel_migrations
 
 Name:           rust-diesel_migrations
-Version:        2.3.1
+Version:        2.3.2
 Release:        %autorelease
 Summary:        Migration management for diesel
 

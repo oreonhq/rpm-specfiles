@@ -1,7 +1,7 @@
 %global source0_hash f7599057b35e67ab61764265daddf9ab03c35cee1e55527547afb073ce8f04e8
 
 Name: libmodsecurity
-Version: 3.0.14
+Version: 3.0.16
 Release: %autorelease
 Summary: A library that loads/interprets rules written in the ModSecurity SecRules
 

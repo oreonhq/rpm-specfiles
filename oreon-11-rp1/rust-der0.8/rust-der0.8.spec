@@ -7,7 +7,7 @@
 %global crate der
 
 Name:           rust-der0.8
-Version:        0.8.1
+Version:        0.8.2
 Release:        %autorelease
 Summary:        Pure Rust embedded-friendly implementation of the Distinguished Encod...
 

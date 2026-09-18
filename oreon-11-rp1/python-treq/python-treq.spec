@@ -1,79 +1,62 @@
-%global source0_hash 25dde3a55ae85ec2f2c56332c99aef255ab14f997d0d00552ebff13538a9804a
+%global source0_hash none
 
-%global pypi_name treq
+Name:           python-treq
+Version:        26.7.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        High-level Twisted HTTP Client API
 
-%bcond doc 1
-
-Name:           python-%{pypi_name}
-Version:        25.5.0
-Release:        3%{?dist}
-Summary:        A requests-like API built on top of twisted.web's Agent
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/twisted/treq
-Source0:        https://files.pythonhosted.org/packages/source/t/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source treq}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-# For tests
-BuildRequires:  python3-pytest
-BuildRequires:  python3-httpbin
 
-%description
-treq is an HTTP library inspired by requests but written on top of
-Twisted’s Agents.
-It provides a simple, higher level API for making HTTP requests
-when using Twisted.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'treq' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-treq
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-treq is an HTTP library inspired by requests but written on top of
-Twisted’s Agents.
-It provides a simple, higher level API for making HTTP requests
-when using Twisted.
+%description -n python3-treq %_description
 
-%if %{with doc}
-%package -n python-%{pypi_name}-doc
-Summary:        treq documentation
-%description -n python-%{pypi_name}-doc
-Documentation for treq
-%endif
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-treq dev,docs
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n treq-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_doc:-x docs}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs
+
 
 %build
 %pyproject_wheel
-%if %{with doc}
-# generate html docs
-export PYTHONPATH=%{python2_sitelib}:%{python3_sitelib}:src
-sphinx-build docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
-%endif
+
 
 %install
 %pyproject_install
-%pyproject_save_files treq
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.rst
 
-%if %{with doc}
-%files -n python-%{pypi_name}-doc
-%license LICENSE
-%doc html
-%endif
+%files -n python3-treq -f %{pyproject_files}
 
 %changelog
 %autochangelog

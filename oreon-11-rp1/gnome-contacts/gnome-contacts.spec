@@ -5,7 +5,7 @@
 %global tarball_version %%(echo %{version} | tr '~' '.')
 
 Name:           gnome-contacts
-Version:        50.0
+Version:        51.0
 Release:        %autorelease
 Summary:        Contacts manager for GNOME
 

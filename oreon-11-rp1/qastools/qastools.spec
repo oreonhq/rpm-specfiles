@@ -1,8 +1,8 @@
 %global source0_hash d18ee5e1045ec44a18d5f7b8613f3987f225b4ef96c63128bf5cc645b2e6dbbb
 
 Name:           qastools
-Version:        0.23.0
-Release:        13%{?dist}
+Version:        1.5.0
+Release:        1%{?dist}
 Summary:        Collection of desktop applications for ALSA
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License:        GPL-3.0-only

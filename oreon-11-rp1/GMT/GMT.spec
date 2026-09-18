@@ -24,7 +24,7 @@
 %endif
 
 Name:           GMT
-Version:        6.6.0
+Version:        6.7.0
 Release:        %autorelease
 Summary:        Generic Mapping Tools
 

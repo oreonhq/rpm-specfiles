@@ -2,8 +2,8 @@
 
 Name:		globus-gridmap-callout-error
 %global _name %(tr - _ <<< %{name})
-Version:	3.2
-Release:	13%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Globus Gridmap Callout Errors
 
 License:	Apache-2.0

@@ -1,8 +1,8 @@
 %global source0_hash 3fe00f4f89b5dd85fd9317e2168ec93f30dbb75d7950a08516c767d21eca7c27
 
 Name: bowtie2
-Version: 2.5.1
-Release: 9%{?dist}
+Version: 2.5.5
+Release: 1%{?dist}
 # Use the word "ultra fast" rather than "ultrafast".
 # https://github.com/BenLangmead/bowtie2/issues/291
 Summary: An ultra fast and memory-efficient read aligner

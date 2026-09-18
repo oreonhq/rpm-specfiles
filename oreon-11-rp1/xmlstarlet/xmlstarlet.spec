@@ -3,8 +3,8 @@
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 Name: xmlstarlet
-Version: 1.6.1
-Release: 29%{?dist}
+Version: 1.7.0
+Release: 1%{?dist}
 Summary: Command Line XML Toolkit
 License: MIT
 URL: http://xmlstar.sourceforge.net/

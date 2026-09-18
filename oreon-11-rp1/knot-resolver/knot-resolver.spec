@@ -8,8 +8,8 @@
 %define NINJA ninja-build
 
 Name:           knot-resolver
-Version:        5.7.6
-Release:        3%{?dist}
+Version:        6.4.2
+Release:        1%{?dist}
 Summary:        Caching full DNS Resolver
 
 License:        GPL-3.0-or-later

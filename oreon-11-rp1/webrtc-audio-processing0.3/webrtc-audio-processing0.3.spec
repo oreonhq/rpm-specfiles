@@ -1,8 +1,8 @@
 %global source0_hash a0fdd938fd85272d67e81572c5a4d9e200a0c104753cb3c209ded175ce3c5dbf
 
 Name:           webrtc-audio-processing0.3
-Version:        0.3.1
-Release:        16%{?dist}
+Version:        2.1
+Release:        1%{?dist}
 Summary:        Library for echo cancellation
 
 License:        BSD-3-Clause

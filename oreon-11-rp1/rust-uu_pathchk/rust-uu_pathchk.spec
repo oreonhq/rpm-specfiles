@@ -10,7 +10,7 @@
 %global crate uu_pathchk
 
 Name:           rust-uu_pathchk
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        pathchk ~ (uutils) diagnose invalid or non-portable PATHNAME
 

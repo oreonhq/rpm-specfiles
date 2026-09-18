@@ -3,7 +3,7 @@
 %global major_version 2
 
 Name:           botan2
-Version:        2.19.5
+Version:        3.13.0
 Release:        %autorelease
 Summary:        Crypto and TLS for C++11
 

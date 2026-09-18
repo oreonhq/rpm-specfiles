@@ -9,7 +9,7 @@
 %global debug_package %{nil}
 
 Name:           uvw
-Version:        3.4.0
+Version:        3.4.0_libuv_v1.48_libuv_v1.48
 %forgemeta
 Release:        %autorelease
 Summary:        Header-only easy to use libuv C++ wrapper

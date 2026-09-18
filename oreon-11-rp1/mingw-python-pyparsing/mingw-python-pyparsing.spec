@@ -11,8 +11,8 @@
 
 Name:           mingw-python-%{pypi_name}
 Summary:        MinGW Python %{pypi_name}
-Version:        3.3.1
-Release:        2%{?dist}
+Version:        3.3.2
+Release:        1%{?dist}
 BuildArch:      noarch
 
 License:        MIT
@@ -60,7 +60,7 @@ mkdir %{distinfo}
 cat > %{distinfo}/METADATA << EOF
 Metadata-Version: 2.2
 Name: %{pypi_name}
-Version: 3.3.1
+Version: 3.3.2
 EOF
 %else
 %global distinfo %{pypi_name}-%{version}.dist-info

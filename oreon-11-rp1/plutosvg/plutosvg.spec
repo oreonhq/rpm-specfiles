@@ -1,7 +1,7 @@
 %global source0_hash 78561b571ac224030cdc450ca2986b4de915c2ba7616004a6d71a379bffd15f3
 
 Name:           plutosvg
-Version:        0.0.7
+Version:        0.0.8
 Release:        %autorelease
 Summary:        Tiny SVG rendering library in C
 License:        MIT

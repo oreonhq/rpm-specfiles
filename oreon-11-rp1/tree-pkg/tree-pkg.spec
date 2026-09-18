@@ -2,7 +2,7 @@
 
 Summary: File system tree viewer
 Name: tree-pkg
-Version: 2.3.1
+Version: 2.3.2
 Release: 1%{?dist}
 
 # The entire source code is LGPL-2.1-or-later except strverscmp.c

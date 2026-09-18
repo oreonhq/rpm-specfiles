@@ -1,62 +1,62 @@
-%global source0_hash 93b18e9393376a45114f9409d7cca119fb6f4f9a37d4b697b500af48b4c5cf0f
+%global source0_hash none
 
-%global srcname eyed3
+Name:           python-eyed3
+Version:        0.9.9
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python audio data toolkit _ID3 and MP3_
 
-Name:           python-%{srcname}
-Version:        0.9.7
-Release:        15%{?dist}
-Summary:        Python audio data toolkit (ID3 and MP3)
-License:        GPL-3.0-or-later
-URL:            https://github.com/nicfit/eyeD3
-Source0:        https://github.com/nicfit/eyeD3/releases/download/v%{version}/eyeD3-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://eyed3.readthedocs.io/
+Source:         %{pypi_source eyed3}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-deprecation
-BuildRequires:  python3-filetype
-BuildRequires:  python3-setuptools
-# Test dependencies.
-BuildRequires:  python3-factory-boy
-BuildRequires:  python3-pytest
-BuildRequires:  python3-six
 
-%global _description\
-A Python module and program for processing ID3 tags. Information about\
-mp3 files(i.e bit rate, sample frequency, play time, etc.) is also\
-provided. The formats supported are ID3 v1.0/v1.1 and v2.3/v2.4.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'eyed3' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
-Summary: %summary
-Requires:       python3-six
-%{?python_provide:%python_provide python3-%{srcname}}
+%package -n     python3-eyed3
+Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-eyed3 %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-eyed3 art-plugin,dev,test,yaml-plugin
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n eyed3-%{version}
 
-%autosetup -n eyeD3-%{version}
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x art-plugin,dev,test,yaml-plugin
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Ignore tests which require:
-# - test data (test_classic_plugin.py, test_core.py, id3/test_frames.py,
-# id3_test_rva.py, test_issues.py)
-py.test-%{python3_version} --ignore=tests/{test_classic_plugin.py,test_core.py,id3/test_frames.py,test_jsonyaml_plugin.py,id3/test_rva.py,test_issues.py}
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname}
-%doc AUTHORS.rst HISTORY.rst README.rst examples/
-%license LICENSE
-%{_bindir}/eyeD3
-%{python3_sitelib}/%{srcname}
-%{python3_sitelib}/eyed3-%{version}-py%{python3_version}.egg-info/
+
+%files -n python3-eyed3 -f %{pyproject_files}
+%{_bindir}/eyed3
 
 %changelog
 %autochangelog

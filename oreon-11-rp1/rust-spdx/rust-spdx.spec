@@ -7,7 +7,7 @@
 %global crate spdx
 
 Name:           rust-spdx
-Version:        0.13.2
+Version:        0.13.5
 Release:        %autorelease
 Summary:        Helper crate for SPDX expressions
 

@@ -25,7 +25,7 @@
 %endif
 
 Name:           magma
-Version:        2.9.0
+Version:        2.10.0
 Release:        %autorelease
 Summary:        Matrix Algebra on GPU and Multi-core Architectures
 Url:            https://icl.utk.edu/magma/
@@ -183,7 +183,7 @@ make generate
 %if %{with test}
 %check
 # Results should be something like
-# % MAGMA 2.9.0 svn 32-bit magma_int_t, 64-bit pointer.
+# % MAGMA 2.10.0 svn 32-bit magma_int_t, 64-bit pointer.
 # % HIP runtime 70051831, driver 70051831. MAGMA not compiled with OpenMP. 
 # % device 0: AMD Radeon Graphics, 2420.0 MHz clock, 16304.0 MiB memory, gcn arch gfx1201
 # % Sat Oct  4 08:05:46 2025

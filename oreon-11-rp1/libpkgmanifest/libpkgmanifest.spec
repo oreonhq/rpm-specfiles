@@ -4,7 +4,7 @@
 %bcond test 0
 
 Name:           libpkgmanifest
-Version:        0.5.9
+Version:        0.6.0
 Release:        1%{?dist}
 Summary:        Library for working with RPM manifests
 License:        LGPL-2.1-or-later

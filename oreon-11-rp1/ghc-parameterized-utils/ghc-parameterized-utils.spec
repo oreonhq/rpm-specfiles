@@ -10,7 +10,7 @@
 # testsuite missing deps: hashable hashtables hedgehog hedgehog-classes indexed-traversable lens tasty tasty-ant-xml tasty-hedgehog tasty-hunit
 
 Name:           ghc-%{pkg_name}
-Version:        2.1.11.0
+Version:        2.3.1.0
 Release:        %autorelease
 Summary:        Classes and data structures for working with data-kind indexed types
 

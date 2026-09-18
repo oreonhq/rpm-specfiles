@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-gtk2
-Version:        2.24.33
-Release:        17%{?dist}
+Version:        3.94.0
+Release:        1%{?dist}
 Summary:        MinGW Windows Gtk2 library
 
 License:        LGPL-2.0-or-later

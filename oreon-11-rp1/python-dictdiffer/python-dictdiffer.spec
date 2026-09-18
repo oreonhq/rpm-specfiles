@@ -1,98 +1,65 @@
-%global source0_hash f5703bfde461172687f615a31d862fc6193f0329a737b2f92f5696a3bc704f66
-
-# Sphinx-generated HTML documentation is not suitable for packaging; see
-# https://bugzilla.redhat.com/show_bug.cgi?id=2006555 for discussion.
-%bcond doc %[ %{defined fc43} || %{defined fc42} ]
+%global source0_hash none
 
 Name:           python-dictdiffer
-Version:        0.9.0
-Release:        19%{?dist}
-Summary:        Dictdiffer is a module that helps you to diff and patch dictionaries
+Version:        0.10.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Dictdiffer is a library that helps you to diff and patch dictionaries.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/inveniosoftware/dictdiffer
-Source:         %{url}/archive/v%{version}/dictdiffer-%{version}.tar.gz
-
-# tests: remove pytest-runner / setup.py test support
-# https://github.com/inveniosoftware/dictdiffer/pull/192
-# rebased on v0.9.0
-Patch:          0001-tests-remove-pytest-runner-setup.py-test-support.patch
-# Downstream-only: remove linting/coverage options for pytest
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-Patch:          0002-Downstream-only-remove-linting-coverage-options-for-.patch
-
-# List test dependencies manually since the test extra has various unwanted
-# dependencies, including linting/coverage tools:
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-BuildRequires:  %{py3_dist pytest}
+Source:         %{pypi_source dictdiffer}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%global common_description %{expand:
-%{summary}.}
 
-%description %{common_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'dictdiffer' generated automatically by pyp2spec.}
 
-%package -n python3-dictdiffer
+Patch:          0001-tests-remove-pytest-runner-setup.py-test-support.patch
+Patch:          0002-Downstream-only-remove-linting-coverage-options-for-.patch
+
+%description %_description
+
+%package -n     python3-dictdiffer
 Summary:        %{summary}
 
-%if %{without doc} && %{defined fedora}
-Obsoletes:      python-dictdiffer-doc < 0.9.0-18
-%endif
+%description -n python3-dictdiffer %_description
 
-%global common_description %{expand:
-%{summary}.}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-dictdiffer docs,numpy,tests
 
-%description -n python3-dictdiffer %{common_description}
-
-%pyproject_extras_subpkg -n python3-dictdiffer numpy
-
-%if %{with doc}
-%package doc
-Summary: Documentation for %{name}
-
-%description doc
-%{summary}.
-%endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n dictdiffer-%{version}
 
-%autosetup -n dictdiffer-%{version}
 
 %generate_buildrequires
-export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
-%pyproject_buildrequires -x numpy %{?with_doc:-x docs}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,numpy,tests
+
 
 %build
-export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l dictdiffer
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with doc}
-PYTHONPATH='%{buildroot}%{python3_sitelib}' sphinx-build docs/ html
-rm -rf html/.buildinfo html/.doctrees
-%endif
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-# Since this project does not use src layout, we must make sure pytest does not
-# see both the “local” module and the one installed in the buildroot. The
-# easiest thing to do is to explicitly test the local copy rather than the
-# installed one by setting PYTHONPATH.
-PYTHONPATH="${PWD}" %pytest
 
 %files -n python3-dictdiffer -f %{pyproject_files}
-
-%if %{with doc}
-%files doc
-%license LICENSE
-%doc html/
-%endif
 
 %changelog
 %autochangelog

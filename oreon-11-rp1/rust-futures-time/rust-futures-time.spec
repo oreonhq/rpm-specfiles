@@ -7,7 +7,7 @@
 %global crate futures-time
 
 Name:           rust-futures-time
-Version:        3.0.1
+Version:        3.1.0
 Release:        %autorelease
 Summary:        Async time combinators
 

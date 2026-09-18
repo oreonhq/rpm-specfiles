@@ -1,71 +1,60 @@
-%global source0_hash d25a765e660f252029738392cff49dd3b2d6e5070ac81c7fb794ae6eac93ef76
+%global source0_hash none
 
-%global srcname pytest-httpserver
+Name:           python-pytest-httpserver
+Version:        1.1.5
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        pytest-httpserver is a httpserver for pytest
 
-%global desc %{expand: \
-This library is designed to help to test http clients without contacting
-the real http server. In other words, it is a fake http server which is
-accessible via localhost can be started with the pre-defined expected
-http requests and their responses.}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/csernazs/pytest-httpserver
+Source:         %{pypi_source pytest_httpserver}
 
-Name:		python-%{srcname}
-Version:	1.0.8
-Release:	12%{?dist}
-Summary:	HTTP server for pytest
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-License:	MIT
-URL:		https://github.com/csernazs/pytest-httpserver
-Source0:	%{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pytest-httpserver' generated automatically by pyp2spec.}
 
 Patch0:		pyproject.patch
-
-# https://fedoraproject.org/wiki/Changes/DeprecatePythonToml
-# Use tomllib instead of toml (used only in tests)
-# https://github.com/csernazs/pytest-httpserver/pull/377
 Patch1:		tomllib.patch
 
-BuildArch:	noarch
+%description %_description
 
-BuildRequires:	python3-devel
-BuildRequires:	python3-pytest
-BuildRequires:	python3-requests
-BuildRequires:	pyproject-rpm-macros
+%package -n     python3-pytest-httpserver
+Summary:        %{summary}
 
-%description
-%{desc}
+%description -n python3-pytest-httpserver %_description
 
-%package -n python3-%{srcname}
-Summary:	%{summary}
-
-%description -n python3-%{srcname} %desc
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_httpserver-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-
-# Remove unnecessary dependencies
-sed -i '/flake8/d' pyproject.toml
-sed -i '/pytest-cov/d' pyproject.toml
-sed -i '/coverage/d' pyproject.toml
-sed -i '/mypy/d' pyproject.toml
-sed -i '/types-requests/d' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pytest_httpserver
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md CHANGES.rst CONTRIBUTION.md
+
+%files -n python3-pytest-httpserver -f %{pyproject_files}
 
 %changelog
 %autochangelog

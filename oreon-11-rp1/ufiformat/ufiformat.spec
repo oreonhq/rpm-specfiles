@@ -1,8 +1,8 @@
 %global source0_hash 002ae9d86ae94fe4d9fe94d1bddf16884c7c37df441a3ddb0d8ee1633ffcc096
 
 Name:           ufiformat
-Version:        0.9.8
-Release:        31%{?dist}
+Version:        0.9.9
+Release:        1%{?dist}
 Summary:        Disk formatting utility for USB floppy devices
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

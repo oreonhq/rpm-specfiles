@@ -1,7 +1,7 @@
 %global source0_hash 794fcf539dcc759bc144ebb56a290f1eda2d1af0bbe7473daad19cc31cac431e
 
 Name:       bcal
-Version:    2.5
+Version:    2.6
 Release:    %autorelease
 Summary:    Storage conversion and expression calculator
 

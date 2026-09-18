@@ -1,7 +1,7 @@
 %global source0_hash 67f7aeef28f4a88c3608f1a093850ff7164fca2f6af91022712171eba41792d7
 
 Name:           plasma-smart-video-wallpaper-reborn
-Version:        2.9.0
+Version:        2.14.1
 Release:        1%{?dist}
 Summary:        Play videos on your Plasma 6 Desktop/Lock Screen
 License:        GPL-2.0-only

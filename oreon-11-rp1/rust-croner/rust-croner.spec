@@ -7,7 +7,7 @@
 %global crate croner
 
 Name:           rust-croner
-Version:        3.0.1
+Version:        4.0.0
 Release:        %autorelease
 Summary:        Rust library designed for parsing and evaluating cron patterns
 

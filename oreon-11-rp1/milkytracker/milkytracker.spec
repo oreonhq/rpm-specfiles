@@ -1,8 +1,8 @@
 %global source0_hash 72d5357e303380b52383b66b51f944a77cd77e2b3bfeb227d87cc0e72ab292f7
 
 Name:           milkytracker
-Version:        1.03.00
-Release:        14%{?dist}
+Version:        1.06
+Release:        1%{?dist}
 Summary:        Module tracker software for creating music
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

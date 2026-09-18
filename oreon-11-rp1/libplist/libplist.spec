@@ -3,13 +3,13 @@
 %global forgeurl https://github.com/libimobiledevice/libplist
 
 Name:     libplist
-Version:  2.6.0
+Version:  2.7.0
 Release:  %autorelease
 Summary:  Library for manipulating Apple Binary and XML Property Lists
 
 License:  LGPL-2.0-or-later
 URL:      https://www.libimobiledevice.org/
-Source:        https://github.com/libimobiledevice/libplist/releases/download/2.6.0/libplist-2.6.0.tar.bz2
+Source:        https://github.com/libimobiledevice/libplist/releases/download/2.7.0/libplist-2.6.0.tar.bz2
 # cython: Fix build with cython 3.1+
 Patch:        https://github.com/libimobiledevice/libplist/commit/d7fe479707af57aeedf7e41c08e7fb698cd2e2a3.patch
 

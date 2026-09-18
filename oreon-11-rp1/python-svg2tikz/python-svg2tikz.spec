@@ -1,94 +1,58 @@
-%global source0_hash dbf2fae0c8a2f4eded306d2fe75edbf2c8e2a8da5490b55a783c941c80c47d9a
+%global source0_hash none
 
-%global         srcname         svg2tikz
-%global         forgeurl        https://github.com/xyz2tex/svg2tikz
-Version:        3.3.0
-%global         tag             v%{version}
-%forgemeta
+Name:           python-svg2tikz
+Version:        3.3.6
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Tools for converting SVG graphics to TikZ/PGF code
 
-Name:           python-%{srcname}
-Release:        6%{?dist}
-Summary:        Convert SVG to TikZ/PGF code
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
-URL:            %{forgeurl}
-Source0:        %{forgesource}
+URL:            ...
+Source:         %{pypi_source svg2tikz}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  gobject-introspection-devel
-Requires:       xclip
 
-BuildArch: noarch
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-SVG2TikZ, formally known as Inkscape2TikZ, are a set of tools for
-converting SVG graphics to TikZ/PGF code.}
+This is package 'svg2tikz' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-svg2tikz
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-svg2tikz %_description
 
-%package -n inkscape-%{srcname}
-Summary:        Inkscape svg2tikz extension
-Requires:       python3-%{srcname}
-Requires:       inkscape
-
-%description -n inkscape-%{srcname} %_description
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n svg2tikz-%{version}
 
-%forgeautosetup
-
-#Remove version limit from lxml
-sed -i "s/lxml =.*/lxml = '\*'/" pyproject.toml
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
-# Executable fix
-chmod -x %{buildroot}%{python3_sitelib}/%{srcname}/__init__.py
-# Shebang fix
-%py3_shebang_fix %{buildroot}%{python3_sitelib}/%{srcname}/tikz_export.py
-chmod +x %{buildroot}%{python3_sitelib}/%{srcname}/tikz_export.py
-	
- 
-# Inkscape-extension
-mkdir -p %{buildroot}%{_datadir}/inkscape/extensions
-ln -s %{python3_sitelib}/%{srcname}/tikz_export.py \
-  %{buildroot}%{_datadir}/inkscape/extensions/tikz_export.py
-ln -s %{python3_sitelib}/%{srcname}/tikz_export_effect.inx \
-  %{buildroot}%{_datadir}/inkscape/extensions/tikz_export_effect.inx
-ln -s %{python3_sitelib}/%{srcname}/tikz_export_output.inx \
-  %{buildroot}%{_datadir}/inkscape/extensions/tikz_export_output.inx
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{py3_test_envvars} %{python3} -m unittest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
-%doc CHANGELOG.md
+
+%files -n python3-svg2tikz -f %{pyproject_files}
 %{_bindir}/svg2tikz
-# Poetry does not mark license files
-# https://github.com/python-poetry/poetry/issues/1350
-%license LICENSE
-
-%files -n inkscape-%{srcname}
-%license LICENSE
-# co-own directory with Inkscape
-%dir %{_datadir}/inkscape/extensions
-%{_datadir}/inkscape/extensions/tikz_export.py
-%{_datadir}/inkscape/extensions/tikz_export_effect.inx
-%{_datadir}/inkscape/extensions/tikz_export_output.inx
 
 %changelog
 %autochangelog

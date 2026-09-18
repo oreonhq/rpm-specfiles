@@ -40,7 +40,7 @@ Documentation can be found here:
 http://steps.sourceforge.net/manual/manual_index.html}
 
 Name:           python-steps
-Version:        3.6.0
+Version:        5.1.0
 Release:        %autorelease
 Summary:        STochastic Engine for Pathway Simulation
 

@@ -1,6 +1,6 @@
 %global source0_hash ad2186c976c588c483bfd6a7166fba2e2ec743027e14be4618ba1f0e5baadab9
 
-Version:        1.7.0
+Version:        1.8.0
 Release:        1%{?dist}
 URL:            https://vercel.com/font
 

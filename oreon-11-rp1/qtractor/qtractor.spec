@@ -1,7 +1,7 @@
 %global source0_hash c1712c32e49c625f97e5b35d7677f0765269594b5e9ef37241f023f716435cd8
 
 Name:           qtractor
-Version:        1.5.11
+Version:        1.6.4
 Release:        %autorelease
 Summary:        Audio/MIDI multi-track sequencer
 License:        GPL-2.0-or-later

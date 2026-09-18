@@ -1,8 +1,8 @@
 %global source0_hash 4624bc68aa5c550cd311d928cffadbb2359a4479ac1e7514886f409124e2eec1
 
 Name:		qclib
-Version:	2.5.1
-Release:	3%{?dist}
+Version:	2.5.2
+Release:	1%{?dist}
 Summary:	Library for extraction of system information for Linux on z Systems
 License:	BSD-3-Clause
 URL:		https://github.com/ibm-s390-linux/qclib

@@ -12,7 +12,7 @@
 %global app_id org.workrave.Workrave
 
 Name:          workrave
-Version:       1.11.0~rc.3
+Version:       1_11_1
 Release:       %autorelease
 Summary:       Program that assists in the recovery and prevention of RSI
 # Based on older packages by Dag Wieers <dag@wieers.com> and Steve Ratcliffe

@@ -1,8 +1,8 @@
 %global source0_hash cacecf0baa674d356641f1d406b8bff1d756d739c46b869a54de515d08e6fc9c
 
 Name:           python-tempita
-Version:        0.5.2
-Release:        20%{?dist}
+Version:        0.6.0
+Release:        1%{?dist}
 Summary:        A very small text templating language
 
 License:        MIT

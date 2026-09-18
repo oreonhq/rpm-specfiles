@@ -1,48 +1,63 @@
-%global source0_hash b01ca8b6fe7d53dfc1b3fe642a6ede28e8cc8a98526a041f7a485a15f9c34e7b
+%global source0_hash none
 
-%global srcname incremental
-
-%global common_description %{expand:
-Incremental is a small library that versions your Python projects.}
-
-Name:           python-%{srcname}
-Version:        24.7.2
+Name:           python-incremental
+Version:        24.11.0
 Release:        %autorelease
-Summary:        It versions your Python projects
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A CalVer version manager that supports the future.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/twisted/incremental
-Source0:        %{url}/archive/%{srcname}-%{version}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source incremental}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
 
-%description %{common_description}
 
-%package -n     python3-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'incremental' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-incremental
 Summary:        %{summary}
-Provides:       %{srcname} = %{version}-%{release}
 
-%description -n python3-%{srcname} %{common_description}
+%description -n python3-incremental %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-incremental scripts
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n incremental-%{version}
 
-%autosetup -n %{srcname}-%{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x scripts
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-incremental -f %{pyproject_files}
+%{_bindir}/incremental
 
 %changelog
 %autochangelog

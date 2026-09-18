@@ -1,8 +1,8 @@
 %global source0_hash 527eb256dfa313403405f324471872326e58e4d7d0f36cbca2f2280c0e34f5d7
 
 Name:           pysnmp
-Version:        7.1.21
-Release:        5%{?dist}
+Version:        7.1.29
+Release:        1%{?dist}
 
 Summary:        An SNMP engine written in Python
 

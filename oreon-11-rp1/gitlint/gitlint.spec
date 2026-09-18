@@ -2,8 +2,8 @@
 
 Summary: Git commit message linting tool
 Name: gitlint
-Version: 0.15.0
-Release: 20%{?dist}
+Version: 0.19.1
+Release: 1%{?dist}
 License: MIT
 Source: %pypi_source
 Patch0: strict-dependencies.patch

@@ -3,8 +3,8 @@
 %global minorver 1
 
 Name:		ftplib
-Version:	4.0
-Release:	26%{?dist}
+Version:	4.0-1-1
+Release:	1%{?dist}
 Summary:	Library of FTP routines
 License:	LGPLv2+
 URL:		http://nbpfaus.net/~pfau/ftplib-4/

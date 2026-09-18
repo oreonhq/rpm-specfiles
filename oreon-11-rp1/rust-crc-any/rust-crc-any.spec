@@ -7,7 +7,7 @@
 %global crate crc-any
 
 Name:           rust-crc-any
-Version:        2.5.0
+Version:        3.0.1
 Release:        %autorelease
 Summary:        Compute CRC values
 

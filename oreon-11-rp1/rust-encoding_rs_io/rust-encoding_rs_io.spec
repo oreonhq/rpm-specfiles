@@ -7,7 +7,7 @@
 %global crate encoding_rs_io
 
 Name:           rust-encoding_rs_io
-Version:        0.1.7
+Version:        0.1.8
 Release:        %autorelease
 Summary:        Streaming transcoding for encoding_rs
 

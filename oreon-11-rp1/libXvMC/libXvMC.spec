@@ -6,8 +6,8 @@
 
 Summary: X.Org X11 libXvMC runtime library
 Name: libXvMC
-Version: 1.0.13
-Release: 9%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Version: 1.0.15
+Release: 1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT
 URL: http://www.x.org
 

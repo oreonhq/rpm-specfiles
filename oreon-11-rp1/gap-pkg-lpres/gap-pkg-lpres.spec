@@ -4,7 +4,7 @@
 %global giturl       https://github.com/gap-packages/lpres
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.1.1
+Version:        1.1.2
 Release:        %autorelease
 Summary:        Nilpotent quotients of L-presented groups
 

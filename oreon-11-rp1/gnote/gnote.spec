@@ -5,7 +5,7 @@
 %global tarball_version %%(echo %{version} | tr '~' '.')
 
 Name:           gnote
-Version:        50~rc
+Version:        50.2
 Release:        1%{?dist}
 Summary:        Note-taking application
 

@@ -1,7 +1,7 @@
 %global source0_hash 6aa566d4b6a5bcf16c980be59197ed0f90943a0724239eba108258a400e1b8cc
 
 Name:           python-py-tes
-Version:        1.1.2
+Version:        1.1.4
 Release:        %autorelease
 Summary:        Python SDK for the GA4GH Task Execution API
 

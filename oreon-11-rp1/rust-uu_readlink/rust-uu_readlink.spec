@@ -10,7 +10,7 @@
 %global crate uu_readlink
 
 Name:           rust-uu_readlink
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        readlink ~ (uutils) display resolved path of PATHNAME
 

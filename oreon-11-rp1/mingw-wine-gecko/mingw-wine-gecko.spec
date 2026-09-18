@@ -6,8 +6,8 @@
 %undefine _auto_set_build_flags
 
 Name:           mingw-wine-gecko
-Version:        2.47.4
-Release:        10%{?dist}
+Version:        3.5.2
+Release:        1%{?dist}
 Summary:        Gecko library required for Wine
 
 # Automatically converted from old format: MPLv1.1 or GPLv2+ or LGPLv2+ - review is highly recommended.

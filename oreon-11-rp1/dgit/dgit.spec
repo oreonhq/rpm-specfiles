@@ -1,7 +1,7 @@
 %global source0_hash 928b8260eb2d433fdd86f78a56d15f5ed804a27e75022c978f81b2c02f3aab6a
 
 Name:           dgit
-Version:        14.11
+Version:        16.9.git
 Release:        %autorelease
 Summary:        Integration between git and Debian-style archives
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

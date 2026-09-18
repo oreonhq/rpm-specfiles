@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        0.2.6
+Version:        0.2.8
 Release:        %autorelease
 Summary:        Efficiently run periodic, on-demand actions
 

@@ -21,8 +21,8 @@ Requires(postun): systemd
 BuildRequires: systemd
 
 Name: tarantool
-Version: 2.4.2.68
-Release: 20%{?dist}
+Version: 3.8.1
+Release: 1%{?dist}
 Summary: In-Memory Database
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD

@@ -1,7 +1,7 @@
 %global source0_hash 30fa9e6ad507df49d3c6a2f88894256bcf90f18e240a00764da6ecab1db24895
 
 Name:           python-tox-uv
-Version:        1.29.0
+Version:        1.36.0
 Release:        %autorelease
 Summary:        Integration of uv with tox
 

@@ -7,7 +7,7 @@
 %global crate nanoid
 
 Name:           rust-nanoid
-Version:        0.4.0
+Version:        0.5.0
 Release:        %autorelease
 Summary:        Tiny, secure, URL-friendly, unique string ID generator for Rust
 

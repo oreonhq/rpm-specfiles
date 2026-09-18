@@ -1,90 +1,57 @@
-%global source0_hash d3a73dd4d56f5b9dc4d11045ca524a224822de530fdf0ab3cd203c2f32d14ad0
+%global source0_hash none
 
-%global pypi_name XStatic-JS-Yaml
+Name:           python-xstatic-js-yaml
+Version:        3.13.1.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        JS-Yaml 3.13.1 _XStatic packaging standard_
 
-Name:           python-%{pypi_name}
-Version:        3.8.1.0
-Release:        29%{?dist}
-Summary:        JS-Yaml (XStatic packaging standard)
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/nodeca/js-yaml
-Source0:        https://files.pythonhosted.org/packages/source/X/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source xstatic_js_yaml}
+
 BuildArch:      noarch
-
-%description
-JS-Yaml JavaScript library packaged for setup-tools (easy_install) / pip.
-
-This package is intended to be used by any project that needs these files.
-
-It intentionally does not provide any extra code except some metadata
-nor has any extra requirements.
-
-%package -n xstatic-js-yaml-common
-Summary:        %{summary}
-
-BuildRequires:  web-assets-devel
-Requires:       web-assets-filesystem
-
-%description -n xstatic-js-yaml-common
-JS-Yaml JavaScript library packaged for setup-tools (easy_install) / pip.
-
-This package is intended to be used by any project that needs these files.
-
-It intentionally does not provide any extra code except some metadata
-nor has any extra requirements.
-
-This package contains the JavaScript files.
-
-%package -n python3-%{pypi_name}
-Summary:        %{summary}
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
 
-Requires:       python3-XStatic
-Requires:       xstatic-js-yaml-common
 
-%{?python_provide:%python_provide python3-%{pypi_name}}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'xstatic-js-yaml' generated automatically by pyp2spec.}
 
-%description -n python3-%{pypi_name}
-JS-Yaml JavaScript library packaged for setup-tools (easy_install) / pip.
+%description %_description
 
-This package is intended to be used by any project that needs these files.
+%package -n     python3-xstatic-js-yaml
+Summary:        %{summary}
 
-It intentionally does not provide any extra code except some metadata
-nor has any extra requirements.
+%description -n python3-xstatic-js-yaml %_description
 
-This package provides Python 3 build of %{pypi_name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n xstatic_js_yaml-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
 
-# Patch to use webassets directory
-sed -i "s|^BASE_DIR = .*|BASE_DIR = '%{_jsdir}/js_yaml'|" xstatic/pkg/js_yaml/__init__.py
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
-mkdir -p %{buildroot}/%{_jsdir}/js_yaml
-mv %{buildroot}/%{python3_sitelib}/xstatic/pkg/js_yaml/data/js-yaml.js %{buildroot}/%{_jsdir}/js_yaml
-rmdir %{buildroot}%{python3_sitelib}/xstatic/pkg/js_yaml/data/
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n xstatic-js-yaml-common
-%doc README.txt
-%{_jsdir}/js_yaml
 
-%files -n python3-%{pypi_name}
-%doc README.txt
-%{python3_sitelib}/xstatic/pkg/js_yaml
-%{python3_sitelib}/XStatic_JS_Yaml-%{version}-py3.*.egg-info
-%{python3_sitelib}/XStatic_JS_Yaml-%{version}-py3.*-nspkg.pth
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-xstatic-js-yaml -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,145 +1,62 @@
-%global source0_hash c823dbf56c9e35b0999a13d7e05062b837bae36c518a40255d522fbe3750fbb4
+%global source0_hash none
 
-%global srcname django-storages
-
-Name:           python-%{srcname}
-Version:        1.11.1
-Release:        21%{?dist}
+Name:           python-django-storages
+Version:        1.14.6
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Support for many storage backends in Django
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
 URL:            https://github.com/jschneier/django-storages
-Source:         %{pypi_source}
+Source:         %{pypi_source django_storages}
+
 BuildArch:      noarch
-
-%global _description %{expand:
-%{summary}.}
-
-%description %{_description}
-
-%package     -n python3-%{srcname}
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
 
-%description -n python3-%{srcname} %{_description}
 
-%package     -n python3-%{srcname}+azure
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'django-storages' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-django-storages
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}+azure}
-Provides:       python3dist(%{srcname}/azure) = %{version}
-Provides:       python%{python3_version}dist(%{srcname}/azure) = %{version}
-Requires:       python%{python3_version}dist(%{srcname}) = %{version}
-Requires:       (python%{python3_version}dist(azure-storage-blob) >= 1.3.1 with python%{python3_version}dist(azure-storage-blob) < 12.0.0)
 
-%description -n python3-%{srcname}+azure %{_description}
+%description -n python3-django-storages %_description
 
-"azure" extras. Python 3 version.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-django-storages azure,boto3,dropbox,google,libcloud,s3,sftp
 
-%package     -n python3-%{srcname}+boto3
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}+boto3}
-Provides:       python3dist(%{srcname}/boto3) = %{version}
-Provides:       python%{python3_version}dist(%{srcname}/boto3) = %{version}
-Requires:       python%{python3_version}dist(%{srcname}) = %{version}
-Requires:       python%{python3_version}dist(boto3) >= 1.4.4
-
-%description -n python3-%{srcname}+boto3 %{_description}
-
-"boto3" extras.
-
-%package     -n python3-%{srcname}+dropbox
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}+dropbox}
-Provides:       python3dist(%{srcname}/dropbox) = %{version}
-Provides:       python%{python3_version}dist(%{srcname}/dropbox) = %{version}
-Requires:       python%{python3_version}dist(%{srcname}) = %{version}
-Requires:       python%{python3_version}dist(dropbox) >= 7.2.1
-
-%description -n python3-%{srcname}+dropbox %{_description}
-
-"dropbox" extras.
-
-%package     -n python3-%{srcname}+google
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}+google}
-Provides:       python3dist(%{srcname}/google) = %{version}
-Provides:       python%{python3_version}dist(%{srcname}/google) = %{version}
-Requires:       python%{python3_version}dist(%{srcname}) = %{version}
-Requires:       python%{python3_version}dist(google-cloud-storage) >= 1.15.0
-
-%description -n python3-%{srcname}+google %{_description}
-
-"google" extras.
-
-%package     -n python3-%{srcname}+libcloud
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}+libcloud}
-Provides:       python3dist(%{srcname}/libcloud) = %{version}
-Provides:       python%{python3_version}dist(%{srcname}/libcloud) = %{version}
-Requires:       python%{python3_version}dist(%{srcname}) = %{version}
-Requires:       python%{python3_version}dist(apache-libcloud)
-
-%description -n python3-%{srcname}+libcloud %{_description}
-
-"libcloud" extras.
-
-%package     -n python3-%{srcname}+sftp
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}+sftp}
-Provides:       python3dist(%{srcname}/sftp) = %{version}
-Provides:       python%{python3_version}dist(%{srcname}/sftp) = %{version}
-Requires:       python%{python3_version}dist(%{srcname}) = %{version}
-Requires:       python%{python3_version}dist(paramiko)
-
-%description -n python3-%{srcname}+sftp %{_description}
-
-"sftp" extras.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n django_storages-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
-rm -vr *.egg-info
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x azure,boto3,dropbox,google,libcloud,s3,sftp
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Tests require too many dependencies
-#%%check
-#export DJANGO_SETTINGS_MODULE=tests.settings
-#%%python3 -m pytest -v tests
 
-%files -n python3-%{srcname}
-%license LICENSE
-%doc README.rst CHANGELOG.rst
-%{python3_sitelib}/storages/
-%{python3_sitelib}/django_storages-*.egg-info/
+%check
+%_pyproject_check_import_allow_no_modules -t
 
-# Missing requirement azure-storage-blob
-#%%files -n python3-%%{srcname}+azure
-#%%{?python_extras_subpkg:%%ghost %%{python3_sitelib}/django_storages-*.egg-info}
 
-%files -n python3-%{srcname}+boto3
-%{?python_extras_subpkg:%ghost %{python3_sitelib}/django_storages-*.egg-info}
-
-%files -n python3-%{srcname}+dropbox
-%{?python_extras_subpkg:%ghost %{python3_sitelib}/django_storages-*.egg-info}
-
-# Missing requirement google-cloud-storage
-#%%files -n python3-%%{srcname}+google
-#%%{?python_extras_subpkg:%%ghost %%{python3_sitelib}/django_storages-*.egg-info}
-
-%files -n python3-%{srcname}+libcloud
-%{?python_extras_subpkg:%ghost %{python3_sitelib}/django_storages-*.egg-info}
-
-%files -n python3-%{srcname}+sftp
-%{?python_extras_subpkg:%ghost %{python3_sitelib}/django_storages-*.egg-info}
+%files -n python3-django-storages -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -10,7 +10,7 @@
 %global supported_arches x86_64 s390x
 
 Name:           rust-opus
-Version:        0.3.1
+Version:        0.4.0
 Release:        %autorelease
 Summary:        Safe Rust bindings for libopus
 

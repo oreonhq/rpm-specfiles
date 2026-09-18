@@ -1,25 +1,24 @@
-%global source0_hash d00911efd32e3bc886c222c3a650291440313ee94ac857031da6cc3be7935204
+%global source0_hash none
 
-%global pypi_name patiencediff
 Name:           python-patiencediff
-Version:        0.2.15
-Release:        8%{?dist}
+Version:        0.2.19
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Python implementation of the patiencediff algorithm
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
 URL:            https://www.breezy-vcs.org/
-Source:         %{pypi_source}
+Source:         %{pypi_source patiencediff}
 
-BuildRequires:  gcc
 BuildRequires:  python3-devel
+BuildRequires:  gcc
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package contains the implementation of the patiencediff algorithm, as
-first described by Bram Cohen. Like Python's difflib, this module provides
-both a convenience unified_diff function for the generation of unified diffs of
-text files as well as a SequenceMatcher that can be used on arbitrary
-lists. Patiencediff provides a good balance of performance, nice output for
-humans, and implementation simplicity.}
+This is package 'patiencediff' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -28,27 +27,36 @@ Summary:        %{summary}
 
 %description -n python3-patiencediff %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-patiencediff dev
 
+
+%prep
 %autosetup -p1 -n patiencediff-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files patiencediff
 
 %check
-%py3_test_envvars %{python3} -m unittest patiencediff.test_patiencediff
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-patiencediff -f %{pyproject_files}
-%doc README.rst
 %{_bindir}/patiencediff
 
 %changelog

@@ -1,26 +1,24 @@
-%global source0_hash 52022dc14dcc0451e05e54a8f5d5e7760351b6701eff816d1e9739577ec5635e
-
-%bcond tests 1
+%global source0_hash none
 
 Name:           python-mkdocs-gen-files
-Version:        0.6.0
+Version:        0.6.1
 Release:        %autorelease
-Summary:        MkDocs plugin to generate documentation pages during the build
+# Fill in the actual package summary to submit package to Fedora
+Summary:        MkDocs plugin to programmatically generate documentation pages during the build
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://oprypin.github.io/mkdocs-gen-files
+URL:            https://github.com/oprypin/mkdocs-gen-files
 Source:         %{pypi_source mkdocs_gen_files}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-%if %{with tests}
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-golden)
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package provides a plugin for MkDocs to programmatically generate
-documentation pages during the build.}
+This is package 'mkdocs-gen-files' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -29,30 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-mkdocs-gen-files %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n mkdocs_gen_files-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l mkdocs_gen_files
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-%pytest
-%else
-%pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-mkdocs-gen-files -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

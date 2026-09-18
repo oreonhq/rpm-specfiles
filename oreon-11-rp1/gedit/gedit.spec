@@ -17,7 +17,7 @@
 
 Name:		gedit
 Epoch:		2
-Version:	49.0
+Version:	50.0
 Release:	%autorelease
 Summary:	Text editor for the GNOME desktop
 License:	GPL-3.0-or-later AND LGPL-3.0-or-later

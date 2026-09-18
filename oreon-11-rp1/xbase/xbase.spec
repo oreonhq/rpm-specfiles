@@ -4,8 +4,8 @@
 
 Name:		xbase
 Summary:	XBase compatible database library
-Version:	4.2.6
-Release:	2%{?dist}
+Version:	4.3.0
+Release:	1%{?dist}
 License:	LGPL-3.0-or-later
 URL:		http://linux.techass.com/projects/xdb/
 Source0:	http://downloads.sourceforge.net/xdb/%{name}64-%{version}.tar.gz

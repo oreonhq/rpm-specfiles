@@ -10,7 +10,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        2.1.8
+Version:        2.4.4
 Release:        %autorelease
 Summary:        TLS protocol native implementation
 

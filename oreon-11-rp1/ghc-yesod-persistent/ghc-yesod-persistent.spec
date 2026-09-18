@@ -10,7 +10,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        1.6.0.8
+Version:        1.6.0.9
 Release:        %autorelease
 Summary:        Some helpers for using Persistent from Yesod
 

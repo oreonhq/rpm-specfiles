@@ -8,7 +8,7 @@
 %endif
 
 Name: pulp-cli-deb
-Version: 0.4.3
+Version: 0.5.0
 Release: %autorelease
 Summary: Command line interface to talk to the Pulp 3 REST API (deb plugin)
 License: GPL-2.0-or-later

@@ -1,79 +1,61 @@
-%global source0_hash 2d3c0ce868085894c45c7436206cb3a1e376d6058a92daa3f7123afd4eda9732
+%global source0_hash none
 
-# Tests are disabled by default. 😞
-# Enable if https://bugzilla.redhat.com/show_bug.cgi?id=1949502 /
-# https://github.com/bitprophet/pytest-relaxed/issues/12 is resolved:
-%bcond_with     tests
-
-%global         srcname     fabric
-
-Name:           python-%{srcname}
-Version:        3.2.2
+Name:           python-fabric
+Version:        3.2.3
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        High level SSH command execution
 
-License:        BSD-3-Clause
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/fabric/fabric
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source:         %{pypi_source fabric}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-# Needed here since invoke's vendored decorator is not used.
-# See RHBZ 2156956.
-Requires:       python3dist(decorator)
 
-%if %{with tests}
-# Extra pytest (a superset of extra testing)
-BuildRequires:  python3dist(pytest)
-# Missing from setup.py (only in requirements-dev.txt), but still needed for
-# testing:
-BuildRequires:  python3dist(pytest-relaxed)
-%endif
-
-BuildRequires:  help2man
-
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Fabric is a high level Python (2.7, 3.4+) library designed to execute shell
-commands remotely over SSH, yielding useful Python objects in return. It builds
-on top of Invoke (subprocess command execution and command-line features) and
-Paramiko (SSH protocol implementation), extending their APIs to complement one
-another and provide additional functionality.}
+This is package 'fabric' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-fabric
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-fabric %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-fabric pytest,testing
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n fabric-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-
-# Allow a slightly older invoke version.
-sed -i 's/invoke>=2.0/invoke>=1.7/' setup.py
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x pytest,testing
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
+
+%files -n python3-fabric -f %{pyproject_files}
 %{_bindir}/fab
 
 %changelog

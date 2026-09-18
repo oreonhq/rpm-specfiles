@@ -1,20 +1,24 @@
-%global source0_hash fbde8c80e1b937a2c61f20347e91c0c18a1940cecf012d62e65a7caf08967c9c
+%global source0_hash none
 
 Name:           python-opentelemetry-api
-Version:        1.39.1
+Version:        1.44.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        OpenTelemetry Python API
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-api
 Source:         %{pypi_source opentelemetry_api}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-OpenTelemetry Python API.}
+This is package 'opentelemetry-api' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -23,39 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-opentelemetry-api %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n opentelemetry_api-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l opentelemetry
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-# The ignored tests have a dependency on the top-level test folder from
-# openetelemetry monorepository. To make the packaging simpler, we ignore those
-# for now.
-%pytest \
-    --ignore=tests/events/test_event_logger_provider.py \
-    --ignore=tests/events/test_proxy_event.py \
-    --ignore=tests/logs/test_logger_provider.py \
-    --ignore=tests/logs/test_proxy.py \
-    --ignore=tests/metrics/test_meter_provider.py \
-    --ignore=tests/trace/test_globals.py \
-    --ignore=tests/trace/test_proxy.py \
-    --ignore=tests/util/test_once.py
 
 %files -n python3-opentelemetry-api -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

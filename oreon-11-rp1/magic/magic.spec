@@ -3,7 +3,7 @@
 %undefine   __brp_mangle_shebangs
 
 Name:		magic
-Version:	8.3.623
+Version:	8.3.683
 Release:	1%{?dist}
 Summary:	A very capable VLSI layout tool
 

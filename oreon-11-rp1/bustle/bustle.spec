@@ -1,7 +1,7 @@
 %global source0_hash 91df9f34dc453dc5d95d7dea7d592db50d3917cc7156c510e3d52a08dfccd6ac
 
 Name:           bustle
-Version:        0.13.0
+Version:        0.14.0
 Release:        %autorelease
 Summary:        Visualize D-Bus activity
 

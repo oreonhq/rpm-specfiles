@@ -4,8 +4,8 @@
 %global modulename bitcoin
 
 Name:           bitcoin-core-selinux
-Version:        0.1
-Release:        4%{?dist}
+Version:        0.2
+Release:        1%{?dist}
 Summary:        Bitcoin Core SELinux policy
 License:        GPL-3.0-only
 URL:            https://github.com/scaronni/%{name}

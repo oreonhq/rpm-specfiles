@@ -7,7 +7,7 @@
 %global crate fundu
 
 Name:           rust-fundu
-Version:        2.0.1
+Version:        2.1.1
 Release:        %autorelease
 Summary:        Configurable, precise and fast rust string parser to a Duration
 

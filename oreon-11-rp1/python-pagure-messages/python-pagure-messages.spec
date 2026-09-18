@@ -1,55 +1,57 @@
-%global source0_hash 8f111d5ed0330c9f478bcf1726f44a4fc6c4f127abfa00dabbb2de9420cd537a
+%global source0_hash none
 
-# Enable Python dependency generation
-%{?python_enable_dependency_generator}
-
-%global pypi_name pagure-messages
-
-Name:           python-%{pypi_name}
-Version:        0.0.6
-Release:        20%{?dist}
+Name:           python-pagure-messages
+Version:        1.3.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        A schema package for messages sent by pagure
 
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
-URL:            https://pagure.io/pagure-messages
-Source0:        %{pypi_source}
+URL:            https://pagure.io/pagure
+Source:         %{pypi_source pagure_messages}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(fedora-messaging)
-BuildRequires:  python3dist(setuptools)
 
-%description
-%{summary}.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pagure-messages' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-pagure-messages
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{pypi_name}}
-# Ensure we don't use this with incompatible Pagure versions
-Conflicts:      pagure < 5.13
 
-%description -n python3-%{pypi_name}
-%{summary}.
+%description -n python3-pagure-messages %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pagure_messages-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{pypi_name}
-%license LICENSE
-%doc README.md
-%{python3_sitelib}/pagure_messages
-%{python3_sitelib}/pagure_messages-%{version}-py%{python3_version}.egg-info
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-pagure-messages -f %{pyproject_files}
 
 %changelog
 %autochangelog

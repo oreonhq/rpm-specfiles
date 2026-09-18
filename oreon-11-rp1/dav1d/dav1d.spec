@@ -1,7 +1,7 @@
 %global source0_hash e099f53253f6c247580c554d53a13f1040638f2066edc3c740e4c2f15174ce22
 
 Name:           dav1d
-Version:        1.5.3
+Version:        1.5.4
 Release:        1%{?dist}
 Summary:        AV1 cross-platform Decoder
 
@@ -9,7 +9,7 @@ Summary:        AV1 cross-platform Decoder
 # tools/compat/getopt.c is ISC
 License:        BSD-2-Clause AND ISC
 URL:            https://code.videolan.org/videolan/dav1d
-Source:        https://code.videolan.org/videolan/dav1d/-/archive/1.5.3/dav1d-1.5.3.tar.bz2
+Source:        https://code.videolan.org/videolan/dav1d/-/archive/1.5.4/dav1d-1.5.3.tar.bz2
 
 BuildRequires:  gcc
 BuildRequires:  nasm >= 2.14

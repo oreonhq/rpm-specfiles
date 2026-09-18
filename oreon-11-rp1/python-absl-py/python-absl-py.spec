@@ -1,7 +1,7 @@
 %global source0_hash 190418ea571aa09a0d91b08e3f71a2598337821dcec3f24872f44a140e8499ee
 
 Name:           python-absl-py
-Version:        2.4.0
+Version:        2.5.0
 Release:        %autorelease
 Summary:        Abseil Python Common Libraries
 

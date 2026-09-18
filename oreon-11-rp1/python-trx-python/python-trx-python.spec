@@ -1,127 +1,74 @@
-%global source0_hash 35a0b633560cc2b0d8ecda885aa72d06385499e0cd1ca11a956b0904c3358f01
+%global source0_hash none
 
-%global pypi_name trx-python
+Name:           python-trx-python
+Version:        0.5.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A community-oriented file format for tractography
 
-Name:           python-%{pypi_name}
-Version:        0.3
-Release:        %{autorelease}
-Summary:        Experiments with new file format for tractography
-
-%global forgeurl https://github.com/tee-ar-ex/trx-python
-%global tag %{version}
-%forgemeta
-
-# Test datasets (additional source files) are licensed CC-BY-4.0
-License:        BSD-2-Clause
-URL:            %forgeurl
-Source0:        %forgesource
-# Test files
-# Test suite tries to download them, but will only do a checksum check
-# if they already exist.
-# Source URLs and file version and their md5sum are listed in
-# https://github.com/tee-ar-ex/trx-python/blob/master/trx/fetcher.py
-#
-# https://figshare.com/articles/dataset/DSI/20001554/1?file=37624154
-# CC-BY-4.0
-Source1:        https://figshare.com/ndownloader/files/37624154#/DSI.zip
-# https://figshare.com/articles/dataset/memmap_test_data_zip/20020460
-# CC-BY-4.0
-Source2:        https://figshare.com/ndownloader/files/37624148#/memmap_test_data.zip
-# https://figshare.com/articles/dataset/trx_from_scratch_zip/20020412
-# CC-BY-4.0
-Source3:        https://figshare.com/ndownloader/files/37624151#/trx_from_scratch.zip
-# https://figshare.com/articles/dataset/gold_standard_zip/21520557
-# CC-BY-4.0
-Source4:        https://figshare.com/ndownloader/files/38146098#/gold_standard.zip
-# Fix setuptools_scm listed as install requirement
-# https://github.com/tee-ar-ex/trx-python/pull/75
-Patch:          %{forgeurl}/pull/75.patch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/tee-ar-ex/trx-python
+Source:         %{pypi_source trx_python}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# For tests
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist psutil}
-# For man pages
-BuildRequires:  help2man
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is a Python implementation of the trx file-format for tractography
-data.
+This is package 'trx-python' generated automatically by pyp2spec.}
 
-For details, please visit the documentation web-page at
-https://tee-ar-ex.github.io/trx-python/.}
+Patch:          %{forgeurl}/pull/75.patch
 
 %description %_description
 
-%package -n python3-%{pypi_name}
+%package -n     python3-trx-python
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-trx-python %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-trx-python all,dev,doc,style,test,utils
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n trx_python-%{version}
 
-%forgeautosetup -p1
-
-# Install test files
-install -p -m 644 -D -t tests %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4}
-
-# Remove .py extension from executables
-for SCRIPT in $(ls scripts/tff_*.py); do
-  mv ${SCRIPT} ${SCRIPT//.py/}
-done
-# Fix glob in setup.py
-sed -r -i 's|(scripts/)\*\.py|\1tff_*|' setup.py
 
 %generate_buildrequires
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,dev,doc,style,test,utils
+
 
 %build
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l trx
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Don't ship the tests
-rm -rf %{buildroot}%{python3_sitelib}/trx/tests
-sed -i '/tests/d' %{pyproject_files}
-
-# Create man pages from --help and --version
-mkdir man
-mkdir -p %{buildroot}%{_mandir}/man1
-for BIN in $(ls scripts/tff_*); do
-    echo "Generating man page for ${BIN//*\//}"
-    %{py3_test_envvars} help2man --section 1 --no-discard-stderr \
-    --no-info --output man/${BIN//*\//}.1 ${BIN//*\//}
-    install -m 0644 man/${BIN//*\//}.1 %{buildroot}%{_mandir}/man1
-done
 
 %check
-# Tests require network for downloading test data. We can provide those
-# without downloading. Use get_test_files.sh for updating if needed.
-# Set directory for test files
-export TRX_HOME="${PWD}/tests"
-# Exlcude tests that fail consistently on big endian.
-# https://github.com/tee-ar-ex/trx-python/issues/83
-%if "%{_host_cpu}" == "s390x"
-k="${k-}${k+ and }not test_seq_ops_trx"
-k="${k-}${k+ and }not test_concatenate[small.trx]"
-k="${k-}${k+ and }not test_resize[small.trx]"
-k="${k-}${k+ and }not test_append[small.trx-10000]"
-k="${k-}${k+ and }not test_append_Tractogram[small.trx-10000]"
-%endif
-# scripts/tests is for internal testing (GitHub workflow)
-%pytest -v --ignore=scripts/tests ${k+-k "$k"}
-%pyproject_check_import -e trx.tests*
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.*
-%{_bindir}/tff_*
-%{_mandir}/man1/tff_*.1*
+
+%files -n python3-trx-python -f %{pyproject_files}
+%{_bindir}/trx
+%{_bindir}/trx_concatenate_tractograms
+%{_bindir}/trx_convert_dsi_studio
+%{_bindir}/trx_convert_tractogram
+%{_bindir}/trx_generate_from_scratch
+%{_bindir}/trx_info
+%{_bindir}/trx_manipulate_datatype
+%{_bindir}/trx_simple_compare
+%{_bindir}/trx_validate
+%{_bindir}/trx_verify_header_compatibility
+%{_bindir}/trx_visualize_overlap
 
 %changelog
 %autochangelog

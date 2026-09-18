@@ -7,7 +7,7 @@
 %global crate num-modular
 
 Name:           rust-num-modular
-Version:        0.6.1
+Version:        0.6.5
 Release:        %autorelease
 Summary:        A generic implementation of integer division and modular arithmetics
 

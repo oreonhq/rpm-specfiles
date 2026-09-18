@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           google-guice
-Version:        5.1.0
+Version:        6.0.0
 Release:        %autorelease
 Summary:        Lightweight dependency injection framework for Java 5 and above
 License:        Apache-2.0
@@ -12,7 +12,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./create-tarball.sh %%{version}
-Source0:        https://github.com/google/guice/archive/refs/tags/5.1.0.tar.gz#/google-guice-5.1.0.tar.gz
+Source0:        https://github.com/google/guice/archive/refs/tags/6.0.0.tar.gz#/google-guice-5.1.0.tar.gz
 Source1:        https://raw.githubusercontent.com/google/guice/HEAD/create-tarball.sh
 
 BuildRequires:  jurand
@@ -35,7 +35,7 @@ BuildRequires:  mvn(org.ow2.asm:asm)
 BuildRequires:  mvn(org.apache:apache-jar-resource-bundle)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 5.1.0-27
+Obsoletes:      %{name}-javadoc < 6.0.0-27
 
 %description
 Put simply, Guice alleviates the need for factories and the use of new

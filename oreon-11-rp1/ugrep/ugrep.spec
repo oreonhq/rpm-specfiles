@@ -1,7 +1,7 @@
 %global source0_hash 08ed29981e4e9ed07077139519a17273658d6097f90642a14d9dfdf07fb74ee9
 
 Name:           ugrep
-Version:        7.5.0
+Version:        7.8.5
 Release:        %autorelease
 Summary:        A more powerful, ultra fast, user-friendly, compatible grep
 License:        BSD-3-Clause

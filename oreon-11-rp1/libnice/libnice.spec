@@ -1,8 +1,8 @@
 %global source0_hash 618fc4e8de393b719b1641c1d8eec01826d4d39d15ade92679d221c7f5e4e70d
 
 Name:           libnice
-Version:        0.1.23
-Release:        2%{?dist}
+Version:        0.1.24
+Release:        1%{?dist}
 Summary:        GLib ICE implementation
 
 License:        LGPL-2.1-or-later OR MPL-1.1

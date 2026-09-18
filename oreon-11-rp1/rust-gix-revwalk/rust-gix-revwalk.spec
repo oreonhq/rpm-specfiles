@@ -7,7 +7,7 @@
 %global crate gix-revwalk
 
 Name:           rust-gix-revwalk
-Version:        0.25.0
+Version:        0.35.0
 Release:        %autorelease
 Summary:        A crate providing utilities for walking the revision graph
 

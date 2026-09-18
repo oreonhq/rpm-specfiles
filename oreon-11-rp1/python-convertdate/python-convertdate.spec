@@ -1,55 +1,62 @@
-%global source0_hash 36f234c1e0ca53b2dbd58cbbaf5cac7b047d98d8426265e81ceadaf667c32800
+%global source0_hash none
 
-%global pypi_name convertdate
-
-Name:           python-%{pypi_name}
-Version:        2.4.1
+Name:           python-convertdate
+Version:        2.5.1
 Release:        %autorelease
-Summary:        Python module to convert date formats and calculating holidays
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Converts between Gregorian dates and other calendar systems
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/fitnr/convertdate
-Source0:        %{url}/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source convertdate}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-Converts between Gregorian dates and other calendar systems. Calendars
-included: Baha'i, French Republican, Hebrew, Indian Civil, Islamic, ISO,
-Julian, Mayan and Persian.
 
-%package -n python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'convertdate' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-convertdate
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
+%description -n python3-convertdate %_description
 
-%generate_buildrequires
-%pyproject_buildrequires
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-convertdate dev,docs,tests
 
-%description -n python3-%{pypi_name}
-Converts between Gregorian dates and other calendar systems. Calendars
-included: Baha'i, French Republican, Hebrew, Indian Civil, Islamic, ISO,
-Julian, Mayan and Persian.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n convertdate-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs,tests
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v tests -k "not testPersian"
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%doc HISTORY.rst README.md
-%license LICENSE
-%{python3_sitelib}/%{pypi_name}-*.dist-info
-%{python3_sitelib}/%{pypi_name}/
+
+%files -n python3-convertdate -f %{pyproject_files}
 
 %changelog
 %autochangelog

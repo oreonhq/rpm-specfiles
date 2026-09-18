@@ -2,12 +2,12 @@
 
 # Review at https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=238349
 
-%global minor_version 0.5
+%global minor_version 0.6
 %global thunar_version 4.18
 %global xfceversion 4.18
 
 Name:           thunar-media-tags-plugin
-Version:        0.5.0
+Version:        0.6.0
 Release:        %autorelease
 Summary:        Media Tags plugin for the Thunar file manager
 

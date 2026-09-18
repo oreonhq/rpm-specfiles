@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           apache-commons-lang3
-Version:        3.19.0
+Version:        3.20.0
 Release:        %autorelease
 Summary:        Provides a host of helper utilities for the java.lang API
 License:        Apache-2.0

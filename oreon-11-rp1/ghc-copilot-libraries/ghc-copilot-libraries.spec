@@ -10,7 +10,7 @@
 # testsuite missing deps: copilot-interpreter copilot-language copilot-theorem test-framework test-framework-quickcheck2
 
 Name:           ghc-%{pkg_name}
-Version:        4.5.1
+Version:        4.8.1
 Release:        %autorelease
 Summary:        Libraries for the Copilot language
 

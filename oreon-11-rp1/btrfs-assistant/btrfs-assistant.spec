@@ -1,7 +1,7 @@
 %global source0_hash cf478b7a5673a456b3aa09df2a875aae8a023511a14ef901970666b93c28ebb9
 
 Name:           btrfs-assistant
-Version:        2.2
+Version:        2.3.1
 Release:        %autorelease
 Summary:        GUI management tool to make managing a Btrfs filesystem easier
 

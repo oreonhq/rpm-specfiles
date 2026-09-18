@@ -10,7 +10,7 @@
 # testsuite missing deps: tasty-golden
 
 Name:           ghc-%{pkg_name}
-Version:        4.16.7.1
+Version:        4.17.0.0
 Release:        %autorelease
 Summary:        A static website compiler library
 

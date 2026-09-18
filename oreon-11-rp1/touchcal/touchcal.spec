@@ -1,8 +1,8 @@
 %global source0_hash d1a8a6d9712a9c1973004ab0d32ac029b525f9d74aa7302516251e0f86f2dcf5
 
 Name:           touchcal
-Version:        1.30
-Release:        6%{?dist}
+Version:        1.30.orig.orig
+Release:        1%{?dist}
 Summary:        Calibration utility for touch screens
 
 License:        GPL-2.0-or-later

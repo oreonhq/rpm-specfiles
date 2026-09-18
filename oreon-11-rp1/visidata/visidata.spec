@@ -3,7 +3,7 @@
 %global srcname visidata
 
 Name:           %{srcname}
-Version:        3.3
+Version:        3.4
 Release:        %autorelease
 Summary:        Terminal interface for exploring and arranging tabular data
 

@@ -1,55 +1,57 @@
-%global source0_hash e8792e44640e1852e02e7ae94ad261ca411fdbcf81150d18ad51afe8732164a4
-%global modname cssselect
-
-%bcond_without tests
+%global source0_hash none
 
 Name:           python-cssselect
-Version:        1.3.0
+Version:        1.5.0
 Release:        %autorelease
-Summary:        Parses CSS3 Selectors and translates them to XPath 1.0
+# Fill in the actual package summary to submit package to Fedora
+Summary:        cssselect parses CSS3 Selectors and translates them to XPath 1.0
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/scrapy/cssselect
-Source0:        https://github.com/scrapy/cssselect/archive/v%{version}/%{modname}-%{version}.tar.gz
+Source:         %{pypi_source cssselect}
 
 BuildArch:      noarch
-
-%global _description \
-Cssselect parses CSS3 Selectors and translates them to XPath 1.0 expressions.\
-Such expressions can be used in lxml or another XPath engine to find the\
-matching elements in an XML or HTML document.
-
-%description %{_description}
-
-%package -n python3-%{modname}
-Summary:        %{summary}
 BuildRequires:  python3-devel
-BuildRequires:	python3dist(tox-current-env) >= 0.0.16
 
-%description -n python3-%{modname} %{_description}
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cssselect' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-cssselect
+Summary:        %{summary}
+
+%description -n python3-cssselect %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{modname}-%{version}
+%autosetup -p1 -n cssselect-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-t}
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{modname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{modname} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst CHANGES AUTHORS
+
+%files -n python3-cssselect -f %{pyproject_files}
 
 %changelog
 %autochangelog

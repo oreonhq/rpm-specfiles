@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        1.2.1.1
+Version:        1.2.2
 Release:        %autorelease
 Summary:        A property-based testing library
 

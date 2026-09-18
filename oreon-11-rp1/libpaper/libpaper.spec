@@ -1,8 +1,8 @@
 %global source0_hash a4e1297b69b9fd1054ee7f5bcc55f4d56da152d41d2eabdf18727a9cddc1f402
 
 Name:		libpaper
-Version:	2.1.1
-Release:	10%{?dist}
+Version:	2.3.0
+Release:	1%{?dist}
 # Needed to replace separate paper package
 Epoch:		1
 Summary:	Library and tools for handling papersize

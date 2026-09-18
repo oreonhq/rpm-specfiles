@@ -24,8 +24,8 @@
 %global major        2
 
 Name:           php-%{pk_project}%{major}
-Version:        2.0.8
-Release:        10%{?dist}
+Version:        3.1.1
+Release:        1%{?dist}
 Summary:        QR code generator for PHP
 
 Group:          Development/Libraries

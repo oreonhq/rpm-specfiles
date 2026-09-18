@@ -1,7 +1,7 @@
 %global source0_hash 01c3a63a285d75626a33ab19a998a9b115432933a9f84e8cb94b142c01ef6d6f
 
 Name:    fwts
-Version: 24.09.00
+Version: 26.03.00
 Release: %autorelease
 Summary: Firmware Test Suite
 URL: https://wiki.ubuntu.com/FirmwareTestSuite

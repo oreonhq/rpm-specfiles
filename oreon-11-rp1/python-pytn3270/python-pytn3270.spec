@@ -1,57 +1,59 @@
-%global source0_hash 79ca5a36acd2c6623d34cae3fa81c8b2b5e02132c4b994e233707e6623592518
+%global source0_hash none
 
-%global pypi_name pytn3270
-
-Name:           python-%{pypi_name}
-Version:        0.15.1
+Name:           python-pytn3270
+Version:        0.16.0
 Release:        %autorelease
-Summary:        Python TN3270 library
+# Fill in the actual package summary to submit package to Fedora
+Summary:        TN3270 library
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ISC
 URL:            https://github.com/lowobservable/pytn3270
-# PyPI is missing tests, so use the GitHub tarball instead
-Source:         %{url}/archive/%{version}/%{pypi_name}-%{version}.tar.gz
-# Use telnetlib3 instead of telnetlib
-Patch:          %{url}/pull/3.patch
+Source:         %{pypi_source pytn3270}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Inspired by pyte, this is a pure Python TN3270 library providing data stream
-parsing and in-memory emulation. It does not include a user interface or
-routines to support automation, instead it is designed to be used to build
-user-facing emulators and automation libraries.}
+This is package 'pytn3270' generated automatically by pyp2spec.}
+
+Patch:          %{url}/pull/3.patch
 
 %description %_description
 
-%package -n python3-%{pypi_name}
+%package -n     python3-pytn3270
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-pytn3270 %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytn3270-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files tn3270
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.md
+
+%files -n python3-pytn3270 -f %{pyproject_files}
 
 %changelog
 %autochangelog

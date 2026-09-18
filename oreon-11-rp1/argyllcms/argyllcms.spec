@@ -4,8 +4,8 @@
 %undefine _include_frame_pointers
 
 Name: argyllcms
-Version: 3.4.1
-Release: 4%{?dist}
+Version: 3.5.0
+Release: 1%{?dist}
 
 # Main code - AGPL-3.0-or-later
 # spectro, xml - GPL-2.0-or-later

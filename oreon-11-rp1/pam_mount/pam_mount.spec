@@ -1,8 +1,8 @@
 %global source0_hash 5426207a485680f8e1764ba405bb38c39a4e0c8306bc8271910f1b819a336ced
 
 Name:           pam_mount
-Version:        2.20
-Release:        5%{?dist}
+Version:        2.22
+Release:        1%{?dist}
 Summary:        A PAM module that can mount volumes for a user session
 
 # The library and binaries are LGPLv2.1+ with these Exceptions:
@@ -24,7 +24,7 @@ BuildRequires:  cryptsetup-devel
 BuildRequires:  gcc
 BuildRequires:  gpg
 BuildRequires:  libHX-devel >= 3.12.1
-BuildRequires:  libmount-devel >= 2.20
+BuildRequires:  libmount-devel >= 2.22
 BuildRequires:  libtool
 BuildRequires:  libxml2-devel
 BuildRequires:  make

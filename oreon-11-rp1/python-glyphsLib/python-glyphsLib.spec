@@ -1,132 +1,65 @@
 %global source0_hash none
 
-# Requires https://pypi.org/project/ufonormalizer/, not packaged
-%bcond ufo_normalization 0
-# Requires https://pypi.org/project/skia-pathops/, not packaged
-%bcond colr 0
-
-# If https://pypi.org/project/xmldiff/ were packaged, we could run more tests
-%bcond xmldiff 0
-
-%bcond check 1
-
-Name:           python-glyphsLib
-Version:        6.13.0
+Name:           python-glyphslib
+Version:        6.14.0
 Release:        %autorelease
-Summary:        A bridge from Glyphs source files to UFOs
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A bridge from Glyphs source files _.glyphs_ to UFOs
 
-# The entire package is Apache-2.0, except:
-#   MIT AND BSD-3-Clause:
-#   - Lib/glyphsLib/data/ (Lib/glyphsLib/data/GlyphData_LICENSE,
-#                          Lib/glyphsLib/data/GlyphData_AGL_LICENSE)
-#
-# Additionally, many files in tests/data/ are OFL-1.1; these appear in the
-# source RPM but do not contribute to the licenses of the binary RPMs. Note
-# that these are not fonts per se, but font *sources*.
-License:        Apache-2.0 AND MIT AND BSD-3-Clause
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/googlefonts/glyphsLib
 Source:         %{pypi_source glyphslib}
 
-# Add additional license text for GlyphData
-# https://github.com/googlefonts/glyphsLib/pull/1073
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'glyphslib' generated automatically by pyp2spec.}
+
 Patch:          %{url}/pull/1073.patch
 
-BuildArch:      noarch
+%description %_description
 
-BuildRequires:  python3-devel
-BuildRequires:  help2man
-
-%global common_description %{expand:
-This library provides a bridge from Glyphs source files (.glyphs) to UFOs
-(Unified Font Object).}
-
-%description %{common_description}
-
-%package -n python3-glyphsLib
+%package -n     python3-glyphslib
 Summary:        %{summary}
 
-%description -n python3-glyphsLib %{common_description}
+%description -n python3-glyphslib %_description
 
-%if %{with ufo_normalization}
-%pyproject_extras_subpkg -n python3-glyphsLib ufo_normalization
-%endif
-%pyproject_extras_subpkg -n python3-glyphsLib defcon
-%if %{with ufo_normalization}
-%pyproject_extras_subpkg -n python3-glyphsLib colr
-%endif
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-glyphslib colr,defcon,ufo-normalization
+
 
 %prep
-%autosetup -n glyphslib-%{version} -p1
-# - Do not generate linting/coverage dependencies:
-#   https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-sed -r \
-%if %{without ufo_normalization}
-    -e 's/^(ufo[Nn]ormalizer)\b/# &/' \
-%endif
-%if %{without colr}
-    -e 's/^(skia-pathops)\b/# &/' \
-%endif
-%if %{without xmldiff}
-    -e 's/^(xmldiff)\b/# &/' \
-%endif
-    -e 's/^(coverage|flake8.*|black)\b/# &/' \
-    requirements-dev.in |
-  tee requirements-dev-filtered.txt
+%autosetup -p1 -n glyphslib-%{version}
+
 
 %generate_buildrequires
-%{pyproject_buildrequires \
-    %{?with_ufo_normalization:-x ufo_normalization} \
-    -x defcon \
-    %{?with_colr:-x colr} \
-    %{?with_check:requirements-dev-filtered.txt}}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x colr,defcon,ufo-normalization
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l glyphsLib
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-install -d '%{buildroot}%{_mandir}/man1'
-for bin in glyphs2ufo ufo2glyphs
-do
-  # We do this in %%install rather than in %%build because we need to use the
-  # script entry point that was generated during installation.
-  env PYTHONPATH='%{buildroot}%{python3_sitelib}' \
-      PYTHONDONTWRITEBYTECODE=1 \
-      help2man \
-          --no-info \
-          --name '%{summary}' \
-          --output="%{buildroot}%{_mandir}/man1/${bin}.1" \
-          "%{buildroot}%{_bindir}/${bin}"
-done
-
-# Mark GlyphData license files in-place rather than installing duplicates.
-sed -r -i 's/^(.*GlyphData(_AGL)?_LICENSE)/%%license &/' %{pyproject_files}
 
 %check
-%pyproject_check_import
-%if %{with check}
-%if %{without ufo_normalization}
-ignore="${ignore-} --ignore=tests/builder/builder_test.py"
-ignore="${ignore-} --ignore=tests/builder/instances_test.py"
-ignore="${ignore-} --ignore=tests/builder/roundtrip_test.py"
-ignore="${ignore-} --ignore=tests/test_helpers.py"
-ignore="${ignore-} --ignore=tests/writer_test.py"
-%endif
-%if %{without xmldiff}
-ignore="${ignore-} --ignore=tests/builder/designspace_gen_test.py"
-ignore="${ignore-} --ignore=tests/builder/interpolation_test.py"
-%endif
-%pytest -v -rs ${ignore-}
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-glyphsLib -f %{pyproject_files}
-%doc README.rst README.builder.md
+
+%files -n python3-glyphslib -f %{pyproject_files}
 %{_bindir}/glyphs2ufo
 %{_bindir}/ufo2glyphs
-%{_mandir}/man1/glyphs2ufo.1*
-%{_mandir}/man1/ufo2glyphs.1*
 
 %changelog
 %autochangelog

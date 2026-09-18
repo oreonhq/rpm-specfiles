@@ -7,7 +7,7 @@
 %global crate prost-reflect
 
 Name:           rust-prost-reflect
-Version:        0.15.3
+Version:        0.16.5
 Release:        %autorelease
 Summary:        Protobuf library extending prost with reflection support and dynamic messages
 

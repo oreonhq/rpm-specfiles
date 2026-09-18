@@ -22,8 +22,8 @@
 %endif
 
 Name:           php-sebastian-%{gh_project}
-Version:        1.0.3
-Release:        5%{?dist}
+Version:        4.0.1
+Release:        1%{?dist}
 Summary:        Looks up which function or method a line of code belongs to, version 1
 
 License:        BSD-3-Clause

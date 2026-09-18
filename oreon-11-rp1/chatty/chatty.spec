@@ -5,7 +5,7 @@
 %global libcmatrix_version 0.0.3
 
 Name:    chatty
-Version: 0.8.8
+Version: 0.8.9
 Release: %{autorelease}
 Summary: A libpurple messaging client
 

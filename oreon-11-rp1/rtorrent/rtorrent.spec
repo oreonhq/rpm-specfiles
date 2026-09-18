@@ -4,8 +4,8 @@ Name:          rtorrent
 # OpenSSL exception, see README
 # Automatically converted from old format: GPLv2+ with exceptions - review is highly recommended.
 License:       LicenseRef-Callaway-GPLv2+-with-exceptions
-Version:       0.16.2
-Release:       3%{?dist}
+Version:       0.16.23
+Release:       1%{?dist}
 Summary:       BitTorrent client based on libtorrent 
 URL:           https://github.com/rakshasa/rtorrent
 Source0:       https://github.com/rakshasa/rtorrent/releases/download/v%{version}/rtorrent-%{version}.tar.gz
@@ -15,7 +15,7 @@ BuildRequires: make
 BuildRequires: gcc-c++
 BuildRequires: libstdc++-devel
 BuildRequires: libsigc++20-devel
-BuildRequires: libtorrent-devel >= 0.16.2
+BuildRequires: libtorrent-devel >= 0.16.23
 BuildRequires: ncurses-devel
 BuildRequires: pkgconfig
 BuildRequires: xmlrpc-c-devel

@@ -5,8 +5,8 @@
 %bcond gtest %[ !0%{?rhel} ]
 
 Name:           snappy
-Version:        1.2.2
-Release:        6%{?dist}
+Version:        1.3.0
+Release:        1%{?dist}
 Summary:        Fast compression and decompression library
 
 License:        BSD-3-Clause

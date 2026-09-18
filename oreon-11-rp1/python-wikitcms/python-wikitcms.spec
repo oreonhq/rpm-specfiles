@@ -1,73 +1,57 @@
-%global source0_hash 39485aa5106e7319f7d09a407f25b6e8bc13d6ed73df95a2320db594a58a325f
+%global source0_hash none
 
-%global srcname wikitcms
+Name:           python-wikitcms
+Version:        2.6.23
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Fedora QA wiki test management library
 
-Name:           python-%{srcname}
-Version:        2.6.22
-Release:        %{autorelease}
-Summary:        Fedora QA wiki test management Python library
-
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-3.0-or-later
 URL:            https://forge.fedoraproject.org/quality/python-wikitcms
-Source0:        https://files.pythonhosted.org/packages/source/w/%{srcname}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source wikitcms}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-python-wikitcms is a library for interacting with Fedora's wiki-based 'test
-management' system. It can:
 
-* Create the pages for release validation test events
-* Find existing release validation event pages, in various ways
-* Report test results
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'wikitcms' generated automatically by pyp2spec.}
 
-The wiki-based test management system itself is documented at:
-https://fedoraproject.org/wiki/Wikitcms
+%description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-wikitcms
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
-Obsoletes:      python2-%{srcname} < %{version}-%{release}
-BuildRequires:  pyproject-rpm-macros
-Recommends:     python3-openidc-client >= 0.4.0
 
-%description -n python3-%{srcname}
-python-wikitcms is a library for interacting with Fedora's wiki-based 'test
-management' system. It can:
+%description -n python3-wikitcms %_description
 
-* Create the pages for release validation test events
-* Find existing release validation event pages, in various ways
-* Report test results
-
-The wiki-based test management system itself is documented at:
-https://fedoraproject.org/wiki/Wikitcms
-
-This is the Python 3 build.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n wikitcms-%{version}
 
-%autosetup -n %{srcname}-%{version}
-# setuptools-git is needed to build the source distribution, but not
-# for packaging, which *starts* from the source distribution
-sed -i -e 's., "setuptools-git"..g' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname}
-%license COPYING
-%doc README.md
-%{python3_sitelib}/%{srcname}*
+
+%files -n python3-wikitcms -f %{pyproject_files}
 
 %changelog
 %autochangelog

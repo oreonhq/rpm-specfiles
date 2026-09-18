@@ -1,7 +1,7 @@
 %global source0_hash 6c2a3ee2b1a4336d19e20976f616ea49c99a10b24e0c218ca47e6bac41f4f484
 
 Name:           rakudo
-Version:        2025.12
+Version:        2026.08
 Release:        %autorelease
 Summary:        Raku on MoarVM, JVM, and JS
 License:        Artistic-2.0

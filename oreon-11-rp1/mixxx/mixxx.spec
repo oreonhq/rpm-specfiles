@@ -29,8 +29,8 @@
 %endif
 
 Name:           mixxx
-Version:        2.5.4
-Release:        4%{?dist}
+Version:        2.5.6
+Release:        1%{?dist}
 Summary:        Mixxx is open source software for DJ'ing
 # main sources are under GPL-2.0-or-later, except:
 # lib/fidlib LGPL-2.1

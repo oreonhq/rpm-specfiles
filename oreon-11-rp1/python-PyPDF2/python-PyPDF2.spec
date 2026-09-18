@@ -1,93 +1,63 @@
-%global source0_hash e28f902f2f0a1603ea95ebe21dff311ef09be3d0f0ef29a3e44a932729564385
+%global source0_hash none
 
-%global srcname PyPDF2
-%global sum Python PDF toolkit and library
+Name:           python-pypdf2
+Version:        3.0.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A pure-python PDF library capable of splitting, merging, cropping, and transforming PDF files
 
-Name:           python-%{srcname}
-Version:        1.26.0
-Release:        36%{?dist}
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-Summary:        %{sum}
-Source:         https://pypi.python.org/packages/source/P/%{srcname}/%{srcname}-%{version}.tar.gz
-URL:            https://github.com/mstamy2/PyPDF2
-
-# setuptools instead of distutils
-# https://github.com/py-pdf/pypdf/pull/599
-Patch01:        599.patch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/py-pdf/PyPDF2
+Source:         %{pypi_source PyPDF2}
 
 BuildArch:      noarch
-
-%description
-A pure Python library built as a PDF toolkit.  It is capable of:
-
-- extracting document information (title, author, ...),
-- splitting documents page by page,
-- merging documents page by page,
-- cropping pages,
-- merging multiple pages into a single page,
-- encryption and decryption of PDF files.
-
-By being pure Python, it should run on any Python platform without any
-dependencies on external libraries.  It can also work entirely on StringIO
-objects rather than file streams, allowing for PDF manipulation in memory.
-It is therefore a useful tool for websites that manage or manipulate PDFs.
-
-%package -n python3-%{srcname}
-Summary:        %{sum}
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-%{?python_provide:%python_provide python3-%{srcname}}
 
-%description -n python3-%{srcname}
-A pure Python library built as a PDF toolkit.  It is capable of:
 
-- extracting document information (title, author, ...),
-- splitting documents page by page,
-- merging documents page by page,
-- cropping pages,
-- merging multiple pages into a single page,
-- encryption and decryption of PDF files.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pypdf2' generated automatically by pyp2spec.}
 
-By being pure Python, it should run on any Python platform without any
-dependencies on external libraries.  It can also work entirely on StringIO
-objects rather than file streams, allowing for PDF manipulation in memory.
-It is therefore a useful tool for websites that manage or manipulate PDFs.
+Patch01:        599.patch
 
-%package -n python-%{srcname}-doc
-Summary:    Documentation for python-%{srcname}
+%description %_description
 
-%description -n python-%{srcname}-doc
-python-PyPDF2 contains documentation and examples for the python-PyPDF package
+%package -n     python3-pypdf2
+Summary:        %{summary}
+
+%description -n python3-pypdf2 %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pypdf2 crypto,dev,docs,full,image
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n PyPDF2-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
-# non-executable script
-sed -i -e '/^#!\//, 1d' PyPDF2/pagerange.py
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x crypto,dev,docs,full,image
 
-# Lots of things in the repo shouldn't be executable
-chmod a-x Scripts/* Sample_Code/* LICENSE README.md CHANGELOG
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# NOTE: Upstream has some testing bugs
-#python -m unittest Tests.tests
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname}
-%{python3_sitelib}/*
-%license LICENSE
 
-%files -n python-%{srcname}-doc
-%doc README.md CHANGELOG Scripts/ Sample_Code/
-%license LICENSE
+%files -n python3-pypdf2 -f %{pyproject_files}
 
 %changelog
 %autochangelog

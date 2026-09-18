@@ -2,7 +2,7 @@
 
 Summary:        Libraries for talking to Microsoft SQL Server and Sybase databases
 Name:           freetds
-Version:        1.5.18
+Version:        1.5.19
 Release:        1%{?dist}
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:            https://www.freetds.org/

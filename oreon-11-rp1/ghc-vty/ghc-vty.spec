@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        6.4
+Version:        6.6
 Release:        %autorelease
 Summary:        A simple terminal UI library
 

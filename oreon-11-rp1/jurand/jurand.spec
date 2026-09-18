@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           jurand
-Version:        1.3.5
+Version:        1.4.0
 Release:        %autorelease
 Summary:        A tool for manipulating Java symbols
 License:        Apache-2.0

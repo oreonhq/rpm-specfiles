@@ -3,8 +3,8 @@
 %global     full_version C_ICAP_%{version}
 
 Name:       c-icap
-Version:    0.6.3
-Release:    5%{?dist}
+Version:    0.6.5
+Release:    1%{?dist}
 Summary:    An implementation of an ICAP server
 License:    LGPL-2.1-or-later and GPL-2.0-or-later
 URL:        http://%{name}.sourceforge.net/

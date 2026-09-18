@@ -2,8 +2,8 @@
 
 Name:             gnumeric
 Epoch:            1
-Version:          1.12.59
-Release:          2%{?dist}
+Version:          1.12.61
+Release:          1%{?dist}
 Summary:          Spreadsheet program for GNOME
 License:          GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-or-later
 URL:              http://www.gnumeric.org

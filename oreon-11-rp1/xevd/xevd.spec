@@ -1,7 +1,7 @@
 %global source0_hash 8d55c7ec1a9ad4e70fe91fbe129a1d4dd288bce766f466cba07a29452b3cecd8
 
 Name:           xevd
-Version:        0.5.0
+Version:        0.7.0
 Release:        %autorelease
 Summary:        Reference MPEG-5 Part 1 (EVC) decoder
 

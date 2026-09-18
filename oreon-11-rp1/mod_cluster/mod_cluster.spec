@@ -11,8 +11,8 @@
 %global namedversion %{version}%{?namedreltag}
 
 Name:          mod_cluster
-Version:       1.3.22
-Release:       3%{?dist}
+Version:       2.1.0.Final
+Release:       1%{?dist}
 Summary:       Apache HTTP Server dynamic load balancer with Wildfly and Tomcat libraries
 # Automatically converted from old format: LGPLv3 - review is highly recommended.
 License:       LGPL-3.0-only

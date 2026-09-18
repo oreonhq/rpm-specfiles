@@ -1,54 +1,62 @@
-%global source0_hash 517e9cf353942723533ae1100ca45dd27fe0785c3ad2765075f5cb1cbce01482
+%global source0_hash none
 
-%global pypi_name testfixtures
-
-Name:           python-%{pypi_name}
-Version:        9.1.0
+Name:           python-testfixtures
+Version:        12.3.0
 Release:        %autorelease
-Summary:        Collection of helpers and mock objects for unit tests
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A collection of helpers and mock objects for unit tests and doc tests.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/Simplistix/testfixtures
-Source0:        %{pypi_source}
+Source:         %{pypi_source testfixtures}
+
 BuildArch:      noarch
-
-%description
-Testfixtures is a collection of helpers and mock objects that are useful
-when writing automated tests in Python.
-
-%package -n python3-%{pypi_name}
-Summary:        %{summary}
-
 BuildRequires:  python3-devel
 
-%description -n python3-%{pypi_name}
-Testfixtures is a collection of helpers and mock objects that are useful
-when writing automated tests in Python.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'testfixtures' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-testfixtures
+Summary:        %{summary}
+
+%description -n python3-testfixtures %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-testfixtures django,loguru,mock-backport,numpy,pandas,polars,pydantic,structlog,sybil,toml,twisted,yaml
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n testfixtures-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x django,loguru,mock-backport,numpy,pandas,polars,pydantic,structlog,sybil,toml,twisted,yaml
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files -l %{pypi_name}
 
-#%%check
-# Upstream has a different idea about how Open Source works
-# and is hostile against everything that doesn't match that idea.
-# Thus, the only thing that matters is that tests work in their CI
+%check
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n %files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.rst
-%license LICENSE.txt
+
+%files -n python3-testfixtures -f %{pyproject_files}
 
 %changelog
 %autochangelog

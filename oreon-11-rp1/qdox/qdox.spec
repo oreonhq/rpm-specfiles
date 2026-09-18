@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           qdox
-Version:        2.1.0
+Version:        2.2.0
 Release:        %autorelease
 Summary:        Extract class/interface/method definitions from sources
 License:        Apache-2.0
@@ -26,7 +26,7 @@ BuildRequires:  mvn(org.junit.jupiter:junit-jupiter)
 BuildRequires:  mvn(org.mockito:mockito-core)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.1.0-15
+Obsoletes:      %{name}-javadoc < 2.2.0-15
 
 %description
 QDox is a high speed, small footprint parser

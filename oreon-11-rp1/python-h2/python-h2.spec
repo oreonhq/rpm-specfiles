@@ -1,73 +1,59 @@
-%global source0_hash 969861622e5fa2021d932d2ccb916a48ccc7c62852b619c899de33b0361ef281
-
-%global srcname h2
-
-%global common_description %{expand:
-HTTP/2 Protocol Stack This repository contains a pure-Python
-implementation of a HTTP/2 protocol stack. It's written from the ground up to
-be embeddable in whatever program you choose to use, ensuring that you can
-speak HTTP/2 regardless of your programming paradigm.}
+%global source0_hash none
 
 Name:           python-h2
-Version:        4.3.0
+Version:        4.4.1
 Release:        %autorelease
-Summary:        HTTP/2 State-Machine based protocol implementation
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Pure-Python HTTP/2 protocol implementation
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://hyper-h2.readthedocs.io
-VCS:            https://github.com/python-hyper/h2
-Source0:        %vcs/archive/v%{version}/%{srcname}-%{version}.tar.gz
-# downstream only patch
-Patch0:         0001-Fedora-tox-adjustments.patch
+URL:            https://github.com/python-hyper/h2/
+Source:         %{pypi_source h2}
 
 BuildArch:      noarch
-BuildRequires:  make
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(sphinx)
 
-%description %{common_description}
 
-%package -n     python3-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'h2' generated automatically by pyp2spec.}
+
+Patch0:         0001-Fedora-tox-adjustments.patch
+
+%description %_description
+
+%package -n     python3-h2
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{common_description}
+%description -n python3-h2 %_description
 
-%package doc
-Summary:        Documentation for %{name}
-
-%description doc
-%{common_description}
-
-This is the documentation package for %{name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n h2-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
-# generate html docs
-PYTHONPATH=$PWD/build/lib.%{python3_platform}-cpython-%{python3_version_nodots} sphinx-build docs/source html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
 
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
 
-%files doc
-%doc html
-%license LICENSE
+%files -n python3-h2 -f %{pyproject_files}
 
 %changelog
 %autochangelog

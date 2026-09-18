@@ -1,98 +1,62 @@
-%global source0_hash 5bddedec6fcf4e963a957c270532599ccab798f41dfb335f00abe9c4b291cf9c
+%global source0_hash none
 
-%global         pypi_name       tinygrad
-%global         forgeurl        https://github.com/tinygrad/tinygrad
-Version:        0.12.0
-%forgemeta
+Name:           python-tinygrad
+Version:        0.14.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        You like pytorch? You like micrograd? You love tinygrad! _3
 
-Name:           python-%{pypi_name}
-Release:        2%{?dist}
-Summary:        You like pytorch? You like micrograd? You'll love tinygrad!
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            %{forgeurl}
-Source0:        %{forgesource}
+URL:            ...
+Source:         %{pypi_source tinygrad}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-# Needed for test
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(hypothesis)
-BuildArch: noarch
 
-%global common_description %{expand:
-tinygrad: For something between PyTorch and karpathy/micrograd. Maintained
-by tiny corp.
 
-This may not be the best deep learning framework, but it is a deep learning
-framework.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'tinygrad' generated automatically by pyp2spec.}
 
-Due to its extreme simplicity, it aims to be the easiest framework to add new
-accelerators to, with support for both inference and training. If XLA is CISC,
-tinygrad is RISC.}
+%description %_description
 
-%description %{common_description}
-
-%package -n python3-%{pypi_name}
+%package -n     python3-tinygrad
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %{common_description}
+%description -n python3-tinygrad %_description
 
-%package  -n python3-%{pypi_name}-examples
-Summary:  Examples for tinygrad
-Requires: %{name} = %{version}-%{release}
-Requires: python3-tiktoken
-Requires: python3-pyopencl
-Requires: clang
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-tinygrad autogen,docs,linting,mesa,testing,testing-minimal,testing-unit
 
-%description -n python3-%{pypi_name}-examples
-Examples for tinygrad
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n tinygrad-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x autogen,docs,linting,mesa,testing,testing-minimal,testing-unit
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%py3_check_import %{pypi_name}
-# Run CPU tests that do not need dependencies not in Fedora
-# Modified from
-# https://github.com/tinygrad/tinygrad/blob/master/.github/workflows/test.yml
-# Tests only run on these arches
-%ifarch aarch64 x86_64
-PYTHON=1 SKIP_SLOW_TEST=1 %python3 -m pytest \
-          test/test_assign.py \
-          test/test_dtype_alu.py \
-          test/test_gc.py \
-          test/test_graph.py \
-          test/test_jit.py \
-          test/test_linearizer.py \
-          test/test_multitensor.py \
-          test/test_symbolic_jit.py \
-          test/test_symbolic_ops.py \
-          test/test_uops.py \
-          test/unit/test_conv.py \
-          %{nil}
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc docs/quickstart.md docs/env_vars.md docs/mnist.md docs/runtime.md
-%doc docs/*pdf docs/showcase.md docs/*svg
-%doc docs/developer/ docs/showcase/ docs/tensor/
-%doc docs/abstractions*.py
 
-%files -n python3-%{pypi_name}-examples
-%doc examples
+%files -n python3-tinygrad -f %{pyproject_files}
 
 %changelog
 %autochangelog

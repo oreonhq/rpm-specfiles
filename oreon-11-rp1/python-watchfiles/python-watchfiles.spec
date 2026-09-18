@@ -1,99 +1,59 @@
-%global source0_hash a173cb5c16c4f40ab19cecf48a534c409f7ea983ab8fed0741304a1c0a31b3f2
+%global source0_hash none
 
 Name:           python-watchfiles
-Version:        1.1.1
+Version:        1.2.0
 Release:        %autorelease
-Summary:        Simple, modern and high performance file watching and code reload in python
-# The main source code is under the MIT license.  See the license field of the
-# python3-watchfiles subpackage for the licenses of statically linked rust
-# dependencies.
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Simple, modern and high performance file watching and code reload in python.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/samuelcolvin/watchfiles
 Source:         %{pypi_source watchfiles}
 
-# Downstream-only: allow a slightly older pytest to support EPEL10
-Patch:          0001-Downstream-only-allow-a-slightly-older-pytest-to-sup.patch
-
 BuildRequires:  python3-devel
-BuildRequires:  cargo-rpm-macros >= 24
-BuildRequires:  tomcli
+BuildRequires:  gcc
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Simple, modern and high performance file watching and code reload in python.
-Underlying file system notifications are handled by the Notify rust library.}
+This is package 'watchfiles' generated automatically by pyp2spec.}
+
+Patch:          0001-Downstream-only-allow-a-slightly-older-pytest-to-sup.patch
 
 %description %_description
 
-%package -n python3-watchfiles
+%package -n     python3-watchfiles
 Summary:        %{summary}
-# The main source code is under the MIT license. This license field includes
-# the licenses of statically linked rust dependencies, based on the output of
-# %%{cargo_license_summary}:
-#
-# CC0-1.0
-# ISC
-# MIT
-# MIT OR Apache-2.0
-# Unlicense OR MIT
-License:        %{shrink:
-                MIT AND
-                CC0-1.0 AND
-                ISC AND
-                (MIT OR Apache-2.0) AND
-                (Unlicense OR MIT)
-                }
 
 %description -n python3-watchfiles %_description
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n watchfiles-%{version}
 
-%autosetup -n watchfiles-%{version} -p1
-
-# Remove unnecessary Python test requirements
-tomcli set pyproject.toml lists delitem \
-    'dependency-groups.dev' '^(coverage|pytest-(pretty|timeout)).*'
-
-# Remove pytest timeout config
-tomcli set pyproject.toml del 'tool.pytest.ini_options.timeout'
-
-# Remove "generate-import-lib" feature for pyo3; applicable only on Windows,
-# and not packaged.
-tomcli set Cargo.toml lists delitem 'dependencies.pyo3.features' \
-    'generate-import-lib'
-
-# Remove unused Cargo config that contains buildflags for Darwin
-rm .cargo/config.toml
-
-%cargo_prep
 
 %generate_buildrequires
-%pyproject_buildrequires -g dev
-%cargo_generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%cargo_license_summary
-%{cargo_license} > LICENSES.dependencies
-
-export RUSTFLAGS='%{build_rustflags}'
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l watchfiles
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# The maturin build backend includes the license files, but currently the
-# pyproject macros don't mark these files as licenses.
-sed -e '/LICENSE/ s/^/%%license /' -i %{pyproject_files}
 
 %check
-# We must set the import mode during tests to avoid the watchfiles directory
-# (which will not have the compiled module) taking precedence for the import.
-# https://docs.pytest.org/en/7.4.x/explanation/pythonpath.html
-%pytest --import-mode append -k "${k-}" -v --full-trace
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-watchfiles -f %{pyproject_files}
-%doc README.md
 %{_bindir}/watchfiles
 
 %changelog

@@ -11,8 +11,8 @@
 
 Name:           %{target}-gcc-cs
 Epoch:          1
-Version:        15.2.0
-Release:        4%{?dist}
+Version:        16.2.0
+Release:        1%{?dist}
 Summary:        GNU GCC for cross-compilation for %{target} target
 License:        GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.0-or-later AND MIT AND BSD-2-Clause
 URL:            https://gcc.gnu.org/

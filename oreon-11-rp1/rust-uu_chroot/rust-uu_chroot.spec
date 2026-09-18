@@ -10,7 +10,7 @@
 %global crate uu_chroot
 
 Name:           rust-uu_chroot
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        chroot ~ (uutils) run COMMAND under a new root directory
 

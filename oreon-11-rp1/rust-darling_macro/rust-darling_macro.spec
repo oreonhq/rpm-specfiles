@@ -7,7 +7,7 @@
 %global crate darling_macro
 
 Name:           rust-darling_macro
-Version:        0.23.0
+Version:        0.24.1
 Release:        %autorelease
 Summary:        Internal support for a proc-macro library for reading attributes into...
 

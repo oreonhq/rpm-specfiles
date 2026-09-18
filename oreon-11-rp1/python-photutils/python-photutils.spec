@@ -1,65 +1,62 @@
-%global source0_hash 947527f77794469f960d51e6fd7add2fd531b16f2369d4541b1441eb81b3d9f7
+%global source0_hash none
 
-%bcond check 0
+Name:           python-photutils
+Version:        3.0.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        An Astropy package for source detection and photometry
 
-%global srcname photutils
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://github.com/astropy/photutils
+Source:         %{pypi_source photutils}
 
-Name: python-%{srcname}
-Version: 2.3.0
-Release: %autorelease
-Summary: Astropy affiliated package for image photometry tasks
-License: BSD-3-Clause
+BuildRequires:  python3-devel
+BuildRequires:  gcc
 
-URL: http://photutils.readthedocs.org/en/latest/index.html
-Source0: %{pypi_source}
 
-ExcludeArch: %{ix86}
-BuildRequires: gcc
-
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Photutils contains functions for:
- * estimating the background and background rms in astronomical images
- * detecting sources in astronomical images
- * estimating morphological parameters of those sources (e.g., 
-    centroid and shape parameters)
- * performing aperture and PSF photometry}
+This is package 'photutils' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
-Summary: %{summary}
+%package -n     python3-photutils
+Summary:        %{summary}
 
-BuildRequires: python3-devel
+%description -n python3-photutils %_description
 
-Recommends: %{py3_dist scipy}  >= 1.7.2
-Recommends: %{py3_dist scikit-image} >= 0.19   
-Recommends: %{py3_dist scikit-learn} >= 1.0
-Recommends: %{py3_dist matplotlib} >= 3.7
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-photutils all,dev,docs,test
 
-%description -n python3-%{srcname} %_description
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n photutils-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -t -e %{toxenv}-test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,dev,docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files photutils
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with check}
+
 %check
-%{tox} 
-%endif 
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
+
+%files -n python3-photutils -f %{pyproject_files}
 
 %changelog
 %autochangelog

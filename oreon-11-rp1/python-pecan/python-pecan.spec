@@ -1,54 +1,58 @@
-%global source0_hash 7de15bf4a2600dc584bed0f25431dfed6bf20a7a5bc935a48d2ce50063339815
+%global source0_hash none
 
-%global pypi_name pecan
-%{!?_licensedir:%global license %%doc}
-%{!?upstream_version: %global upstream_version %{version}%{?milestone}}
+Name:           python-pecan
+Version:        1.8.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A WSGI object-dispatching web framework, designed to be lean and fast, with few dependencies.
 
-Name:           python-%{pypi_name}
-Version:        1.7.0
-Release:        5%{?dist}
-Summary:        A lean WSGI object-dispatching web framework
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            http://github.com/pecan/pecan
+Source:         %{pypi_source pecan}
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://github.com/pecan/pecan
-Source0:        %pypi_source
 BuildArch:      noarch
-
-%description
-A WSGI object-dispatching web framework, designed to be lean and
-fast with few dependencies
-
-%package -n python3-%{pypi_name}
-Summary:        A lean WSGI object-dispatching web framework
-
 BuildRequires:  python3-devel
 
-Conflicts:     python2-%{pypi_name} < 1.3.2-5
 
-%description -n python3-%{pypi_name}
-A WSGI object-dispatching web framework, designed to be lean and
-fast with few dependencies
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pecan' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-pecan
+Summary:        %{summary}
+
+%description -n python3-pecan %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pecan-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.rst
-%{_bindir}/pecan
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-pecan -f %{pyproject_files}
 %{_bindir}/gunicorn_pecan
+%{_bindir}/pecan
 
 %changelog
 %autochangelog

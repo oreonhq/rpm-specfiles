@@ -7,7 +7,7 @@
 %global crate wasm-bindgen
 
 Name:           rust-wasm-bindgen
-Version:        0.2.126
+Version:        0.2.128
 Release:        %autorelease
 Summary:        Easy support for interacting between JS and Rust.
 

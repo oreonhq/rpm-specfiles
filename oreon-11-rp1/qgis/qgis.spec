@@ -3,7 +3,7 @@
 #TODO: Run test suite (see debian/rules)
 
 Name:           qgis
-Version:        3.44.8
+Version:        4.2.2
 Release:        1%{?dist}
 Summary:        A user friendly Open Source Geographic Information System
 

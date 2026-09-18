@@ -3,8 +3,8 @@
 #global extra_version -2
 
 Name:           cdogs-sdl
-Version:        0.7.3
-Release:        17%{?dist}
+Version:        2.4.0
+Release:        1%{?dist}
 Summary:        C-Dogs is an arcade shoot-em-up
 # The game-engine is GPLv2+
 # The game art is CC

@@ -1,36 +1,23 @@
-%global source0_hash 78514a9265b9aa7d4607042dc77c5e6461ab27036450ad8e1f6ef9a7f29bf958
+%global source0_hash none
 
 Name:           python-blobfile
-Version:        3.2.0
+Version:        3.3.0
 Release:        %autorelease
-Summary:        Read GCS, ABS and local paths with the same interface
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Read GCS, ABS and local paths with the same interface, clone of tensorflow.io.gfile
 
-License:        Unlicense
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/blobfile/blobfile
 Source:         %{pypi_source blobfile}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# BuildRequires for testing
-#BuildRequires:  python3dist(xmltodict)
-#BuildRequires:  python3dist(lxml)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is a library that provides a Python-like interface for reading local and
-remote files (only from blob storage), with an API similar to open() as well as
-some of the os.path and shutil functions. blobfile supports local paths, Google
-Cloud Storage paths (gs://<bucket>), and Azure Blob Storage paths
-(az://<account>/<container>
-or https://<account>.blob.core.windows.net/<container>/).
-
-The main function is BlobFile, which lets you open local and remote files that
-act more or less like local ones. There are also a few additional functions
-such as basename, dirname, and join, which mostly do the same thing as their
-os.path namesakes, only they also support GCS paths and ABS paths.
-
-This library is inspired by TensorFlow's gfile but does not have exactly the
-same interface.
-}
+This is package 'blobfile' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -39,39 +26,31 @@ Summary:        %{summary}
 
 %description -n python3-blobfile %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n blobfile-%{version}
-# Remove the test files, not needed for normal operation.
-# We cannot use them, (see below,) so remove them.
-# See: https://github.com/blobfile/blobfile/issues/226
-rm blobfile/_ops_test.py
-rm blobfile/_xml_test.py
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l blobfile
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-# Run the XML benchmarks/tests since those work offline
-# Except they don't actually work 
-# See upstream bug: https://github.com/blobfile/blobfile/issues/257
-#/usr/bin/python3 -m blobfile._xml_test
-# We could run tests with python testing/run.py --direct but
-# "The tests are rather slow, ~7 minutes to run (even though large file tests
-# are disabled) and require accounts with every cloud provider."
-# Upstream bug: https://github.com/blobfile/blobfile/issues/256
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-blobfile -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

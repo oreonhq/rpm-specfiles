@@ -1,83 +1,62 @@
-%global source0_hash b2a4e61802e0a5518bc8293058adedbb6b0d51c08c125d1322b1af7c7cbca4c1
+%global source0_hash none
 
-%global pypi_name Scrapy
-%global pkg_name scrapy
-Name:		python-scrapy
-Version:	2.14.1
-Release:	2%{?dist}
-Summary:	A high-level Python Screen Scraping framework
-# Automatically converted from old format: BSD - review is highly recommended.
-License:	LicenseRef-Callaway-BSD
-URL:		https://scrapy.org
-# TODO fix Source0 to correct github source URL
-Source0:	https://files.pythonhosted.org/packages/source/S/%{pypi_name}/%{pkg_name}-%{version}.tar.gz
-BuildArch:	noarch
+Name:           python-scrapy
+Version:        2.19.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A high-level Web Crawling and Web Scraping framework
 
-%description
-Scrapy is a fast high-level screen scraping and web crawling 
-framework, used to crawl websites and extract structured data 
-from their pages. It can be used for a wide range of purposes,
-from data mining to monitoring and automated testing.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://scrapy.org/
+Source:         %{pypi_source scrapy}
 
-%package -n python3-%{pkg_name}
-Summary:	%{summary}
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-Requires:	python3-pyOpenSSL
-Requires:	python3-twisted
-Requires:	python3-lxml
-Requires:	python3-w3lib
-Requires:	python3-queuelib
-Requires:	python3-zope-interface
-Requires:	python3-cssselect
-Requires:	python3-pydispatcher
-Requires:	python3-parsel
-Requires:	python3-itemadapter
-Requires:	python3-protego
-Requires:	python3-itemloaders
-Requires:	python3-pydispatcher
-Requires:	python-tldextract
-Requires:	python3-service-identity
-Requires:	python3-cryptography 
 
-%{?python_provide:%python_provide python3-%{pkg_name}}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'scrapy' generated automatically by pyp2spec.}
 
-%description -n python3-%{pkg_name}
-Scrapy is a fast high-level screen scraping and web crawling 
-framework, used to crawl websites and extract structured data 
-from their pages. It can be used for a wide range of purposes,
-from data mining to monitoring and automated testing.
+%description %_description
 
-%package doc
-Summary:	Documentation for %{name}
+%package -n     python3-scrapy
+Summary:        %{summary}
 
-%description doc
-Scrapy is a fast high-level screen scraping and web crawling 
-framework, used to crawl websites and extract structured data 
-from their pages. It can be used for a wide range of purposes,
-from data mining to monitoring and automated testing.
-This package contains the documentation for %{name}
+%description -n python3-scrapy %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-scrapy bpython,color,gcs,httpx,images,ipython,ptpython,robotparser,s3,twisted-http2,uvloop
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n scrapy-%{version}
 
-%autosetup -n %{pkg_name}-%{version}
+
 %generate_buildrequires
-%pyproject_buildrequires 
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x bpython,color,gcs,httpx,images,ipython,ptpython,robotparser,s3,twisted-http2,uvloop
+
 
 %build
 %pyproject_wheel
-pushd docs
-%make_build html && rm -r build/html/.buildinfo
-popd
+
 
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{pkg_name}
-%license LICENSE
-%doc AUTHORS PKG-INFO
-%{python3_sitelib}/scrapy
-%{python3_sitelib}/scrapy-%{version}.dist-info/
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-scrapy -f %{pyproject_files}
 %{_bindir}/scrapy
 
 %changelog

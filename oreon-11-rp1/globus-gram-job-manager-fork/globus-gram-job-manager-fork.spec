@@ -2,8 +2,8 @@
 
 Name:		globus-gram-job-manager-fork
 %global _name %(tr - _ <<< %{name})
-Version:	3.4
-Release:	2%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Fork Job Manager Support
 
 License:	Apache-2.0

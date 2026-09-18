@@ -1,61 +1,62 @@
-%global source0_hash 19375f2b8712da70dae7300580887ce8dcc7d2a1c96f0240e0c4759ddb622fac
+%global source0_hash none
 
-%global srcname yamlloader
-%global _desc %{expand: \
-This module provides loaders and dumpers for PyYAML. Currently, an 
-OrderedDict loader/dumper is implemented, allowing to keep items order
-when loading resp. dumping a file from/to an OrderedDict (Python 3.7+:
-Also  regular dicts are supported and are the default items to be loaded
-to. As of Python 3.7 preservation of insertion order is a language feature 
-of regular dicts.)\
-\
-This project was originally mirrored from yamlordereddict Many thanks to 
-the original author François Ménabé! The library contains several 
-improvements including automated testing and the much faster C-versions 
-of the Loaders/Dumpers.}
-
-Name:           python-%{srcname}
-Version:        1.1.0
+Name:           python-yamlloader
+Version:        1.6.0
 Release:        %autorelease
-Summary:        Ordered YAML loader and dumper for PyYAML
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Ordered YAML loader and dumper for PyYAML.
 
-License:	MIT
-URL:		https://github.com/Phynix/yamlloader
-Source0:	%{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/Phynix/yamlloader
+Source:         %{pypi_source yamlloader}
 
-BuildArch:	noarch
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildRequires:	python3-devel
-BuildRequires:	python3-hypothesis
-BuildRequires:	python3-pytest
 
-%description %{_desc}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'yamlloader' generated automatically by pyp2spec.}
 
-%package -n python3-%{srcname}
-Summary:	%{summary}
+%description %_description
 
-%description -n python3-%{srcname} %{_desc}
+%package -n     python3-yamlloader
+Summary:        %{summary}
+
+%description -n python3-yamlloader %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-yamlloader dev,doc,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n yamlloader-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,doc,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
+
+%files -n python3-yamlloader -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,80 +1,65 @@
-%global source0_hash 0563a76513b6af6eebbe788c3bf3d01c920e46b3f90c8416738c5cfc773ff8e2
+%global source0_hash none
 
-%global pypi_name cssutils
-%global srcname cssutils
+Name:           python-cssutils
+Version:        2.15.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A CSS Cascading Style Sheets library for Python
 
-%bcond_without tests
-
-Name:           python-%{srcname}
-Summary:        CSS Cascading Style Sheets library for Python
-Version:        2.11.1
-Release:        8%{?dist}
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-3.0-or-later
 URL:            https://github.com/jaraco/cssutils
-Source0:        %pypi_source
+Source:         %{pypi_source cssutils}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# Tests BuildRequires
-BuildRequires:  python3dist(more-itertools)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-cov)
-BuildRequires:  python3dist(mypy)
-BuildRequires:  ruff
-BuildRequires:  python3dist(cssselect)
-BuildRequires:  python3dist(jaraco-test)
 
-%global _description \
-A Python package to parse and build CSS Cascading Style Sheets. DOM only, not\
-any rendering facilities.
 
-%description %{_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cssutils' generated automatically by pyp2spec.}
 
-%package doc
-Summary:        Documentation for %{name}
+%description %_description
 
-%description doc
-%{summary}.
-
-%package -n python3-%{srcname}
+%package -n     python3-cssutils
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
-A Python package to parse and build CSS Cascading Style Sheets. DOM only, not\
-any rendering facilities.
+%description -n python3-cssutils %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-cssutils check,cover,doc,enabler,test,type
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n cssutils-%{version}
-# jaraco.test module not yet in Fedora
-rm -f cssutils/tests/test_property.py cssutils/tests/test_selector.py
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x check,cover,doc,enabler,test,type
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files *utils
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-%pytest -k "not test_parseUrl and not encutils and not website.logging"
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
+
+%files -n python3-cssutils -f %{pyproject_files}
 %{_bindir}/csscapture
 %{_bindir}/csscombine
 %{_bindir}/cssparse
-
-%files doc
-%doc examples/
 
 %changelog
 %autochangelog

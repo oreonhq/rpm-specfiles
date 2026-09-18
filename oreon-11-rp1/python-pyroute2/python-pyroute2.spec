@@ -1,54 +1,67 @@
-%global source0_hash 54d226fc3ff2732f49bac9b26853c50c9d05be05a4d9daf09c7cf6d77301eff3
+%global source0_hash none
 
-%global srcname pyroute2
+Name:           python-pyroute2
+Version:        0.9.6
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python Netlink library
 
-%global _description \
-PyRoute2 provides several levels of API to work with Netlink\
-protocols, such as Generic Netlink, RTNL, TaskStats, NFNetlink,\
-IPQ.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-2.0-or-later OR Apache-2.0
+URL:            https://github.com/svinota/pyroute2
+Source:         %{pypi_source pyroute2}
 
-Name: python-%{srcname}
-Version: 0.7.12
-Release: %autorelease
-Summary: Pure Python netlink library
-License: GPL-2.0-or-later OR Apache-2.0
-URL: https://github.com/svinota/%{srcname}
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildArch: noarch
-Source0: %{pypi_source pyroute2}
 
-%description %{_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pyroute2' generated automatically by pyp2spec.}
 
-%package -n python%{python3_pkgversion}-%{srcname}
-Summary: %{summary}
-BuildRequires: python%{python3_pkgversion}-devel
-BuildRequires: python%{python3_pkgversion}-setuptools
+%description %_description
 
-%description -n python%{python3_pkgversion}-%{srcname} %{_description}
+%package -n     python3-pyroute2
+Summary:        %{summary}
+
+%description -n python3-pyroute2 %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pyroute2 dev,docs,repo
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pyroute2-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs,repo
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pyroute2
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-pyroute2 -f %{pyproject_files}
+%{_bindir}/dhcp-server-detector
+%{_bindir}/pyroute2-decoder
+%{_bindir}/pyroute2-dhcp-client
+%{_bindir}/pyroute2-test-platform
 %{_bindir}/ss2
-%{_bindir}/%{srcname}-cli
-%{_bindir}/%{srcname}-dhcp-client
-%{_bindir}/%{srcname}-test-platform
-%doc README*
-%license LICENSE.GPL-2.0-or-later LICENSE.Apache-2.0
-%{python3_sitelib}/pr2modules
 
 %changelog
 %autochangelog

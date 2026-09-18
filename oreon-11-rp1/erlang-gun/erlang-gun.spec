@@ -3,7 +3,7 @@
 %global realname gun
 
 Name:		erlang-%{realname}
-Version:	2.2.0
+Version:	2.6.0
 Release:	%autorelease
 BuildArch:	noarch
 Summary:	Erlang HTTP client with support for HTTP/1.1, HTTP/2, Websocket and more

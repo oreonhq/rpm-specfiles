@@ -1,85 +1,62 @@
-%global source0_hash 1cdb87c01ae41c57ff173c2bdf6a03085f8713c2d4ef8af795f60826d62eee1a
+%global source0_hash none
 
-%global srcname  pytest-cov
-%global slugname pytest_cov
-%global forgeurl https://github.com/pytest-dev/%{srcname}
-
-%global common_description %{expand:
-This plugin produces coverage reports. Compared to just using coverage run this
-plugin does some extras:
-
-  • Subprocess support: you can fork or run stuff in a subprocess and will get
-    covered without any fuss.
-  • Xdist support: you can use all of pytest-xdist’s features and still get
-    coverage.
-  • Consistent pytest behavior. If you run coverage run -m pytest you will have
-    slightly different sys.path (CWD will be in it, unlike when running
-    pytest).
-
-All features offered by the coverage package should work, either through
-pytest-cov’s command line options or through coverage’s config file.
-}
-
-# During python mass rebuild we need to build python-pytest-cov without
-# tests because some dependencies are not yet available
-%bcond_without tests
-
-Name:           python-%{srcname}
-Version:        7.0.0
-%forgemeta
+Name:           python-pytest-cov
+Version:        7.1.0
 Release:        %autorelease
-Summary:        Coverage plugin for pytest
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Pytest plugin for measuring coverage.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            %{forgeurl}
-Source:         %{forgesource}
+URL:            https://github.com/pytest-dev/pytest-cov
+Source:         %{pypi_source pytest_cov}
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
 
-%description %{common_description}
 
-%package -n python3-%{srcname}
-Summary: %{summary}
-%description -n python3-%{srcname} %{common_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pytest-cov' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-pytest-cov
+Summary:        %{summary}
+
+%description -n python3-pytest-cov %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pytest-cov testing
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_cov-%{version}
 
-%forgeautosetup -p1
 
 %generate_buildrequires
-%pyproject_buildrequires -r %{?with_tests:-x testing}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x testing
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{slugname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-k="$(awk 'NR>1 {pre=" and " } { printf "%snot %s", pre, $0 }' <<EOF
-test_append_coverage_subprocess
-test_celery
-test_central_subprocess
-test_cleanup_on_sigterm
-test_contexts[nodist]
-test_contexts[1xdist]
-test_contexts[2xdist]
-test_contexts[3xdist]
-test_dist_subprocess_collocated
-test_dist_subprocess_not_collocated
-test_filterwarnings_error
-test_subprocess_with_path_aliasing
-EOF
-)"
-%pytest -k "${k}"
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc *.rst
+
+%files -n python3-pytest-cov -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,10 +1,10 @@
 %global source0_hash 0e37a55b7c3379230e97e1ad982542b75016a0c7d6676198604e557f9b373dae
 
-%global tag     1.11
+%global tag     1.12
 
 Name:           sway
-Version:        1.11
-Release:        3%{?dist}
+Version:        1.12
+Release:        1%{?dist}
 Summary:        i3-compatible window manager for Wayland
 License:        MIT
 URL:            https://github.com/swaywm/sway

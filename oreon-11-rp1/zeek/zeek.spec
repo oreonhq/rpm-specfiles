@@ -11,7 +11,7 @@
 %global broker_soversion 2.6
 
 Name:           zeek
-Version:        6.0.4
+Version:        9.0.0
 Release:        %autorelease
 Summary:        Powerful framework for network analysis and security monitoring
 

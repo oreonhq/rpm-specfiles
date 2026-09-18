@@ -5,8 +5,8 @@
 
 Summary:        World's most popular Open Source IRC bot
 Name:           eggdrop
-Version:        1.10.1
-Release:        2%{?dist}
+Version:        1.10.2
+Release:        1%{?dist}
 # Eggdrop itself is GPL-2.0-or-later but uses other source codes, breakdown:
 # GPL-2.0-only: src/mod/pbkdf2.mod/{pbkdf2,tclpbkdf2}.c
 # BSD-3-Clause: src/compat/inet_aton.c

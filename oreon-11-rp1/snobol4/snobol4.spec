@@ -5,8 +5,8 @@
 %global optflags %{optflags} -Wno-error=unused-result -Wno-error=unused-but-set-variable -Wno-error=restrict -Wno-error=unused-variable -Wno-error=maybe-uninitialized -Wno-error=uninitialized
 
 Name:		snobol4
-Version:	2.3.1
-Release:	8%{?dist}
+Version:	2.3.4
+Release:	1%{?dist}
 # Majority: BSD-2-Clause
 # BSD-3-Clause: modules/random/random.c
 # BSD-4-Clause: lib/bsd/popen.c

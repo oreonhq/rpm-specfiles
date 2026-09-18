@@ -5,7 +5,7 @@
 %global selinuxtype targeted
 
 Name:           mlmmj
-Version:        1.8.0
+Version:        2.1.0
 Release:        1%{?dist}
 Summary:        A simple and slim mailing list manager inspired by ezmlm
 License:        MIT

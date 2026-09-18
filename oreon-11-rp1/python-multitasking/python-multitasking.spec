@@ -1,53 +1,56 @@
-%global source0_hash 2fba2fa8ed8c4b85e227c5dd7dc41c7d658de3b6f247927316175a57349b84d1
+%global source0_hash none
 
-%global         srcname     multitasking
-
-Name:           python-%{srcname}
-Version:        0.0.12
+Name:           python-multitasking
+Version:        0.0.13
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Non-blocking Python methods using decorators
-License:        Apache-2.0
-URL:            https://pypi.org/project/%{srcname}/
-Source0:        %pypi_source
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/ranaroussi/multitasking
+Source:         %{pypi_source multitasking}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-MultiTasking is a tiny Python library lets you convert your Python methods
-into asynchronous, non-blocking methods simply by using a decorator.}
+This is package 'multitasking' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-multitasking
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-multitasking %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n multitasking-%{version}
 
-%autosetup -n %{srcname}-%{version}
-
-# Remove the python shebang from non-executable files.
-sed -i '1{\@^#!/usr/bin/env python@d}' multitasking/__init__.py
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
+
+%files -n python3-multitasking -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,68 +1,62 @@
-%global source0_hash 3a8f2de7fea9397ee6ea39a9ad4f7f242c1c044e498b7fca1c407f54ffcfd11a
+%global source0_hash none
 
-# tests require a running Redis server
-%bcond tests 0
-
-%global pypi_name django-redis
-%global modname django_redis
-
-Name:           python-%{pypi_name}
-Version:        6.0.0
+Name:           python-django-redis
+Version:        7.0.0
 Release:        %autorelease
-Summary:        Full featured redis cache backend for Django
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Full featured redis cache backend for Django.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://github.com/niwinz/django-redis
-Source0:        https://github.com/niwinz/%{pypi_name}/archive/%{version}.tar.gz#/%{pypi_name}-%{version}.tar.gz
+URL:            https://github.com/jazzband/django-redis
+Source:         %{pypi_source django_redis}
+
 BuildArch:      noarch
- 
-%description
-Full featured redis cache backend for Django.
-
-%package -n     python3-%{pypi_name}
-Summary:        Full featured redis cache backend for Django
-
 BuildRequires:  python3-devel
-%if %{with tests}
-# from the testenv section in setup.cfg
-# the macro can't pick these up
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-cov)
-BuildRequires:  python3dist(pytest-mock)
-BuildRequires:  python3dist(pytest-xdist)
-BuildRequires:  python3dist(lz4) >= 0.15
-BuildRequires:  python3dist(msgpack) >= 0.6.0
-BuildRequires:  python3dist(pyzstd) >= 0.15
-%endif
 
-%description -n python3-%{pypi_name}
-Full featured redis cache backend for Django.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'django-redis' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-django-redis
+Summary:        %{summary}
+
+%description -n python3-django-redis %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-django-redis hiredis,lz4,msgpack,pyzstd
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n django_redis-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x hiredis,lz4,msgpack,pyzstd
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{modname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-%pyproject_check_import
-%pytest -v
-%else
-%pyproject_check_import -e django_redis.compressors.lz4 -e django_redis.compressors.zstd  -e django_redis.serializers.msgpack
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.rst
+
+%files -n python3-django-redis -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,83 +1,61 @@
-%global source0_hash 082367f568a7812aa5f6922ffe3d9d027cd83829dc32bcaac4c874eeed618000
+%global source0_hash none
 
-%global srcname webencodings
-%global desc This is a Python implementation of the WHATWG Encoding standard.
+Name:           python-webencodings
+Version:        0.6.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Character encoding aliases for legacy web content
 
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/CourtBouillon/webencodings
+Source:         %{pypi_source webencodings}
 
-Name: python-%{srcname}
-Version: 0.5.1
-Release: 33%{?dist}
-BuildArch: noarch
-
-License: BSD-3-Clause
-Summary: Character encoding for the web
-URL: https://github.com/gsnedders/python-%{srcname}
-Source0:        https://github.com/gsnedders/python-webencodings/archive/refs/tags/v0.5.1.tar.gz#/webencodings-0.5.1.tar.gz
-
-BuildRequires: python3-devel
-BuildRequires: python3-setuptools
-BuildRequires: python3-pytest
-BuildRequires: python3-sphinx
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
 
-%description
-%{desc}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'webencodings' generated automatically by pyp2spec.}
 
+%description %_description
 
-%package doc
-Summary: Documentation for python-webencodings
+%package -n     python3-webencodings
+Summary:        %{summary}
 
+%description -n python3-webencodings %_description
 
-%description doc
-Documentation for python-webencodings.
-
-
-%package -n python3-%{srcname}
-Summary: %{summary}
-
-%{?python_provide:%python_provide python3-%{srcname}}
-
-Requires: python3
-
-
-%description -n python3-%{srcname}
-%{desc}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-webencodings doc,test
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n python-%{srcname}-%{version}
+%autosetup -p1 -n webencodings-%{version}
+
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,test
 
 
 %build
-%py3_build
-
-PYTHONPATH=. sphinx-build-3 docs docs/_build
-
-# Remove unneeded build artifacts.
-rm -rf docs/_build/.buildinfo
-rm -rf docs/_build/.doctrees
+%pyproject_wheel
 
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-py.test-3
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files doc
-%license LICENSE
-%doc docs/_build
-
-
-%files -n python3-%{srcname}
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/%{srcname}
-%{python3_sitelib}/*.egg-info
-
+%files -n python3-webencodings -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.5.1-33

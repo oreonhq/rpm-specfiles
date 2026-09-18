@@ -1,55 +1,57 @@
-%global source0_hash 4837290305613710cf6c515db8923284da06e4f48a549d2fe8e2d4276aed3e73
-
-%global srcname python_fontconfig
+%global source0_hash none
 
 Name:           python-fontconfig
-Version:        0.6.2.post1
-Release:        2%{?dist}
+Version:        0.6.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Python bindings for Fontconfig library
 
-License:        GPL-3.0-or-later
-URL:            https://github.com/lilydjwg/%{name}
-Source0:        %{pypi_source}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-3.0
+URL:            https://github.com/Vayn/python-fontconfig
+Source:         %{pypi_source python_fontconfig}
 
-BuildRequires:  gcc
-BuildRequires:  fontconfig-devel
-BuildRequires:  python3-Cython
+BuildArch:      noarch
 BuildRequires:  python3-devel
-# Needed for tests
-BuildRequires:  dejavu-serif-fonts
 
-%description
-%{summary}.
 
-%package -n python3-fontconfig
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'python-fontconfig' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-python-fontconfig
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-fontconfig}
 
-%description -n python3-fontconfig
-%{summary}.
+%description -n python3-python-fontconfig %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n python_fontconfig-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+%pyproject_buildrequires
+
 
 %build
-%{python3} %{py_setup} build_ext -i
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files fontconfig
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-yes | %{py3_test_envvars} %{python3} test/test.py
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-fontconfig -f %{pyproject_files}
-%doc README.rst
-%license LICENSE.txt
+
+%files -n python3-python-fontconfig -f %{pyproject_files}
 
 %changelog
 %autochangelog

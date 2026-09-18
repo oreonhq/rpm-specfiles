@@ -3,7 +3,7 @@
 %global pypi_name banal
 
 Name:           python-%{pypi_name}
-Version:        1.0.6
+Version:        1.1.2
 Release:        %autorelease
 Summary:        Commons of stupid, simple Python micro functions
 

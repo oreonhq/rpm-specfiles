@@ -10,7 +10,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        1.3.16
+Version:        1.3.16.1
 Release:        %autorelease
 Summary:        For creating, comparing, parsing and printing Universally Unique Identifiers
 

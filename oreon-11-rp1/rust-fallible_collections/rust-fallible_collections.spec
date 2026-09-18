@@ -7,7 +7,7 @@
 %global crate fallible_collections
 
 Name:           rust-fallible_collections
-Version:        0.4.9
+Version:        0.5.2
 Release:        %autorelease
 Summary:        a crate which adds fallible allocation api to std collections
 

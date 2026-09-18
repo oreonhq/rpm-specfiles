@@ -2,8 +2,8 @@
 
 Name:             gawk-json
 Summary:          JSON encoder/decoder for gawk
-Version:          2.0.1
-Release:          7%{?dist}
+Version:          2.1.0
+Release:          1%{?dist}
 License:          GPL-3.0-or-later
 
 URL:              https://sourceforge.net/projects/gawkextlib

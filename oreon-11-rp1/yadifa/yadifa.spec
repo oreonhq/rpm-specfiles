@@ -6,8 +6,8 @@
 %global revision	11259
 
 Name:		yadifa
-Version:	2.6.7
-Release:	5%{?dist}
+Version:	3.0.3
+Release:	1%{?dist}
 Summary:	Lightweight authoritative Name Server with DNSSEC capabilities
 
 License:	BSD-3-Clause

@@ -1,8 +1,8 @@
 %global source0_hash 682ffa3fc894686156337b8ce473c954bf3f4fb0f3ecac159c73db632d28a8fd
 
 Name:           DevIL
-Version:        1.7.8
-Release:        54%{?dist}
+Version:        1.8.0
+Release:        1%{?dist}
 Summary:        A cross-platform image library
 # Automatically converted from old format: LGPLv2 - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2

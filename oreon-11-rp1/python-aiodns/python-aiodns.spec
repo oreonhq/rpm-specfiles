@@ -1,60 +1,57 @@
-%global source0_hash 5faadf797ec7a406f281f0cb02824ca0cdbc2a7c4531549ba52aac9cb1ead6cf
-
-# All tests require network access (DNS). We can run them manually with, e.g.:
-#   fedpkg mockbuild --with network_tests --enable-network
-%bcond_with network_tests
+%global source0_hash none
 
 Name:           python-aiodns
-Version:        4.0.0
-Release:        2%{?dist}
+Version:        4.0.4
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Simple DNS resolver for asyncio
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/saghul/aiodns
-Source0:        %{url}/archive/v%{version}/aiodns-%{version}.tar.gz
+URL:            https://github.com/aio-libs/aiodns.git
+Source:         %{pypi_source aiodns}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-%if %{with network_tests}
-BuildRequires:  %{py3_dist pytest}
-# Optional uvloop integration tests:
-BuildRequires:  %{py3_dist uvloop}
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-aiodns provides a simple way for doing asynchronous DNS resolutions using
-pycares.}
+This is package 'aiodns' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package     -n python3-aiodns
+%package -n     python3-aiodns
 Summary:        %{summary}
 
-%description -n python3-aiodns %{_description}
+%description -n python3-aiodns %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n aiodns-%{version}
 
-%autosetup -n aiodns-%{version} -p0
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l aiodns
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%if %{with network_tests}
-%pytest tests.py
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-aiodns -f %{pyproject_files}
-%doc README.rst ChangeLog
 
 %changelog
 %autochangelog

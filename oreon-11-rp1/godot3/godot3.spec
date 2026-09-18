@@ -19,8 +19,8 @@
 %define rdnsname %{urdnsname}3
 
 Name:           godot3
-Version:        3.6.1
-Release:        3%{?dist}
+Version:        4.7.2-stable
+Release:        1%{?dist}
 Summary:        Multi-platform 2D and 3D game engine with a feature-rich editor (version 3)
 %if 0%{?mageia}
 Group:          Development/Tools

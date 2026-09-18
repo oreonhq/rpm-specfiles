@@ -1,51 +1,61 @@
-%global source0_hash 4076f1368ea0ed88ff9c19255b5215cf59e92662df040e32698205ab66cc168d
+%global source0_hash none
 
-%global srcname colcon-meson
+Name:           python-colcon-meson
+Version:        0.6.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Extension for colcon to support Meson packages.
 
-Name:           python-%{srcname}
-Version:        0.5.0
-Release:        1%{?dist}
-Summary:        Extension for colcon to support Meson packages
-
-License:        Apache-2.0
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/colcon/colcon-meson
-Source0:        https://github.com/colcon/colcon-meson/archive/%{version}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source colcon_meson}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A colcon extension for building Meson packages.}
+This is package 'colcon-meson' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python%{python3_pkgversion}-%{srcname}
+%package -n     python3-colcon-meson
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-pytest
 
-%description -n python%{python3_pkgversion}-%{srcname} %_description
+%description -n python3-colcon-meson %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-colcon-meson test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n colcon_meson-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l colcon_meson
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -k 'not linter' test
-%pyproject_check_import colcon_meson
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-colcon-meson -f %{pyproject_files}
 
 %changelog
 %autochangelog

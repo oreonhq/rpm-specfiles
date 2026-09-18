@@ -21,8 +21,8 @@
 %global ns_project   MimeTypeDetection
 
 Name:           php-%{pk_vendor}-%{pk_name}
-Version:        1.16.0
-Release:        4%{?dist}
+Version:        1.17.0
+Release:        1%{?dist}
 Summary:        Mime-type detection for Flysystem
 
 License:        MIT

@@ -1,8 +1,8 @@
 %global source0_hash d29e4250d437340b076350e910e69fd5539ef8b92528d0306745cec0e343cc17
 
 Name:           libjwt
-Version:        1.12.1
-Release:        21%{?dist}
+Version:        3.6.1
+Release:        1%{?dist}
 Summary:        A Javascript Web Token library in C
 
 License:        MPL-2.0

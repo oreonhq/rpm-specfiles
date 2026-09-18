@@ -11,7 +11,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        3.2.8.0
+Version:        3.2.9.0
 Release:        %autorelease
 Summary:        Low-level networking interface
 

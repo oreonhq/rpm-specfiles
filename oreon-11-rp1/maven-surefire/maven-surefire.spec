@@ -4,7 +4,7 @@
 %global upstream_version %(echo '%{version}' | tr '~' '-')
 
 Name:           maven-surefire
-Version:        3.2.2
+Version:        3.6.0
 Release:        %autorelease
 Summary:        Test framework project
 License:        Apache-2.0 AND CPL-1.0
@@ -12,7 +12,7 @@ URL:            https://maven.apache.org/surefire/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/surefire/surefire/3.2.2/surefire-3.2.2-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/surefire/surefire/3.6.0/surefire-3.2.2-source-release.zip
 # Remove bundled binaries which cannot be easily verified for licensing
 Source1:        https://www.eclipse.org/legal/cpl-v10.html
 
@@ -48,7 +48,7 @@ BuildRequires:  mvn(org.testng:testng::jdk15:)
 # PpidChecker relies on /usr/bin/ps to check process uptime
 Requires:       procps-ng
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.2.2-19
+Obsoletes:      %{name}-javadoc < 3.6.0-19
 
 %description
 Surefire is a test framework project.

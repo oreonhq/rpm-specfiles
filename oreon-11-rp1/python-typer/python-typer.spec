@@ -1,7 +1,7 @@
 %global source0_hash f5941b15e75097cd190a9b7d3fa6cc0ca2ada86c7f1b683985ea64fa9711e8ca
 
 Name:           python-typer
-Version:        0.24.1
+Version:        0.27.2
 Release:        %autorelease
 Summary:        Build great CLIs; easy to code; based on Python type hints
 

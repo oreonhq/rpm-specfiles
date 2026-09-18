@@ -1,10 +1,10 @@
 %global source0_hash fbe74bbdcee21d656715688706da3c8becfd946d92cd44705cc6098bb23b3a16
 
-%global sover 0.8
+%global sover 0.9
 
 Name:           yaml-cpp
-Version:        0.8.0
-Release:        5%{?dist}
+Version:        0.9.0
+Release:        1%{?dist}
 
 License:        MIT
 Summary:        A YAML parser and emitter for C++

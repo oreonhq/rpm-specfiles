@@ -1,79 +1,57 @@
-%global source0_hash fd7a78171dfa45066dd2a0d8d8f04a1c33a9eef656a23a5404f30ce65d633348
+%global source0_hash none
 
-%global pypi_name uritools
-
-Name:           python-%{pypi_name}
-Version:        4.0.3
+Name:           python-uritools
+Version:        6.1.3
 Release:        %autorelease
-Summary:        URI parsing, classification and composition 
+# Fill in the actual package summary to submit package to Fedora
+Summary:        URI parsing, classification and composition
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/tkem/uritools
-Source:         %url/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
+URL:            https://github.com/tkem/uritools/
+Source:         %{pypi_source uritools}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(sphinx)
 
-%global common_description %{expand:
-This module provides RFC 3986 compliant functions for parsing, classifying and
-composing URIs and URI references, largely replacing the Python Standard
-Library's urllib.parse module.}
 
-%description %{common_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'uritools' generated automatically by pyp2spec.}
 
-%package -n python3-%{pypi_name}
+%description %_description
+
+%package -n     python3-uritools
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %{common_description}
+%description -n python3-uritools %_description
 
-%package -n python-%{pypi_name}-doc
-Summary:        Documentation for python-%{pypi_name}
-# BSD-2-Clause: Sphinx javascript
-# MIT: jquery
-License:        Apache-2.0 AND BSD-2-Clause AND MIT
-BuildArch:      noarch
-Requires:       python3-%{pypi_name} = %{?epoch:%{epoch}:}%{version}-%{release}
-Provides:       bundled(js-sphinx_javascript_frameworks_compat)
-Provides:       bundled(js-doctools)
-Provides:       bundled(js-jquery)
-Provides:       bundled(js-language_data)
-Provides:       bundled(js-searchtools)
-
-%description -n python-%{pypi_name}-doc
-%{common_description}
-
-This package is providing the documentation for %{pypi_name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n uritools-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
-# generate html docs
-sphinx-build-3 -b html docs/ html
-# remove the sphinx-build-3 leftovers
-rm -rf html/.{doctrees,buildinfo}
 
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc CHANGELOG.rst README.rst
 
-%files -n python-%{pypi_name}-doc
-%doc html
+%files -n python3-uritools -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -27,8 +27,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        6.0.0
-Release:        9%{?dist}
+Version:        7.0.0
+Release:        1%{?dist}
 Summary:        PHP Utility class for timing, version %{major}
 
 License:        BSD-3-Clause
@@ -49,7 +49,7 @@ BuildRequires:  phpunit10
 # From composer.json
 #        "php": ">=8.1"
 Requires:       php(language) >= 8.1
-# From phpcompatinfo report for version 6.0.0
+# From phpcompatinfo report for version 7.0.0
 Requires:       php-spl
 # Autoloader
 Requires:       php-composer(fedora/autoloader)

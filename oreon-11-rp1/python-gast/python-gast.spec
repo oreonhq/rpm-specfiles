@@ -1,21 +1,24 @@
-%global source0_hash 88fc5300d32c7ac6ca7b515310862f71e6fdf2c029bbec7c66c0f5dd47b6b1fb
+%global source0_hash none
 
 Name:           python-gast
-Version:        0.6.0
+Version:        0.7.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Python AST that abstracts the underlying Python version
-License:        BSD-3-Clause
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/serge-sans-paille/gast/
 Source:         %{pypi_source gast}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A generic AST to represent Python2 and Python3's Abstract Syntax Tree (AST).
-GAST provides a compatibility layer between the AST of various Python versions,
-as produced by ast.parse from the standard ast module.}
+This is package 'gast' generated automatically by pyp2spec.}
+
 %description %_description
 
 %package -n     python3-gast
@@ -23,27 +26,31 @@ Summary:        %{summary}
 
 %description -n python3-gast %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n gast-%{version}
 
+
 %generate_buildrequires
-# Don't use tox options to avoid an unwanted dependency in RHEL
 %pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files gast
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-gast -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

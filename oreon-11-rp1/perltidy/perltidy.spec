@@ -1,7 +1,7 @@
 %global source0_hash 56a1fc2f1f813e49026a0f284b9209a6b2824620993e7598c85b01c444ff0f64
 
 Name:		perltidy
-Version:	20260204
+Version:	20260826
 Release:	1%{?dist}
 Summary:	Tool for indenting and re-formatting Perl scripts
 License:	GPL-2.0-or-later

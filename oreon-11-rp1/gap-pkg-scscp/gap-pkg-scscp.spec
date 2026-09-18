@@ -6,7 +6,7 @@
 %global giturl      https://github.com/gap-packages/scscp
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        2.4.4
+Version:        2.5.0
 Release:        %autorelease
 Summary:        Symbolic Computation Software Composability Protocol in GAP
 

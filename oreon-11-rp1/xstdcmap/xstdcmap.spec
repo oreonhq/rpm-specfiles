@@ -1,7 +1,7 @@
 %global source0_hash 365847e379398499ec9ad9a299cc47a0d6e7feba9546dfd4e5b422204b5ac180
 
 Name:           xstdcmap
-Version:        1.0.5
+Version:        1.0.6
 Release:        %autorelease
 Summary:        Utility to define standard colormap properties
 

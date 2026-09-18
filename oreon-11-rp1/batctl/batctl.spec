@@ -1,7 +1,7 @@
 %global source0_hash b4b70dae620106e45ee3ddb1f512f69075692b12343d0521267403cb212a4a26
 
 Name:           batctl
-Version:        2026.0
+Version:        2026.3
 Release:        %autorelease
 Summary:        B.A.T.M.A.N. advanced control and management tool
 

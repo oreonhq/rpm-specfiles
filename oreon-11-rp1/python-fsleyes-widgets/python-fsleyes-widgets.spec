@@ -1,79 +1,61 @@
-%global source0_hash 722fee3b09546767661b35030c7a5e43b5fbbaf70d6fea7eebe58ce147960097
-
-%bcond xvfb_tests 1
-
-%global desc %{expand:
-A collection of custom wx widgets and utilities used by FSLeyes.}
+%global source0_hash none
 
 Name:           python-fsleyes-widgets
-Version:        0.16.0
+Version:        0.17.0
 Release:        %autorelease
-Summary:        A collection of custom wx widgets and utilities used by FSLeyes
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A collection of wxPython widgets used by FSLeyes
 
-License:        Apache-2.0
-URL:            https://pypi.python.org/pypi/fsleyes-widgets
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://git.fmrib.ox.ac.uk/fsl/fsleyes/widgets
 Source:         %{pypi_source fsleyes_widgets}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-%if %{with xvfb_tests}
-BuildRequires:  xorg-x11-server-Xvfb
-# We BR pytest manually because other dependencies in requirements-dev.txt
-# pertain to coverage analysis
-# (https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters)
-# or to Sphinx documentation (which we do not build).
-BuildRequires:  %{py3_dist pytest}
-%endif
 
-%description %{desc}
 
-%package -n python3-fsleyes-widgets
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'fsleyes-widgets' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-fsleyes-widgets
 Summary:        %{summary}
 
-%description -n python3-fsleyes-widgets %{desc}
+%description -n python3-fsleyes-widgets %_description
 
-# do not generate docs because sphinx docs bundle js etc. which are very hard to unbundle
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-fsleyes-widgets doc,style,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n fsleyes_widgets-%{version}
 
-%autosetup -n fsleyes_widgets-%{version}
-
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-sed -r -i 's/[[:blank:]]--cov=[^[:blank:]]+//' setup.cfg
-
-# remove unneeded shebangs
-find fsleyes_widgets -type f -name '*.py' -exec sed -r -i '1{/^#!/d}' '{}' '+'
-
-# Don't run coverage when running tests
-sed -r -i 's/ ?--cov=fsleyes_widgets//' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,style,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files fsleyes_widgets
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with xvfb_tests}
-# From https://git.fmrib.ox.ac.uk/fsl/fsleyes/widgets/blob/master/.ci/test_template.sh
-%global __pytest xvfb-run -a -s '-screen 0 1920x1200x24' pytest
-# https://github.com/pauldmccarthy/fsleyes-widgets/issues/3
-%pytest -m 'not dodgy' -k "not test_fileToUrl"
-%else
-%pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-fsleyes-widgets -f %{pyproject_files}
-# While %%pyproject_files contains LICENSE in .dist-info, we need to add
-# COPYRIGHT manually, so we install both files in the same place.
-%license LICENSE COPYRIGHT
-%doc README.rst
 
 %changelog
 %autochangelog

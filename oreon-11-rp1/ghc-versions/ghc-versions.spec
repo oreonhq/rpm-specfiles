@@ -13,7 +13,7 @@
 %endif
 
 Name:           ghc-%{pkg_name}
-Version:        6.0.8
+Version:        6.0.9
 Release:        %autorelease
 Summary:        Types and parsers for software version numbers
 

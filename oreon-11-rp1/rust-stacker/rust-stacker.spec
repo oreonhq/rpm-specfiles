@@ -8,7 +8,7 @@
 %global crate stacker
 
 Name:           rust-stacker
-Version:        0.1.24
+Version:        0.1.25
 Release:        %autorelease
 Summary:        A stack growth library useful when implementing deeply recursive
 

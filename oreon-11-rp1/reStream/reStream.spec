@@ -3,7 +3,7 @@
 %global debug_package %{nil}
 
 Name:           reStream
-Version:        1.4.0
+Version:        1.5.0
 Release:        %autorelease
 URL:            https://github.com/rien/reStream
 Summary:        Stream your reMarkable screen over SSH

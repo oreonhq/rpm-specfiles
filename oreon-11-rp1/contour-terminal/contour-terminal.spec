@@ -1,7 +1,7 @@
 %global source0_hash 0018f111530ffb5fc669fdd9e400f730156c4d8cfd03ec9e06da555d6bc921e5
 
 Name:           contour-terminal
-Version:        0.6.2.8008
+Version:        0.7.0.8982
 Release:        %autorelease
 Summary:        Modern C++ Terminal Emulator
 License:        Apache-2.0

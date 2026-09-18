@@ -3,7 +3,7 @@
 %global upstream_version %%(echo %{version} | tr '~' '.')
 
 Name:           gst-thumbnailers
-Version:        1.0.0
+Version:        1.1.0
 Release:        %autorelease
 Summary:        GStreamer Thumbnailers
 

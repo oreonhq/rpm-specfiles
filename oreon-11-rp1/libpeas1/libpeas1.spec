@@ -6,7 +6,7 @@
 %global tarball_name libpeas
 
 Name:           libpeas1
-Version:        1.36.0
+Version:        2.2.1
 Release:        %autorelease
 Summary:        Plug-ins implementation convenience library, API version 1
 

@@ -25,8 +25,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{gh_owner}-%{gh_project}%{major}
-Version:        2.0.5
-Release:        10%{?gh_date:.%{gh_date}git%{gh_short}}%{?dist}
+Version:        3.0.5
+Release:        1%{?gh_date:.%{gh_date}git%{gh_short}}%{?dist}
 Summary:        Restarts a process without Xdebug, version %{major}
 
 License:        MIT

@@ -1,8 +1,8 @@
 %global source0_hash 16a37fecd7bbd63ec9de3ec6c0af331cee77d6dfda838a1b1573d6f298474da5
 
 Name:           terminology
-Version:        1.13.0
-Release:        10%{?dist}
+Version:        1.14.0
+Release:        1%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 Summary:        EFL based terminal emulator

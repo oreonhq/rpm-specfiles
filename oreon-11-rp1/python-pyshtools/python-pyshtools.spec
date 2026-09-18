@@ -1,88 +1,64 @@
 %global source0_hash none
 
-%global srcname pyshtools
-
-%if 0%{?fedora} || 0%{?rhel} >= 9
-%global blaslib flexiblas
-%else
-%global blaslib openblas
-%endif
-
-Name:           python-%{srcname}
-Version:        4.13.1
+Name:           python-pyshtools
+Version:        4.14.1
 Release:        %autorelease
-Summary:        Tools for working with spherical harmonics
+# Fill in the actual package summary to submit package to Fedora
+Summary:        SHTOOLS - Spherical Harmonic Tools
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://shtools.github.io/SHTOOLS/
-Source0:        %pypi_source %{srcname}
-# We don't need oldest-supported-numpy as NumPy is always built for "this" Python.
+Source:         %{pypi_source pyshtools}
+
+BuildRequires:  python3-devel
+BuildRequires:  gcc
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pyshtools' generated automatically by pyp2spec.}
+
 Patch:          0001-Use-normal-numpy-as-build-dependency.patch
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch: %{ix86}
+%description %_description
 
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-BuildRequires:  gcc-gfortran
-BuildRequires:  fftw3-devel
-BuildRequires:  %{blaslib}-devel
-BuildRequires:  make
-BuildRequires:  python3-devel
-BuildRequires:  python3-f2py
-
-# Runtime dependencies (we can't use automatic build requires due to build issues).
-BuildRequires:  python3dist(scipy) >= 0.14
-BuildRequires:  python3dist(matplotlib) >= 3.3
-BuildRequires:  python3dist(astropy) >= 4
-BuildRequires:  python3dist(xarray)
-BuildRequires:  python3dist(requests)
-BuildRequires:  python3dist(pooch) >= 1.1
-BuildRequires:  python3dist(tqdm)
-
-# Optional dependencies.
-BuildRequires:  python3dist(cartopy) >= 0.18
-BuildRequires:  python3dist(ducc0) >= 0.15
-
-%description
-pysthools is a Python library that can be used to perform spherical
-harmonic transforms and reconstructions, multitaper spectral analyses on
-the sphere, expansions of functions into Slepian bases, and standard
-operations on global gravitational and magnetic field data.
-
-%package -n     python3-%{srcname}
+%package -n     python3-pyshtools
 Summary:        %{summary}
-Recommends:     python3-%{srcname}+cartopy
-Recommends:     python3-%{srcname}+ducc
 
-%description -n python3-%{srcname}
-pysthools is a Python library that can be used to perform spherical
-harmonic transforms and reconstructions, multitaper spectral analyses on
-the sphere, expansions of functions into Slepian bases, and standard
-operations on global gravitational and magnetic field data.
+%description -n python3-pyshtools %_description
 
-%pyproject_extras_subpkg -n python3-%{srcname} cartopy ducc
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pyshtools cartopy,ducc,palettable,pygmt
+
 
 %prep
-%autosetup -n %{srcname}-%{version} -p1
+%autosetup -p1 -n pyshtools-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -R
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x cartopy,ducc,palettable,pygmt
+
 
 %build
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%pyproject_wheel -Csetup-args=-Dblas=%{blaslib} -Csetup-args=-Dlapack=%{blaslib}
+%pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-export MPLBACKEND=Agg %py3_test_envvars
-make -C examples/python -f Makefile no-timing PYTHON=%{python3}
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-pyshtools -f %{pyproject_files}
 
 %changelog
 %autochangelog

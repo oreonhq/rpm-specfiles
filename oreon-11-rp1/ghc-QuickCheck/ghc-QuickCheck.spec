@@ -11,7 +11,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        2.15.0.1
+Version:        2.19.0.0
 Release:        %autorelease
 Summary:        Automatic testing of Haskell programs
 

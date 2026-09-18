@@ -2,8 +2,8 @@
 
 Summary:        E-mail filtering framework using Sendmail's Milter interface
 Name:           mimedefang
-Version:        3.6
-Release:        4%{?dist}
+Version:        3.7.1
+Release:        1%{?dist}
 # {event{,_tcp}.{c,h},eventpriv.h} are GPL-2.0-or-later, rest is GPL-2.0-only
 License:        GPL-2.0-only AND GPL-2.0-or-later
 URL:            https://mimedefang.org/

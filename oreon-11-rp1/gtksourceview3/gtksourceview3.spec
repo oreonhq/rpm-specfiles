@@ -6,8 +6,8 @@
 %global po_package gtksourceview-3.0
 
 Name: gtksourceview3
-Version: 3.24.11
-Release: 17%{?dist}
+Version: 5.21.0
+Release: 1%{?dist}
 Summary: Source code editing widget
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

@@ -7,7 +7,7 @@
 %global crate coolor
 
 Name:           rust-coolor
-Version:        0.5.0
+Version:        1.1.0
 Release:        %autorelease
 Summary:        conversion between color formats
 

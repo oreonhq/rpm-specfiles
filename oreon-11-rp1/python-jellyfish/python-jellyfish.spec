@@ -1,75 +1,61 @@
-%global source0_hash 0f994e4e67cb674fc181e2d25c6959170bfd074b6261828921b7e4debe1d0a6d
+%global source0_hash none
 
-%global realname jellyfish
-# Share doc between python-jellyfish and python3-jellyfish
-%global _docdir_fmt %{name}
+Name:           python-jellyfish
+Version:        1.2.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        ...
 
-Name:           python-%{realname}
-Version:        0.9.1
-Release:        16%{?dist}
-Summary:        A python library for doing approximate and phonetic matching of strings
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://jellyfish.jpt.sh/
+Source:         %{pypi_source jellyfish}
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://github.com/jamesturk/%{realname}
-Source0:        https://github.com/jamesturk/%{realname}/archive/v%{version}.tar.gz
-# git repo is here https://github.com/jamesturk/jellyfish-testdata.git
-# tgz created with: git archive HEAD -o jellyfish-testdata-20160204.tgz
-Source1:        jellyfish-testdata-20200727.tgz
-# We do not use the C binding so we just install everything in site_lib
+BuildRequires:  python3-devel
+BuildRequires:  gcc
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'jellyfish' generated automatically by pyp2spec.}
+
 Patch0:         fix-build.patch
-# The following two patches are needed because we do not ship any C implementation so we manually
-# disable the tests that check for this C version
 Patch1:         test-only-python-implementation.diff
 Patch2:         nocimplementation-fix-0.9.1.patch
-BuildArch:      noarch
-BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-
-%global _description\
-Jellyfish does approximate and phonetic string matching. It\
-includes the following string comparison algorithms:\
-Levenshtein Distance, Damerau-Levenshtein Distance,\
-Jaro Distance, Jaro-Winkler Distance, Match Rating Approach\
-Comparison and Hamming Distance\
-\
-And the following phonetic encodings:\
-American Soundex, Metaphone, NYSIIS (New York State Identification\
-and Intelligence System), Match Rating Codex
 
 %description %_description
 
-%package -n python3-%{realname}
-Summary:        A python library for doing approximate and phonetic matching of strings
+%package -n     python3-jellyfish
+Summary:        %{summary}
 
-%description -n python3-%{realname} %{_description}
+%description -n python3-jellyfish %_description
 
-Python 3 Version.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n jellyfish-%{version}
 
-%autosetup -n %{realname}-%{version} -p1
-tar xf %{SOURCE1} -C testdata
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{realname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-# testdata is here: https://github.com/jamesturk/jellyfish-testdata.git
-PYTHONPATH=. pytest-3 jellyfish/test.py
 
-%files -n python3-%{realname} -f %{pyproject_files}
-%doc README.md docs/
+%files -n python3-jellyfish -f %{pyproject_files}
 
 %changelog
 %autochangelog

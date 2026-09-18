@@ -1,8 +1,8 @@
 %global source0_hash cd4c88c9b7311cb6785db71c0ed64f5430c9d5b3454e0158314b2ef25ace3e61
 
 Name:           openal-soft
-Version:        1.24.2
-Release:        2%{?dist}
+Version:        1.25.2
+Release:        1%{?dist}
 Summary:        Software implementation of the OpenAL 3D audio API
 
 # LGPL-2.0-or-later: Main library

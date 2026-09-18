@@ -1,82 +1,63 @@
-%global source0_hash 50350e0192b9a536ad4abb76b24b67f39b4def5d17039495e57a69abe8dee838
+%global source0_hash none
 
-#https://homer.apps.099c.org/ tests disabled in RHEL
-%if 0%{?rhel}
-%bcond_with tests
-%else
-%bcond_without tests
-%endif
+Name:           python-faker
+Version:        40.39.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Faker is a Python package that generates fake data for you.
 
-%global srcname faker
-%global _description\
-Faker is a Python package that generates fake data for you. Whether you need\
-to bootstrap your database, create good-looking XML documents, fill-in your\
-persistence to stress test it, or anonymize data taken from a production\
-service, Faker is for you.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/joke2k/faker
+Source:         %{pypi_source faker}
 
-Name: python-%{srcname}
-Version: 40.1.2
-Release: %autorelease
-Summary: Faker is a Python package that generates fake data for you
-License: MIT
-URL: https://faker.readthedocs.io
-Source: https://github.com/joke2k/%{srcname}/archive/v%{version}/%{srcname}-%{version}.tar.gz
-BuildArch: noarch
-BuildRequires: python3-devel
-%if %{with tests}
-BuildRequires: python3-pytest
-BuildRequires: python3-dateutil
-BuildRequires: python3-freezegun
-BuildRequires: python3-validators
-BuildRequires: python3-pillow
-%endif
-BuildRequires: tzdata
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'faker' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
-Summary: %{summary}
-%py_provides python3-%{srcname}
-Suggests: %{name}-doc = %{version}-%{release}
+%package -n     python3-faker
+Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-faker %_description
 
-%package doc
-Summary: Documentation for %{name}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-faker image,tzdata
 
-%description doc %_description
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n faker-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-
-# We don't ship the tzdata python module
-# but the system level one is enough
-sed -i '/install_requires=.*tzdata/d' setup.py
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x image,tzdata
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-# Exclude tests that require the faker.sphinx module
-%pytest --ignore-glob='tests/sphinx/*'
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
+
+%files -n python3-faker -f %{pyproject_files}
 %{_bindir}/faker
-
-%files doc
-%license LICENSE.txt
-%doc README.rst CHANGELOG.md CONTRIBUTING.rst RELEASE_PROCESS.rst docs/*.rst
 
 %changelog
 %autochangelog

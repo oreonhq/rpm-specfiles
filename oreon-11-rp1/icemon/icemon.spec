@@ -1,8 +1,8 @@
 %global source0_hash 3caf14731313c99967f6e4e11ff261b061e4e3d0c7ef7565e89b12e0307814ca
 
 Name:           icemon
-Version:        3.3
-Release:        18%{?dist}
+Version:        3.4
+Release:        1%{?dist}
 Summary:        Icecream GUI monitor
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

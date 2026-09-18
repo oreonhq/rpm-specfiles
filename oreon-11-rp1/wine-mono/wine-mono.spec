@@ -5,8 +5,8 @@
 %{?mingw_package_header}
 
 Name:           wine-mono
-Version:        10.4.1
-Release:        2%{?dist}
+Version:        11.3.0
+Release:        1%{?dist}
 Summary:        Mono library required for Wine
 
 License:        GPL-2.0-or-later AND LGPL-2.1-only AND MIT AND BSD-4-Clause-UC AND MS-PL AND MPL-1.1

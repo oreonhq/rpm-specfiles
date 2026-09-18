@@ -7,7 +7,7 @@
 %global crate gix-transport
 
 Name:           rust-gix-transport
-Version:        0.52.1
+Version:        0.59.2
 Release:        %autorelease
 Summary:        A crate of the gitoxide project dedicated to implementing the git tra...
 

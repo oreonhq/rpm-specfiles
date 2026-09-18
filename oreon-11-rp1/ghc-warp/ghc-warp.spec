@@ -13,9 +13,9 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        3.4.9
+Version:        3.4.15
 # can only be reset when subpkg bumped
-Release:        12%{?dist}
+Release:        1%{?dist}
 Summary:        A fast, light-weight web server for WAI applications
 
 License:        MIT

@@ -7,8 +7,8 @@
 %global debug_package %{nil}
 
 Name:           vim-go
-Version:        1.28
-Release:        9%{?dist}
+Version:        1.29
+Release:        1%{?dist}
 Summary:        Go development plugin for Vim
 
 # Automatically converted from old format: BSD - review is highly recommended.

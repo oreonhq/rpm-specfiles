@@ -1,21 +1,24 @@
-%global source0_hash 5c3d86081fbebd04dd5de03626a0607b809a98fb6ccba5770b62466fe940ff20
+%global source0_hash none
 
 Name:           python-deepmerge
-Version:        2.0
-Release:        5%{?dist}
-Summary:        Toolset for deeply merging Python dictionaries
+Version:        3.0.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A toolset for deeply merging Python dictionaries.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            http://deepmerge.readthedocs.io/en/latest/
 Source:         %{pypi_source deepmerge}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# Not using auto dev deps to avoid unwanted style and lint dependencies
-BuildRequires:  python3-pytest
 
-%global _description \
-%{summary}.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'deepmerge' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -24,31 +27,36 @@ Summary:        %{summary}
 
 %description -n python3-deepmerge %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-deepmerge dev
 
+
+%prep
 %autosetup -p1 -n deepmerge-%{version}
 
-# Move tests out of the package path
-mv deepmerge/tests tests
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l deepmerge
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-deepmerge -f %{pyproject_files}
-%doc README.rst
-%license LICENSE
 
 %changelog
 %autochangelog

@@ -8,7 +8,7 @@
 Name:           kdevelop
 Summary:        Integrated Development Environment for C++/C
 Epoch:          9
-Version:        26.08.0
+Version:        26.08.1
 Release:        1%{?dist}
 License:        GPL-2.0-only
 URL:            https://www.kdevelop.org/

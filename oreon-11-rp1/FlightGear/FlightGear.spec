@@ -5,7 +5,7 @@
 
 Name:           FlightGear
 Summary:        The FlightGear Flight Simulator
-Version:        2024.1.4
+Version:        2024.1.7
 Release:        1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

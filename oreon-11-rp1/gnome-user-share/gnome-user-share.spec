@@ -3,7 +3,7 @@
 %global tarball_version %%(echo %{version} | tr '~' '.')
 
 Name:           gnome-user-share
-Version:        48.2
+Version:        48.3
 Release:        %autorelease
 Summary:        Gnome user file sharing
 

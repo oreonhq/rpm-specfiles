@@ -28,8 +28,8 @@
 %endif
 
 Name:           php-%{pk_vendor}-%{pk_project}
-Version:        1.2.0
-Release:        9%{?dist}
+Version:        2.1.1
+Release:        1%{?dist}
 Summary:        Simple PHP event system
 
 License:        MIT
@@ -52,7 +52,7 @@ BuildRequires:  phpunit9
 #        "doctrine/deprecations": "^0.5.3 || ^1"
 Requires:       php(language) >= 7.1
 Requires:      (php-composer(doctrine/deprecations)  >= 0.5.3 with php-composer(doctrine/deprecations)  < 2)
-# From phpcompatinfo report for version 1.2.0
+# From phpcompatinfo report for version 2.1.1
 Requires:       php-spl
 # Autoloader
 Requires:       php-composer(fedora/autoloader)

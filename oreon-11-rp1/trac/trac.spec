@@ -1,8 +1,8 @@
 %global source0_hash 61d73c61f670d68ffc346829d24b2f1d2050aa561aa71cb98e2fb43992c27304
 
 Name:           trac
-Version:        1.6
-Release:        11%{?dist}
+Version:        1.6..
+Release:        1%{?dist}
 Summary:        Enhanced wiki and issue tracking system
 License:        BSD-3-Clause
 URL:            http://trac.edgewall.com/

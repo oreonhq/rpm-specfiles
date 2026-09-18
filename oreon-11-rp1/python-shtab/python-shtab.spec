@@ -1,54 +1,62 @@
-%global source0_hash 8c16673ade76a2d42417f03e57acf239bfb5968e842204c17990cae357d07d6f
-
-%global pypi_name shtab
+%global source0_hash none
 
 Name:           python-shtab
-Version:        1.7.2
+Version:        1.12.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Automagic shell tab completion for Python CLI applications
 
-License:        Apache-2.0
-URL:            https://github.com/iterative/shtab
-Source0:        %{pypi_source}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MPL-2.0
+URL:            https://github.com/tqdm/shtab
+Source:         %{pypi_source shtab}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
 
-BuildRequires:  python3dist(pytest)
 
-%description
-Automatically generate shell tab completion scripts for Python CLI apps.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'shtab' generated automatically by pyp2spec.}
+
+%description %_description
 
 %package -n     python3-shtab
 Summary:        %{summary}
 
-%description -n python3-shtab
-Automatically generate shell tab completion scripts for Python CLI apps.
+%description -n python3-shtab %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-shtab dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n shtab-%{version}
 
-%autosetup -n shtab-%{version}
-# remove coverage test config
-sed -i -e 's/addopts =/#addopts =/' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files shtab
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-shtab -f %{pyproject_files}
-%license LICENCE
-%doc README.rst
 %{_bindir}/shtab
 
 %changelog

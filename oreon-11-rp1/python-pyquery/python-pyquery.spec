@@ -1,77 +1,63 @@
-%global source0_hash 0194bb2706b12d037db12c51928fe9ebb36b72d9e719565daba5a6c595322faf
+%global source0_hash none
 
-%global real_name pyquery
-
-%if 0%{?rhel}
-%bcond_with tests
-%else
-%bcond_without tests
-%endif
-
-Name:           python-%{real_name}
-Version:        2.0.1
+Name:           python-pyquery
+Version:        2.1.0
 Release:        %autorelease
-Summary:        A jQuery-like library for python
-License:        BSD-3-Clause
-URL:            http://pypi.python.org/pypi/pyquery
-Source0:        %pypi_source pyquery
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A jquery-like library for python
 
-# skip a test that needs network
-Patch:          python-pyquery-skip-test-requiring-net-connection.patch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/gawel/pyquery
+Source:         %{pypi_source pyquery}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%global _description\
-python-pyquery allows you to make jQuery queries on XML documents. The API is\
-as much as possible the similar to jQuery. python-pyquery uses lxml for fast\
-XML and HTML manipulation.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pyquery' generated automatically by pyp2spec.}
+
+Patch:          python-pyquery-skip-test-requiring-net-connection.patch
 
 %description %_description
 
-%package -n python3-pyquery
-Summary:        A jQuery-like library for python3
-BuildRequires:  python3-devel
+%package -n     python3-pyquery
+Summary:        %{summary}
 
-# test deps
-BuildRequires:  python3-cssselect
-BuildRequires:  python3-lxml >= 2.1
-BuildRequires:  python3-requests
-%if %{with tests}
-BuildRequires:  python3-pytest
-BuildRequires:  python3-webob
-BuildRequires:  python3-webtest
-%endif
+%description -n python3-pyquery %_description
 
-Requires:       python3-lxml >= 2.1
-Requires:       python3-cssselect
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pyquery test
 
-%description -n python3-pyquery
-python3-pyquery allows you to make jQuery queries on XML documents. The API is 
-as much as possible the similar to jQuery. python-pyquery uses lxml for fast 
-XML and HTML manipulation.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pyquery-%{version}
 
-%autosetup -n %{real_name}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files -l pyquery
 
 %check
-%if %{with tests}
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pyquery -f %{pyproject_files}
-%doc CHANGES.rst README.rst
 
 %changelog
 %autochangelog

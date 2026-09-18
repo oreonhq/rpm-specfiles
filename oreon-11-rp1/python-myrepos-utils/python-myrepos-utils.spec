@@ -1,56 +1,62 @@
-%global source0_hash f03df2d604d81e288650f322d4770f48bf9eda0352f0b5c250ba943d1030365b
+%global source0_hash none
 
-%bcond check 0
-
-%global srcname myrepos-utils
-
-Name:           python-%{srcname}
-Version:        0.0.4.2
+Name:           python-myrepos-utils
+Version:        0.0.4.3
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Additional utilities for myrepos
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
 URL:            https://git.sr.ht/~michel-slm/myrepos-utils
-Source0:        %{pypi_source}
+Source:         %{pypi_source myrepos_utils}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Additional utilities for myrepos.}
+This is package 'myrepos-utils' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n %{srcname}
+%package -n     python3-myrepos-utils
 Summary:        %{summary}
-Requires:       myrepos
 
-%description -n %{srcname} %_description
+%description -n python3-myrepos-utils %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-myrepos-utils dev,release,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n myrepos_utils-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_check:-r requirements-test.txt}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,release,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files myrepos_utils
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import myrepos_utils
-%if %{with check}
-%pytest -v
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n %{srcname} -f %{pyproject_files}
-%doc README.md
-%license COPYING.md
+
+%files -n python3-myrepos-utils -f %{pyproject_files}
 %{_bindir}/mr-utils
 
 %changelog

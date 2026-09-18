@@ -1,8 +1,8 @@
 %global source0_hash b22451ae0963572dc2dbcdf15b7ee4cdd0f91a24402cb3deab00325375491583
 
 Name:		packmol
-Version:	21.1.0
-Release:	3%{?dist}
+Version:	21.2.3
+Release:	1%{?dist}
 Summary:	Packing optimization for molecular dynamics simulations
 License:	MIT
 URL:		https://m3g.github.io/packmol

@@ -3,8 +3,8 @@
 %global module manatools
 
 Name:           python-%{module}
-Version:        0.0.4
-Release:        17%{?dist}
+Version:        0.99.3
+Release:        1%{?dist}
 
 Summary:        A Python framework to build ManaTools applications
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

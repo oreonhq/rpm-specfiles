@@ -8,7 +8,7 @@
 
 Name:		lightdm
 Summary:	A cross-desktop Display Manager
-Version:	1.32.0
+Version:	1.33.1
 Release:	%autorelease
 
 # library/bindings are LGPLv2 or LGPLv3, the rest GPLv3+

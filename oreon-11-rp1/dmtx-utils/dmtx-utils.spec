@@ -1,8 +1,8 @@
 %global source0_hash 0d396ec14f32a8cf9e08369a4122a16aa2e5fa1675e02218f16f1ab777ea2a28
 
 Name:           dmtx-utils
-Version:        0.7.6
-Release:        24%{?dist}
+Version:        0.7.8
+Release:        1%{?dist}
 Summary:        Tools for working with Data Matrix 2D bar-codes
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

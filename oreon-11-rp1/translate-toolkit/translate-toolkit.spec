@@ -2,8 +2,8 @@
 
 %global upstream_name translate_toolkit
 Name:           translate-toolkit
-Version:        3.18.0
-Release:        2%{?dist}
+Version:        3.20.0
+Release:        1%{?dist}
 Summary:        Tools to assist with translation and software localization
 License:        GPL-2.0-or-later
 URL:            http://toolkit.translatehouse.org/

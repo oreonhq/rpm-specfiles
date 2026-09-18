@@ -7,7 +7,7 @@
 %global crate dtoa
 
 Name:           rust-dtoa
-Version:        0.4.8
+Version:        1.0.11
 Release:        %autorelease
 Summary:        Fast functions for printing floating-point primitives to an io::Write
 

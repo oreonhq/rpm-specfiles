@@ -1,8 +1,8 @@
 %global source0_hash 626d7d19f8e4ceae70f60e2e662291789e0f54ab86945317a3d5693c30f847a2
 
 Name:    nawk
-Version: 20251225
-Release: 3%{?dist}
+Version: 20260426
+Release: 1%{?dist}
 Summary: "The one true awk" descended from UNIX V7
 License: MIT
 URL:     https://github.com/onetrueawk/awk

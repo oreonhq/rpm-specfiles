@@ -1,7 +1,7 @@
 %global source0_hash 6bc02411e29183a896aa60c58db6819ec6cf57c08997481d0b0da9029356b529
 
 Name:           corrosion
-Version:        0.5.2
+Version:        0.6.1
 Release:        %autorelease
 Summary:        Easy Rust and C/C++ Integration
 SourceLicense:  MIT

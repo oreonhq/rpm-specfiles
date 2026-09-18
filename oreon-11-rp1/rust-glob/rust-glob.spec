@@ -8,7 +8,7 @@
 %global crate glob
 
 Name:           rust-glob
-Version:        0.3.3
+Version:        0.3.4
 Release:        %autorelease
 Summary:        Support for matching file paths against Unix shell style patterns
 

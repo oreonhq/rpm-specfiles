@@ -15,7 +15,7 @@
 
 %global github_owner     jmespath
 %global github_name      jmespath.php
-%global github_version   2.6.0
+%global github_version   2.9.2
 %global github_commit    42dae2cbd13154083ca6d70099692fef8ca84bfb
 
 %global composer_vendor  mtdowling
@@ -28,7 +28,7 @@
 
 Name:          php-%{composer_vendor}-jmespath-php
 Version:       %{github_version}
-Release:       10%{?github_release}%{?dist}
+Release:       1%{?github_release}%{?dist}
 Summary:       Declaratively specify how to extract elements from a JSON document
 
 License:       MIT

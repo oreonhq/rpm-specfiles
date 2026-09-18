@@ -1,7 +1,7 @@
 %global source0_hash 99db059725dc7061c1647099fe8ce619ba2ce520018606a2f7a720032622a9b5
 
 Name:           xonsh
-Version:        0.22.1
+Version:        0.24.2
 Release:        %autorelease
 Summary:        A general purpose, Python-ish shell
 

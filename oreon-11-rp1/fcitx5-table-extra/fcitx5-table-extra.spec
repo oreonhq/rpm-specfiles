@@ -1,7 +1,7 @@
 %global source0_hash 194226fd3aabc317e99de4d2b6229e5c3770185e6c70b85d55c4e05468d7e9bf
 
 Name:       fcitx5-table-extra
-Version:    5.1.11
+Version:    5.1.13
 Release:    %autorelease
 Summary:    Extra tables for Fcitx5
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

@@ -2,7 +2,7 @@
 
 Summary:    X11 display information utility
 Name:       xdpyinfo
-Version:    1.3.4
+Version:    1.4.0
 Release:    %autorelease
 License:    MIT
 URL:        http://www.x.org

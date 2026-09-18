@@ -2,8 +2,8 @@
 
 Name:		globus-xio-gsi-driver
 %global _name %(tr - _ <<< %{name})
-Version:	5.4
-Release:	11%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Globus XIO GSI Driver
 
 License:	Apache-2.0

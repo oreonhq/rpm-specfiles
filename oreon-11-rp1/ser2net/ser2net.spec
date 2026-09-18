@@ -1,6 +1,6 @@
 %global source0_hash 99ab72b7b252020ae76ece5f883b74155ed94206e243e14066bb67b93f05d7ed
 
-Version:        4.6.7
+Version:        4.6.8
 
 %global forgeurl https://github.com/cminyard/ser2net
 %forgemeta

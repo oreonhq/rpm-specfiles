@@ -1,8 +1,8 @@
 %global source0_hash 7ca765fdae52e1995b38a7080b023ca606d8621751d9dd5bb57ba5a0f5672b48
 
 Name:		lsvpd
-Version:	1.7.15
-Release:	8%{?dist}
+Version:	1.7.17
+Release:	1%{?dist}
 Summary:	VPD/hardware inventory utilities for Linux
 
 License:	GPL-2.0-or-later

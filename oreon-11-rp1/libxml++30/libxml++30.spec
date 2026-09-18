@@ -3,8 +3,8 @@
 %global api_ver 3.0
 
 Name:           libxml++30
-Version:        3.2.5
-Release:        7%{?dist}
+Version:        3.2.6
+Release:        1%{?dist}
 Summary:        C++ wrapper for the libxml2 XML parser library
 
 License:        LGPL-2.1-or-later

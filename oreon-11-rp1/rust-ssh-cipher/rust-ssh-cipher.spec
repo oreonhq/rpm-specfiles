@@ -7,7 +7,7 @@
 %global crate ssh-cipher
 
 Name:           rust-ssh-cipher
-Version:        0.2.0
+Version:        0.3.0
 Release:        %autorelease
 Summary:        Pure Rust implementation of SSH symmetric encryption
 

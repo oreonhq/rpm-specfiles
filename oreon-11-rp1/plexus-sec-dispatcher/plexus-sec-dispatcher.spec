@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           plexus-sec-dispatcher
-Version:        2.0
+Version:        4.2.0
 Release:        %autorelease
 Summary:        Plexus Security Dispatcher Component
 License:        Apache-2.0
@@ -25,7 +25,7 @@ BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-cipher)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.0-33
+Obsoletes:      %{name}-javadoc < 4.2.0-33
 
 %description
 Plexus Security Dispatcher Component

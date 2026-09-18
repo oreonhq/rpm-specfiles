@@ -1,8 +1,8 @@
 %global source0_hash 07542b5ea2442143b125ba213b6823ff4a23fff352ecdd84bbebe1d154f4f5c1
 
 Name:           htmlcxx
-Version:        0.86
-Release:        28%{?dist}
+Version:        0.87
+Release:        1%{?dist}
 # Automatically converted from old format: LGPLv2 and GPLv2+ and ASL 2.0 and MIT - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2 AND GPL-2.0-or-later AND Apache-2.0 AND LicenseRef-Callaway-MIT
 Summary:        A simple non-validating CSS1 and HTML parser for C++

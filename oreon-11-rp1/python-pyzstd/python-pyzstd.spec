@@ -1,68 +1,57 @@
-%global source0_hash c16e3a1442a945bef85fc125d8803a9a8c87b55069e6c19a2bd4f8c6167a0645
-
-%bcond tests 1
-%global forgeurl https://github.com/Rogdham/pyzstd
-%define tag %{version}
+%global source0_hash none
 
 Name:           python-pyzstd
-Version:        0.16.2
-%forgemeta
+Version:        0.19.1
 Release:        %autorelease
-Summary:        Python bindings to Zstandard (zstd) compression library
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Support for Zstandard _zstd_ compression
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            %{forgeurl}
-Source:         %{forgesource}
+URL:            https://github.com/Rogdham/pyzstd
+Source:         %{pypi_source pyzstd}
 
-BuildRequires:  gcc
-BuildRequires:  libzstd-devel
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  tomcli
-%if %{with tests}
-BuildRequires:  %{py3_dist pytest}
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Pyzstd module provides classes and functions for compressing and decompressing
-data, using Facebook’s Zstandard (or zstd as short name) algorithm.}
+This is package 'pyzstd' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-pyzstd
+%package -n     python3-pyzstd
 Summary:        %{summary}
 
 %description -n python3-pyzstd %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 %{forgesetupargs}
-# Ensure dynamic-link-zstd is always used
-sed -i 's|DYNAMIC_LINK =.*|DYNAMIC_LINK = True|' setup.py
-# Stop disabling debuginfo
-sed -i "s|'-g0', ||" setup.py
-# Fix non-executable-script rpmlint error
-sed -i -e '1{\@^#!.*@d}' src/__main__.py
-# Remove setuptools upperbound
-tomcli set pyproject.toml arrays replace 'build-system.requires' '(setuptools.*),<.+' '\1'
+%prep
+%autosetup -p1 -n pyzstd-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pyzstd
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pyzstd -f %{pyproject_files}
-%doc CHANGELOG.md
-%doc README.md
-%license LICENSE
 
 %changelog
 %autochangelog

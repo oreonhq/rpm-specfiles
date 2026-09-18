@@ -1,108 +1,61 @@
-%global source0_hash 963d67b4fa9682a02b0ccbca9d26a16971e94224eaf09c7cc7678bf0e8ec47e8
+%global source0_hash none
 
-%global pypi_name commoncode
-
-Name:           python-%{pypi_name}
-Version:        32.4.2
+Name:           python-commoncode
+Version:        32.5.2
 Release:        %autorelease
-Summary:        Common functions and utilities for handling paths, dates, files and hashes
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Set of common utilities, originally split from ScanCode
 
-# Python-2.0:
-#  - src/commoncode/dict_utils.py
-#  - src/commoncode/fileutils.py
-# LicenseRef-Fedora-Public-Domain: src/commoncode/functional.py
-License:        Apache-2.0 AND Python-2.0 AND LicenseRef-Fedora-Public-Domain
-URL:            https://github.com/nexB/commoncode
-Source:         %url/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/nexB/scancode-toolkit
+Source:         %{pypi_source commoncode}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
-# The docs extra was removed, so specify this manually
-# based on the dependencies in the dev extra.
-BuildRequires:  %{py3_dist Sphinx}
-BuildRequires:  %{py3_dist sphinx-rtd-theme}
-BuildRequires:  %{py3_dist sphinx-reredirects}
-BuildRequires:  %{py3_dist sphinx-copybutton}
 
-%global common_description %{expand:
-Commoncode provides a set of common functions and utilities for handling various
-things like paths, dates, files and hashes. It started as library in
-scancode-toolkit.}
 
-%description %{common_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'commoncode' generated automatically by pyp2spec.}
 
-%package -n python3-%{pypi_name}
+%description %_description
+
+%package -n     python3-commoncode
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %{common_description}
+%description -n python3-commoncode %_description
 
-%package -n python-%{pypi_name}-doc
-Summary:        Documentation for python-%{pypi_name}
-# BSD-2-Clause: Sphinx javascript
-# MIT: jquery
-License:        Apache-2.0 AND BSD-2-Clause AND MIT
-BuildArch:      noarch
-Requires:       python3-%{pypi_name} = %{?epoch:%{epoch}:}%{version}-%{release}
-Provides:       bundled(js-sphinx_javascript_frameworks_compat)
-Provides:       bundled(js-doctools)
-Provides:       bundled(js-jquery)
-Provides:       bundled(js-language_data)
-Provides:       bundled(js-searchtools)
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-commoncode dev
 
-%description -n python-%{pypi_name}-doc
-%{common_description}
-
-This package is providing the documentation for %{pypi_name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n commoncode-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
-sed -i 's|\(fallback_version = "\)[^"]*|\1%{version}|' pyproject.toml
-sed -i \
-    -e 's|requests\[use_chardet_on_py3\]|requests|' \
-    -e 's|Beautifulsoup4\[chardet\]|Beautifulsoup4|' \
-    -e '/doc8/d' \
-    -e '/sphinx-rtd-dark-mode/d' \
-    -e '/sphinx-autobuild/d' \
-    -e 's/click >=.*/click/' \
-setup.cfg
-sed -i '/"sphinx_rtd_dark_mode"/d' docs/source/conf.py
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
-# generate html docs
-sphinx-build-3 -b html docs/source html
-# remove the sphinx-build-3 leftovers
-rm -rf html/.{doctrees,buildinfo}
 
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-export LC_ALL=C.UTF-8
-%if 0%{?fedora} < 40
-%pytest
-%else
-# https://github.com/aboutcode-org/commoncode/issues/56
-# https://github.com/aboutcode-org/commoncode/issues/88
-%pytest -k "not test_safe_path_posix_style_chinese_char and not test_get_type"
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc AUTHORS.rst CHANGELOG.rst CODE_OF_CONDUCT.rst README.rst
-%license etc/scripts/gen_pypi_simple.py.NOTICE
-%license src/commoncode/dict_utils.ABOUT
-%license src/commoncode/python.LICENSE
 
-%files -n python-%{pypi_name}-doc
-%doc html
+%files -n python3-commoncode -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -4,8 +4,8 @@
 %global backends %{nil}
 
 Name: pdns
-Version: 5.0.2
-Release: 3%{?dist}
+Version: 5.1.4
+Release: 1%{?dist}
 Summary: A modern, advanced and high performance authoritative-only name server
 License: GPL-2.0-only
 URL: http://powerdns.com

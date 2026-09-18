@@ -1,7 +1,7 @@
 %global source0_hash 190b50e97d2bb2cfa2ea20137a91aa5b113351f53f8c05fbb152ab97f31b57f7
 
 Name:           rmtfs
-Version:        1.1.1
+Version:        1.3
 Release:        %autorelease
 Summary:        Qualcomm Remote Filesystem Service Implementation
 

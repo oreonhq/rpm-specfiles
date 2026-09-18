@@ -4,7 +4,7 @@
 %global debug_package %{nil}
 
 Name:           asio
-Version:        1.30.2
+Version:        1.38.2
 Release:        %autorelease
 Summary:        A cross-platform C++ library for network programming
 

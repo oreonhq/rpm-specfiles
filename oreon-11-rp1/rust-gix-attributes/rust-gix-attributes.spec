@@ -7,7 +7,7 @@
 %global crate gix-attributes
 
 Name:           rust-gix-attributes
-Version:        0.29.0
+Version:        0.35.0
 Release:        %autorelease
 Summary:        A crate of the gitoxide project dealing .gitattributes files
 

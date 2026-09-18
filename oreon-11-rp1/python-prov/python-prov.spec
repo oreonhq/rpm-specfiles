@@ -5,8 +5,8 @@
 %global modname prov
 
 Name:           python-%{modname}
-Version:        2.0.0
-Release:        14%{?dist}
+Version:        3.2.1
+Release:        1%{?dist}
 Summary:        W3C Provenance Data Model supporting PROV-JSON and PROV-XML import/export
 
 License:        MIT

@@ -2,11 +2,11 @@
 
 # Review at https://bugzilla.redhat.com/show_bug.cgi?id=351531
 
-%global majorversion 0.13
+%global majorversion 0.14
 %global xfceversion 4.18
 
 Name:           ristretto
-Version:        0.13.4
+Version:        0.14.0
 Release:        %autorelease
 Summary:        Image-viewer for the Xfce desktop environment
 Summary(de):    Bildbetrachter für die Xfce Desktop-Umgebung

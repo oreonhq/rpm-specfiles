@@ -1,63 +1,57 @@
-%global source0_hash a533872cf577832dce5504c63545265b8c5764db94f207e87f707a408faaf9b7
+%global source0_hash none
 
-%global pypi_name pytest-localftpserver
-
-Name:           python-%{pypi_name}
-Version:        1.5.0
-Release:        %{autorelease}
+Name:           python-pytest-localftpserver
+Version:        1.6.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        A PyTest plugin which provides an FTP fixture for your tests
 
-%global forgeurl https://github.com/oz123/pytest-localftpserver
-%forgemeta
-
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pytest-localftpserver.readthedocs.io/
-Source:         %forgesource
+URL:            https://github.com/oz123/pytest-localftpserver
+Source:         %{pypi_source pytest_localftpserver}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(cryptography)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A PyTest plugin which provides an FTP fixture for your tests.
-
-Documentation: https://pytest-localftpserver.readthedocs.io/}
+This is package 'pytest-localftpserver' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{pypi_name}
+%package -n     python3-pytest-localftpserver
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-pytest-localftpserver %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_localftpserver-%{version}
 
-%forgeautosetup -p1
-
-# Remove shebang
-sed -i '/env python/ d' pytest_localftpserver/plugin.py
 
 %generate_buildrequires
-export SETUPTOOLS_SCM_PRETEND_VERSION=v%{version}
 %pyproject_buildrequires
 
+
 %build
-export SETUPTOOLS_SCM_PRETEND_VERSION=v%{version}
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l pytest_localftpserver
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v \
-  tests/test_pytest_localftpserver.py \
-  tests/test_helper_functions.py
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.rst AUTHORS.rst HISTORY.rst
+
+%files -n python3-pytest-localftpserver -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -13,7 +13,7 @@ vendors without requiring that applications have specific knowledge of the
 hardware they are targeting.}
 
 Name:           openvr
-Version:        2.12.14
+Version:        2.15.6
 Release:        %autorelease
 Summary:        OpenVR SDK
 License:        BSD-3-Clause

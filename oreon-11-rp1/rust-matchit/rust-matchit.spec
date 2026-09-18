@@ -7,7 +7,7 @@
 %global crate matchit
 
 Name:           rust-matchit
-Version:        0.8.4
+Version:        0.9.2
 Release:        %autorelease
 Summary:        A high performance, zero-copy URL router.
 

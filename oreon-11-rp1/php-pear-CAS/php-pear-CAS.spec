@@ -14,8 +14,8 @@
 %global gh_project   phpCAS
 
 Name:           php-pear-CAS
-Version:        1.6.1
-Release:        9%{?dist}
+Version:        1.6.2
+Release:        1%{?dist}
 Summary:        Central Authentication Service client library in php
 
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

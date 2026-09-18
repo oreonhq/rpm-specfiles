@@ -1,7 +1,7 @@
 %global source0_hash db21c6b89c2804968a1eada43ecb6a9093994b6b42c7adb09ea82ad870879f2a
 
 %global forgeurl https://github.com/bk138/gromit-mpx
-Version:        1.8.0
+Version:        1.9.0
 %global tag %{version}
 %forgemeta
 

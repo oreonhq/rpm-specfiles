@@ -1,7 +1,7 @@
 %global source0_hash 77675456193b90b93f4a6bfe87809255899415f7ee24cd0db0afaa787bd9f5c8
 
 Name:           python-cucumber-expressions
-Version:        19.0.0
+Version:        20.1.0
 Release:        %autorelease
 Summary:        Cucumber Expressions - a simpler alternative to Regular Expressions
 

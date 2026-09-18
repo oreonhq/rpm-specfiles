@@ -7,7 +7,7 @@
 %global crate av1-grain
 
 Name:           rust-av1-grain
-Version:        0.2.5
+Version:        0.5.0
 Release:        %autorelease
 Summary:        Helpers for generating and parsing AV1 film grain data
 

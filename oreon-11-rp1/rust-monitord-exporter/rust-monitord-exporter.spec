@@ -6,7 +6,7 @@
 %global crate monitord-exporter
 
 Name:           rust-monitord-exporter
-Version:        0.4.1
+Version:        0.26.2
 Release:        %autorelease
 Summary:        Let Prometheus know how happy your systemd is
 

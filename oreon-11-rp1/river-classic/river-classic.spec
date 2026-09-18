@@ -6,7 +6,7 @@
 %global zig_xkbcommon_ver 0.3.0
 
 Name:           river-classic
-Version:        0.3.14
+Version:        0.3.17
 Release:        %autorelease
 Summary:        Dynamic tiling Wayland compositor
 

@@ -2,8 +2,8 @@
 
 Summary: Zorba's Incredible Data Repairer And Verifier
 Name: zidrav
-Version: 1.2.0
-Release: 40%{?dist}
+Version: 3.5
+Release: 1%{?dist}
 URL: https://sourceforge.net/projects/zidrav
 Source: https://downloads.sourceforge.net/project/zidrav/zidrav4unix/%{version}/zidrav4unix-%{version}.tar.gz
 Patch0: %{name}-rpm.patch

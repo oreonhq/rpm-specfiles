@@ -1,8 +1,8 @@
 %global source0_hash 581a6a9a333e6e8aedf710c702237f7ebf7da170a6c3c1712a9629ae0daddddb
 
 Name:          whichfont
-Version:       2.3.0
-Release:       3%{?dist}
+Version:       3.0.1
+Release:       1%{?dist}
 Summary:       Querying Fontconfig
 
 License:       GPL-3.0-or-later

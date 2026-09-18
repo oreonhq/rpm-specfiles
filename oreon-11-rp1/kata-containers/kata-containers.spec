@@ -30,7 +30,7 @@
 %endif
 
 # https://github.com/kata-containers/kata-containers
-Version: 3.26.0
+Version: 4.2.0
 %global tag         %{version}%{?rcstr}
 
 %global domain      github.com

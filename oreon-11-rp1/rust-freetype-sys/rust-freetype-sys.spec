@@ -7,7 +7,7 @@
 %global crate freetype-sys
 
 Name:           rust-freetype-sys
-Version:        0.21.0
+Version:        0.23.0
 Release:        %autorelease
 Summary:        Low level binding for FreeType font library
 

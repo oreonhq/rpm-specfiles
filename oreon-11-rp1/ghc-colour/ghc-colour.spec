@@ -10,7 +10,7 @@
 # testsuite missing deps: test-framework test-framework-quickcheck2
 
 Name:           ghc-%{pkg_name}
-Version:        2.3.6
+Version:        2.3.7
 Release:        %autorelease
 Summary:        A model for human color perception
 

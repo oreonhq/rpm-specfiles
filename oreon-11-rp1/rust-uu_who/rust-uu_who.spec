@@ -10,7 +10,7 @@
 %global crate uu_who
 
 Name:           rust-uu_who
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        who ~ (uutils) display information about currently logged-in users
 

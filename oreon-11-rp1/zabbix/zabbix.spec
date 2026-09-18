@@ -18,7 +18,7 @@
 
 Name:           zabbix
 Epoch:          1
-Version:        7.4.8
+Version:        7.4.14
 Release:        1%{?dist}
 Summary:        Open-source monitoring solution for your IT infrastructure
 

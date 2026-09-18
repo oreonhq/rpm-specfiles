@@ -1,7 +1,7 @@
 %global source0_hash d816666182ec4396fdbb6b5c367760257be9a3e2952ff84490d21613cd097f8e
 
 Name:           mopidy-mpd
-Version:        4.0.0~a4
+Version:        4.0.1
 Release:        1%{?dist}
 Summary:        Mopidy extension for controlling Mopidy from MPD clients
 

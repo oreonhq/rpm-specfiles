@@ -5,7 +5,7 @@
 %global minor_sover 5
 
 Name:           lib3270
-Version:        5.5.0
+Version:        5.6.0
 Release:        %autorelease
 Summary:        TN3270 Protocol Library
 

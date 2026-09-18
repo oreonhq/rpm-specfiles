@@ -1,52 +1,62 @@
-%global source0_hash 8697b192bc4e9f2d75de4bdd1071d466d85e81092f1527b253fa893266fcc3fb
+%global source0_hash none
 
-%global srcname colorlog
-%global desc "colorlog.ColoredFormatter is a formatter for use with Python's logging module that outputs records using terminal colors."
-
-Name:           python-%{srcname}
-Version:        6.10.1
+Name:           python-colorlog
+Version:        6.12.0
 Release:        %autorelease
-Summary:        Colored formatter for the Python logging module
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Add colours to the output of Python_s logging module.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/borntyping/python-colorlog
-Source0:        %{url}/archive/v%{version}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source colorlog}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
-%generate_buildrequires
-%pyproject_buildrequires
 
-%description
-%{desc}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'colorlog' generated automatically by pyp2spec.}
 
-%package -n python3-%{srcname}
+%description %_description
+
+%package -n     python3-colorlog
 Summary:        %{summary}
 
-%description -n python3-%{srcname}
-%{desc}
+%description -n python3-colorlog %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-colorlog development
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n colorlog-%{version}
 
-%autosetup -n %{name}-%{version}
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x development
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{pytest} -v
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname}
-%doc README.md
-%license LICENSE
-%{python3_sitelib}/%{srcname}/
-%{python3_sitelib}/%{srcname}*.dist-info/
+
+%files -n python3-colorlog -f %{pyproject_files}
 
 %changelog
 %autochangelog

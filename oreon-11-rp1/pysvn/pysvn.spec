@@ -1,8 +1,8 @@
 %global source0_hash 3ede206672ae6bc90ec07b702c79321783f4ad8e58c2eddbc5e505bbc218f0b9
 
 Name:           pysvn
-Version:        1.9.21
-Release:        13%{?dist}
+Version:        1.9.25
+Release:        1%{?dist}
 Summary:        Pythonic style bindings for Subversion
 License:        Apache-1.1
 URL:            https://pysvn.sourceforge.io/

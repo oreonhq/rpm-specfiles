@@ -1,76 +1,65 @@
-%global source0_hash 7b664f60818a16afa8cc9f1dd6d9b17f944e0ce94e50787d76f81bc7a8648cce
+%global source0_hash none
 
-%global pypi_name lesscpy
+Name:           python-lesscpy
+Version:        0.15.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python LESS compiler
 
-%if 0%{?rhel} > 7
-# Disable python2 build by default
-%endif
-
-Name:           python-%{pypi_name}
-Version:        0.14.0
-Release:        24%{?dist}
-Summary:        Lesscss compiler
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/robotis/lesscpy
-Source0:        https://pypi.python.org/packages/source/l/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
-Patch1:         0001-Remove-tabfile-support-as-PLY-removed-it-as-well.patch
+URL:            https://github.com/lesscpy/lesscpy
+Source:         %{pypi_source lesscpy}
 
 BuildArch:      noarch
- 
-%global _description\
-A compiler written in python 3 for the lesscss language.  For those of us not\
-willing/able to have node.js installed in our environment.  Not all features\
-of lesscss are supported (yet).  Some features wil probably never be\
-supported (JavaScript evaluation).
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'lesscpy' generated automatically by pyp2spec.}
+
+Patch1:         0001-Remove-tabfile-support-as-PLY-removed-it-as-well.patch
 
 %description %_description
 
+%package -n     python3-lesscpy
+Summary:        %{summary}
 
-%package -n python3-lesscpy
-Summary:    %summary
-Requires:   python3-ply
-Requires:   python3-six
-BuildRequires: python3-devel
-BuildRequires: python3-setuptools
-BuildRequires: python3-ply
-BuildRequires: python3-pytest
-BuildRequires: python3-six
-%{?python_provide:%python_provide python3-lesscpy}
+%description -n python3-lesscpy %_description
 
-%description -n python3-lesscpy
-A compiler written in python 3 for the lesscss language.  For those of us not
-willing/able to have node.js installed in our environment.  Not all features
-of lesscss are supported (yet).  Some features wil probably never be
-supported (JavaScript evaluation).
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-lesscpy release,test,tox
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{pypi_name}-%{version}
+%autosetup -p1 -n lesscpy-%{version}
+
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x release,test,tox
+
 
 %build
-
-%py3_build
+%pyproject_wheel
 
 
 %install
-
-%py3_install
-# link for backwards compatibility. consider removal in Fedora 30+
-ln -s ./lesscpy %{buildroot}/%{_bindir}/py3-lesscpy
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files -n python3-lesscpy
-%doc LICENSE
+%files -n python3-lesscpy -f %{pyproject_files}
 %{_bindir}/lesscpy
-%{_bindir}/py3-lesscpy
-%{python3_sitelib}/%{pypi_name}
-%{python3_sitelib}/%{pypi_name}*.egg-info
-
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.14.0-24

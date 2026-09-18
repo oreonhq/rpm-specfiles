@@ -1,55 +1,64 @@
-%global source0_hash c6b362c1ddc777748ff68fee0b9155fcdf32efb0b6731bf648340483c1ff202b
+%global source0_hash none
 
 Name:           python-b2sdk
-Version:        1.21.0
-Release:        13%{?dist}
+Version:        2.13.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Backblaze B2 SDK
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/Backblaze/b2-sdk-python
-Source0:        %{pypi_source b2sdk}
+Source:         %{pypi_source b2sdk}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-# Fedora does not ship with version 5 or lower
-Patch0:         relax-setuptools_scm-version.patch
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Python library and a few handy utilities for easy access to all of the
-capabilities of B2 Cloud Storage.
+This is package 'b2sdk' generated automatically by pyp2spec.}
 
-B2 command-line tool is an example of how it can be used to provide command-line
-access to the B2 service, but there are many possible applications (including
-FUSE filesystems, storage backend drivers for backup applications etc).}
+Patch0:         relax-setuptools_scm-version.patch
 
 %description %_description
 
-%package -n python3-b2sdk
+%package -n     python3-b2sdk
 Summary:        %{summary}
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-setuptools_scm
 
 %description -n python3-b2sdk %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-b2sdk full
 
+
+%prep
 %autosetup -p1 -n b2sdk-%{version}
-rm -rf b2sdk.egg-info
+
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x full
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
-rm -rf %{buildroot}%{python3_sitelib}/test
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-b2sdk
-%doc CHANGELOG.md
-%doc README.md
-%license LICENSE
-%{python3_sitelib}/b2sdk-*.egg-info/
-%{python3_sitelib}/b2sdk/
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-b2sdk -f %{pyproject_files}
 
 %changelog
 %autochangelog

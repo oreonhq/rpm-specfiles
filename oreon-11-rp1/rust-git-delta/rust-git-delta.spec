@@ -6,7 +6,7 @@
 %global crate git-delta
 
 Name:           rust-git-delta
-Version:        0.19.1
+Version:        0.19.2
 Release:        %autorelease
 Summary:        Syntax-highlighting pager for git
 

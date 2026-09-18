@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.9.1.3
+Version:        0.9.1.4
 Release:        %autorelease
 Summary:        Better error messages when decoding JSON values
 

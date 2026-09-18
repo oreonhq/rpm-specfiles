@@ -6,15 +6,15 @@
 %global _hardened_build 1
 
 Name:           sane-airscan
-Version:        0.99.36
-Release:        2%{?dist}
+Version:        0.99.38
+Release:        1%{?dist}
 Summary:        SANE backend for AirScan (eSCL) and WSD document scanners
 # SANE related source and header files - GPL 2.0+ with SANE exception
 # http_parser.c/.h - MIT
 # the exception is defined in LICENSE, meant for SANE project in most cases
 License:        GPL-2.0-or-later WITH SANE-exception AND MIT
 URL:            https://github.com/alexpevzner/sane-airscan
-Source:        https://github.com/alexpevzner/sane-airscan/archive/refs/tags/0.99.36.tar.gz#/sane-airscan-0.99.36.tar.gz
+Source:        https://github.com/alexpevzner/sane-airscan/archive/refs/tags/0.99.38.tar.gz#/sane-airscan-0.99.36.tar.gz
 
 # backported from upstream
 

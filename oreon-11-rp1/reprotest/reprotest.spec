@@ -1,8 +1,8 @@
 %global source0_hash 7b535a1e1cdf460f54ee5d683bf26710b270a3454ea1da726700464b8c55aca0
 
 Name:           reprotest
-Version:        0.7.30
-Release:        3%{?dist}
+Version:        0.7.32
+Release:        1%{?dist}
 Summary:        Build packages and check them for reproducibility
 URL:            https://salsa.debian.org/reproducible-builds/%{name}
 

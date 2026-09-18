@@ -10,7 +10,7 @@
 %global crate uu_tty
 
 Name:           rust-uu_tty
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        tty ~ (uutils) display the name of the terminal connected to standard input
 

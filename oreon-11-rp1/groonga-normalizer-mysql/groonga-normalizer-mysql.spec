@@ -1,7 +1,7 @@
 %global source0_hash e27b2208823c5d53c3afe07206adf2bd7ff0cb7ae4db4ed3238230b02a044925
 
 %global forgeurl https://github.com/groonga/groonga-normalizer-mysql
-Version:        1.2.3
+Version:        1.3.0
 %forgemeta
 
 Name:           groonga-normalizer-mysql

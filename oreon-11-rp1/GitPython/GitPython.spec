@@ -3,8 +3,8 @@
 %global srcname GitPython
 
 Name:           %{srcname}
-Version:        3.1.46
-Release:        3%{?dist}
+Version:        3.1.62
+Release:        1%{?dist}
 Summary:        Python Git Library
 
 License:        BSD-3-Clause

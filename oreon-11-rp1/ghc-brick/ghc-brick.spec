@@ -16,9 +16,9 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        2.9
+Version:        2.13
 # can only be reset when all subpkgs bumped
-Release:        13%{?dist}
+Release:        1%{?dist}
 Summary:        A declarative terminal user interface library
 
 License:        BSD-3-Clause

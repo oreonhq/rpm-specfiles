@@ -8,8 +8,8 @@
 %bcond_without docs
 
 Name:           avrdude
-Version:        8.0
-Release:        9%{?dist}
+Version:        8.3
+Release:        1%{?dist}
 Summary:        Software for programming Atmel AVR Microcontroller
 
 License:        GPL-2.0-or-later AND GPL-3.0-only AND (WTFPL OR MIT)

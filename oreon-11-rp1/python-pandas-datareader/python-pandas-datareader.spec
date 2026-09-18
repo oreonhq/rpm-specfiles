@@ -1,71 +1,59 @@
-%global source0_hash 9fc3c63d39bc0c10c2683f1c6d503ff625020383e38f6cbe14134826b454d5a6
+%global source0_hash none
 
-%bcond check 0
+Name:           python-pandas-datareader
+Version:        0.11.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Pandas-compatible data readers. Formerly a component of pandas.
 
-%global srcname pandas-datareader
-%global summary Data readers from the pandas codebase
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://pandas.pydata.org
+Source:         %{pypi_source pandas_datareader}
 
-%global common_description                                                   \
-Data readers extracted from the pandas codebase, should be compatible with   \
-recent pandas versions.
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-Name: python-%{srcname}
-Version: 0.10.0
-Release: %autorelease
-Summary: %{summary}
-License: BSD-3-Clause
 
-URL: https://github.com/pydata/pandas-datareader
-Source0: %{pypi_source}
-# Old version of versioner still uses deprecated SafeConfigParser
-# https://github.com/pydata/pandas-datareader/issues/969
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pandas-datareader' generated automatically by pyp2spec.}
+
 Patch: pandas-datareader-python312.patch
 
-BuildArch: noarch
-BuildRequires: python3-devel
-BuildRequires: python3-setuptools
+%description %_description
 
-%description
-%{common_description}
+%package -n     python3-pandas-datareader
+Summary:        %{summary}
 
-%package -n python3-%{srcname}
-Summary: %{summary}
+%description -n python3-pandas-datareader %_description
 
-%if %{with check}
-BuildRequires: python3-pytest
-BuildRequires: python3-numpy
-BuildRequires: python3-pandas
-BuildRequires: python3-requests
-BuildRequires: python3-wrapt
-%endif
-
-%{?python_provide:%python_provide python3-%{srcname}}
-
-%description -n python3-%{srcname}
-%{common_description}
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pandas_datareader-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires 
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files pandas_datareader
 
 %check
-# Most tests require network
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-pandas-datareader -f %{pyproject_files}
 
 %changelog
 %autochangelog

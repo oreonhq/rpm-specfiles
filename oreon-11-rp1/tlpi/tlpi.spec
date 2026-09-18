@@ -1,7 +1,7 @@
 %global source0_hash 26975fc411ff8b97bc31c88002bac2a0f1c329cfc448c0b1d0f26ced9aa94024
 
 Name:		tlpi
-Version:	260105
+Version:	260523
 Release:	%autorelease
 Summary:	Utilities to display namespaces and control groups
 

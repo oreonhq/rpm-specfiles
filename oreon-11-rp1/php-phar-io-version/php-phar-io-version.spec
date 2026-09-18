@@ -26,8 +26,8 @@
 %endif
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        2.0.1
-Release:        18%{?dist}
+Version:        3.2.1
+Release:        1%{?dist}
 Summary:        Library for handling version information and constraints
 
 # Automatically converted from old format: BSD - review is highly recommended.

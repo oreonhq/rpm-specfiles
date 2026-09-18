@@ -7,7 +7,7 @@
 %global crate tokio-serde
 
 Name:           rust-tokio-serde
-Version:        0.8.0
+Version:        0.9.0
 Release:        %autorelease
 Summary:        Send and receive Serde encodable types over the network using Tokio
 

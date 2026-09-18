@@ -10,8 +10,8 @@
 %define _default_patch_fuzz 3
 
 Name:    sslh
-Version: 1.21c
-Release: 15%{?dist}
+Version: 2.3.1
+Release: 1%{?dist}
 Summary: Applicative protocol(SSL/SSH) multiplexer
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only

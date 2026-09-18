@@ -10,7 +10,7 @@
 %global crate uu_pwd
 
 Name:           rust-uu_pwd
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        pwd ~ (uutils) display current working directory
 

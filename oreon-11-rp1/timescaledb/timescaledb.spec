@@ -3,8 +3,8 @@
 %global core_name timescale
 
 Name:           %{core_name}db
-Version:        2.16.0
-Release:        2%{?dist}
+Version:        2.30.1
+Release:        1%{?dist}
 Summary:        Open-source time-series database powered by PostgreSQL
 
 License:        Apache-2.0

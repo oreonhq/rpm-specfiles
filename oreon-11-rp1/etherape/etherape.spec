@@ -1,8 +1,8 @@
 %global source0_hash 49c90df3bb880d3c60dfac4444ca8fc5d68ba8f36b820ed5f877381c9a07175c
 
 Name:           etherape
-Version:        0.9.21
-Release:        2%{?dist}
+Version:        0.9.22
+Release:        1%{?dist}
 Summary:        Graphical network monitor for Unix
 
 License:        GPL-2.0-or-later

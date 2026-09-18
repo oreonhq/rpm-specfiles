@@ -1,7 +1,7 @@
 %global source0_hash 5202b89be915cd24ebdc3021c7159b587050c4dc3eb9de2eb599d098b16e54df
 
 Name:       debmirror
-Version:    2.47
+Version:    2.49.git
 Release:    %autorelease
 Summary:    Debian partial mirror script, with ftp and package pool support
 License:    GPL-2.0-or-later

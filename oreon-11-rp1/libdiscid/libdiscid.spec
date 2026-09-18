@@ -1,8 +1,8 @@
 %global source0_hash 72dbb493e07336418fe2056f0ebc7ce544eedb500bb896cc1cc04bd078c2d530
 
 Name:           libdiscid
-Version:        0.6.5
-Release:        2%{?dist}
+Version:        0.7.0
+Release:        1%{?dist}
 Summary:        C Library for creating MusicBrainz DiscIDs
 
 License:        LGPL-2.1-or-later

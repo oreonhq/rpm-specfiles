@@ -6,8 +6,8 @@
 %global       mver 3.0
 
 Name:         skribilo
-Version:      0.11.0
-Release:      2%{?dist}
+Version:      0.11.1
+Release:      1%{?dist}
 Summary:      A free document production tool
 
 License:      GPL-3.0-or-later

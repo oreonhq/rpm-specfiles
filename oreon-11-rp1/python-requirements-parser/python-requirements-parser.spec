@@ -1,69 +1,59 @@
-%global source0_hash 49dd8e415d7402eda2dffd31b73abee691de040470de1dbb2ebfb3ce16dd7c22
-
-# Copyright (C) 2023 Maxwell G <maxwell@gtmx.me>
-# Copyright (C) Fedora Project Authors
-# SPDX-License-Identifier: MIT
-# License text: https://spdx.org/licenses/MIT
-
-%bcond tests 1
-%global forgeurl https://github.com/madpah/requirements-parser
+%global source0_hash none
 
 Name:           python-requirements-parser
-Version:        0.5.0
-%forgemeta
-Release:        11%{?dist}
-Summary:        A small Python module for parsing Pip requirement files
+Version:        0.13.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        This is a small Python module for parsing Pip requirement files.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://requirements-parser.readthedocs.org/
-# The sdist is missing tests
-Source:         %{forgesource}
-# Part of https://github.com/madpah/requirements-parser/pull/87 submitted
-# upstream
-Patch:          pyproject.toml-limit-documentation-to-the-sdist.patch
+URL:            https://github.com/madpah/requirements-parser/#readme
+Source:         %{pypi_source requirements_parser}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  tomcli+tomlkit
-%if %{with tests}
-BuildRequires:  %{py3_dist pytest}
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package provides a small Python module for parsing Pip requirements files.}
+This is package 'requirements-parser' generated automatically by pyp2spec.}
 
-%description %{_description}
+Patch:          pyproject.toml-limit-documentation-to-the-sdist.patch
+
+%description %_description
 
 %package -n     python3-requirements-parser
 Summary:        %{summary}
 
-%description -n python3-requirements-parser %{_description}
+%description -n python3-requirements-parser %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n requirements_parser-%{version}
 
-%autosetup -p1 %{forgesetupargs}
-# types-setuptools is not needed at runtime,
-# but setuptools itself for pkg_resources is
-tomcli-set pyproject.toml del tool.poetry.dependencies.types-setuptools
-tomcli-set pyproject.toml str tool.poetry.dependencies.setuptools "*"
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files requirements
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-requirements-parser -f %{pyproject_files}
-%license AUTHORS.rst LICENSE
-%doc README.md
 
 %changelog
 %autochangelog

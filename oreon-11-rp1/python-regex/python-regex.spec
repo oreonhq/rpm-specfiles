@@ -1,61 +1,57 @@
-%global source0_hash a729e47d418ea11d03469f321aaf67cdee8954cde3ff2cf8403ab87951ad10f2
+%global source0_hash none
 
-%global srcname regex
-
-Name:           python-%{srcname}
-Version:        2026.2.28
+Name:           python-regex
+Version:        2026.9.10
 Release:        %autorelease
-Summary:        Alternative regular expression module, to replace re
-# see also https://code.google.com/p/mrab-regex-hg/issues/detail?id=124
-# Automatically converted from old format: Python and CNRI - review is highly recommended.
-License:        LicenseRef-Callaway-Python AND CNRI-Python
-URL:            https://bitbucket.org/mrabarnett/mrab-regex
-Source0:        https://files.pythonhosted.org/packages/source/r/%{srcname}/%{srcname}-%{version}.tar.gz
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Alternative regular expression module, to replace re.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0 AND CNRI-Python
+URL:            https://github.com/mrabarnett/mrab-regex
+Source:         %{pypi_source regex}
+
 BuildRequires:  python3-devel
 BuildRequires:  gcc
-# needed for processing README.rst
-BuildRequires:  /usr/bin/rst2html
-BuildRequires:  python3-pygments
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This new regex implementation is intended eventually to replace
-Python's current re module implementation.
-
-For testing and comparison with the current 're' module the new
-implementation is in the form of a module called 'regex'.}
+This is package 'regex' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-regex
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-regex %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n regex-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
-# rebuild the HTML doc
-rst2html docs/UnicodeProperties.rst > docs/UnicodeProperties.html
-rst2html README.rst > README.html
+
 
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.html
-%doc docs/Features.html
-%doc docs/UnicodeProperties.html
+
+%files -n python3-regex -f %{pyproject_files}
 
 %changelog
 %autochangelog

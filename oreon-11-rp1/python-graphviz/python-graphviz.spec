@@ -1,93 +1,64 @@
-%global source0_hash 815346b8c2fcd8ccede29623a67bfc30abdbb75749e96128b9d414573d6d8f04
+%global source0_hash none
 
-# what it's called on pypi
-%global srcname graphviz
-
-%global common_description %{expand:
-This package facilitates the creation and rendering of graph descriptions in
-the DOT language of the Graphviz graph drawing software (master repo) from
-Python.
-
-Create a graph object, assemble the graph by adding nodes and edges, and
-retrieve its DOT source code string. Save the source code to a file and
-render it with the Graphviz installation of your system.}
-
-Name:           python-%{srcname}
-Version:        0.20.1
+Name:           python-graphviz
+Version:        0.21
 Release:        %autorelease
-# Set Epoch to avoid being obsoleted by graphviz-python
-Epoch:          1
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Simple Python interface for Graphviz
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/xflr6/graphviz
-Source0:        %url/archive/%{version}/%{srcname}-%{version}.tar.gz
-# Do not depend on separate mock module
-# Do not pull in coverage deps
-Patch0:         python-graphviz-deps.patch
+Source:         %{pypi_source graphviz}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%description %{common_description}
 
-%package -n     python3-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'graphviz' generated automatically by pyp2spec.}
+
+Patch0:         python-graphviz-deps.patch
+
+%description %_description
+
+%package -n     python3-graphviz
 Summary:        %{summary}
-Requires:       graphviz
 
-%description -n python3-%{srcname} %{common_description}
+%description -n python3-graphviz %_description
 
-%package -n python-%{srcname}-doc
-Summary:        Documentation for %{name}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-graphviz dev,docs,test
 
-%description -n python-%{srcname}-doc
-%{common_description}
-
-This is the documentation package for %{name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n graphviz-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-
-sed -i 's/\r//' docs/*.rst
-sed -i 's/\r//' README.rst
 
 %generate_buildrequires
-%pyproject_buildrequires -t -x docs
-echo "graphviz"
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs,test
+
 
 %build
 %pyproject_wheel
 
-# generate html docs
-PYTHONPATH=$PWD/build/lib sphinx-build docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
 
 %install
 %pyproject_install
-%pyproject_save_files %{srcname} 
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Compatibility with pytest 8
-# Workaround for: https://github.com/xflr6/graphviz/issues/219
-cat tests/backend/conftest.py >> tests/conftest.py
-rm tests/backend/conftest.py
+%_pyproject_check_import_allow_no_modules -t
 
-%pytest --skip-exe \
-        --only-exe \
-        --collect-only \
-        --verbose \
-        --pdb \
-        --exitfirst \
-        --doctest-report none
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-
-%files -n python-%{srcname}-doc
-%doc html
-%license LICENSE.txt
+%files -n python3-graphviz -f %{pyproject_files}
 
 %changelog
 %autochangelog

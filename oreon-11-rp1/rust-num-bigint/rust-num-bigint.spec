@@ -7,7 +7,7 @@
 %global crate num-bigint
 
 Name:           rust-num-bigint
-Version:        0.4.8
+Version:        0.5.1
 Release:        %autorelease
 Summary:        Big integer implementation for Rust
 

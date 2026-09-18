@@ -5,7 +5,7 @@
 %global source101_hash 3543108bb93f27ef00cd1c4381ac9a5b160ab8a1481a8a1df6359d0799fc18c5
 
 Name: pcs
-Version: 0.12.2
+Version: 0.12.3.1
 Release: 1%{?dist}
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 # https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing#Good_Licenses

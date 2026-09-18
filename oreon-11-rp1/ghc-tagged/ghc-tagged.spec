@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.8.9
+Version:        0.8.10
 Release:        %autorelease
 Summary:        Haskell 98 phantom types to avoid unsafely passing dummy arguments
 

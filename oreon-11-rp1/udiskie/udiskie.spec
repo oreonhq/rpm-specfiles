@@ -1,7 +1,7 @@
 %global source0_hash 26fd27d492304346916f0d799f581ac493727e17684407551cd0a41403c915f5
 
 Name:           udiskie
-Version:        2.6.2
+Version:        2.7.0
 Release:        %{autorelease}
 Summary:        Removable disk auto-mounter
 

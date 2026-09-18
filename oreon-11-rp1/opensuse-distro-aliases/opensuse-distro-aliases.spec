@@ -1,7 +1,7 @@
 %global source0_hash edecbc3db1f0c21935ae38b23d635f27afcab8d058badd749633966757a8c1e0
 
 Name:           opensuse-distro-aliases
-Version:        0.2.0
+Version:        0.2.4
 Release:        %autorelease
 Summary:        Aliases for active openSUSE releases
 

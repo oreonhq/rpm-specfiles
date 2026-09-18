@@ -3,7 +3,7 @@
 %global realname stdlib2
 
 Name:		erlang-%{realname}
-Version:	1.4.6
+Version:	1.4.7
 Release:	%autorelease
 BuildArch:	noarch
 Summary:	Erlang stdlib extensions

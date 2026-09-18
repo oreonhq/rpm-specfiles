@@ -1,8 +1,8 @@
 %global source0_hash 2d78bca81e9d08f4f28fcaa13eb8ce50951695468d9fdf1292438180ed6b4ed3
 
 Name:		sigscheme
-Version:	0.9.4
-Release:	2%{?dist}
+Version:	0.9.5
+Release:	1%{?dist}
 License:	BSD-3-Clause
 URL:		https://github.com/uim/sigscheme
 BuildRequires: make

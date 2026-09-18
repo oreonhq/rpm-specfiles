@@ -1,79 +1,62 @@
-%global source0_hash cfd13ad0dd2c47a3600b439ef72d8615d482cedcff1632930d6f28924d92f294
-
-# Created by pyp2rpm-3.3.2
-# Fedora doesn't have all the docs deps yet
-%bcond_with docs
+%global source0_hash none
 
 Name:           python-jaraco-functools
-Version:        4.3.0
+Version:        4.6.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Functools like those found in stdlib
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/jaraco/jaraco.functools
-Source0:        %{pypi_source jaraco_functools}
+Source:         %{pypi_source jaraco_functools}
+
 BuildArch:      noarch
- 
-%description
-Functools like those found in stdlib
-
-%package -n python3-jaraco-functools
-Summary:       %{summary}
-
 BuildRequires:  python3-devel
-BuildRequires:  tomcli
 
-%description -n python3-jaraco-functools
-Functools like those found in stdlib
 
-%if %{with docs}
-%package -n python-jaraco-functools-doc
-Summary:        jaraco-functools documentation
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'jaraco-functools' generated automatically by pyp2spec.}
 
-BuildRequires:  python3dist(jaraco-packaging) >= 3.2
-BuildRequires:  python3dist(rst-linker) >= 1.9
-BuildRequires:  python3dist(sphinx)
+%description %_description
 
-%description -n python-jaraco-functools-doc
-Documentation for jaraco-functools
-%endif
+%package -n     python3-jaraco-functools
+Summary:        %{summary}
+
+%description -n python3-jaraco-functools %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-jaraco-functools check,cover,doc,enabler,test,type
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n jaraco_functools-%{version}
 
-%autosetup -n jaraco_functools-%{version}
-# Remove dev-only dependencies. Upstream later split the `test` dependencies out of it
-# https://github.com/jaraco/skeleton/issues/138
-tomcli set pyproject.toml lists delitem "project.optional-dependencies.test" "pytest-.*"
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x check,cover,doc,enabler,test,type
+
 
 %build
 %pyproject_wheel
 
-%if %{with docs}
-# generate html docs 
-%{python3} -m sphinx docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
-%endif
 
 %install
 %pyproject_install
-%pyproject_save_files -l jaraco
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-jaraco-functools -f %{pyproject_files}
-%doc README.rst
-
-%if %{with docs}
-%files -n python-jaraco-functools-doc
-%doc html
-%license LICENSE
-%endif
 
 %changelog
 %autochangelog

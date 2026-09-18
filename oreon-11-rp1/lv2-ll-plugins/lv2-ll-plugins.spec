@@ -4,8 +4,8 @@
 
 Summary:	Collection of LV2 plugins
 Name:		lv2-ll-plugins
-Version:	0.2.8
-Release:	41%{?dist}
+Version:	0.2.33
+Release:	1%{?dist}
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:	GPL-3.0-or-later
 URL:		http://ll-plugins.nongnu.org/

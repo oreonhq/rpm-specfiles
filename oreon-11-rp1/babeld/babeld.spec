@@ -3,8 +3,8 @@
 %define _hardened_build 1
 
 Name:           babeld
-Version:        1.13.1
-Release:        8%{?dist}
+Version:        1.14
+Release:        1%{?dist}
 Summary:        Ad-hoc network routing daemon
 
 License:        MIT

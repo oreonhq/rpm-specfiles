@@ -1,8 +1,8 @@
 %global source0_hash e0807d77bd073142d459f9d41e2721e7e37e3fb676fc4300d65c878a1428c059
 
 Name:           dirvish
-Version:        1.2.1
-Release:        36%{?dist}
+Version:        1.3.1
+Release:        1%{?dist}
 Summary:        Fast, disk based, rotating network backup system
 
 License:        OSL-2.0

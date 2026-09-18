@@ -1,79 +1,60 @@
-%global source0_hash 30a0d385021fbe4a4116672845e5695bbe56eb682f9096066776394f954a7429
+%global source0_hash none
 
-%global pypi_name cmd2
+Name:           python-cmd2
+Version:        4.2.4
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        cmd2 - quickly build feature-rich and user-friendly interactive command line applications in Python
 
-Name:             python-%{pypi_name}
-Version:          2.5.11
-Release:          7%{?dist}
-Summary:          Extra features for standard library's cmd module
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            ...
+Source:         %{pypi_source cmd2}
 
-License:          MIT
-URL:              https://pypi.python.org/pypi/cmd2
-Source0:          %{pypi_source}
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cmd2' generated automatically by pyp2spec.}
+
 Patch0:           python-cmd2-2.5.11-disable-cov-tests.patch
-# Adapted from https://github.com/python-cmd2/cmd2/pull/1419
 Patch1:           Add-support-for-Python-3.14-and-remove-for-Python-3.8.patch
-BuildArch:        noarch
-
-%global _description\
-Enhancements for standard library's cmd module.\
-\
-Drop-in replacement adds several features for command-prompt tools:\
-\
- * Searchable command history (commands: "hi", "li", "run")\
- * Load commands from file, save to file, edit commands in file\
- * Multi-line commands\
- * Case-insensitive commands\
- * Special-character shortcut commands (beyond cmd's "@" and "!")\
- * Settable environment parameters\
- * Parsing commands with flags\
- * > (filename), >> (filename) redirect output to file\
- * < (filename) gets input from file\
- * bare >, >>, < redirect to/from paste buffer\
- * accepts abbreviated commands when unambiguous\
- * `py` enters interactive Python console\
- * test apps against sample session transcript (see example/example.py)\
-\
-Usable without modification anywhere cmd is used; simply import cmd2.Cmd\
-in place of cmd.Cmd.\
-\
-See docs at http://packages.python.org/cmd2/
 
 %description %_description
 
-%package -n python3-cmd2
-Summary:          %{summary}
-BuildRequires:    python3-devel
-BuildRequires:    python3-pytest
-BuildRequires:    python3-pytest-mock
-# An editor is needed for tests; vim works too
-BuildRequires:    nano
-Requires:         /usr/bin/which
+%package -n     python3-cmd2
+Summary:        %{summary}
+
+%description -n python3-cmd2 %_description
+
+
+%prep
+%autosetup -p1 -n cmd2-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
-%description -n python3-%{pypi_name} %_description
-
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n %{pypi_name}-%{version} -p1
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files -l cmd2
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc CHANGELOG.md README.md docs
+
+%files -n python3-cmd2 -f %{pyproject_files}
 
 %changelog
 %autochangelog

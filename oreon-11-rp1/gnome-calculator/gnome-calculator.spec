@@ -7,7 +7,7 @@
 %global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           gnome-calculator
-Version:        50.0
+Version:        51.0
 Release:        %autorelease
 Summary:        A desktop calculator
 

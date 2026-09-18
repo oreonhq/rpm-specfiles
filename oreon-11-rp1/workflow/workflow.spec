@@ -9,7 +9,7 @@ Name:           workflow
 # src/kernel/rbtree.h available under GPL-2.0-or-later
 License:        Apache-2.0 AND BSD-2-Clause AND Zlib AND GPL-2.0-or-later
 
-Version:        0.11.11
+Version:        1.1.0
 Release:        %autorelease
 
 URL:            https://github.com/sogou/workflow

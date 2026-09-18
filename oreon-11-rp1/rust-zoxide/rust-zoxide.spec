@@ -6,7 +6,7 @@
 %global crate zoxide
 
 Name:           rust-zoxide
-Version:        0.9.8
+Version:        0.10.0
 Release:        %autorelease
 Summary:        Smarter cd command for your terminal
 

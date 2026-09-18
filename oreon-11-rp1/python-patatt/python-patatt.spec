@@ -1,60 +1,58 @@
-%global source0_hash eed847aa1db2578896725010817fbf915e2959fff1a9cd30c85108dab4a9e6d8
+%global source0_hash none
 
-%global srcname patatt
-
-Name:           python-%{srcname}
-Version:        0.6.3
+Name:           python-patatt
+Version:        0.8.0
 Release:        %autorelease
-Summary:        Add cryptographic attestation to patches sent via email
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A simple library to add cryptographic attestation to patches sent via email
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT-0
-URL:            https://git.kernel.org/pub/scm/utils/%{srcname}/%{srcname}.git
-Source0:        https://mirrors.edge.kernel.org/pub/software/devel/%{srcname}/%{srcname}-%{version}.tar.xz
-Source1:        https://mirrors.edge.kernel.org/pub/software/devel/%{srcname}/%{srcname}-%{version}.tar.sign
-# https://git.kernel.org/pub/scm/utils/patatt/patatt.git/plain/.keys/openpgp/linuxfoundation.org/konstantin/default
-Source2:        gpgkey-DE0E66E32F1FDD0902666B96E63EDCA9329DD07E.asc
+URL:            https://git.kernel.org/pub/scm/utils/patatt/patatt.git/about/
+Source:         %{pypi_source patatt}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildRequires:  gnupg2
-BuildRequires:  python%{python3_pkgversion}-devel
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This utility allows an easy way to add end-to-end cryptographic attestation to
-patches sent via mail. It does so by adapting the DKIM email signature standard
-to include cryptographic signatures via the X-Developer-Signature email header.}
+This is package 'patatt' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n %{srcname}
+%package -n     python3-patatt
 Summary:        %{summary}
-Provides:       python%{python3_pkgversion}-%{srcname} = %{version}-%{release}
 
-%description -n %{srcname} %{_description}
+%description -n python3-patatt %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n patatt-%{version}
 
-xz -dc '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -r requirements.txt
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n %{srcname} -f %{pyproject_files}
-%license COPYING
-%doc DCO README.rst samples
-%{_bindir}/%{srcname}
-%{_mandir}/man5/%{srcname}.5.*
+
+%files -n python3-patatt -f %{pyproject_files}
+%{_bindir}/patatt
 
 %changelog
 %autochangelog

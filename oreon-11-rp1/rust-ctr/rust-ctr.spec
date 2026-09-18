@@ -7,7 +7,7 @@
 %global crate ctr
 
 Name:           rust-ctr
-Version:        0.9.2
+Version:        0.10.1
 Release:        %autorelease
 Summary:        CTR block modes of operation
 

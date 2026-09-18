@@ -1,9 +1,9 @@
 %global source0_hash 29951a16ca48c5350fa862417a253bc45c2762106027c216bb7a56eabdd7f0f6
 
-%global minorversion 0.5
+%global minorversion 0.6
 
 Name:           gigolo
-Version:        0.5.4
+Version:        0.6.0
 Release:        %autorelease
 Summary:        GIO/GVFS management application
 

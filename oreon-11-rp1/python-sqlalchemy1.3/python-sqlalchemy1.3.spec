@@ -1,108 +1,62 @@
-%global source0_hash ebbb777cbf9312359b897bf81ba00dae0f5cb69fba2a18265dcc18a6f5ef7519
+%global source0_hash none
 
-# pytest7 is not compatible
-%if (0%{?fedora} && 0%{?fedora} < 37) || (0%{?rhel} && 0%{?rhel} < 10)
-%bcond_without tests
-%else
-%bcond_with tests
-%endif
+Name:           python-sqlalchemy
+Version:        2.0.54
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Database Abstraction Library
 
-# when bootstrapping Python, pytest-xdist is not yet available
-%bcond_without xdist
-
-%global srcname SQLAlchemy
-
-Name:           python-sqlalchemy1.3
-Version:        1.3.24
-# cope with pre-release versions containing tildes
-%global srcversion %{lua: srcversion, num = rpm.expand("%{version}"):gsub("~", ""); print(srcversion);}
-Release:        19%{?dist}
-Summary:        Modular and flexible ORM library for python (legacy 1.3.x version)
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            http://www.sqlalchemy.org/
-Source0:        https://files.pythonhosted.org/packages/source/S/%{srcname}/%{srcname}-%{srcversion}.tar.gz
-
-BuildRequires:  gcc
+URL:            https://docs.sqlalchemy.org
+Source:         %{pypi_source sqlalchemy}
 
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-%if %{with tests}
-BuildRequires:  python3-mock
-BuildRequires:  python3-pytest
-%if %{with xdist}
-BuildRequires:  python3-pytest-xdist
-%endif
-%endif
+BuildRequires:  gcc
 
-%description
-SQLAlchemy is an Object Relational Mapper (ORM) that provides a flexible,
-high-level interface to SQL databases.  Database and domain concepts are
-decoupled, allowing both sides maximum flexibility and power. SQLAlchemy
-provides a powerful mapping layer that can work as automatically or as manually
-as you choose, determining relationships based on foreign keys or letting you
-define the join conditions explicitly, to bridge the gap between database and
-domain.
 
-%package doc
-Summary:        Documentation for SQLAlchemy 1.3.x
-BuildArch:      noarch
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sqlalchemy' generated automatically by pyp2spec.}
 
-%description doc
-Documentation for SQLAlchemy 1.3.x
+%description %_description
 
-%package -n python3-sqlalchemy1.3
-Summary:        Modular and flexible ORM library for python (legacy 1.3.x version)
-%{?python_provide:%python_provide python%{python3_pkgversion}-sqlalchemy1.3}
-# This is a compat package that conflicts with the main one
-Conflicts:      python3-sqlalchemy
-# This is a compatibility package for software that isn't yet updated to work with sqlalchemy 1.4+
-Provides:       deprecated()
+%package -n     python3-sqlalchemy
+Summary:        %{summary}
 
-%description -n python3-sqlalchemy1.3
-SQLAlchemy is an Object Relational Mapper (ORM) that provides a flexible,
-high-level interface to SQL databases.  Database and domain concepts are
-decoupled, allowing both sides maximum flexibility and power. SQLAlchemy
-provides a powerful mapping layer that can work as automatically or as manually
-as you choose, determining relationships based on foreign keys or letting you
-define the join conditions explicitly, to bridge the gap between database and
-domain.
+%description -n python3-sqlalchemy %_description
 
-This package includes the python 3 version of the module.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sqlalchemy aiomysql,aioodbc,aiosqlite,asyncio,asyncmy,mariadb-connector,mssql,mssql-pymssql,mssql-pyodbc,mypy,mysql,mysql-connector,oracle,oracle-oracledb,postgresql,postgresql-asyncpg,postgresql-pg8000,postgresql-psycopg,postgresql-psycopg2binary,postgresql-psycopg2cffi,postgresql-psycopgbinary,pymysql,sqlcipher
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sqlalchemy-%{version}
 
-%setup -q -n %{srcname}-%{srcversion}
 
-# Remove flag for pytest-xdist. (python2-pytest-xdist is a removed dependency.)
-# (--max-worker-restart=5 would end the test run after 5 crashing tests.)
-sed -i -e's/\(addopts = .*\) --max-worker-restart=5/\1/' setup.cfg
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x aiomysql,aioodbc,aiosqlite,asyncio,asyncmy,mariadb-connector,mssql,mssql-pymssql,mssql-pyodbc,mypy,mysql,mysql-connector,oracle,oracle-oracledb,postgresql,postgresql-asyncpg,postgresql-pg8000,postgresql-psycopg,postgresql-psycopg2binary,postgresql-psycopg2cffi,postgresql-psycopgbinary,pymysql,sqlcipher
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# remove unnecessary scripts for building documentation
-rm -rf doc/build
 
-%if %{with tests}
 %check
-PYTHONPATH=. %{__python3} -m pytest test \
-%if %{with xdist}
---numprocesses=auto
-%endif
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files doc
-%doc doc examples
 
-%files -n python3-sqlalchemy1.3
-%license LICENSE
-%doc README.rst
-%{python3_sitearch}/*
+%files -n python3-sqlalchemy -f %{pyproject_files}
 
 %changelog
 %autochangelog

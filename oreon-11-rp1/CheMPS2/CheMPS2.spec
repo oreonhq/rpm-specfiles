@@ -1,8 +1,8 @@
 %global source0_hash ccd4c0d9432759d97690bf37a0333440f93513960c62d1f75842f090406a224d
 
 Name:           CheMPS2
-Version:        1.8.9
-Release:        32%{?dist}
+Version:        1.8.12
+Release:        1%{?dist}
 Summary:        A spin-adapted implementation of DMRG for ab initio quantum chemistry
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

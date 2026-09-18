@@ -1,28 +1,24 @@
-%global source0_hash 4096459bdb19df0231360617f2266d8068a40b9eb202bbea9c54274a320f0c55
+%global source0_hash none
 
-%global srcname pypdf
-%global forgeurl https://github.com/py-pdf/pypdf
-
-Name:           python-%{srcname}
-Version:        4.2.0
+Name:           python-pypdf
+Version:        6.19.0
 Release:        %autorelease
-Summary:        Pure-Python PDF library
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A pure-python PDF library capable of splitting, merging, cropping, and transforming PDF files
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://pypdf.readthedocs.io
-# PyPI tarball doesn't include tests
-Source:         %{forgeurl}/archive/%{version}/%{srcname}-%{version}.tar.gz
+URL:            https://github.com/py-pdf/pypdf
+Source:         %{pypi_source pypdf}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-docs
-BuildRequires:  sed
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-pypdf is a free and open-source pure-python PDF library capable of splitting,
-merging, cropping, and transforming the pages of PDF files. It can also add
-custom data, viewing options, and passwords to PDF files. pypdf can retrieve
-text and metadata from PDFs as well.}
+This is package 'pypdf' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -31,55 +27,36 @@ Summary:        %{summary}
 
 %description -n python3-pypdf %_description
 
-%pyproject_extras_subpkg -n python3-pypdf crypto,full,image
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pypdf crypto,cryptodome,dev,docs,fonts,full,image,rtl-text
 
-%package        doc
-Summary:        Documentation for %{name}
-Requires:       python3-docs
-
-%description    doc
-This package provides additional documentation for %{name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pypdf-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-
-# Fix test dependencies
-sed -i tox.ini \
-  -e 's/pycryptodome/pycryptodomex/' \
-  -e '/pytest-socket/d'
-
-# Use local intersphinx inventory
-sed -r \
-    -e 's|https://docs.python.org/\{python_version\}|%{_docdir}/python3-docs/html|' \
-    -i docs/conf.py
 
 %generate_buildrequires
-%pyproject_buildrequires -t -x crypto,docs,full,image
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x crypto,cryptodome,dev,docs,fonts,full,image,rtl-text
+
 
 %build
 %pyproject_wheel
 
-# Build docs
-sphinx-build-3 docs html
-rm -rf html/{.buildinfo,.doctrees}
 
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-# https://lists.fedoraproject.org/archives/list/python-devel@lists.fedoraproject.org/thread/4Y2VRLVAR3DJXBSFVDYJMU3G4ZNPGEU6/
-%license LICENSE
-%doc README.md CHANGELOG.md CONTRIBUTORS.md
 
-%files doc
-%license LICENSE
-%doc html
+%files -n python3-pypdf -f %{pyproject_files}
 
 %changelog
 %autochangelog

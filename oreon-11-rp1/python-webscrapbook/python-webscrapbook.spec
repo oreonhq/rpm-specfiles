@@ -1,82 +1,64 @@
-%global source0_hash 061c4e0aa4fe7961fb2059edcc36385f72c9ba57d2febf35dc55bfdcad36ea99
+%global source0_hash none
 
-# Initially created by pyp2rpm-3.3.2
-%global pypi_name webscrapbook
+Name:           python-webscrapbook
+Version:        2.10.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A backend toolkit for management of WebScrapBook collection.
 
-#%%global gitdate 20240526
-#%%global gitref 48ad89d28e811fe4fc633e5071bd874c76caddee
-#%%global shortref %%(echo %%{gitref} |cut -c1-8)
-
-%if 0%{?shortref:1}
-%global buildref .%{gitdate}git%{shortref}
-%endif
-
-%if 0%{?gitref:1}
-%global directoryname PyWebScrapbook-%{gitref}
-%global archivename %{directoryname}.tar.gz
-%global dlpath archive/%{gitref}.tar.gz
-%else
-%global directoryname PyWebScrapBook-%{version}
-%global archivename %{directoryname}.zip
-%global dlpath archive/refs/tags/%{version}.zip
-%endif
-
-Name:           python-%{pypi_name}
-Version:        2.7.2
-Release:        2%{?dist}
-Summary:        A backend toolkit for management of WebScrapBook collection
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/danny0838/PyWebScrapBook
-Source0:        %{url}/%{dlpath}#/%{archivename}
-
-# Downstream Fedora patch to comply with packaging guidelines
-Patch100:       python-webscrapbook-2.7.1-test-requirements.patch
+Source:         %{pypi_source webscrapbook}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# For mime.types
-BuildRequires:  mailcap
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-PyWebScrapBook is a command line toolkit and backend server for the
-WebScrapBook browser extension.
+This is package 'webscrapbook' generated automatically by pyp2spec.}
 
-Features: Host any directory as a website; HTZ or MAFF archive file viewing;
-Markdown file rendering; Directory listing; Create, view, edit, and/or delete
-files via the web page or API; HTTP(S) authorization.}
+Patch100:       python-webscrapbook-2.7.1-test-requirements.patch
 
 %description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-webscrapbook
 Summary:        %{summary}
-Recommends:     python3-%{pypi_name}+adhoc_ssl
- 
-%description -n python3-%{pypi_name} %_description
 
-%pyproject_extras_subpkg -n python3-%{pypi_name} adhoc_ssl
+%description -n python3-webscrapbook %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-webscrapbook adhoc-ssl
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n webscrapbook-%{version}
 
-%autosetup -p1 -n %{directoryname}
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x adhoc-ssl
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files webscrapbook
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-webscrapbook -f %{pyproject_files}
 %{_bindir}/webscrapbook
 %{_bindir}/wsb
 %{_bindir}/wsbview

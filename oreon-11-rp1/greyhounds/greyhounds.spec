@@ -1,8 +1,8 @@
 %global source0_hash 233d7960034b0acf36701f2ccbe0a203cf6a09bc79f0915c719da69f2a751cdd
 
 Name:           greyhounds
-Version:        0.8
-Release:        0.46.prealpha%{?dist}
+Version:        1.2.10
+Release:        1.46.prealpha%{?dist}
 Summary:        Greyhounds is a greyhounds racing and breeding game
 Summary(pl):    Greyhounds to wyścigi i hodowla chartów
 # Automatically converted from old format: GPLv2 - review is highly recommended.

@@ -4,8 +4,8 @@
 
 Name:           libmpris-qt5
 Summary:        Qt and QML MPRIS interface and adaptor
-Version:        1.0.0
-Release:        16%{?dist}
+Version:        1.0.6
+Release:        1%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://git.merproject.org/mer-core/%{repo}

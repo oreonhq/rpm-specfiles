@@ -1,8 +1,8 @@
 %global source0_hash 9c6c11ec8e08aa37ce8ef7c5bcbdee60bac2428faeffb07d072e572ed05eb8cd
 
 Name:          volk
-Version:       3.2.0
-Release:       9%{?dist}
+Version:       3.3.0
+Release:       1%{?dist}
 Summary:       The Vector Optimized Library of Kernels
 License:       LGPL-3.0-or-later
 URL:           https://github.com/gnuradio/%{name}

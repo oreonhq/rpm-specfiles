@@ -1,8 +1,8 @@
 %global source0_hash 787fe8346c9bfc2d47b46325ed77bce6be21a5ae547361e0822c1ade49fb9046
 
 Name:           xnec2c
-Version:        4.4.16
-Release:        7%{?dist}
+Version:        4.4.18
+Release:        1%{?dist}
 Summary:        GTK based graphical wrapper for nec2c
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

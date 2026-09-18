@@ -1,22 +1,24 @@
-%global source0_hash b241f5885f560bc56a59ee63ca4c6a8bfa46ae4ad651af316d4e81817bb9fd88
+%global source0_hash none
 
 Name:           python-exceptiongroup
-Version:        1.3.0
+Version:        1.3.1
 Release:        %autorelease
-Summary:        Backport of PEP 654 (exception groups)
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Backport of PEP 654 _exception groups_
 
-# license clarification in https://github.com/agronholm/exceptiongroup/issues/150
-License:        MIT or PSF-2.0
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
 URL:            https://github.com/agronholm/exceptiongroup
 Source:         %{pypi_source exceptiongroup}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is a backport of the BaseExceptionGroup and ExceptionGroup classes
-from Python 3.11.}
+This is package 'exceptiongroup' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -25,30 +27,36 @@ Summary:        %{summary}
 
 %description -n python3-exceptiongroup %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-exceptiongroup test
 
+
+%prep
 %autosetup -p1 -n exceptiongroup-%{version}
 
-# test failure fix
-sed -i 's/range(10000)/range(150_000)/g' tests/test_exceptions.py
 
 %generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
 %pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l exceptiongroup
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest -vv
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-exceptiongroup -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

@@ -1,55 +1,64 @@
-%global source0_hash 1571634f34b7a98f04adfb3072f97a8bef4bdf62a36a3816b94b402569b12f9b
+%global source0_hash none
 
-%global srcname gbulb
-
-Name:           python-%{srcname}
-Version:        0.6.5
+Name:           python-gbulb
+Version:        0.6.6
 Release:        %autorelease
-Summary:        GLib event loop for tulip (PEP 3156)
+# Fill in the actual package summary to submit package to Fedora
+Summary:        GLib event loop for Python asyncio
 
-License:        Apache-2.0
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/beeware/gbulb
-Source:         %{pypi_source}
-# upstream hardcodes arbitrary versions in dependencies to make their live
-# easier (and harder for anybody else...); relax dependencies
+Source:         %{pypi_source gbulb}
+
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'gbulb' generated automatically by pyp2spec.}
+
 Patch:          requirements-versions.patch
 Patch:          0001-Fix-compatibility-with-Python-3.13.patch
 
-BuildArch:      noarch
-BuildRequires:  gtk3-devel
-BuildRequires:  python3-devel
-
-%global _description %{expand:
-Gbulb is a Python library that implements a PEP 3156 interface for the GLib
-main event loop under UNIX-like systems.}
-
 %description %_description
 
-%package -n     python3-%{srcname}
+%package -n     python3-gbulb
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-gbulb %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-gbulb dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n gbulb-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst AUTHORS.rst CHANGELOG.rst
+
+%files -n python3-gbulb -f %{pyproject_files}
 
 %changelog
 %autochangelog

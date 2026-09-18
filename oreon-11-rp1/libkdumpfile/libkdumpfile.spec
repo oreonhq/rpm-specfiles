@@ -12,7 +12,7 @@
 %global addrlibsover 3
 
 Name:           libkdumpfile
-Version:        0.5.5
+Version:        0.5.6
 Release:        %autorelease
 Summary:        Kernel coredump file access
 
@@ -31,7 +31,7 @@ BuildRequires:  lzo-devel
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 %else
-Obsoletes:      python3-libkdumpfile < 0.5.5-1
+Obsoletes:      python3-libkdumpfile < 0.5.6-1
 %endif
 BuildRequires:  snappy-devel
 BuildRequires:  zlib-devel

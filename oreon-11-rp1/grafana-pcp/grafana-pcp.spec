@@ -19,8 +19,8 @@ end}
 %global gomodulesmode GO111MODULE=auto
 
 Name:           grafana-pcp
-Version:        5.3.0
-Release:        6%{?dist}
+Version:        6.1.0
+Release:        1%{?dist}
 Summary:        Performance Co-Pilot Grafana Plugin
 License:        Apache-2.0
 URL:            https://github.com/performancecopilot/grafana-pcp

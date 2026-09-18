@@ -1,59 +1,63 @@
-%global source0_hash 1169d376c297e7de388d18b4481760d478b0e99a777cad3a9c86e556f4b697cb
+%global source0_hash none
 
-%global pypi_name tenacity
-%global _description %{expand:
-Tenacity is a general-purpose retrying library to simplify the task of adding
-retry behavior to just about anything.}
-
-Name:           python-%{pypi_name}
-Version:        9.1.2
-Release:        5%{?dist}
+Name:           python-tenacity
+Version:        9.1.4
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Retry code until it succeeds
-License:        Apache-2.0
-URL:            https://github.com/jd/%{pypi_name}
-Source:         %{pypi_source}
-# Python 3.14 fixes
-# https://bugzilla.redhat.com/show_bug.cgi?id=2327977
-# Pushed upstream: https://github.com/jd/tenacity/pull/528
-# Rebased on tenacity-9.1.2.tar.gz
-Patch0:         528.patch
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/jd/tenacity
+Source:         %{pypi_source tenacity}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description %{_description}
 
-%package -n python3-%{pypi_name}
-Summary:          %{summary}
-BuildRequires:    python3-devel
-# for tests
-BuildRequires:    python3-pytest
-BuildRequires:    python3-tornado >= 4.5
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'tenacity' generated automatically by pyp2spec.}
 
-%description -n python3-%{pypi_name} %{_description}
+Patch0:         528.patch
+
+%description %_description
+
+%package -n     python3-tenacity
+Summary:        %{summary}
+
+%description -n python3-tenacity %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-tenacity doc,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n tenacity-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p 1
-# Avoid type checking dependency
-sed -e '/typeguard/d' -i setup.cfg
-# [toml] is an empty feature since setuptools switched to builtin tomllib
-sed -e 's/setuptools_scm\[toml\]/setuptools_scm/' -i pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -k "not test_retry_type_annotations"
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.rst
+
+%files -n python3-tenacity -f %{pyproject_files}
 
 %changelog
 %autochangelog

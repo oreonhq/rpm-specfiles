@@ -4,7 +4,7 @@ Name: lhasa
 Summary: Free Software LHA implementation
 License: ISC
 
-Version: 0.5.0
+Version: 0.6.0
 Release: 1%{?dist}
 
 URL: https://fragglet.github.io/lhasa/

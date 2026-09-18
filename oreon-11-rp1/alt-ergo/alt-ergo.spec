@@ -3,7 +3,7 @@
 %global giturl  https://github.com/OCamlPro/alt-ergo
 
 Name:		alt-ergo
-Version:	2.4.3
+Version:	2.6.4
 Release:	%autorelease
 Summary:	Automated theorem prover including linear arithmetic
 

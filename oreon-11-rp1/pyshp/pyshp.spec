@@ -1,7 +1,7 @@
 %global source0_hash c4db990421bebd9a530d0193ba6b4effbe1b71619ee6ac31c23e4a855a738f0e
 
 Name:           pyshp
-Version:        3.0.3
+Version:        3.1.6
 Release:        %autorelease
 Summary:        Pure Python read/write support for ESRI Shapefile format
 

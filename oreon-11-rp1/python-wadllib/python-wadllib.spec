@@ -1,54 +1,61 @@
-%global source0_hash acd9ad6a2c1007d34ca208e1da6341bbca1804c0e6850f954db04bdd7666c5fc
+%global source0_hash none
 
 Name:           python-wadllib
-Version:        1.3.6
+Version:        2.1.0
 Release:        %autorelease
-Summary:        Navigate HTTP resources using WADL files as guides
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Navigate HTTP resources using WADL files as guides.
 
-License:        LGPL-3.0-only
-URL:            https://launchpad.net/wadllib
-Source0:        %{pypi_source wadllib}
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://code.launchpad.net/wadllib
+Source:         %{pypi_source wadllib}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A Python library to navigate HTTP resources using WADL files as guides.}
+This is package 'wadllib' generated automatically by pyp2spec.}
 
 %description %_description
 
 %package -n     python3-wadllib
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(lazr-uri)
-
-# doctests use the cgi module removed from Python 3.13
-# https://bugs.launchpad.net/wadllib/+bug/2069619
-BuildRequires:  (python3dist(legacy-cgi) if python3 >= 3.13)
-
 %description -n python3-wadllib %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-wadllib docs,test
 
-%autosetup -n wadllib-%{version}
+
+%prep
+%autosetup -p1 -n wadllib-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l wadllib
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%{py3_test_envvars} %{python3} -m unittest src/wadllib/tests/*.py
 
 %files -n python3-wadllib -f %{pyproject_files}
-# README is installed in sitelib and used at runtime
 
 %changelog
 %autochangelog

@@ -74,13 +74,13 @@
 %endif
 
 Name:           opencv
-Version:        4.13.0
+Version:        5.0.0
 %global javaver %(foo=%{version}; echo ${foo//./})
 %global majorver %(foo=%{version}; a=(${foo//./ }); echo ${a[0]} )
 %global minorver %(foo=%{version}; a=(${foo//./ }); echo ${a[1]} )
 %global padding  %(digits=00; num=%{minorver}; echo ${digits:${#num}:${#digits}} )
 %global abiver   %(echo %{majorver}%{padding}%{minorver} )
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Collection of algorithms for computer vision
 # This is normal three clause BSD.
 License:        BSD-3-Clause AND Apache-2.0 AND ISC

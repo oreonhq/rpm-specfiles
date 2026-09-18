@@ -5,8 +5,8 @@
 %global pkgname graphite2
 
 Name:          mingw-%{pkgname}
-Version:       1.3.14
-Release:       17%{?dist}
+Version:       1.3.15
+Release:       1%{?dist}
 Summary:       MinGW Windows %{pkgname} library
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

@@ -2,8 +2,8 @@
 
 Name:		globus-xio-gridftp-multicast
 %global _name %(tr - _ <<< %{name})
-Version:	2.2
-Release:	10%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Globus XIO GridFTP Multicast Driver
 
 License:	Apache-2.0

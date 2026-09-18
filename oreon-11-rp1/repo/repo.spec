@@ -1,7 +1,7 @@
 %global source0_hash ea9967585cfffe4f5b7053798766825dce2454299cd72fe46edf3d488e5b8d47
 
 Name:           repo
-Version:        2.61.1
+Version:        2.67
 Release:        %autorelease
 Summary:        Repository management tool built on top of git
 

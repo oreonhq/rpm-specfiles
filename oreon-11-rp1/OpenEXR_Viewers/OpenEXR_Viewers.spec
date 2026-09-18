@@ -15,8 +15,8 @@
 %global project openexr
 
 Name:           %{real_name}
-Version:        2.3.0
-Release:        23%{?dist}
+Version:        3.4.15
+Release:        1%{?dist}
 Summary:        Viewers programs for OpenEXR
 
 # Automatically converted from old format: AMPAS BSD - review is highly recommended.

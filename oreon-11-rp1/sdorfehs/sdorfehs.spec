@@ -1,7 +1,7 @@
 %global source0_hash eb79eaa817997efe4c827abe8600d0b6c635c01bc7252f57cf3c87ec36b091b8
 
 Name:           sdorfehs
-Version:        1.5
+Version:        1.7
 Release:        %autorelease
 Summary:        A tiling window manager
 

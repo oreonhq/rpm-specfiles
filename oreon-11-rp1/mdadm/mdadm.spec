@@ -3,8 +3,8 @@
 %bcond abrt %{undefined rhel}
 
 Name:        mdadm
-Version:     4.3
-Release:     10%{?dist}
+Version:     4.6
+Release:     1%{?dist}
 Summary:     The mdadm program controls Linux md devices (software RAID arrays)
 URL:         http://www.kernel.org/pub/linux/utils/raid/mdadm/
 License:     GPL-2.0-or-later

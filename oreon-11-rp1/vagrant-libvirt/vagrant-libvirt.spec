@@ -5,8 +5,8 @@
 %global vagrant_spec_commit 259c55e204674f2b006700c6d351d04250d13b04
 
 Name: %{vagrant_plugin_name}
-Version: 0.11.2
-Release: 9%{?dist}
+Version: 0.12.2
+Release: 1%{?dist}
 Summary: libvirt provider for Vagrant
 License: MIT
 URL: https://github.com/vagrant-libvirt/vagrant-libvirt

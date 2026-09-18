@@ -1,8 +1,8 @@
 %global source0_hash 755be60cfe2dfc495dd50276242836e792c6f82e3e7c58537a707af91afc3d7c
 
 Name:      sugar-read
-Version:   123
-Release:   17%{?dist}
+Version:   124
+Release:   1%{?dist}
 Summary:   A document reader for Sugar
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:   GPL-2.0-or-later

@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           easymock
-Version:        5.6.0
+Version:        5.7.0
 Release:        %autorelease
 Summary:        Easy mock objects
 License:        Apache-2.0

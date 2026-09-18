@@ -15,7 +15,7 @@
 # published by the Open Source Initiative.
 
 Name:		qdmr
-Version:	0.13.3
+Version:	0.15.1
 Release:	1%{?dist}
 Summary:	A GUI application for configuring and programming DMR radios
 License:	GPL-3.0-or-later

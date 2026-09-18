@@ -1,10 +1,13 @@
-%global source0_hash 9635050a311f8effeb46888e573aa4871eb54aa24d7f700bf087620c1fb4525a
+%global source0_hash none
 
 Name:           python-bluebell-akn
-Version:        3.1.1
+Version:        5.0.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Transforms text to and from Akoma Ntoso
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-3.0-or-later
 URL:            https://github.com/laws-africa/bluebell
 Source:         %{pypi_source bluebell_akn}
@@ -12,22 +15,10 @@ Source:         %{pypi_source bluebell_akn}
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Bluebell is a (fairly) generic Akoma Ntoso 3 parser, supporting all
-hierarchical elements and multiple document types.
-
-Bluebell supports the following Akoma Ntoso (AKN) document types:
-
-act, bill (hierarchicalStructure)
-debateReport, doc, statement (openStructure)
-judgment (judgmentStructure)
-Bluebell tries to walk the line between being expressive and supporting a range
-of AKN documents and structures, while being simple to use and not requiring
-that authors have an in-depth knowledge of AKN.
-
-Bluebell will always produce structurally valid Akoma Ntoso, no matter what
-input is given. It will never refuse to parse malformed input. If it does, it's
-a bug.}
+This is package 'bluebell-akn' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -36,28 +27,37 @@ Summary:        %{summary}
 
 %description -n python3-bluebell-akn %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-bluebell-akn dev
 
+
+%prep
 %autosetup -p1 -n bluebell_akn-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires 
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l bluebell
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%{py3_test_envvars} %{python3} -m unittest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-bluebell-akn -f %{pyproject_files}
 %{_bindir}/bluebell
-%doc README.md
 
 %changelog
 %autochangelog

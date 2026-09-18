@@ -10,7 +10,7 @@
 %global giturl  https://github.com/rocq-prover/rocq
 
 Name:           rocq
-Version:        9.1.1
+Version:        9.2.0
 Release:        %autorelease
 Summary:        Proof management system
 
@@ -92,7 +92,7 @@ Recommends:     texlive-collection-latex
 
 # This can be removed when F48 reaches EOL
 Provides:       coq = %{version}-%{release}
-Obsoletes:      coq < 9.1.1
+Obsoletes:      coq < 9.2.0
 
 %global _desc %{expand:Rocq is a formal proof management system.  It provides a formal language to
 write mathematical definitions, executable algorithms and theorems together
@@ -112,7 +112,7 @@ Summary:        Core binaries and tools of the Rocq proof management system
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 # This can be removed when F48 reaches EOL
 Provides:       coq-core = %{version}-%{release}
-Obsoletes:      coq-core < 9.1.1
+Obsoletes:      coq-core < 9.2.0
 
 %description    runtime
 %_desc
@@ -135,7 +135,7 @@ Summary:        The Rocq Prelude, and the Corelib and Ltac2 modules
 Requires:       %{name}-runtime%{?_isa} = %{version}-%{release}
 # This can be removed when F48 reaches EOL
 Provides:       coq = %{version}-%{release}
-Obsoletes:      coq < 9.1.1
+Obsoletes:      coq < 9.2.0
 
 %description    core
 %_desc
@@ -161,7 +161,7 @@ Summary:        Compatibility binaries for Coq after the Rocq renaming
 Requires:       %{name}-core%{?_isa} = %{version}-%{release}
 # This can be removed when F48 reaches EOL
 Provides:       coq-core = %{version}-%{release}
-Obsoletes:      coq-core < 9.1.1
+Obsoletes:      coq-core < 9.2.0
 
 %description -n coq-core-compat
 %_desc
@@ -174,7 +174,7 @@ Summary:        The coqidetop language server
 Requires:       %{name}-core%{?_isa} = %{version}-%{release}
 # This can be removed when F48 reaches EOL
 Provides:       coq-coqide-server = %{version}-%{release}
-Obsoletes:      coq-coqide-server < 9.1.1
+Obsoletes:      coq-coqide-server < 9.2.0
 
 %description    coqide-server
 %_desc
@@ -204,7 +204,7 @@ Requires:       hicolor-icon-theme
 Requires:       xdg-utils
 # This can be removed when F48 reaches EOL
 Provides:       coq-coqide = %{version}-%{release}
-Obsoletes:      coq-coqide < 9.1.1
+Obsoletes:      coq-coqide < 9.2.0
 
 Provides:       bundled(ocaml-xml-light)
 
@@ -235,7 +235,7 @@ Requires:       font(lato)
 Requires:       font(robotoslab)
 # This can be removed when F48 reaches EOL
 Provides:       coq-doc = %{version}-%{release}
-Obsoletes:      coq-doc < 9.1.1
+Obsoletes:      coq-doc < 9.2.0
 
 %description    doc
 %_desc

@@ -24,7 +24,7 @@
 %global source_directory 1.25-development
 
 Name:           libnbd
-Version:        1.25.4
+Version:        1.25.7
 Release:        1%{?dist}
 Summary:        NBD client library in userspace
 

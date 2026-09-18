@@ -6,7 +6,7 @@
 %bcond saml2 0
 
 Name:       matrix-synapse
-Version:    1.137.0
+Version:    1.161.0
 Release:    %autorelease
 Summary:    A Matrix reference homeserver written in Python using Twisted
 License:    AGPL-3.0-or-later

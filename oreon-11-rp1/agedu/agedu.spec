@@ -3,8 +3,8 @@
 %global rel 20200705.2a7d4a2
 
 Name:           agedu
-Version:        0
-Release:        35.%{rel}%{?dist}
+Version:        20260410.3622eda
+Release:        1.%{rel}%{?dist}
 Summary:        An utility for tracking down wasted disk space
 License:        MIT
 URL:            http://www.chiark.greenend.org.uk/~sgtatham/agedu/

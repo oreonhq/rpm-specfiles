@@ -7,7 +7,7 @@
 %global crate tree-sitter-ocaml
 
 Name:           rust-tree-sitter-ocaml
-Version:        0.24.0
+Version:        0.26.0
 Release:        %autorelease
 Summary:        OCaml grammar for tree-sitter
 

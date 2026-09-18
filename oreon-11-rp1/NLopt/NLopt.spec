@@ -18,11 +18,11 @@
 %endif
 %global guile_pkg    %(echo guile%{?guile_ver} | sed -e 's!\\\.!!g')
 
-%global relversion 2.10.0
+%global relversion 2.11.0
 Name:              NLopt
-Version:           2.10.0
+Version:           2.11.0
 %global tag        v%{version}
-Release:           9%{?dist}
+Release:           1%{?dist}
 Summary:           Open-Source library for nonlinear optimization
 
 # Get a lowercase name for virtual provides.
@@ -65,7 +65,7 @@ Source0:           https://github.com/stevengj/%{lc_name}/archive/%{tag}/%{lc_na
 Patch0:            nlopt-2.9.1-kill_rpath.patch
 # Enable build for Octave
 # https://github.com/stevengj/nlopt/pull/597
-# backported to release 2.10.0
+# backported to release 2.11.0
 Patch1:            octave-build.patch
 
 BuildRequires:     cmake3

@@ -7,8 +7,8 @@
 
 Summary:        GNU Readline extension for Tcl/Tk
 Name:           tcl-tclreadline
-Version:        2.4.1
-Release:        3%{?dist}
+Version:        2.5.0
+Release:        1%{?dist}
 License:        BSD-3-Clause
 URL:            https://github.com/flightaware/tclreadline
 Source0:        https://github.com/flightaware/%{pkgname}/archive/v%{version}/%{pkgname}-%{version}.tar.gz

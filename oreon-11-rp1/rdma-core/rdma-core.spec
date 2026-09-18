@@ -1,7 +1,7 @@
 %global source0_hash 340be509137103677ea30798d6ffe64a991148dae333b79a5bc0744e219fde2f
 
 Name: rdma-core
-Version: 61.0
+Version: 65.0
 Release: %autorelease
 Summary: RDMA core userspace libraries and daemons
 

@@ -1,8 +1,8 @@
 %global source0_hash 13a1ceef025d430b47ae76f3271d4a36bfa6304949331711fd36f9d9a95049ed
 
 Name:          reflections
-Version:       0.9.12
-Release:       22%{?dist}
+Version:       0.10.2
+Release:       1%{?dist}
 Summary:       Java run-time meta-data analysis
 License:       WTFPL
 URL:           https://github.com/ronmamo/reflections

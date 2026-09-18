@@ -8,8 +8,8 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           libsearpc
-Version:        3.3
-Release:        12%{?dist}
+Version:        3.3-latest-latest
+Release:        1%{?dist}
 Summary:        A simple and easy-to-use C language RPC framework
 
 # Main package license: Apache-2.0

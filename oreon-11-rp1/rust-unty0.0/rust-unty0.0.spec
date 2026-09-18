@@ -7,7 +7,7 @@
 %global crate unty
 
 Name:           rust-unty0.0
-Version:        0.0.4
+Version:        0.0.5
 Release:        %autorelease
 Summary:        Explicitly types your generics
 

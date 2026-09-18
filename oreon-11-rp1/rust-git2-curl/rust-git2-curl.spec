@@ -7,7 +7,7 @@
 %global crate git2-curl
 
 Name:           rust-git2-curl
-Version:        0.21.0
+Version:        0.22.0
 Release:        %autorelease
 Summary:        Backend for an HTTP transport in libgit2 powered by libcurl.
 

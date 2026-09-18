@@ -5,8 +5,8 @@
 %global pyver_under %(%{python3} -Esc "import sys; sys.stdout.write('{0.major}_{0.minor}'.format(sys.version_info))")
 
 Name:           imath
-Version:        3.1.12
-Release:        7%{?dist}
+Version:        3.2.3
+Release:        1%{?dist}
 Summary:        Library of 2D and 3D vector, matrix, and math operations for computer graphics
 
 License:        BSD-3-Clause

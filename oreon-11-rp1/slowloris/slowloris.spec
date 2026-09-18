@@ -1,8 +1,8 @@
 %global source0_hash fe0f26723d35a5dbd1204a80ca1a9c2f85bf5f062355058059f89d01ee2820b5
 
 Name:           slowloris
-Version:        0.2.1
-Release:        21%{?dist}
+Version:        0.2.6
+Release:        1%{?dist}
 Summary:        Low bandwidth DoS tool
 
 License:        MIT

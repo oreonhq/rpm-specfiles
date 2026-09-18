@@ -7,7 +7,7 @@
 %global crate clap-verbosity-flag
 
 Name:           rust-clap-verbosity-flag
-Version:        2.2.3
+Version:        3.0.4
 Release:        %autorelease
 Summary:        Easily add a --verbose flag to CLIs using Clap
 

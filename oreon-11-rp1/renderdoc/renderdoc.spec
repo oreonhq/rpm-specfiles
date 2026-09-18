@@ -2,8 +2,8 @@
 
 %global vswig   modified-7
 Name:           renderdoc
-Version:        1.42
-Release:        2%{?dist}
+Version:        1.46
+Release:        1%{?dist}
 Summary:        A stand-alone graphics debugging tool
 
 License:        MIT

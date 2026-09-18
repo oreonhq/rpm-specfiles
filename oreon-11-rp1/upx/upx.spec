@@ -1,7 +1,7 @@
 %global source0_hash 8eb914115b306fd9fd2110bd3d27ddb8ae7c5a03bb965f7d10f046a3a4ff9dfe
 
 Name:           upx
-Version:        5.1.1
+Version:        5.2.1
 Release:        1%{?dist}
 Summary:        Ultimate Packer for eXecutables
 

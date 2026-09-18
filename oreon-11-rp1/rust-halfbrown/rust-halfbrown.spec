@@ -7,7 +7,7 @@
 %global crate halfbrown
 
 Name:           rust-halfbrown
-Version:        0.2.5
+Version:        0.4.0
 Release:        %autorelease
 Summary:        Multi backend HashMap for higher performance on different key space s...
 

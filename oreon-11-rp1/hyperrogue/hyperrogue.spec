@@ -4,8 +4,8 @@
 %global _lto_cflags %nil
 
 Name:           hyperrogue
-Version:        13.0
-Release:        4.w%{?dist}
+Version:        13.1o
+Release:        1.w%{?dist}
 Summary:        An SDL roguelike in a non-euclidean world
 
 # The game is under the GPLv2 (savepng.* is under zlib) and the music under CC-BY-SA (v3) and sounds under CC-BY-SA 4.0, CC-BY 4.0 and CC0

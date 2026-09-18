@@ -3,7 +3,7 @@
 %global public_key RWRzJFnXiLZleAyCIv1talBjyRewelcy9gzYQq9pd3SKSFBPoy57sf5s
 
 Name:           ibus-chewing
-Version:        2.1.7
+Version:        2.2.0
 Release:        %autorelease
 Summary:        The Chewing engine for IBus input platform
 Summary(zh_TW): IBus新酷音輸入法

@@ -1,8 +1,8 @@
 %global source0_hash df7ceabf8f07044a2fde4924d794554996811640a45de40cb12c2cf1f90f742c
 
 Name:       xclock
-Version:    1.1.1
-Release:    11%{?dist}
+Version:    1.2.1
+Release:    1%{?dist}
 Summary:    The classic X Window System clock utility
 
 License:    MIT-open-group AND SMLNJ AND MIT

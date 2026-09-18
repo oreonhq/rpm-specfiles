@@ -4,8 +4,8 @@
 
 Summary: Process server with telnet console and log access
 Name: procServ
-Version: 2.7.0
-Release: 24%{?dist}
+Version: 2.8.0
+Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License: GPL-3.0-only

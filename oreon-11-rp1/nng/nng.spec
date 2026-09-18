@@ -1,8 +1,8 @@
 %global source0_hash ff882bda0a854abd184a7c1eb33329e526928ef98e80ef0457dd9a708bb5b0b1
 
 Name:     nng
-Version:  1.9.0
-Release:  5%{?dist}
+Version:  1.12.4
+Release:  1%{?dist}
 Summary:  Light-weight brokerless messaging
 
 License:  MIT

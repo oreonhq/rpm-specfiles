@@ -4,8 +4,8 @@
 ExcludeArch: %{ix86}
 
 Name:           ocaml-integers
-Version:        0.7.0
-Release:        22%{?dist}
+Version:        0.8.0
+Release:        1%{?dist}
 Summary:        Various signed and unsigned integer types for OCaml
 
 License:        MIT

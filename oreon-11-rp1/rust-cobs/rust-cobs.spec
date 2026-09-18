@@ -7,7 +7,7 @@
 %global crate cobs
 
 Name:           rust-cobs
-Version:        0.3.0
+Version:        0.5.1
 Release:        %autorelease
 Summary:        This is an implementation of the Consistent Overhead Byte Stuffing (C...
 

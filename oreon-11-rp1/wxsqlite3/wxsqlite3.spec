@@ -5,7 +5,7 @@
 %global wxincdir %{_includedir}/wx-%{wxversion}
 
 Name:           wxsqlite3
-Version:        4.12.2
+Version:        5.0.1
 Release:        1%{?dist}
 Summary:        C++ wrapper around the SQLite 3.x database
 

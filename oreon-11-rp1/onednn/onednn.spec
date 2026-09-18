@@ -1,7 +1,7 @@
 %global source0_hash 0ed141ee3ecf2856aef4966154a19b408faac50234581aeed4bd6e9dad09de68
 
 Name:           onednn
-Version:        3.11.1
+Version:        3.13.2
 Release:        %autorelease
 Summary:     The oneAPI Deep Neural Network Library
 

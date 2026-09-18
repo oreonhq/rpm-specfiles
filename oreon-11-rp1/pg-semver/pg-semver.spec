@@ -7,8 +7,8 @@
 %endif
 
 Name:		pg-semver
-Version:	0.32.1
-Release:	8%{?dist}
+Version:	0.41.0
+Release:	1%{?dist}
 Summary:	A semantic version data type for PostgreSQL
 License:	PostgreSQL
 Url:		https://github.com/theory/pg-semver

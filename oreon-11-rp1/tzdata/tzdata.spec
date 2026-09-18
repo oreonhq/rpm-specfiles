@@ -4,10 +4,10 @@
 
 Summary: Timezone data
 Name: tzdata
-Version: 2025c
-%define tzdata_version 2025c
-%define tzcode_version 2025c
-Release: 3%{?dist}
+Version: 2026c
+%define tzdata_version 2026c
+%define tzcode_version 2026c
+Release: 1%{?dist}
 License: LicenseRef-Fedora-Public-Domain AND (GPL-2.0-only WITH ClassPath-exception-2.0)
 URL: https://www.iana.org/time-zones
 Source0:        https://data.iana.org/time-zones/releases/tzdata%{tzdata_version}.tar.gz

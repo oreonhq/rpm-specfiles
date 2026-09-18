@@ -1,8 +1,8 @@
 %global source0_hash dad0aa84dd416cad055421ed9b40df39efae78d3df759c0583c64c54f7f2ff5f
 
 Name:           liquidwar
-Version:        5.6.5
-Release:        22%{?dist}
+Version:        6.0.6.3902
+Release:        1%{?dist}
 Summary:        Multiplayer wargame with liquid armies
 License:        GPL-2.0-or-later
 URL:            http://www.ufoot.org/liquidwar/v5

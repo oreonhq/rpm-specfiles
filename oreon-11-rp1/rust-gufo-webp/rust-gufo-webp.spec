@@ -7,7 +7,7 @@
 %global crate gufo-webp
 
 Name:           rust-gufo-webp
-Version:        0.4.0
+Version:        0.5.0
 Release:        %autorelease
 Summary:        Data structure for WebP images
 

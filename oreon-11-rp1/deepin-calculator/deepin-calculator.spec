@@ -1,7 +1,7 @@
 %global source0_hash d61501c545b945f0bf039c8929bfbcac968924e5b08f1ef9883014e2f0443572
 
 Name:           deepin-calculator
-Version:        6.5.30
+Version:        6.5.40
 Release:        %autorelease
 Summary:        An easy to use calculator for ordinary users
 License:        GPL-3.0-or-later

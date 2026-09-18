@@ -7,7 +7,7 @@
 %global crate vte4
 
 Name:           rust-vte4
-Version:        0.8.0
+Version:        0.10.0
 Release:        %autorelease
 Summary:        Rust bindings for the VTE Gtk4 library
 

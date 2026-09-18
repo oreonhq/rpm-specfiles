@@ -1,104 +1,62 @@
-%global source0_hash afb20c371a601d261b4f6edb53c3c418c249db1a9717b0baafc9a9bb39ba1224
+%global source0_hash none
 
-# Bconds are needed for Python bootstrap
-%bcond docs %{undefined rhel}
-%bcond tests 1
+Name:           python-zope-interface
+Version:        8.6
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Interfaces for Python
 
-# Install doc subpackage files into the main package doc directory
-%global _docdir_fmt %{name}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        ZPL-2.1
+URL:            https://github.com/zopefoundation/zope.interface
+Source:         %{pypi_source zope_interface}
 
-Name:		python-zope-interface
-Version:	8.2
-Release:	%autorelease
-Summary:	Zope 3 Interface Infrastructure
-License:	ZPL-2.1
-URL:		https://pypi.io/project/zope.interface
-Source0:	%{pypi_source zope_interface}
-
-%description
-Interfaces are a mechanism for labeling objects as conforming to a given API
-or contract.
-
-This is a separate distribution of the zope.interface package used in Zope 3.
-
-%package -n python3-zope-interface
-Summary:	Zope 3 Interface Infrastructure
-
-BuildRequires:  gcc
-BuildRequires:  make
 BuildRequires:  python3-devel
+BuildRequires:  gcc
 
-%description -n python3-zope-interface
-Interfaces are a mechanism for labeling objects as conforming to a given API
-or contract.
 
-This is a separate distribution of the zope.interface package used in Zope 3.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'zope-interface' generated automatically by pyp2spec.}
 
-%if %{with docs}
-%package doc
-Summary:        Documentation for zope.interface
-BuildArch:      noarch
-BuildRequires:  python3-docs
+%description %_description
 
-%description doc
-Documentation for %{name}.
-%endif
+%package -n     python3-zope-interface
+Summary:        %{summary}
+
+%description -n python3-zope-interface %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-zope-interface docs,test,testing
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n zope_interface-%{version}
 
-%autosetup -n zope_interface-%{version} -p1
-
-# Remove version limit from setuptools
-sed -i '/setuptools/s/<.*"/"/' pyproject.toml
-
-# Update the sphinx theme name
-sed -i "s/'default'/'classic'/" docs/conf.py
-
-# Use local objects.inv for intersphinx
-sed -i "s|\('https://docs\.python\.org/': \)None|\1'%{_docdir}/python3-docs/html/objects.inv'|" docs/conf.py
-
-# Do not run coverage tests in Fedora
-sed -i "/coverage/d" setup.py
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_docs: -x docs} %{?with_tests: -x test}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test,testing
+
 
 %build
 %pyproject_wheel
 
-%if %{with docs}
-# build the sphinx documents
-PYTHONPATH=$PWD/src make -C docs html
-rm -f docs/_build/html/.buildinfo
-%endif
 
 %install
 %pyproject_install
-%pyproject_save_files -l zope
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%py3_check_import zope.interface
-%if %{with tests}
-# We have to run tests installed together with the package
-# https://github.com/zopefoundation/zope.interface/issues/196
-pushd %{buildroot}%{python3_sitearch}
-PURE_PYTHON=1 python3 -m unittest discover -vv -s zope/interface -t .
-popd
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-zope-interface -f %{pyproject_files}
-%doc README.rst CHANGES.rst
-%license COPYRIGHT.txt
-%exclude %{python3_sitearch}/zope/interface/tests/
-%exclude %{python3_sitearch}/zope/interface/common/tests/
-# C files don't need to be packaged
-%exclude %{python3_sitearch}/zope/interface/*.c
-
-%if %{with docs}
-%files doc
-%doc docs/_build/html/
-%endif
 
 %changelog
 %autochangelog

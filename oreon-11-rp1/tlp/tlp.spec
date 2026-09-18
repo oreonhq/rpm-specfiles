@@ -1,9 +1,9 @@
 %global source0_hash ddb40400dcba69063d8ab1d41ee55e8dea5a42a26abe27643c13040bb8ef294b
 
-%global gittag 1.9.0
+%global gittag 1.10.2
 Name:           tlp
-Version:        1.9.0
-Release:        7%{?dist}
+Version:        1.10.2
+Release:        1%{?dist}
 Summary:        Optimize laptop battery life
 License:        GPL-2.0-or-later
 URL:            https://linrunner.de/tlp

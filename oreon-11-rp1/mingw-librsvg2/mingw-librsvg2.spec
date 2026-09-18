@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-librsvg2
-Version:        2.57.1
-Release:        7%{?dist}
+Version:        2.63.0
+Release:        1%{?dist}
 Summary:        SVG library based on cairo for MinGW
 
 License:        LGPL-2.0-or-later

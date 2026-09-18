@@ -12,8 +12,8 @@
 %global _kf5_iconsdir %{_datadir}/icons
 
 Name:       smb4k
-Version:    4.0.0
-Release:    3%{?dist}
+Version:    4.0.6
+Release:    1%{?dist}
 Summary:    The SMB/CIFS Share Browser for KDE
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

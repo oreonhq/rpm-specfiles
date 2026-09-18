@@ -6,7 +6,7 @@
 %global tag v%{version}
 
 Name:           corsix-th
-Version:        0.69.2
+Version:        0.70.1
 %forgemeta
 Release:        %autorelease
 Summary:        Open source clone of Theme Hospital

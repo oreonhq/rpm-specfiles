@@ -4,7 +4,7 @@
 %global _cmake_shared_libs %{nil}
 
 Name:           warzone2100
-Version:        4.6.3
+Version:        4.7.0
 Release:        1%{?dist}
 Summary:        Innovative 3D real-time strategy
 

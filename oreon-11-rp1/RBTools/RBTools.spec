@@ -1,8 +1,8 @@
 %global source0_hash 7efd4efa3966830532b71f8408ff2ed0d11c7aff9fdf6021f261b9380cfcd37a
 
 Name:           RBTools
-Version:        5.0
-Release:        8%{?dist}
+Version:        6.0
+Release:        1%{?dist}
 Summary:        Tools for use with ReviewBoard
 
 License:        MIT

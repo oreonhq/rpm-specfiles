@@ -19,8 +19,8 @@
 
 Summary:       The BOINC client
 Name:          boinc-client
-Version:       8.2.4
-Release:       3%{?dist}
+Version:       8.2.15
+Release:       1%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:       LicenseRef-Callaway-LGPLv2+
 URL:           http://boinc.berkeley.edu/

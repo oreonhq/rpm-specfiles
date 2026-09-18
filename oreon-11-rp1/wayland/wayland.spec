@@ -1,7 +1,7 @@
 %global source0_hash c065f040afdff3177680600f249727e41a1afc22fccf27222f15f5306faa1f03
 
 Name:           wayland
-Version:        1.25.0
+Version:        1.26.0
 Release:        1%{?dist}
 Summary:        Wayland Compositor Infrastructure
 

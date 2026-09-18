@@ -10,7 +10,7 @@
 # testsuite missing deps: httpd-shed test-framework test-framework-hunit
 
 Name:           ghc-%{pkg_name}
-Version:        4000.4.1
+Version:        4000.5.0
 Release:        %autorelease
 Summary:        A library for client-side HTTP
 

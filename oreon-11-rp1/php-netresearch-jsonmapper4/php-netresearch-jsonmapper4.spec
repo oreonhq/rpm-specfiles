@@ -22,8 +22,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{pk_vendor}-%{pk_project}4
-Version:        4.5.0
-Release:        4%{?dist}
+Version:        6.0.0
+Release:        1%{?dist}
 Summary:        Map nested JSON structures onto PHP classes, version 4
 
 License:        OSL-3.0

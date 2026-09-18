@@ -2,8 +2,8 @@
 
 Summary: Utility to display new messages of a logfile since last run
 Name: fetchlog
-Version: 1.4
-Release: 31%{?dist}
+Version: 1.6
+Release: 1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 Url: http://sourceforge.net/projects/fetchlog

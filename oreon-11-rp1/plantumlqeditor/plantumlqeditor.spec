@@ -5,8 +5,8 @@
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 Name:           plantumlqeditor
-Version:        1.2
-Release:        34.%{date}git%{shortcommit0}%{?dist}
+Version:        1.2.0
+Release:        1.%{date}git%{shortcommit0}%{?dist}
 Summary:        Simple editor for PlantUML
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later

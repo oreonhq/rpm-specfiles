@@ -4,8 +4,8 @@
 %global debian_release 16
 
 Name:       man2html
-Version:    1.6
-Release:    42.%{posttag}%{?dist}
+Version:    1.6g
+Release:    1.%{posttag}%{?dist}
 Summary:    Convert man pages to HTML - CGI scripts
 
 # man2html.c and debian/sources/man2html.cgi.c are man2html

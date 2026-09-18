@@ -1,8 +1,8 @@
 %global source0_hash 84e9977770a131f3bbc699c2d6cae8b3471e44a4ae1e62024f697caa6bf19d96
 
 Name:      schismtracker
-Version:   20251014
-Release:   2%{?dist}
+Version:   20260524
+Release:   1%{?dist}
 Summary:   Sound module composer/player
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:   GPL-2.0-only

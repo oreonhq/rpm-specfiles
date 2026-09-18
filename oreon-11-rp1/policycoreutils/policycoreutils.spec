@@ -3,9 +3,9 @@
 %global source2_key_fpr 63191CE94183098689CAB8DB7EF137EC935B0EAF
 
 %global libauditver     4.0
-%global libsepolver     3.10-1
-%global libsemanagever  3.10-1
-%global libselinuxver   3.10-1
+%global libsepolver     3.11-1
+%global libsemanagever  3.11-1
+%global libselinuxver   3.11-1
 
 %global generatorsdir %{_prefix}/lib/systemd/system-generators
 
@@ -14,8 +14,8 @@
 
 Summary: SELinux policy core utilities
 Name:    policycoreutils
-Version: 3.10
-Release: 4%{?dist}
+Version: 3.11
+Release: 1%{?dist}
 License: GPL-2.0-or-later
 # https://github.com/SELinuxProject/selinux/wiki/Releases
 Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/selinux-%{version}.tar.gz
@@ -30,9 +30,9 @@ Source17: selinux-autorelabel-mark.service
 Source18: selinux-autorelabel.target
 Source19: selinux-autorelabel-generator.sh
 # Weblate zip bundles are optional Fedora extras see README.translations those unzip steps were
-# already commented out in prep and are not used for 3.10.
+# already commented out in prep and are not used for 3.11.
 # https://github.com/fedora-selinux/selinux
-# $ git format-patch -N 3.10 -- policycoreutils python gui sandbox dbus semodule-utils restorecond
+# $ git format-patch -N 3.11 -- policycoreutils python gui sandbox dbus semodule-utils restorecond
 # $ for j in [0-9]*.patch; do printf "Patch%s: %s\n" ${j/-*/} $j; done
 # Patch list start
 Patch0001: 0001-Don-t-be-verbose-if-you-are-not-on-a-tty.patch

@@ -3,8 +3,8 @@
 %global pkg_name %{name}3
 
 Name:           starcal
-Version:        3.2.2
-Release:        6%{?dist}
+Version:        3.2.5
+Release:        1%{?dist}
 Summary:        A full-featured international calendar written in Python
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

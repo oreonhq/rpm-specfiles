@@ -7,7 +7,7 @@
 %global crate cursive_core
 
 Name:           rust-cursive_core
-Version:        0.4.6
+Version:        0.4.7
 Release:        %autorelease
 Summary:        Core components for the Cursive TUI
 

@@ -1,61 +1,61 @@
-%global source0_hash e41d0c6f12575c152efb9478e34313aac4b18e4f8378bbd3e65bed0d65e7e713
+%global source0_hash none
 
-%global         pypi_name cli_helpers
-
-Summary:        Python helpers for common CLI tasks
 Name:           python-cli-helpers
-Version:        2.10.1
-Release:        1%{?dist}
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
+Version:        2.15.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Helpers for building command-line apps
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/dbcli/cli_helpers
-Source0:        https://github.com/dbcli/cli_helpers/archive/v%{version}/cli_helpers-%{version}.tar.gz
+Source:         %{pypi_source cli_helpers}
+
 BuildArch:      noarch
-BuildRequires:  python3-configobj
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  python3-tabulate
-BuildRequires:  python3-terminaltables
-BuildRequires:  python3-wcwidth
-%global _description\
-CLI Helpers is a Python package that makes it easy to perform common\
-tasks when building command-line apps. Its a helper library for\
-command-line interfaces.
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cli-helpers' generated automatically by pyp2spec.}
+
 %description %_description
 
 %package -n     python3-cli-helpers
 Summary:        %{summary}
-Requires:       python3-configobj >= 5.0.5
-Requires:       python3-pygments >= 1.6
-Requires:       python3-tabulate >= 0.8.2
-Requires:       python3-terminaltables >= 3.0.0
-Requires:       python3-wcwidth
+
 %description -n python3-cli-helpers %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
 %pyproject_extras_subpkg -n python3-cli-helpers styles
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n %{pypi_name}-%{version}
+%prep
+%autosetup -p1 -n cli_helpers-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x styles
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-PYTHONPATH=build/lib/ py.test-3
 
 %files -n python3-cli-helpers -f %{pyproject_files}
-%doc AUTHORS CHANGELOG README.rst
 
 %changelog
 %autochangelog

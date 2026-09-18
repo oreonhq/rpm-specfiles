@@ -1,7 +1,7 @@
 %global source0_hash 74a3bd14b203eae824318d91fd7523439c0802a5df0ced5f6919ba09ba0750c0
 
 Name: zswap-cli
-Version: 1.1.2
+Version: 2.0.0
 Release: %autorelease
 
 License: MIT

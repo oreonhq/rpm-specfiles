@@ -8,7 +8,7 @@
 %global crate redis
 
 Name:           rust-redis
-Version:        0.25.4
+Version:        1.7.0
 Release:        %autorelease
 Summary:        Driver for Rust
 

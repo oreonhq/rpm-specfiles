@@ -1,8 +1,8 @@
 %global source0_hash 68cc45f0076b615ccf5bc2bf196c454fda2921a0790e5c8fde728a686a146f8d
 
 Name:           l3afpad
-Version:        0.8.18.1.10
-Release:        30%{?dist}
+Version:        0.8.18.1.11
+Release:        1%{?dist}
 Summary:        Simple text editor forked from Leafpad, supports GTK+ 3.x
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

@@ -3,7 +3,7 @@
 %global xfceversion 4.20
 
 Name:		xfce4-power-manager
-Version:	4.20.0
+Version:	4.20.1
 Release:	%autorelease
 Summary:	Power management for the Xfce desktop environment
 

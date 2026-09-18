@@ -1,87 +1,61 @@
-%global source0_hash 528e205d893243ff92178b2095ee6d47885895d12aa449db4e468a38f68a2e72
+%global source0_hash none
 
-%global pypi_name pyqt-feedback-flow
-
-%bcond tests 1
-
-Name:           python-%{pypi_name}
-Version:        0.3.5
+Name:           python-pyqt-feedback-flow
+Version:        0.3.6
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Show feedback in toast-like notifications
 
-%global forgeurl https://github.com/firefly-cpp/pyqt-feedback-flow
-%global tag %{version}
-%forgemeta
-
-License:        MIT
-URL:            %forgeurl
-Source0:        %forgesource
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/firefly-cpp/pyqt-feedback-flow
+Source:         %{pypi_source pyqt_feedback_flow}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# The python3dist(pyqt6) dependency generated from PyQt6 in
-# pyproject.toml is satisfied by python3-pyqt6-base, but this project
-# uses PyQt6.QtSvg, which is packaged along with other “non-core” modules
-# in python3-pyqt6. Since this is not represented (and currently cannot
-# be represented) in the Python metadata, we need explicit BuildRequires
-# *and* Requires on the full python3-pyqt6.
-BuildRequires:  python3-pyqt6
-BuildRequires:  tomcli
-%if %{with tests}
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist pytest-qt}
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This software allows us to show flowing notifications in the realm
-of a text or a picture. Both text and pictures (raster and vector)
-can be customized according to users' wishes, which offers a wide
-variety of possibilities for providing flowing feedback.}
+This is package 'pyqt-feedback-flow' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{pypi_name}
+%package -n     python3-pyqt-feedback-flow
 Summary:        %{summary}
-# See the comment on the corresponding BuildRequires.
-Requires:       python3-pyqt6
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-pyqt-feedback-flow %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pyqt-feedback-flow docs
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pyqt_feedback_flow-%{version}
 
-%forgeautosetup -p1
-rm -rf %{pypi_name}.egg-info
-
-# Drop version pinning (we use the versions available in Fedora)
-# Sphinx dependencies are optional deps not defined as strings
-for DEP in $(tomcli get -F newline-keys pyproject.toml \
-    tool.poetry.dependencies | grep -vi "sphinx")
-do
-    tomcli set pyproject.toml replace tool.poetry.dependencies.${DEP} ".*" "*"
-done
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files pyqt_feedback_flow
 
 %check
-%if %{with tests}
-%pytest -r fEs
-%endif
-# Package only has three tests. Let's run the smoke test as well.
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc CITATION.cff CHANGELOG.md CONTRIBUTING.md README.md
+
+%files -n python3-pyqt-feedback-flow -f %{pyproject_files}
 
 %changelog
 %autochangelog

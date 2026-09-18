@@ -5,11 +5,11 @@
 %global debug_package %{nil}
 
 %global crate ffmpeg-sys-the-third
-%global crate_version 3.0.1+ffmpeg-7.1
+%global crate_version 6.0.0+ffmpeg-9.0+ffmpeg-7.1
 %global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-ffmpeg-sys-the-third
-Version:        3.0.1
+Version:        6.0.0+ffmpeg-9.0
 Release:        %autorelease
 Summary:        FFI bindings to FFmpeg
 

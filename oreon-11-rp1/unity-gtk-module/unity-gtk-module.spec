@@ -4,8 +4,8 @@
 %global build_type_safety_c 2
 
 Name:		unity-gtk-module
-Version:	0.0.0+17.04.20170403
-Release:	24%{?dist}
+Version:	0.0.0+17.04.20170918
+Release:	1%{?dist}
 Summary:	GTK+ module for exporting old-style menus as GMenuModels
 
 # Automatically converted from old format: LGPLv3 - review is highly recommended.

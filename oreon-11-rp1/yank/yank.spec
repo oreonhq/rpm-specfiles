@@ -1,8 +1,8 @@
 %global source0_hash 40f5472df5f6356a4d6f48862a19091bd4de3f802b3444891b3bc4b710fb35ca
 
 Name:           yank
-Version:        1.3.0
-Release:        9%{?dist}
+Version:        1.4.0
+Release:        1%{?dist}
 Summary:        Tool for selecting and copying text from stdin without a mouse
 
 License:        MIT

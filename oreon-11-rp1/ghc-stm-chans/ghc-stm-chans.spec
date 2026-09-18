@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        3.0.0.9
+Version:        3.0.0.11
 Release:        %autorelease
 Summary:        Additional types of channels for STM
 

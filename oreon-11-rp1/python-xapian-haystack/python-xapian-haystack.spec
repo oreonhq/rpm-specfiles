@@ -1,49 +1,57 @@
-%global source0_hash 4dc881a815f1c50449e63255f1f1aff12b2cdf588edbaa5137a3828c01955825
-
-# Created by pyp2rpm-3.3.10
+%global source0_hash none
 
 Name:           python-xapian-haystack
-Version:        3.1.0
-Release:        11%{?dist}
+Version:        4.0.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        A Xapian backend for Haystack
 
-License:        GPL-2.0-only
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-2.0-or-later
 URL:            https://github.com/notanumber/xapian-haystack
-Source0:        %{url}/archive/%{version}/xapian-haystack-%{version}.tar.gz
-BuildArch:      noarch
+Source:         %{pypi_source xapian_haystack}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Xapian backend for Django-Haystack}
+This is package 'xapian-haystack' generated automatically by pyp2spec.}
 
 %description %_description
 
 %package -n     python3-xapian-haystack
 Summary:        %{summary}
 
-Requires:       python3-xapian >= 1.4
 %description -n python3-xapian-haystack %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n xapian-haystack-%{version}
+%prep
+%autosetup -p1 -n xapian_haystack-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-xapian-haystack
-%license LICENSE
-%doc README.rst
-%pycached %{python3_sitelib}/xapian_backend.py
-%{python3_sitelib}/xapian_haystack-%{version}.dist-info/
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-xapian-haystack -f %{pyproject_files}
 
 %changelog
 %autochangelog

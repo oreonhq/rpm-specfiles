@@ -6,8 +6,8 @@
 #define  prever_dot .rc3
 #define  postver    a
 
-%define version_alsa_lib  1.2.15.3
-%define version_alsa_ucm  1.2.15.3
+%define version_alsa_lib  1.2.16.1
+%define version_alsa_ucm  1.2.16.1
 %define version_alsa_tplg 1.2.5
 
 %global lib_patch         0
@@ -16,7 +16,7 @@
 Summary:  The Advanced Linux Sound Architecture (ALSA) library
 Name:     alsa-lib
 Version:  %{version_alsa_lib}
-Release:  3%{?prever_dot}%{?dist}
+Release:  1%{?prever_dot}%{?dist}
 License:  LGPL-2.1-or-later
 URL:      https://www.alsa-project.org/
 # HTTPS so spectool/mock can fetch without FTP (often blocked in builders).

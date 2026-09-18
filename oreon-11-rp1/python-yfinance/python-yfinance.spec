@@ -1,69 +1,62 @@
-%global source0_hash 3c7463460e01c6bcd78eb966908a1fe5efc482292ee8dbade33d74c9a94b3166
+%global source0_hash none
 
-%global         srcname     yfinance
-%global         forgeurl    https://github.com/ranaroussi/%{srcname}
-Version:        0.2.54
-%global         tag         %{version}
-%forgemeta
-
-Name:           python-%{srcname}
+Name:           python-yfinance
+Version:        1.7.0
 Release:        %autorelease
-Summary:        Yahoo! Finance market data downloader
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Download market data from Yahoo! Finance API
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            %forgeurl
-Source0:        %forgesource
+URL:            https://github.com/ranaroussi/yfinance
+Source:         %{pypi_source yfinance}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Ever since Yahoo! finance decommissioned their historical data API, many
-programs that relied on it to stop working.
+This is package 'yfinance' generated automatically by pyp2spec.}
 
-yfinance aims to solve this problem by offering a reliable, threaded,
-and Pythonic way to download historical market data from Yahoo! finance.}
+%description %_description
 
-%description %{_description}
-
-%package -n python3-%{srcname}
+%package -n     python3-yfinance
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-yfinance %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-yfinance dev,repair
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n yfinance-%{version}
 
-%forgeautosetup
-
-# Remove the python shebang from non-executable files.
-sed -i '1{\@^#!/usr/bin/env python@d}' yfinance/*.py
-
-# Allow an older version of requests.
-sed -i 's/requests>=2.31/requests>=2.28/' requirements.txt setup.py
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,repair
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# A sample executable is included but it does not seem to work. It's not needed
-# for the package since this is a python library meant to be used by other
-# python executables.
-rm -vf %{buildroot}%{_bindir}/sample
-
-%pyproject_save_files yfinance
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-yfinance -f %{pyproject_files}
 
 %changelog
 %autochangelog

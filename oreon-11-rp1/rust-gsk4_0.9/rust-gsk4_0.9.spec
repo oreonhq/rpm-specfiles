@@ -7,7 +7,7 @@
 %global crate gsk4
 
 Name:           rust-gsk4_0.9
-Version:        0.9.6
+Version:        0.11.4
 Release:        %autorelease
 Summary:        Rust bindings of the GSK 4 library
 

@@ -3,7 +3,7 @@
 %{!?qt6_qtwebengine_arches:%global qt6_qtwebengine_arches %{ix86} x86_64 %{arm} aarch64 mips mipsel mips64el}
 
 Name:           frescobaldi
-Version:        4.0.5
+Version:        4.0.7
 Release:        1%{?dist}
 Summary:        Edit LilyPond sheet music with ease!
 

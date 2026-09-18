@@ -7,7 +7,7 @@
 %global crate fragile
 
 Name:           rust-fragile
-Version:        2.0.1
+Version:        3.0.0
 Release:        %autorelease
 Summary:        Wrapper types for sending non-send values to other threads
 

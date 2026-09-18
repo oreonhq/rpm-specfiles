@@ -6,8 +6,8 @@
 
 Name:          mingw-python-%{pypi_name}
 Summary:       MinGW Windows Python %{pypi_name} library
-Version:       6.0.2
-Release:       2%{?dist}
+Version:       6.1.3
+Release:       1%{?dist}
 BuildArch:     noarch
 
 # The lxml project is licensed under BSD-3-Clause

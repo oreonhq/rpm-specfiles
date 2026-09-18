@@ -1,51 +1,62 @@
-%global source0_hash 6b7eb57940336e800faebc3dab506360edec9478f7b22dc570858ad3aa7458da
+%global source0_hash none
 
 Name:           python-requests-futures
-Version:        1.0.2
-Release:        7%{?dist}
-Summary:        Asynchronous Python HTTP Requests
+Version:        1.1.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Asynchronous Python HTTP for Humans.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/ross/requests-futures
 Source:         %{pypi_source requests_futures}
-BuildArch:      noarch
 
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Small add-on for the Python requests http library. Makes use of Python 3.2’s
-concurrent.futures or the back-port for prior versions of Python.}
+This is package 'requests-futures' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-requests-futures
+%package -n     python3-requests-futures
 Summary:        %{summary}
-Obsoletes:      python-requests-futures < 1.0.0-14
-
-BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  python3-pytest-httpbin
 
 %description -n python3-requests-futures %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-requests-futures dev,docs,test
 
-%autosetup -n requests_futures-%{version}
+
+%prep
+%autosetup -p1 -n requests_futures-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files requests_futures
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v -m 'not network'
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-requests-futures -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

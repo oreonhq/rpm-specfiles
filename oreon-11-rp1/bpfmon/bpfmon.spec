@@ -1,8 +1,8 @@
 %global source0_hash f73508a40b093caea8ac20431c19b1e89627311bbd8ff49063ec987378a46a7c
 
 Name:           bpfmon
-Version:        2.53
-Release:        6%{?dist}
+Version:        2.60
+Release:        1%{?dist}
 Summary:        Traffic monitor for BPF expression/iptables rule
 
 License:        GPL-2.0-or-later

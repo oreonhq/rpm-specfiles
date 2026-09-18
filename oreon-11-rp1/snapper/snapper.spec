@@ -4,7 +4,7 @@
 %global snapper_svcs snapper-boot.service snapper-boot.timer snapper-cleanup.service snapper-cleanup.timer snapper-timeline.service snapper-timeline.timer snapperd.service
 
 Name:           snapper
-Version:        0.13.0
+Version:        0.13.2
 Release:        1%{?dist}
 Summary:        Tool for filesystem snapshot management
 

@@ -2,7 +2,7 @@
 
 %global gitver 49abc7cb5f73cc6852136c91da49ea3a338960e4
 Name:          waffle
-Version:       1.8.1
+Version:       1.8.3
 Release:       %autorelease
 Summary:       Platform independent GL API layer
 

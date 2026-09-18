@@ -10,7 +10,7 @@
 %global crate uu_fmt
 
 Name:           rust-uu_fmt
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        fmt ~ (uutils) reformat each paragraph of input
 

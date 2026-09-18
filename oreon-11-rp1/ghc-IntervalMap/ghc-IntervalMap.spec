@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        0.6.2.1
+Version:        0.6.2.4
 Release:        %autorelease
 Summary:        Containers for intervals, with efficient search
 

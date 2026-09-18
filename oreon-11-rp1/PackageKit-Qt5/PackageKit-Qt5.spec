@@ -2,8 +2,8 @@
 
 Summary:   Qt5 support library for PackageKit
 Name:      PackageKit-Qt5
-Version:   1.1.2
-Release:   5%{?dist}
+Version:   1.1.4
+Release:   1%{?dist}
 
 License:   LGPL-2.1-only
 URL:       http://www.packagekit.org/

@@ -26,8 +26,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        5.0.3
-Release:        14%{?dist}
+Version:        7.0.0
+Release:        1%{?dist}
 Summary:        PHP Utility class for timing, version %{major}
 
 License:        BSD-3-Clause

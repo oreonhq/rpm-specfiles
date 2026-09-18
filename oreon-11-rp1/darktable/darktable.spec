@@ -8,7 +8,7 @@
 ###
 
 Name: darktable
-Version: 5.4.1
+Version: 5.6.1
 Release: %autorelease
 
 Summary: Utility to organize and develop raw images

@@ -4,7 +4,7 @@
 %bcond check 0
 
 Name:    newsboat
-Version: 2.43
+Version: 2.44
 Release: %{autorelease}
 Summary: RSS/Atom feed reader for the text console
 

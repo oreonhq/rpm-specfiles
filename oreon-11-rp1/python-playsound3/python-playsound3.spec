@@ -1,49 +1,62 @@
-%global source0_hash 3f0eb87d5ff2061d07663c4b010b8e7d66c274344712b01d561a0a73447ef41d
+%global source0_hash none
 
 Name:           python-playsound3
-Version:        3.3.1
+Version:        3.3.2
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Cross-platform library to play audio files
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/sjmikler/playsound3
+URL:            https://github.com/szmikler/playsound3
 Source:         %{pypi_source playsound3}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Cross platform library to play sound files in Python.}
+This is package 'playsound3' generated automatically by pyp2spec.}
 
 %description %_description
 
 %package -n     python3-playsound3
 Summary:        %{summary}
-Recommends:     gstreamer1-plugins-base-tools
 
 %description -n python3-playsound3 %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-playsound3 dev
 
+
+%prep
 %autosetup -p1 -n playsound3-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l playsound3
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-#tests play sounds and don't work reliably in an rpm build.
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-playsound3 -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

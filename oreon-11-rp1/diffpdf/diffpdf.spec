@@ -2,8 +2,8 @@
 
 %global _hardened_build 1
 Name:           diffpdf
-Version:        2.1.3
-Release:        36%{?dist}
+Version:        6.1.1
+Release:        1%{?dist}
 Summary:        PDF files comparator
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

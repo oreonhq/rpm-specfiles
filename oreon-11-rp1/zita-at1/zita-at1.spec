@@ -2,8 +2,8 @@
 
 Summary:       Audio autotuner for JACK
 Name:          zita-at1
-Version:       0.6.2
-Release:       17%{?dist}
+Version:       0.8.2
+Release:       1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:       GPL-2.0-or-later
 URL:           http://kokkinizita.linuxaudio.org/

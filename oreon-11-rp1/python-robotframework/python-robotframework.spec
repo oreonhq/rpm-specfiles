@@ -1,71 +1,59 @@
-%global source0_hash 6fa65c2708f0d48dd7a05bea2dc96943d0e39fdac9b3eb7290e780200b2cec57
+%global source0_hash none
 
-%global srcname robotframework
+Name:           python-robotframework
+Version:        7.5
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Generic automation framework for acceptance testing and robotic process automation _RPA_
 
-Name:           python-%{srcname}
-Version:        7.4.1
-Release:        2%{?dist}
-Summary:        Generic automation framework for acceptance testing and RPA
-# Robot Framework is licensed as Apache-2.0
-# Support libraries to display HTML results:
-#  - jQuery, jQuery Highlight plugin: MIT
-#  - jQuery Tablesorter, jQuery Templates plugin: MIT or GPLv2
-#  - JSXCompressor: Apache-2.0 or LGPLv3
-#  - OpenIconic icons (as base64): MIT
-License:        Apache-2.0 and MIT
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/robotframework/robotframework
-Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz
+Source:         %{pypi_source robotframework}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-jsonschema
-BuildRequires:  python3-typing-extensions
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Robot Framework is a generic open source automation framework for acceptance
-testing, acceptance test driven development (ATDD), and robotic process
-automation (RPA).
-It has simple plain text syntax and it can be extended easily with libraries
-implemented using Python or Java.}
+This is package 'robotframework' generated automatically by pyp2spec.}
 
-%description
-%{_description}
+%description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-robotframework
 Summary:        %{summary}
 
-# Bundled JavaScript for reports
-Provides:      bundled(jquery) = 3.5.1
-Provides:      bundled(jquery-highlight)
-Provides:      bundled(jquery-tablesorter) = 2.30.5
-Provides:      bundled(jquery-templates) = 1.0.0pre
-Provides:      bundled(jsxcompressor)
+%description -n python3-robotframework %_description
 
-%description -n python3-%{srcname}
-%{_description}
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n robotframework-%{version}
 
-%autosetup -p 1 -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files robot
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{python3} utest/run.py
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst BUILD.rst INSTALL.rst CONTRIBUTING.rst
-%license LICENSE.txt
-%{_bindir}/{robot,rebot,libdoc}
+
+%files -n python3-robotframework -f %{pyproject_files}
+%{_bindir}/libdoc
+%{_bindir}/rebot
+%{_bindir}/robot
 
 %changelog
 %autochangelog

@@ -1,58 +1,62 @@
-%global source0_hash 46bed4611fb53edc731aadeb64b28308bcb848f4cc150c60c948d078f7108721
-
-%define modname zope_deprecation
+%global source0_hash none
 
 Name:           python-zope-deprecation
-Version:        5.1
+Version:        6.0
 Release:        %autorelease
-Summary:        Zope 3 Deprecation Infrastructure
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Zope Deprecation Infrastructure
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ZPL-2.1
-URL:            https://pypi.python.org/pypi/zope.deprecation
-Source0:        https://files.pythonhosted.org/packages/source/z/%{modname}/%{modname}-%{version}.tar.gz
-BuildArch:      noarch
+URL:            https://github.com/zopefoundation/zope.deprecation
+Source:         %{pypi_source zope_deprecation}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%global _description\
-This package provides a simple function called 'deprecated(names, reason)' to\
-deprecate the previously mentioned Python objects.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'zope-deprecation' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-zope-deprecation
-Summary:        Zope 3 Deprecation Infrastructure
-%{?python_provide:%python_provide python3-zope-deprecation}
+%package -n     python3-zope-deprecation
+Summary:        %{summary}
 
-%description -n python3-zope-deprecation
-This package provides a simple function called 'deprecated(names, reason)' to
-deprecate the previously mentioned Python objects.
+%description -n python3-zope-deprecation %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-zope-deprecation docs,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n zope_deprecation-%{version}
 
-%autosetup -p1 -n %{modname}-%{version}
-
-# Allow newer setuptools
-sed -i 's/"setuptools .*"/"setuptools"/' pyproject.toml
-sed -i 's/setuptools <=.*/setuptools/'  tox.ini
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l zope
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-zope-deprecation -f %{pyproject_files}
-%doc README.rst LICENSE.txt
-%{python3_sitelib}/zope.deprecation-5.1-py%{python3_version}-nspkg.pth
 
 %changelog
 %autochangelog

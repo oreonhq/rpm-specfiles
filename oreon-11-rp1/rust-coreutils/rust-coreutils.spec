@@ -11,7 +11,7 @@
 %global crate coreutils
 
 Name:           rust-coreutils
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        coreutils ~ GNU coreutils reimplementation in Rust
 

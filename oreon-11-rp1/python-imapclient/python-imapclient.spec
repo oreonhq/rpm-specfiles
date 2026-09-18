@@ -1,69 +1,58 @@
-%global source0_hash dff1dfe7e7cc16428053dd2cd9895623e97f733ce1ec0a9c1c21557821146cb3
+%global source0_hash none
 
-%global pypi_name imapclient
-%global forgeurl https://github.com/mjs/imapclient/
-
-Name:           python-%{pypi_name}
-Version:        3.0.1
-Release:        %{autorelease}
+Name:           python-imapclient
+Version:        4.0.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Easy-to-use, Pythonic and complete IMAP client library
-%global tag %{version}
-%forgemeta
-License:        BSD-3-Clause
-URL:            %forgeurl
-Source:         %forgesource
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/mjs/imapclient/
+Source:         %{pypi_source imapclient}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-IMAPClient is an easy-to-use, Pythonic and complete IMAP client library.
-
-Features:
- - Arguments and return values are natural Python types
- - IMAP server responses are fully parsed and readily usable
- - IMAP unique message IDs (UIDs) are handled transparently
- - Internationalised mailbox names are transparently handled
- - Time zones are correctly handled
- - Convenience methods are provided for commonly used functionality
- - Exceptions are raised when errors occur
-
-Python versions 3.7 through 3.11 are officially supported.
-
-IMAPClient includes comprehensive units tests and automated functional
-tests that can be run against a live IMAP server.}
+This is package 'imapclient' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{pypi_name}
+%package -n     python3-imapclient
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-imapclient %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n imapclient-%{version}
 
-%forgeautosetup -p1
-
-# Remove shebang (no entry point)
-sed -i '/^#!.*python/d' imapclient/interact.py
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc NEWS.rst README.rst examples
+
+%files -n python3-imapclient -f %{pyproject_files}
+%{_bindir}/imapclient-interact
+%{_bindir}/imapclient-livetest
 
 %changelog
 %autochangelog

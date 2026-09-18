@@ -15,9 +15,9 @@
 # testsuite missing deps: tasty-golden
 
 Name:           ghc-%{pkg_name}
-Version:        0.12.10.3
+Version:        0.13.2.2
 # can only be reset when subpkg bumped
-Release:        6%{?dist}
+Release:        1%{?dist}
 Summary:        Conversion between math formats
 
 License:        GPL-2.0-or-later

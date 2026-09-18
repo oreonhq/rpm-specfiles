@@ -1,8 +1,8 @@
 %global source0_hash 533d62ce9923b8ada7f138ac4bf298e62806ce678cd61499a7c131505c1ba3ec
 
 Name:           pungi
-Version:        4.10.1
-Release:        5%{?dist}
+Version:        4.13.0
+Release:        1%{?dist}
 Summary:        Distribution compose tool
 
 License:        GPL-2.0-only

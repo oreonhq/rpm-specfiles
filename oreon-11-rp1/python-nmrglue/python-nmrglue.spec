@@ -4,7 +4,7 @@
 %global pkgsum Python module for processing NMR data
 
 Name:		python-%{pkgname}
-Version:	0.9
+Version:	0.12
 Release:	%autorelease
 Summary:	%{pkgsum}
 

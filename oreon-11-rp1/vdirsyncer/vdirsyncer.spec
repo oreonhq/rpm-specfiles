@@ -19,8 +19,8 @@
 %global _docdir_fmt %{name}
 
 Name:       vdirsyncer
-Version:    0.20.0
-Release:    4%{?dist}
+Version:    0.21.0
+Release:    1%{?dist}
 Summary:    %{sum}
 
 License:    BSD-3-Clause

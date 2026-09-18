@@ -7,7 +7,7 @@
 %global crate html-escape
 
 Name:           rust-html-escape
-Version:        0.2.14
+Version:        0.2.15
 Release:        %autorelease
 Summary:        This library is for encoding/escaping special characters in HTML
 

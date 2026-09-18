@@ -2,8 +2,8 @@
 
 Summary:        Implementation of an E-component of Network Intrusion Detection System
 Name:           libnids
-Version:        1.24
-Release:        35%{?dist}
+Version:        1.26
+Release:        1%{?dist}
 License:        GPL-2.0-or-later
 URL:            https://libnids.sourceforge.net/
 Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz

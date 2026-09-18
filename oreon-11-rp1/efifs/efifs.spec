@@ -16,8 +16,8 @@
 
 Summary:        Free software EFI/UEFI standalone file system drivers
 Name:           efifs
-Version:        1.11
-Release:        4%{?dist}
+Version:        1.12
+Release:        1%{?dist}
 License:        GPL-3.0-or-later
 URL:            https://efi.akeo.ie/
 Source0:        https://github.com/pbatard/efifs/archive/v%{version}/%{name}-%{version}.tar.gz

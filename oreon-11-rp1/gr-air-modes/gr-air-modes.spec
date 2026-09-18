@@ -9,8 +9,8 @@
 
 Name:             gr-air-modes
 URL:              http://github.com/bistromath/gr-air-modes
-Version:          0
-Release:          0.123.%{git_suffix}%{?dist}
+Version:          3.6
+Release:          1.123.%{git_suffix}%{?dist}
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:          GPL-3.0-or-later
 BuildRequires:    cmake

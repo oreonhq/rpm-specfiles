@@ -7,7 +7,7 @@
 %global crate proptest-derive
 
 Name:           rust-proptest-derive
-Version:        0.6.0
+Version:        0.8.0
 Release:        %autorelease
 Summary:        Custom-derive for the Arbitrary trait of proptest
 

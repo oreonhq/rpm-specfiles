@@ -1,65 +1,56 @@
-%global source0_hash b8b26d929a42da6745f55b1c232d0a546b26c1fabf68a73dc2736f695c89386d
+%global source0_hash none
 
-%global pypi_name freecell_solver
+Name:           python-freecell-solver
+Version:        0.6.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Freecell Solver bindings
 
-Name:           python-%{pypi_name}
-Version:        0.2.6
-Release:        23%{?dist}
-Summary:        Freecell Solver Python bindings
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/shlomif/freecell_solver
+Source:         %{pypi_source freecell_solver}
 
-License:        MIT
-URL:            https://fc-solve.shlomifish.org/
-Source0:        https://files.pythonhosted.org/packages/source/f/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(cffi)
-BuildRequires:  python3dist(openstackdocstheme)
-BuildRequires:  python3dist(oslotest) >= 1.10.0
-BuildRequires:  python3dist(sphinx)
 
-%description
-Python bindings for Freecell Solver using cffi.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'freecell-solver' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-freecell-solver
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-Python bindings for Freecell Solver using cffi.
+%description -n python3-freecell-solver %_description
 
-%package -n python-%{pypi_name}-doc
-Summary:        Documentation for freecell_solver
-%description -n python-%{pypi_name}-doc
-Documentation for freecell_solver
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n freecell_solver-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
-# generate html docs
-PYTHONPATH=${PWD} sphinx-build-3 doc/source html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.rst doc/source/readme.rst
 
-%files -n python-%{pypi_name}-doc
-%doc html
-%license LICENSE
+%files -n python3-freecell-solver -f %{pyproject_files}
 
 %changelog
 %autochangelog

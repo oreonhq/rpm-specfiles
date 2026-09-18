@@ -7,7 +7,7 @@
 %global crate gufo-xmp
 
 Name:           rust-gufo-xmp
-Version:        0.4.0
+Version:        0.5.0
 Release:        %autorelease
 Summary:        Reading and editing for XMP data
 

@@ -10,7 +10,7 @@
 # testsuite missing deps: ChasingBottoms nothunks
 
 Name:           ghc-%{pkg_name}
-Version:        0.2.20.1
+Version:        0.2.21
 Release:        %autorelease
 Summary:        Efficient hashing-based container types
 

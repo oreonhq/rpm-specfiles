@@ -7,7 +7,7 @@
 %global crate os_str_bytes
 
 Name:           rust-os_str_bytes
-Version:        6.6.1
+Version:        7.2.1
 Release:        %autorelease
 Summary:        Convert between byte sequences and platform-native strings
 

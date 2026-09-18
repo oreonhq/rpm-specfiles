@@ -1,7 +1,7 @@
 %global source0_hash 2b2bf2b4470d5e140fb5564f619aadf032869cf09640e991d8e6208745b32859
 
 Name:           gotcha
-Version:        1.0.5
+Version:        1.0.8
 Release:        %autorelease
 Summary:        A library for wrapping function calls to shared libraries
 

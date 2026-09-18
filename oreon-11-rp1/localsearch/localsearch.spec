@@ -37,7 +37,7 @@
 %global tarball_version %%(echo %{version} | tr '~' '.')
 
 Name:           localsearch
-Version:        3.11~rc
+Version:        3.12.0
 Release:        %autorelease
 Summary:        Localsearch and metadata extractors
 

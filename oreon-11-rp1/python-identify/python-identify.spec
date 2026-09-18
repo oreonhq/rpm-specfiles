@@ -1,59 +1,63 @@
-%global source0_hash 1b4d68f5f7267f2b9c4637379742fb6764abae63b5c053ac30c1ded252a2525b
+%global source0_hash none
 
-%bcond check 0
-%global pypi_name identify
-
-Name:           python-%{pypi_name}
-Version:        2.6.18
-Release:        1%{?dist}
+Name:           python-identify
+Version:        2.6.19
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        File identification library for Python
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/chriskuehl/identify
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+URL:            https://github.com/pre-commit/identify
+Source:         %{pypi_source identify}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(ukkonen)
-%if %{with check}
-BuildRequires:  python3-pytest
-%endif
 
-%description
-Given a file (or some information about a file), return a set of standardized
-tags identifying what the file is.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'identify' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-identify
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-%{summary}.
+%description -n python3-identify %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-identify license
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n identify-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x license
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with check}
+
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%{python3} -m pytest -v
-%endif
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
-%{_bindir}/%{pypi_name}-cli
+%files -n python3-identify -f %{pyproject_files}
+%{_bindir}/identify-cli
 
 %changelog
 %autochangelog

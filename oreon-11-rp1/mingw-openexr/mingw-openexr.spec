@@ -5,7 +5,7 @@
 %global pkgname openexr
 
 Name:          mingw-%{pkgname}
-Version:       3.4.7
+Version:       3.4.15
 Release:       1%{?dist}
 Summary:       MinGW Windows %{pkgname} library
 

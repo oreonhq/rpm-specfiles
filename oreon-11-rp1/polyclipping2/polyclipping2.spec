@@ -9,7 +9,7 @@
 %bcond_without docs   # Enable docs by default
 
 Name:           polyclipping2
-Version:        2.0.1
+Version:        2.0.1_DLLs_DLLs
 Release:        %autorelease
 Summary:        Polygon Clipping and Offsetting Library v2
 License:        BSL-1.0

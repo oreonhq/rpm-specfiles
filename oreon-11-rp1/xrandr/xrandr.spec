@@ -1,7 +1,7 @@
 %global source0_hash f8dd7566adb74147fab9964680b6bbadee87cf406a7fcff51718a5e6949b841c
 
 Name:       xrandr
-Version:    1.5.3
+Version:    1.5.4
 Release:    %autorelease
 Summary:    Commandline utility to change output properties
 

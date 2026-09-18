@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/radiroot
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        2.9
+Version:        2.10
 Release:        %autorelease
 Summary:        Compute radicals for roots of solvable rational polynomials
 

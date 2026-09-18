@@ -1,7 +1,7 @@
 %global source0_hash 7bd4e79ce18b1d47517e7e91fbb7cf19d4f01942804a519bc7c0bf32b6325dd5
 
 Name:           plutovg
-Version:        1.3.2
+Version:        1.3.3
 Release:        %autorelease
 Summary:        Tiny 2D vector graphics library in C
 License:        MIT AND FTL

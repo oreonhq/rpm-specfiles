@@ -1,7 +1,7 @@
 %global source0_hash 0d33a128ee684fe38752dc75984efd010a727313da662be417380b20c9a1934e
 
 Name:           tmt
-Version:        1.69.0
+Version:        1.78.0
 Release:        %autorelease
 Summary:        Test Management Tool
 

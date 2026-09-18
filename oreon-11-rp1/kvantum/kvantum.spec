@@ -4,7 +4,7 @@
 %bcond  qt5           1
 
 Name:           kvantum
-Version:        1.1.6
+Version:        1.1.8
 Release:        %autorelease
 Summary:        SVG-based theme engine for Qt, KDE and LXQt
 

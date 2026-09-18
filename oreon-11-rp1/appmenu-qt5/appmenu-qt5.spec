@@ -1,8 +1,8 @@
 %global source0_hash e69a5e1c5626921a52951d19ce52d435ead0745951c1bff8b96516e1e20af80e
 
 Name:       appmenu-qt5
-Version:    0.3.0+16.10.20160628.1
-Release:    41%{?dist}
+Version:    0.3.0+16.10.20160628.1.orig.orig
+Release:    1%{?dist}
 Summary:    Support for global DBus-exported application menu in Qt5
 
 # Automatically converted from old format: LGPLv3 - review is highly recommended.

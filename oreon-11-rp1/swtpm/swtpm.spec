@@ -9,8 +9,8 @@
 
 Summary: TPM Emulator
 Name:           swtpm
-Version:        0.10.1
-Release:        3%{?dist}
+Version:        0.10.2
+Release:        1%{?dist}
 License:        BSD-3-Clause
 Url:            https://github.com/stefanberger/swtpm
 Source0:        https://github.com/stefanberger/swtpm/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz

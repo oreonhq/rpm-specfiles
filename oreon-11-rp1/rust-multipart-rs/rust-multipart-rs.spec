@@ -7,7 +7,7 @@
 %global crate multipart-rs
 
 Name:           rust-multipart-rs
-Version:        0.1.13
+Version:        0.2.3
 Release:        %autorelease
 Summary:        Simple, zero-allocation, streaming, async multipart reader & writer for Rust
 

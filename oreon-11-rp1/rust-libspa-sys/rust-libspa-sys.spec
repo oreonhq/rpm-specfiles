@@ -7,7 +7,7 @@
 %global crate libspa-sys
 
 Name:           rust-libspa-sys
-Version:        0.9.2
+Version:        0.10.1
 Release:        %autorelease
 Summary:        Rust FFI bindings for libspa
 

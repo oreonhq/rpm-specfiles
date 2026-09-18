@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           thorvg
-Version:        0.15.16
+Version:        1.1.1
 Release:        %{autorelease}
 Summary:        Lightweight vector-based scenes and animation drawing library
 

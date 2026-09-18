@@ -7,7 +7,7 @@
 %global crate hayro-jpeg2000
 
 Name:           rust-hayro-jpeg2000
-Version:        0.3.3
+Version:        0.4.0
 Release:        %autorelease
 Summary:        Memory-safe, pure-Rust JPEG 2000 decoder
 

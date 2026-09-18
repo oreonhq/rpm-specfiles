@@ -14,8 +14,8 @@
 %global _build %{_target_platform}
 
 Name:           slibtool
-Version:        0.5.28
-Release:        16%{?dist}
+Version:        0.7.4
+Release:        1%{?dist}
 Summary:        A skinny libtool implementation, written in C
 
 License:        MIT

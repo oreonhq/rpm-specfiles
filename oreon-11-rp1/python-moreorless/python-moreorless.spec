@@ -1,62 +1,62 @@
-%global source0_hash 560a04f85006fccd74feaa4b6213a446392ff7b5ec0194a5464b6c30f182fa33
+%global source0_hash none
 
-%global srcname moreorless
-
-%bcond_without tests
-
-Name:           python-%{srcname}
-Version:        0.5.0
+Name:           python-moreorless
+Version:        0.6.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Python diff wrapper
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/thatch/moreorless/
-Source0:        %{pypi_source}
+Source:         %{pypi_source moreorless}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  %{py3_dist setuptools_scm}
-%if %{with tests}
-BuildRequires:  %{py3_dist coverage}
-BuildRequires:  %{py3_dist parameterized}
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is a thin wrapper around difflib.unified_diff that Does The Right Thing for
-"No newline at eof". The args are also simplified compared to difflib.}
+This is package 'moreorless' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-moreorless
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-moreorless %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-moreorless cli,dev,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n moreorless-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x cli,dev,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files -l moreorless
 
 %check
-%if %{with tests}
-%{python3} -m coverage run -m moreorless.tests -v
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
-%exclude %{python3_sitelib}/%{srcname}/py.typed
+
+%files -n python3-moreorless -f %{pyproject_files}
 
 %changelog
 %autochangelog

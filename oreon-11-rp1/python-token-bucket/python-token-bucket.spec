@@ -1,62 +1,60 @@
-%global source0_hash 58a9744f11289fe780e2a93da773db2d0872ddc9dcd9a34036b1912557450156
+%global source0_hash none
 
 Name:           python-token-bucket
-Version:        0.3.0
-Release:        18%{?dist}
-Summary:        A Token Bucket implementation
+Version:        0.4.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Very fast implementation of the token bucket algorithm.
 
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/falconry/token-bucket
-Source0:        %{url}/archive/refs/tags/%{version}.tar.gz
+Source:         %{pypi_source token_bucket}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-# Temporary, until https://github.com/falconry/token-bucket/pull/24 gets
-# merged upstream.
-Patch0:         0000-py312-imp.patch
-# Drop pytest-runner and "setup.py test" support
-# https://github.com/falconry/token-bucket/pull/28
-# Cherry-picked on 0.3.0
-# https://fedoraproject.org/wiki/Changes/DeprecatePythonPytestRunner
-Patch1:         0001-Drop-pytest-runner-and-setup.py-test-support.patch
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The token-bucket package provides an implementation of the token bucket
-algorithm suitable for use in web applications for shaping or policing
-request rates. This implementation does not require the use of an independent
-timer thread to manage the bucket state.
-}
+This is package 'token-bucket' generated automatically by pyp2spec.}
+
+Patch0:         0000-py312-imp.patch
+Patch1:         0001-Drop-pytest-runner-and-setup.py-test-support.patch
 
 %description %_description
 
-%package -n python3-token-bucket
-Summary: %{summary}
+%package -n     python3-token-bucket
+Summary:        %{summary}
 
 %description -n python3-token-bucket %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n token-bucket-%{version}
+%prep
+%autosetup -p1 -n token_bucket-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files token_bucket
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-token-bucket -f %{pyproject_files}
-%doc README.rst
-%license LICENSE
 
 %changelog
 %autochangelog

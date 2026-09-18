@@ -1,98 +1,57 @@
-%global source0_hash abf61f45ba4dbb7123920554d87f4fd923948025621d61454c808315fb265233
+%global source0_hash none
 
-%bcond_without tests
-%bcond_without doc_pdf
+Name:           python-succulent
+Version:        0.4.6
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A lightweight framework for collecting and processing data from HTTP POST requests
 
-%global pypi_name succulent
-
-%global _description %{expand:
-Sending sensor measurements, data, or GPS positions from embedded devices,
-microcontrollers, and smartwatches to the central server is sometimes
-complicated and tricky. Setting up the primary data collection scripts
-can be time-consuming (selecting a protocol, framework, API, testing it, etc.).
-Usually, scripts are written for a specific task; thus, they are not easily
-adaptive to other tasks. succulent is a pure Python framework that simplifies
-the configuration, management, collection, and preprocessing of data collected
-via POST requests. }
-
-Name:           python-%{pypi_name}
-Version:        0.4.3
-Release:        1%{?dist}
-Summary:        Collect POST requests
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/firefly-cpp/%{pypi_name}
-Source0:        %{url}/archive/%{version}/%{pypi_name}-%{version}.tar.gz
+URL:            https://github.com/firefly-cpp/succulent
+Source:         %{pypi_source succulent}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  tomcli
-BuildRequires:  python3-pytest
 
-%if %{with doc_pdf}
-BuildRequires:  make
-BuildRequires:  python3-sphinx-latex
-BuildRequires:  latexmk
-BuildRequires:  %{py3_dist sphinx}
-BuildRequires:  %{py3_dist sphinx-rtd-theme}
-BuildRequires:  %{py3_dist sphinxcontrib-bibtex}
-%endif
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'succulent' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{pypi_name}
+%package -n     python3-succulent
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-succulent %_description
 
-%package doc
-Summary:        Documentation and examples for %{name}
-
-%description doc
-%{summary}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n succulent-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-rm -rf %{pypi_name}.egg-info
-
-# Drop version pinning (we use the versions available in Fedora)
-for DEP in $(tomcli get -F newline-keys pyproject.toml tool.poetry.dependencies)
-do
-  tomcli set pyproject.toml replace tool.poetry.dependencies.${DEP} ".*" "*"
-done
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
-%if %{with doc_pdf}
-%make_build -C docs latex SPHINXOPTS='%{?_smp_mflags}'
-%make_build -C docs/_build/latex LATEXMKOPTS='-quiet'
-%endif
 
 %install
 %pyproject_install
-%pyproject_save_files succulent
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.md CHANGELOG.md CODE_OF_CONDUCT.md CITATION.cff
 
-%files doc
-%license LICENSE
-%if %{with doc_pdf}
-%doc docs/_build/latex/succulent.pdf
-%endif
+%files -n python3-succulent -f %{pyproject_files}
 
 %changelog
 %autochangelog

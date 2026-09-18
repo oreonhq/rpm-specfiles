@@ -1,8 +1,8 @@
 %global source0_hash 443e54a6149d1b0bf08677d17b18fced9028b101fc2ffd2c81e0834f87eebc7d
 
 Name:           ntpsec
-Version:        1.2.4
-Release:        8%{?dist}
+Version:        1_2_5
+Release:        1%{?dist}
 Summary:        NTP daemon and utilities
 
 License:        NTP AND BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND ISC AND Apache-2.0 AND Beerware

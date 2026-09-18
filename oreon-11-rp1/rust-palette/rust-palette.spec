@@ -7,7 +7,7 @@
 %global crate palette
 
 Name:           rust-palette
-Version:        0.7.6
+Version:        0.7.7
 Release:        %autorelease
 Summary:        Convert and manage colors with a focus on correctness, flexibility an...
 

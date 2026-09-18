@@ -1,86 +1,57 @@
-%global source0_hash 67eb44463896e581d0f336fd163c4b3004937141336cabaea960de747f0fd3e3
+%global source0_hash none
 
-# EPEL9 does not have python-aiohttp packaged yet.
-%if 0%{?fedora}
-%bcond_without  tests
-%else
-%bcond_with     tests
-%endif
-
-%global         srcname     azure-mgmt-consumption
-
-Name:           python-%{srcname}
-Version:        2.0.0
+Name:           python-azure-mgmt-consumption
+Version:        9.0.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Microsoft Azure Consumption Client Library for Python
-License:        MIT
-URL:            https://pypi.org/project/%{srcname}/
-# This source comes from making a git archive of the main azure-sdk-for-python
-# repository. To reproduce the source code, run the generate-source.sh script.
-Source0:        %{srcname}-%{version}.tgz
 
-Epoch:          1
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/Azure/azure-sdk-for-python
+Source:         %{pypi_source azure-mgmt-consumption %{version} zip}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%if %{with tests}
-BuildRequires:  python3dist(azure-devtools)
-BuildRequires:  python3dist(azure-mgmt-keyvault)
-BuildRequires:  python3dist(azure-mgmt-resource)
-BuildRequires:  python3dist(azure-sdk-tools)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-aiohttp)
-BuildRequires:  python3dist(python-dotenv)
-%endif
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Microsoft Azure Consumption Client Library for Python}
+This is package 'azure-mgmt-consumption' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-azure-mgmt-consumption
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-azure-mgmt-consumption %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n azure-mgmt-consumption-%{version}
 
-%autosetup -p0 -n %{srcname}-%{version}
-
-# Remove the custom wheel builder.
-sed -i '/azure-namespace-package/d' setup.cfg
-rm -fv azure_bdist_wheel.py
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# PEP 420 allows implicit namespace packaging without additional __init__.py
-# files. Remove unneccessary __init__.py that conflicts with other packages.
-rm -rf %{buildroot}%{python3_sitelib}/azure/{__init__.py,__pycache__}
-rm -rf %{buildroot}%{python3_sitelib}/azure/mgmt/{__init__.py,__pycache__}
-
-%pyproject_save_files azure
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%if %{with tests}
-%pytest
-%endif
 
-%files -n python3-%{srcname}
-%doc README.rst HISTORY.rst
-%{python3_sitelib}/azure/mgmt/consumption
-%{python3_sitelib}/azure_mgmt_consumption-%{version}.dist-info
+%files -n python3-azure-mgmt-consumption -f %{pyproject_files}
 
 %changelog
 %autochangelog

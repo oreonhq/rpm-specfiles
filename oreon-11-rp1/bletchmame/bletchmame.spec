@@ -3,7 +3,7 @@
 %global forgeurl https://github.com/npwoods/bletchmame
 
 Name:           bletchmame
-Version:        2.15
+Version:        2.17
 Release:        %autorelease
 Summary:        MAME emulator frontend
 

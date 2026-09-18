@@ -16,7 +16,7 @@
 %global gh_project   PHP-CS-Fixer
 
 Name:           php-cs-fixer
-Version:        3.94.2
+Version:        3.95.25
 Release:        1%{?dist}
 Summary:        PHP Coding Standards Fixer
 

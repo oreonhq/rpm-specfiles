@@ -1,68 +1,63 @@
-%global source0_hash e9ca5ee839421616f1113b728d1c67a2bdb0ecd08b02a1d57819eee819929559
+%global source0_hash none
 
-%{?python_enable_dependency_generator}
-
-%global modname sqlacodegen
-
-Name:           python-%{modname}
-Version:        2.0.0
-Release:        29%{?dist}
+Name:           python-sqlacodegen
+Version:        4.0.4
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Automatic model code generator for SQLAlchemy
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/agronholm/sqlacodegen
-Source0:        https://files.pythonhosted.org/packages/source/%(n=%{modname}; echo ${n:0:1})/%{modname}/%{modname}-%{version}.tar.gz
+Source:         %{pypi_source sqlacodegen}
 
 BuildArch:      noarch
-
-%global _description\
-This is a tool that reads the structure of an existing database and generates\
-the appropriate SQLAlchemy model code, using the declarative style if possible.\
-\
-This tool was written as a replacement for sqlautocode, which was suffering\
-from several issues (including, but not limited to, incompatibility with\
-Python 3 and the latest SQLAlchemy version).\
-\
-Features:\
-* Supports SQLAlchemy 0.8.x - 1.2.x\
-* Produces declarative code that almost looks like it was hand written\
-* Produces PEP 8 compliant code\
-* Accurately determines relationships, including many-to-many, one-to-one\
-* Automatically detects joined table inheritance\
-* Excellent test coverage
-
-%description %{_description}
-
-%package -n python3-%{modname}
-Summary:        Automatic model code generator for SQLAlchemy
-%{?python_provide:%python_provide python3-%{modname}}
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools >= 36.2.7
-BuildRequires:  python3-setuptools_scm >= 1.7.0
 
-%description -n python3-%{modname} %{_description}
 
-Python 3 version.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sqlacodegen' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-sqlacodegen
+Summary:        %{summary}
+
+%description -n python3-sqlacodegen %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sqlacodegen citext,geoalchemy2,pgvector,sqlmodel
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sqlacodegen-%{version}
 
-%autosetup -n %{modname}-%{version}
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x citext,geoalchemy2,pgvector,sqlmodel
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-#check
-# Requires multiple DBs to be running
 
-%files -n python3-%{modname}
-%license LICENSE
-%doc README.rst CHANGES.rst
-%{_bindir}/%{modname}
-%{python3_sitelib}/%{modname}*
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-sqlacodegen -f %{pyproject_files}
+%{_bindir}/sqlacodegen
 
 %changelog
 %autochangelog

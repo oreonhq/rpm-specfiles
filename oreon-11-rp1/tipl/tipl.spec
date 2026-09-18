@@ -5,8 +5,8 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           tipl
-Version:        0
-Release:        0.22.git%{shortcommit}%{?dist}
+Version:        2022.03.21
+Release:        1.22.git%{shortcommit}%{?dist}
 Summary:        Template image processing library
 
 # Automatically converted from old format: BSD - review is highly recommended.

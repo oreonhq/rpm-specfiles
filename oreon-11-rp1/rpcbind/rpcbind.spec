@@ -5,7 +5,7 @@
 %global rpcbind_state_dir %{_rundir}/rpcbind
 
 Name:           rpcbind
-Version:        1.2.8
+Version:        1.2.9
 Release:        1%{?dist}
 Summary:        Universal Addresses to RPC Program Number Mapper
 License:        BSD-3-Clause

@@ -1,51 +1,57 @@
-%global source0_hash bb013e1b375e8a3e51fad1055d22e9faf116d2e054934dded2462ef495b7ca90
+%global source0_hash none
 
 Name:           python-syrupy
-Version:        4.9.1
-Release:        6%{?dist}
-Summary:        Pytest snapshot plugin
+Version:        6.1.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Pytest Snapshot Test Utility
 
-License:        Apache-2.0
-URL:            https://syrupy-project.github.io/syrupy/
-Source:         https://github.com/syrupy-project/syrupy/archive/v%{version}/syrupy-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/syrupy-project/syrupy
+Source:         %{pypi_source syrupy}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-# for tests
-BuildRequires:  python3-pytest-xdist
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Syrupy is a pytest snapshot plugin. It enables developers
-to write tests which assert immutability of computed results.}
+This is package 'syrupy' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-syrupy
+%package -n     python3-syrupy
 Summary:        %{summary}
 
 %description -n python3-syrupy %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n syrupy-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files syrupy
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-syrupy -f %{pyproject_files}
-%doc README.* CHANGELOG.md
 
 %changelog
 %autochangelog

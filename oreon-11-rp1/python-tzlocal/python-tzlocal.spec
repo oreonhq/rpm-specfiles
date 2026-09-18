@@ -1,55 +1,62 @@
-%global source0_hash 3db2c8d811992bb88472aaf7d9bf2d5108367cf959b6b7fe38e3c2b31e7ac91c
+%global source0_hash none
 
 Name:           python-tzlocal
-Version:        5.3.1
+Version:        5.4.4
 Release:        %autorelease
-Summary:        A Python module that tries to figure out what your local timezone is
+# Fill in the actual package summary to submit package to Fedora
+Summary:        tzinfo object for the local timezone
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/regebro/tzlocal
-# pypi/pythonhosted tarballs don't respect symlinks which are used in the test
-Source0:        %{url}/archive/%{version}/tzlocal-%{version}.tar.gz
+Source:         %{pypi_source tzlocal}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  python3-pytest-mock
 
-%global common_description %{expand:
-This Python module returns a tzinfo object with the local timezone information.
-It requires pytz, and returns pytz tzinfo objects. This module attempts to fix
-a glaring hole in pytz, that there is no way to get the local timezone
-information, unless you know the zoneinfo name.}
 
-%description %{common_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'tzlocal' generated automatically by pyp2spec.}
 
-%package -n python3-tzlocal
+%description %_description
+
+%package -n     python3-tzlocal
 Summary:        %{summary}
 
-%description -n python3-tzlocal %{common_description}
+%description -n python3-tzlocal %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-tzlocal devenv,testing
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n tzlocal-%{version}
 
-%autosetup -n tzlocal-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x devenv,testing
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files tzlocal
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-tzlocal -f %{pyproject_files}
-# pyproject_files handles LICENSE.txt; verify with “rpm -qL -p …”
-%doc README.rst CHANGES.txt
 
 %changelog
 %autochangelog

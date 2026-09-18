@@ -13,7 +13,7 @@
 
 %global github_owner     mnapoli
 %global github_name      phpunit-easymock
-%global github_version   1.3.0
+%global github_version   1.5.0
 %global github_commit    3620599d773e9c4924acc7e40061047c75bac574
 
 %global composer_vendor  mnapoli
@@ -39,7 +39,7 @@
 
 Name:          php-%{composer_vendor}-%{composer_project}
 Version:       %{github_version}
-Release:       14%{?github_release}%{?dist}
+Release:       1%{?github_release}%{?dist}
 Summary:       Helpers to build PHPUnit mocks
 
 License:       MIT
@@ -58,7 +58,7 @@ BuildRequires: php(language) >= %{php_min_ver}
 # test suite run with all allowed versions
 BuildRequires: phpunit8 >= %{phpunit8_min_ver}
 BuildRequires: phpunit9 >= %{phpunit9_min_ver}
-## phpcompatinfo (computed from version 1.3.0)
+## phpcompatinfo (computed from version 1.5.0)
 BuildRequires: php-reflection
 ## Autoloader
 BuildRequires: php-composer(fedora/autoloader)
@@ -71,7 +71,7 @@ Requires:      php(language) >= %{php_min_ver}
 # Single version required at runtime
 Requires:     (phpunit8 >= %{phpunit8_min_ver} or phpunit9 >= %{phpunit9_min_ver})
 %endif
-# phpcompatinfo (computed from version 1.3.0)
+# phpcompatinfo (computed from version 1.5.0)
 #     <none>
 # Autoloader
 Requires:      php-composer(fedora/autoloader)

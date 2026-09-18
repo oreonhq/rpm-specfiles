@@ -1,7 +1,7 @@
 %global source0_hash 624964272bea14767e5df2561d87dd30767938c8cb52fb23585bc37580680e86
 
 Name:           proselint
-Version:        0.14.0
+Version:        0.16.0
 Release:        %autorelease
 Summary:        A linter for English prose
 

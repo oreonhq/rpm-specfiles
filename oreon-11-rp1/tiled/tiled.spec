@@ -3,7 +3,7 @@
 Name:           tiled
 Summary:        Tiled Map Editor
 
-Version:        1.12.0
+Version:        1.12.2
 Release:        1%{?dist}
 
 # tiled itself is GPLv2+, libtiled and tmxviewer are BSD.

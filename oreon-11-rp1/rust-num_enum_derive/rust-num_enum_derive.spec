@@ -8,7 +8,7 @@
 %global crate num_enum_derive
 
 Name:           rust-num_enum_derive
-Version:        0.5.11
+Version:        0.7.6
 Release:        %autorelease
 Summary:        Internal implementation details for num_enum
 

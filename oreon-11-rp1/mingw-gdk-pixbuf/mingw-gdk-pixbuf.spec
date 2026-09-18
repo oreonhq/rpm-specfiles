@@ -6,7 +6,7 @@
 %global release_version %(echo %{version} | awk -F. '{print $1"."$2}')
 
 Name:           mingw-gdk-pixbuf
-Version:        2.44.5
+Version:        2.44.8
 Release:        1%{?dist}
 Summary:        MinGW Windows GDK Pixbuf library
 

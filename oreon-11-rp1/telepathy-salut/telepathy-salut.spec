@@ -1,8 +1,8 @@
 %global source0_hash 70b9108ac8b511b7688e1b580de4ddb8981603c3cbde01f287ef8f9cb708618e
 
 Name:           telepathy-salut
-Version:        0.8.1
-Release:        35%{?dist}
+Version:        0.99.11
+Release:        1%{?dist}
 Summary:        Link-local XMPP telepathy connection manager
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

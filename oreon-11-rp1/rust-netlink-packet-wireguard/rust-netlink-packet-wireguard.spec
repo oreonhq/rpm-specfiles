@@ -7,7 +7,7 @@
 %global crate netlink-packet-wireguard
 
 Name:           rust-netlink-packet-wireguard
-Version:        0.3.1
+Version:        0.5.0
 Release:        %autorelease
 Summary:        Wireguard generic netlink packet definitions
 

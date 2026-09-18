@@ -4,7 +4,7 @@
 ExcludeArch: %{ix86}
 
 Name:           ocaml-atd
-Version:        3.0.1
+Version:        4.2.0
 Release:        %autorelease
 Summary:        Adaptable Type Definitions for cross-language data types
 

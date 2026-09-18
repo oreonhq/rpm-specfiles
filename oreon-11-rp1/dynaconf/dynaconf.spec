@@ -6,8 +6,8 @@ Dynaconf is a layered configuration system for Python applications with strong \
 support for 12-factor applications and extensions for Flask and Django
 
 Name:           %{srcname}
-Version:        3.1.2
-Release:        20%{?dist}
+Version:        3.3.5
+Release:        1%{?dist}
 Summary:        A dynamic configurator for python projects
 
 License:        MIT

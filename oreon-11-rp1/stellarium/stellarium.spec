@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           stellarium
-Version:        25.4
+Version:        26.2
 Release:        1%{?dist}
 Summary:        Photo-realistic nightsky renderer
 

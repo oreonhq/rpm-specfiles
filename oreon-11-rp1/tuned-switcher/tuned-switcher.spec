@@ -1,7 +1,7 @@
 %global source0_hash 718d101127adca41595f14dbb18d61a3f12ce8a08e58781e7d2f2ca998adc4ea
 
 Name: tuned-switcher
-Version: 0.9.4
+Version: 1.1.2
 Release: %autorelease
 
 # Main code - GPL-3.0-or-later.

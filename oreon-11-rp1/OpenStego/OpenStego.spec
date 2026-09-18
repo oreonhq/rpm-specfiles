@@ -4,13 +4,13 @@
 
 %global         gituser         syvaidya
 %global         gitname         openstego
-# Release 0.7.4 - 2020-06-06
+# Release 0.8.6 - 2020-06-06
 %global         commit          2f4d84f0e38421809fa8213f0fe1028bfc3fa9ed
 %global         shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           OpenStego
-Version:        0.7.4
-Release:        19%{?dist}
+Version:        0.8.6
+Release:        1%{?dist}
 Summary:        Free Steganography solution
 Summary(fr):    Solution libre pour la steganographie
 

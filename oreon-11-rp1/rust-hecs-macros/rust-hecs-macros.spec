@@ -8,7 +8,7 @@
 %global crate hecs-macros
 
 Name:           rust-hecs-macros
-Version:        0.10.0
+Version:        0.11.1
 Release:        %autorelease
 Summary:        Procedural macro definitions for hecs
 

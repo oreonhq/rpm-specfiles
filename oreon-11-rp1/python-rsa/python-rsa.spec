@@ -1,80 +1,63 @@
-%global source0_hash e38464a49c6c85d7f1351b0126661487a7e0a14a50f1675ec50eb34d4f20ef21
+%global source0_hash none
 
-%global pypi_name rsa
-
-Name:           python-%{pypi_name}
-Version:        4.9
-Release:        13%{?dist}
+Name:           python-rsa
+Version:        4.9.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Pure-Python RSA implementation
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            http://stuvel.eu/rsa
-Source0:        https://pypi.python.org/packages/source/r/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+URL:            https://stuvel.eu/rsa
+Source:         %{pypi_source rsa}
+
 BuildArch:      noarch
-
-%description
-Python-RSA is a pure-Python RSA implementation. It supports encryption
-and decryption, signing and verifying signatures, and key generation
-according to PKCS#1 version 1.5. It can be used as a Python library as
-well as on the command-line.
-
-%package -n     python3-%{pypi_name}
-Summary:        Pure-Python RSA implementation
-%{?python_provide:%python_provide python3-%{pypi_name}}
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-#BuildRequires:  python3-mypy
-BuildRequires:  python3-pyasn1 >= 0.1.3
-Requires:       python3-pyasn1 >= 0.1.3
-Requires:       python3-setuptools
 
-%description -n python3-%{pypi_name}
-Python-RSA is a pure-Python RSA implementation. It supports encryption
-and decryption, signing and verifying signatures, and key generation
-according to PKCS#1 version 1.5. It can be used as a Python library as
-well as on the command-line.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'rsa' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-rsa
+Summary:        %{summary}
+
+%description -n python3-rsa %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n rsa-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
-cp %{buildroot}%{_bindir}/pyrsa-priv2pub %{buildroot}%{_bindir}/pyrsa-priv2pub-3
-cp %{buildroot}%{_bindir}/pyrsa-keygen %{buildroot}%{_bindir}/pyrsa-keygen-3
-cp %{buildroot}%{_bindir}/pyrsa-encrypt %{buildroot}%{_bindir}/pyrsa-encrypt-3
-cp %{buildroot}%{_bindir}/pyrsa-decrypt %{buildroot}%{_bindir}/pyrsa-decrypt-3
-cp %{buildroot}%{_bindir}/pyrsa-sign %{buildroot}%{_bindir}/pyrsa-sign-3
-cp %{buildroot}%{_bindir}/pyrsa-verify %{buildroot}%{_bindir}/pyrsa-verify-3
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{pypi_name}
-%doc README.md
-%license LICENSE
-%{_bindir}/pyrsa-priv2pub
-%{_bindir}/pyrsa-keygen
-%{_bindir}/pyrsa-encrypt
-%{_bindir}/pyrsa-decrypt
-%{_bindir}/pyrsa-sign
-%{_bindir}/pyrsa-verify
-%{_bindir}/pyrsa-priv2pub-3
-%{_bindir}/pyrsa-keygen-3
-%{_bindir}/pyrsa-encrypt-3
-%{_bindir}/pyrsa-decrypt-3
-%{_bindir}/pyrsa-sign-3
-%{_bindir}/pyrsa-verify-3
-%{python3_sitelib}/%{pypi_name}/
-%{python3_sitelib}/%{pypi_name}-%{version}-py%{python3_version}.egg-info/
 
 %check
-# Disabled following https://github.com/sybrenstuvel/python-rsa/issues/153
-# As for the multiple comments, it seems more like a test problem than a code problem
-# Please re-enable tests as soon as that Issue got solved
-# %{__python3} setup.py test
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-rsa -f %{pyproject_files}
+%{_bindir}/pyrsa-decrypt
+%{_bindir}/pyrsa-encrypt
+%{_bindir}/pyrsa-keygen
+%{_bindir}/pyrsa-priv2pub
+%{_bindir}/pyrsa-sign
+%{_bindir}/pyrsa-verify
 
 %changelog
 %autochangelog

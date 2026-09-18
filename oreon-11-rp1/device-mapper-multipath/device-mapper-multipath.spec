@@ -1,7 +1,7 @@
 %global source0_hash 81f3659fa7755c45ea574c2ccf54c37a74165f6d978c18fcbcca1a807c888959
 
 Name:    device-mapper-multipath
-Version: 0.13.1
+Version: 0.15.1
 Release: 1%{?dist}
 Summary: Tools to manage multipath devices using device-mapper
 # readline uses GPL-3.0-only
@@ -10,7 +10,7 @@ URL:     http://christophe.varoqui.free.fr/
 
 # The source for this package was pulled from upstream's git repo.  Use the
 # following command to generate the tarball
-# curl -L https://github.com/opensvc/multipath-tools/archive/0.13.1.tar.gz -o multipath-tools-0.13.1.tgz
+# curl -L https://github.com/opensvc/multipath-tools/archive/0.15.1.tar.gz -o multipath-tools-0.13.1.tgz
 Source0: https://github.com/opensvc/multipath-tools/archive/refs/tags/%{version}.tar.gz#/multipath-tools-%{version}.tgz
 Source1: multipath.conf
 Patch0001: 0001-RH-fixup-udev-rules-for-redhat.patch

@@ -7,7 +7,7 @@
 %global crate curve25519-dalek
 
 Name:           rust-curve25519-dalek
-Version:        4.1.3
+Version:        5.0.0
 Release:        %autorelease
 Summary:        A pure-Rust implementation of group operations on ristretto255 and Cu...
 

@@ -7,7 +7,7 @@
 %global crate html2text
 
 Name:           rust-html2text
-Version:        0.16.2
+Version:        0.17.1
 Release:        %autorelease
 Summary:        Render HTML as plain text
 

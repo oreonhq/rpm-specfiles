@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           python-systemd
-Version:        235
+Version:        236
 Release:        %autorelease
 Summary:        Python module wrapping libsystemd functionality
 

@@ -2,7 +2,7 @@
 %global source10_hash d511de1f556521041b0811c6fb9c3e175d9a527bce5ade9ca31ab79b0941823c
 
 Name:           rust
-Version:        1.94.0
+Version:        1.98.1
 Release:        %autorelease
 Summary:        The Rust Programming Language
 License:        (Apache-2.0 OR MIT) AND (Artistic-2.0 AND BSD-3-Clause AND ISC AND MIT AND MPL-2.0 AND Unicode-3.0)

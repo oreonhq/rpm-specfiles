@@ -1,8 +1,8 @@
 %global source0_hash 7225b9c4c732eae8716143ef910c67b39bd364a3547b32e5dd70d539d4eacd67
 
 Name: liboauth2
-Version: 2.2.0
-Release: 2%{?dist}
+Version: 2.4.0
+Release: 1%{?dist}
 Summary: Generic library to build OAuth 2.x and OpenID Connect servers and clients in C
 License: Apache-2.0
 URL: https://github.com/OpenIDC/liboauth2

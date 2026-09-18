@@ -1,61 +1,62 @@
-%global source0_hash 799193bf41a2c294a52f58b0c7c036d6c0524c0ef63ced6d3f210edd78fae63f
+%global source0_hash none
 
-%global srcname colcon-metadata
+Name:           python-colcon-metadata
+Version:        0.3.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Extension for colcon to read package metadata from files.
 
-Name:           python-%{srcname}
-Version:        0.2.5
-Release:        21%{?dist}
-Summary:        Extension for colcon to read package metadata from files
-
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://colcon.readthedocs.io
-Source0:        https://github.com/colcon/%{srcname}/archive/%{version}/%{srcname}-%{version}.tar.gz
+URL:            https://github.com/colcon/colcon-metadata/
+Source:         %{pypi_source colcon_metadata}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-An extension for colcon-core to fetch and manage package metadata from
-repositories.
 
-%package -n python%{python3_pkgversion}-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'colcon-metadata' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-colcon-metadata
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  python%{python3_pkgversion}-setuptools >= 30.3.0
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
 
-%if %{undefined __pythondist_requires}
-Requires:       python%{python3_pkgversion}-colcon-core
-Requires:       python%{python3_pkgversion}-PyYAML
-%endif
+%description -n python3-colcon-metadata %_description
 
-%description -n python%{python3_pkgversion}-%{srcname}
-An extension for colcon-core to fetch and manage package metadata from
-repositories.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-colcon-metadata test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n colcon_metadata-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{__python3} -m pytest \
-    --ignore=test/test_spell_check.py \
-    --ignore=test/test_flake8.py \
-    test
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname}
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/colcon_metadata/
-%{python3_sitelib}/colcon_metadata-%{version}-py%{python3_version}.egg-info/
+
+%files -n python3-colcon-metadata -f %{pyproject_files}
 
 %changelog
 %autochangelog

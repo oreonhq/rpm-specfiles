@@ -1,7 +1,7 @@
 %global source0_hash 5acd6d59e1fdf2a8507887137cf7f3e862fec0c21cc079bba7068abf03e881d9
 
 Name:           libcanlock
-Version:        3.3.1
+Version:        3.3.3
 Release:        %autorelease
 Summary:        Create and verify RFC 8315 Netnews Cancel-Locks
 # BSD licensed:

@@ -7,7 +7,7 @@
 %global crate gix-negotiate
 
 Name:           rust-gix-negotiate
-Version:        0.25.0
+Version:        0.35.1
 Release:        %autorelease
 Summary:        A crate of the gitoxide project implementing negotiation algorithms
 

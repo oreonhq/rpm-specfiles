@@ -2,7 +2,7 @@
 
 %define __cmake_in_source_build 1
 
-%define main_version 24.02
+%define main_version 26.05.1
 %define async_version 1.7.0
 %define echolib_version 1.3.4
 %define qtel_version 1.2.5
@@ -12,7 +12,7 @@
 Name:		svxlink
 Epoch:		2
 Version:	%{main_version}
-Release:	7%{?dist}
+Release:	1%{?dist}
 Summary:	Repeater controller and EchoLink (simplex or repeater)
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

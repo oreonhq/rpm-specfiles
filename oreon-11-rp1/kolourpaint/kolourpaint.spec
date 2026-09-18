@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kolourpaint
 Summary: An easy-to-use paint program 
-Version: 26.04.3
+Version: 26.08.1
 Release: 1%{?dist}
 
 # Automatically converted from old format: BSD - review is highly recommended.

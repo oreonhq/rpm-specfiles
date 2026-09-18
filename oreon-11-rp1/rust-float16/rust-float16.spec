@@ -7,7 +7,7 @@
 %global crate float16
 
 Name:           rust-float16
-Version:        0.1.5
+Version:        0.1.7
 Release:        %autorelease
 Summary:        Half-precision floating point f16 and bf16 types for Rust implementin...
 

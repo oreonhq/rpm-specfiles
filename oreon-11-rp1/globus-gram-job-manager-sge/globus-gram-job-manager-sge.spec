@@ -2,8 +2,8 @@
 
 Name:		globus-gram-job-manager-sge
 %global _name %(tr - _ <<< %{name})
-Version:	3.3
-Release:	12%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Grid Engine Job Manager Support
 
 #		The sge.pm file is LGPL-2.1, the rest is Apache-2.0

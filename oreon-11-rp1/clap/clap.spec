@@ -4,7 +4,7 @@
 %global debug_package %{nil}
 
 %global forgeurl https://github.com/free-audio/clap
-Version:        1.2.7
+Version:        1.2.10
 %global tag %{version}
 %forgemeta
 

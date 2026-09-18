@@ -1,8 +1,8 @@
 %global source0_hash e5c8041cef8e33c55732f06a292381cb345db946cf792a4ae18aa5c66cdd4fbb
 
 Name:           unique
-Version:        1.1.6
-Release:        37%{?dist}
+Version:        3.0.2
+Release:        1%{?dist}
 Summary:        Single instance support for applications
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

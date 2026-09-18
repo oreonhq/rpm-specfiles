@@ -7,7 +7,7 @@
 %global crate pango-sys
 
 Name:           rust-pango-sys
-Version:        0.22.0
+Version:        0.22.9
 Release:        %autorelease
 Summary:        FFI bindings to libpango-1.0
 

@@ -1,24 +1,23 @@
-%global source0_hash f64f62dee2306fc1c22050a59b6c6cdad126e04b0cf50e393ff858a1da719096
+%global source0_hash none
 
 Name:           python-psygnal
-Version:        0.15.1
+Version:        0.16.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Fast python callback/event system modeled after Qt Signals
 
-License:        BSD-3-Clause
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/pyapp-kit/psygnal
 Source:         %{pypi_source psygnal}
 
-BuildSystem:    pyproject
-BuildOption(install): -l psygnal
-BuildOption(generate_buildrequires): -g test-min,test
+BuildRequires:  python3-devel
+BuildRequires:  gcc
 
-BuildArch:      noarch
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Psygnal (pronounced "signal") is a pure python implementation of the observer
-pattern, with the API of Qt-style Signals with (optional) signature and type
-checking, and support for threading. It has no dependencies.}
+This is package 'psygnal' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -27,11 +26,34 @@ Summary:        %{summary}
 
 %description -n python3-psygnal %_description
 
-%prep -a
-sed -i '/pyinstaller/d' pyproject.toml
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-psygnal proxy,pydantic
+
+
+%prep
+%autosetup -p1 -n psygnal-%{version}
+
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x proxy,pydantic
+
+
+%build
+%pyproject_wheel
+
+
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -rs
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-psygnal -f %{pyproject_files}
 

@@ -6,8 +6,8 @@
 %define semodule_version 0.0.5
 
 Name:           usbguard
-Version:        1.1.3
-Release:        7%{?dist}
+Version:        1.1.4
+Release:        1%{?dist}
 Summary:        A tool for implementing USB device usage policy
 License:        GPL-2.0-or-later
 ## Not installed

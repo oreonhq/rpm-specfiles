@@ -1,7 +1,7 @@
 %global source0_hash e01c0701792231d67768e0e314ebad6395501759ea56772dc7e36d3badec5549
 
 Name:           coturn
-Version:        4.9.0
+Version:        4.18.0
 Release:        1%{?dist}
 Summary:        TURN/STUN & ICE Server
 # MIT (src/{apps/relay/acme.c,server/ns_turn_khash.h} and BSD-3-Clause (the rest)

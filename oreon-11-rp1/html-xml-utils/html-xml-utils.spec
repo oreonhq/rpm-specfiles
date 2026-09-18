@@ -1,7 +1,7 @@
 %global source0_hash 888a31631a7a70308bb2f333e077d0416f4bb78317f8697ffb4a95187f677301
 
 Name:           html-xml-utils
-Version:        8.7
+Version:        8.8
 Release:        1%{?dist}
 Summary:        A number of simple utilities for manipulating HTML and XML files
 

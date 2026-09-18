@@ -4,8 +4,8 @@
 %bcond_with tests
 
 Name:      pyee
-Version:   13.0.0
-Release:   5%{?dist}
+Version:   14.0.0
+Release:   1%{?dist}
 Summary:   A port of node.js's EventEmitter to python
 License:   MIT
 URL:       https://pypi.python.org/pypi/pyee

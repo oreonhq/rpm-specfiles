@@ -1,63 +1,57 @@
-%global source0_hash 0908ae2af79a6549e7be1708745c09a101bbb6681fd41f492294e1d9dc77dfb6
+%global source0_hash none
 
 Name:           python-beanprice
-Version:        2.0.0
+Version:        2.1.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Price quotes fetcher for Beancount
 
-License:        GPL-2.0-only
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/beancount/beanprice
 Source:         %{pypi_source beanprice}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package provides a script to fetch market data prices from various sources
-on the Internet and render them for plain text accounting price syntax
-(and Beancount).}
+This is package 'beanprice' generated automatically by pyp2spec.}
 
 %description %_description
-
-%package -n     beanprice
-Summary:        %{summary}
-Requires:       python3-beanprice = %{version}-%{release}
-
-%description -n beanprice %_description
 
 %package -n     python3-beanprice
 Summary:        %{summary}
 
 %description -n python3-beanprice %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n beanprice-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l beanprice
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Remove spurious directories
-rm -r %{buildroot}%{python3_sitelib}/experiments/
 
 %check
-# coincap_test expects the system timezone to be UTC
-TZ=UTC %pytest -v
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n beanprice
-%doc README.md
-%{_bindir}/bean-price
 
 %files -n python3-beanprice -f %{pyproject_files}
+%{_bindir}/bean-price
 
 %changelog
 %autochangelog

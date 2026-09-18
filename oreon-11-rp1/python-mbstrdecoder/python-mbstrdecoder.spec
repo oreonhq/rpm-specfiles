@@ -1,59 +1,62 @@
-%global source0_hash dcfd2c759322eb44fe193a9e0b1b86c5b87f3ec5ea8e1bb43b3e9ae423f1e8fe
+%global source0_hash none
 
-%global pypi_name mbstrdecoder
+Name:           python-mbstrdecoder
+Version:        1.1.5
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        mbstrdecoder is a Python library for multi-byte character string decoder
 
-Name:           python-%{pypi_name}
-Version:        1.1.3
-Release:        7%{?dist}
-Summary:        multi-byte character string decoder
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/thombashi/mbstrdecoder 
-Source0:        https://files.pythonhosted.org/packages/source/m/%{pypi_name}/%{pypi_name}-%{version}.tar.gz 
+URL:            https://github.com/thombashi/mbstrdecoder
+Source:         %{pypi_source mbstrdecoder}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
-%description
-multi-byte character string decoder
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'mbstrdecoder' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-mbstrdecoder
 Summary:        %{summary}
- 
-Requires:  python3-chardet
 
-%description -n python3-%{pypi_name}
+%description -n python3-mbstrdecoder %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-mbstrdecoder test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n mbstrdecoder-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
-sed -i 's/chardet>=3.0.4,<.*/chardet>=3.0.4/g' requirements/requirements.txt
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Please support chardet 6.0.0
-# https://github.com/thombashi/mbstrdecoder/issues/14
-#
-# Skip failing test:
-# test/test_mbstrdecoder.py::Test_to_MultiByteStrDecoder_unicode::test_normal_codec_candidate[Bob\u2019s Burgers-windows-1252-windows_1252-codec_candidates4]
-k="${k-}${k+ and }not (Test_to_MultiByteStrDecoder_unicode and Burgers-windows-1252-windows_1252-codec_candidates4)"
+%_pyproject_check_import_allow_no_modules -t
 
-%pytest -k "${k-}" -v
 
-%files -n python3-%{pypi_name} -f %{pyproject_files} 
-%license LICENSE
-%doc README.rst
+%files -n python3-mbstrdecoder -f %{pyproject_files}
 
 %changelog
 %autochangelog

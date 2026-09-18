@@ -1,8 +1,8 @@
 %global source0_hash 72c8d01d71e40315e9b8f9dbbe848692354974ad05f337b106cd3797e45b9be4
 
 Name: pdfio
-Version: 1.6.1
-Release: 2%{?dist}
+Version: 1.6.5
+Release: 1%{?dist}
 Summary: C library for PDF I/O
 # Apache 2.0 with exception - pdfio code
 # GPL-2.0-or-later - code128 font from examples

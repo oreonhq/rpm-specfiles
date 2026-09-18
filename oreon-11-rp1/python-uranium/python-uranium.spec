@@ -1,7 +1,7 @@
 %global source0_hash 4f4cbce70f0940071c7c6e7143d946edafeac468212d8c61c9af7e882d058b08
 
 Name:           python-uranium
-Version:        5.6.0
+Version:        5.13.0
 Release:        %autorelease
 Summary:        A Python framework for building desktop applications
 License:        LGPL-3.0-or-later

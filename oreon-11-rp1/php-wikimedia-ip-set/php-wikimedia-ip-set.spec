@@ -1,8 +1,8 @@
 %global source0_hash f37be348ffd490799fbc3b3531bd51eccc427caaa89f609ddc95a0865293b252
 
 Name:		php-wikimedia-ip-set
-Version:	3.1.0
-Release:	10%{?dist}
+Version:	4.0.0
+Release:	1%{?dist}
 Summary:	Library to match IP addresses against CIDR specifications
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

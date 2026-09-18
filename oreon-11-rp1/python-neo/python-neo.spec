@@ -1,153 +1,62 @@
-%global source0_hash 9bc5dbd03a25a96a42d3be1a1c6b5d18e440e1ac02b628844a32037e326ed14b
+%global source0_hash none
 
-# IO tests download LARGE amounts of test data so must be run with
-# network enabled in mock:
-# --with io_tests --enable-network
-# Note: all tests pass, they just take a lot of bandwidth and time.
-# Tests with unsatisfied dependencies will be skipped.
-%bcond io_tests 0
+Name:           python-neo
+Version:        0.14.5
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Neo is a package for representing electrophysiology data in Python, together with support for reading a wide range of neurophysiology file formats
 
-# Run tests that do not require network or special dependencies.
-%bcond tests 1
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://neuralensemble.org/neo
+Source:         %{pypi_source neo}
 
-%global _description %{expand:
-Neo is a package for representing electrophysiology data in Python, together
-with support for reading a wide range of neurophysiology file formats,
-including Spike2, NeuroExplorer, AlphaOmega, Axon, Blackrock, Plexon, Tdt, and
-support for writing to a subset of these formats plus non-proprietary formats
-including HDF5.
-
-The goal of Neo is to improve interoperability between Python tools for
-analyzing, visualizing and generating electrophysiology data (such as
-OpenElectrophy, NeuroTools, G-node, Helmholtz, PyNN) by providing a common,
-shared object model. In order to be as lightweight a dependency as possible,
-Neo is deliberately limited to representation of data, with no functions for
-data analysis or visualization.
-
-Neo implements a hierarchical data model well adapted to intracellular and
-extracellular electrophysiology and EEG data with support for multi-electrodes
-(for example tetrodes). Neos data objects build on the quantities_ package,
-which in turn builds on NumPy by adding support for physical dimensions. Thus
-neo objects behave just like normal NumPy arrays, but with additional metadata,
-checks for dimensional consistency and automatic unit conversion.
-
-Read the documentation at http://neo.readthedocs.io/}
-
-Name:       python-neo
-Version:    0.14.2
-Release:    %autorelease
-Summary:    Represent electrophysiology data in Python
-
-%global forgeurl https://github.com/NeuralEnsemble/python-neo
-%global tag %{version}
-%forgemeta
-
-License:    BSD-3-Clause
-URL:        %forgeurl
-Source:     %forgesource
-
-BuildArch:  noarch
-
-# python-pyedflib does not support s390x
-# https://src.fedoraproject.org/rpms/python-pyedflib/blob/rawhide/f/python-pyedflib.spec
-ExcludeArch:  s390x
-
-%description %{_description}
-
-%package -n python3-neo
-Summary:        %{summary}
+BuildArch:      noarch
 BuildRequires:  python3-devel
-%if %{with tests} || %{with io_tests}
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist scipy}
-BuildRequires:  %{py3_dist ipython}
-%if %{with io_tests}
-BuildRequires:  %{py3_dist datalad}
-BuildRequires:  %{py3_dist pyedflib}
-BuildRequires:  %{py3_dist h5py}
-# Retired from Fedora. Dead upstream and didn't work with Python 3.12.
-# However, there is igor2' on PyPI. But that's not available in Fedora.
-%dnl BuildRequires:  %{py3_dist igor}
-BuildRequires:  %{py3_dist klusta}
-BuildRequires:  %{py3_dist nixio}
-BuildRequires:  %{py3_dist pillow}
-BuildRequires:  %{py3_dist probeinterface}
-# Some tests require pynwb. However with the current version (2.8.3)
-# a PermissionError is raised.
-%dnl BuildRequires:  %{py3_dist pynwb}
-%endif
-%endif
-# https://github.com/NeuralEnsemble/python-neo/issues/1471: neuroshare is dead
 
-# Extra requires:
-# Not in fedora yet, to be updated as these are added
-# Recommends:  %%{py3_dist stfio}
-Recommends:  %{py3_dist datalad}
-Recommends:  %{py3_dist h5py}
-# Retired from Fedora. Dead upstream and didn't work with Python 3.12.
-# However, there is igor2' on PyPI. But that's not available in Fedora.
-%dnl Recommends:  %{py3_dist igor}
-Recommends:  %{py3_dist nixio}
-Recommends:  %{py3_dist klusta}
-Recommends:  %{py3_dist pillow}
-Recommends:  %{py3_dist probeinterface}
-Recommends:  %{py3_dist pynwb}
-Recommends:  %{py3_dist scipy}
 
-%description -n python3-neo %{_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'neo' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-neo
+Summary:        %{summary}
+
+%description -n python3-neo %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-neo all,biocam,ced,dev,docs,edf,igorproio,iocache,kwikio,maxwell,med,neomatlabio,neuralynx,nixio,nwb,plexon2,test,tiffio
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n neo-%{version}
 
-%forgeautosetup
-# remove rpm's SPECPARTS file
-rm -rf SPECPARTS
-
-# Remove upstream's pin to py<3.13
-sed -i '/requires-python/ d' pyproject.toml
-
-# Unpin setuptools
-sed -r -i 's/(setuptools)[<=>]+[0-9.]+/\1/' pyproject.toml
-
-%if %{with io_tests}
-# datalad needs to know who we are later when it tries to download the data sets
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
-%endif
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,biocam,ced,dev,docs,edf,igorproio,iocache,kwikio,maxwell,med,neomatlabio,neuralynx,nixio,nwb,plexon2,test,tiffio
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l neo
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if 0%{with tests} || 0%{with io_tests}
-%if %{with io_tests}
-# Requires Maxwell H5 (HDF5) compression library, which needs to be
-# and installed manually.
-k="${k:-}${k:+ and }not TestMaxwell"
-%endif
-%pytest \
-%if %{without io_tests}
-  --ignore=neo/test/iotest/ \
-  --ignore=neo/test/rawiotest/ \
-  --deselect=neo/test/utils/test_datasets.py::TestDownloadDataset \
-%endif
-  -r fEs ${k:+-k "${k:-}"}
-%else
-  # do not export EPHY_TESTING_DATA_FOLDER, use ~
-  # exclude one that requires "zugbruecke" to open windows dlls?
-  # Also exclude tests from import check.
-  %pyproject_check_import -e *pypl2.pypl2lib* -e neo.test*
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-neo -f %{pyproject_files}
-%doc README.rst examples doc/source/authors.rst CODE_OF_CONDUCT.md CITATION.txt
 
 %changelog
 %autochangelog

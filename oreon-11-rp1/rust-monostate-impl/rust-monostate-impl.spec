@@ -7,7 +7,7 @@
 %global crate monostate-impl
 
 Name:           rust-monostate-impl
-Version:        1.0.2
+Version:        1.0.3
 Release:        %autorelease
 Summary:        Implementation detail of the monostate crate
 

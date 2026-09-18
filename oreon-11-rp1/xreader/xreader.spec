@@ -4,8 +4,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/.*$
 
 Name:		xreader
-Version:	4.6.3
-Release:	2%{?dist}
+Version:	4.6.8
+Release:	1%{?dist}
 Summary:	Simple document viewer
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

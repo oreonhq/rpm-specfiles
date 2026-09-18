@@ -1,7 +1,7 @@
 %global source0_hash 0fc04840b18c6323c5bbb80f475958f146bd6fc53cff8952e957b9d0048a8cf0
 
 Name:           zeal
-Version:        0.8.0
+Version:        0.9.1
 Release:        %autorelease
 Summary:        Offline documentation browser inspired by Dash
 

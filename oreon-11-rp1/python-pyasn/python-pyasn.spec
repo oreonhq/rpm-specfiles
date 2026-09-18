@@ -1,66 +1,59 @@
-%global source0_hash 4ee4fef63f85d5de5766e436518e18cfc19ebdbda5b5f7023a33da6b8fd821e0
+%global source0_hash none
 
-%global srcname pyasn
-
-Name:           python-%{srcname}
-Version:        1.6.1
+Name:           python-pyasn
+Version:        1.6.2
 Release:        %autorelease
-Summary:        Offline IP address to Autonomous System Number lookup module
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Offline IP address to Autonomous System Number lookup module.
 
-# pyasn itself is MIT, but it builds on other projects under ISC and
-# BSD-4-Clause; for details see the LICENSE file and
-# https://github.com/hadiasghari/pyasn/issues/25
-License:        MIT AND ISC AND BSD-4-Clause
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
 URL:            https://github.com/hadiasghari/pyasn
-# PyPI tarball doesn't include tests
-Source:         %{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
-# Fixup commit for 1.6.1
-Patch:          %{url}/commit/1d64d6d2f20e0353b46fbf5b94f8bdea8f41e9ce.patch
+Source:         %{pypi_source pyasn}
 
-BuildRequires:  gcc
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-pyasn is a Python extension module that enables very fast IP address to
-Autonomous System Number lookups. Current state and Historical lookups can be
-done, based on the MRT/RIB BGP archive used as input.
+This is package 'pyasn' generated automatically by pyp2spec.}
 
-pyasn is different from other ASN lookup tools in that it provides offline and
-historical lookups. It provides utility scripts for users to build their own
-lookup databases based on any MRT/RIB archive. This makes pyasn much faster
-than online dig/whois/json lookups.}
+Patch:          %{url}/commit/1d64d6d2f20e0353b46fbf5b94f8bdea8f41e9ce.patch
 
 %description %_description
 
-%package -n     python3-%{srcname}
+%package -n     python3-pyasn
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-pyasn %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pyasn-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md BACKLOG.txt
-%{_bindir}/pyasn_util_asnames.py
-%{_bindir}/pyasn_util_convert.py
-%{_bindir}/pyasn_util_download.py
+
+%files -n python3-pyasn -f %{pyproject_files}
 
 %changelog
 %autochangelog

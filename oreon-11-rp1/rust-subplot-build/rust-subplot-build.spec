@@ -7,7 +7,7 @@
 %global crate subplot-build
 
 Name:           rust-subplot-build
-Version:        0.12.0
+Version:        0.13.0
 Release:        %autorelease
 Summary:        A library for using Subplot code generation from another project's
 

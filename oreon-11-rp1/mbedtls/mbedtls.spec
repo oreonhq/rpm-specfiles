@@ -1,8 +1,8 @@
 %global source0_hash 8fb65fae8dcae5840f793c0a334860a411f884cc537ea290ce1c52bb64ca007a
 
 Name: mbedtls
-Version: 3.6.6
-Release: 2%{?dist}
+Version: 4.2.0
+Release: 1%{?dist}
 Summary: Light-weight cryptographic and SSL/TLS library
 License: Apache-2.0 OR GPL-2.0-or-later
 URL: https://www.trustedfirmware.org/projects/mbed-tls

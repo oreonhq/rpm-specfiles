@@ -1,7 +1,7 @@
 %global source0_hash b9f8035ca37b2d8f14cb4bb02fe40abe31f73bf175108031d8c3d8612d7f7a5b
 
 Name:           photoqt
-Version:        5.2
+Version:        5.4.1
 Release:        %autorelease
 Summary:        A fast Qt image viewer
 

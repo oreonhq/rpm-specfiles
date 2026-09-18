@@ -7,7 +7,7 @@
 %global crate fastbloom
 
 Name:           rust-fastbloom
-Version:        0.14.1
+Version:        0.17.0
 Release:        %autorelease
 Summary:        Fastest Bloom filter in Rust
 

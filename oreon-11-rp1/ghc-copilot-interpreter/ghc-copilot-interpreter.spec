@@ -10,7 +10,7 @@
 # testsuite missing deps: copilot-core copilot-prettyprinter test-framework test-framework-quickcheck2
 
 Name:           ghc-%{pkg_name}
-Version:        4.5.1
+Version:        4.8.1
 Release:        %autorelease
 Summary:        Interpreter for Copilot
 

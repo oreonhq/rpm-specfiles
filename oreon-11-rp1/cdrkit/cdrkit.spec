@@ -1,8 +1,8 @@
 %global source0_hash d1c030756ecc182defee9fe885638c1785d35a2c2a297b4604c0e0dcc78e47da
 
 Name:    cdrkit
-Version: 1.1.11
-Release: 63%{?dist}
+Version: 1.1.11-5-5
+Release: 1%{?dist}
 Summary: A collection of CD/DVD utilities
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only

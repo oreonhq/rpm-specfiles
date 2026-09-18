@@ -7,7 +7,7 @@
 %global crate sequoia-cert-store
 
 Name:           rust-sequoia-cert-store
-Version:        0.7.3
+Version:        0.8.0-pqc.1
 Release:        %autorelease
 Summary:        A certificate database interface.
 

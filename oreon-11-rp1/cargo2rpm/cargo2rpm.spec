@@ -3,8 +3,8 @@
 %bcond_without check
 
 Name:           cargo2rpm
-Version:        0.3.3
-Release:        4%{?dist}
+Version:        0.4.0
+Release:        1%{?dist}
 Summary:        Translation layer between cargo and RPM
 License:        MIT
 URL:            https://codeberg.org/rust2rpm/cargo2rpm

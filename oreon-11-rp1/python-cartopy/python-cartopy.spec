@@ -1,114 +1,65 @@
-%global source0_hash 55f1a390e5f3f075b221c7d91fb10258ad978db786c7930eba06eb45d28753fe
+%global source0_hash none
 
-%global srcname cartopy
-
-# Some tests use the network.
-%bcond_with network
-
-Name:           python-%{srcname}
-Version:        0.25.0
+Name:           python-cartopy
+Version:        0.26.0
 Release:        %autorelease
-Summary:        Cartographic Python library with Matplotlib visualisations
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Python library for cartographic visualizations with Matplotlib
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://scitools.org.uk/cartopy/docs/latest/
-Source0:        %pypi_source %{srcname}
-# Set location of Fedora-provided pre-existing data.
-Source1:        siteconfig.py
+URL:            https://github.com/SciTools/cartopy
+Source:         %{pypi_source cartopy}
 
-# Fedora specific.
+BuildRequires:  python3-devel
+BuildRequires:  gcc
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cartopy' generated automatically by pyp2spec.}
+
 Patch:          0001-Reduce-numpy-build-dependency.patch
-# Might not go upstream in current form.
 Patch:          0002-Increase-tolerance-for-new-FreeType.patch
 
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch:    %{ix86}
+%description %_description
 
-BuildRequires:  gcc-c++
-BuildRequires:  proj-data-uk
-BuildRequires:  python3-devel
-
-%global _description %{expand:
-Cartopy is a Python package designed to make drawing maps for data analysis
-and visualisation easy. It features:
-* object oriented projection definitions
-* point, line, polygon and image transformations between projections
-* integration to expose advanced mapping in Matplotlib with a simple and
-  intuitive interface
-* powerful vector data handling by integrating shapefile reading with Shapely
-  capabilities
-}
-
-%description %{_description}
-
-%package -n     python3-%{srcname}
+%package -n     python3-cartopy
 Summary:        %{summary}
 
-Requires:       python-%{srcname}-common = %{version}-%{release}
-Recommends:     python3dist(cartopy[ows]) = %{version}-%{release}
-Recommends:     python3dist(cartopy[plotting]) = %{version}-%{release}
-Recommends:     python3dist(cartopy[speedups]) = %{version}-%{release}
+%description -n python3-cartopy %_description
 
-%description -n python3-%{srcname} %{_description}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-cartopy doc,ows,plotting,speedups,srtm,test
 
-%package -n     python-%{srcname}-common
-Summary:        Data files for %{srcname}
-BuildArch:      noarch
-
-BuildRequires:  natural-earth-map-data-110m
-BuildRequires:  natural-earth-map-data-50m
-
-Recommends:     natural-earth-map-data-110m
-Suggests:       natural-earth-map-data-50m
-Suggests:       natural-earth-map-data-10m
-
-%description -n python-%{srcname}-common
-Data files for %{srcname}.
-
-%pyproject_extras_subpkg -n python3-cartopy ows plotting speedups
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n cartopy-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
-cp -a %SOURCE1 lib/cartopy/
-
-sed -i -e 's/, "pytest-cov", "coveralls"//g' pyproject.toml
-
-# Remove generated Cython sources
-rm lib/cartopy/trace.cpp
 
 %generate_buildrequires
-%pyproject_buildrequires -r -x ows,plotting,speedups,test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,ows,plotting,speedups,srtm,test
+
 
 %build
-export FORCE_CYTHON=1 SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-mkdir -p %{buildroot}%{_datadir}/cartopy/shapefiles/natural_earth/
-for theme in physical cultural; do
-    ln -s %{_datadir}/natural-earth-map-data/${theme} \
-        %{buildroot}%{_datadir}/cartopy/shapefiles/natural_earth/${theme}
-done
 
 %check
-MPLBACKEND=Agg \
-    %{pytest} -n auto --doctest-modules --mpl --mpl-generate-summary=html --pyargs cartopy \
-%if %{with network}
-    %{nil}
-%else
-    -m "not network"
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python-%{srcname}-common
-%doc README.md
-%{_datadir}/cartopy/
 
-%files -n python3-%{srcname} -f %{pyproject_files}
+%files -n python3-cartopy -f %{pyproject_files}
 %{_bindir}/cartopy_feature_download
 
 %changelog

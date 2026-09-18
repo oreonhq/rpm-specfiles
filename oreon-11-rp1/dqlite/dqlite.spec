@@ -1,7 +1,7 @@
 %global source0_hash c9468a335aac9755b70f8f92726d84e93b486459767979288aafc43e66b5ff24
 
 Name:           dqlite
-Version:        1.17.1
+Version:        1.18.7
 Release:        1%{?dist}
 Summary:        Embeddable, replicated and fault tolerant SQL engine
 

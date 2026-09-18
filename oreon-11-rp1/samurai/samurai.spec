@@ -1,8 +1,8 @@
 %global source0_hash 37a2d9f35f338c53387eba210bab7e5d8abe033492664984704ad84f91b71bac
 
 Name:           samurai
-Version:        1.2
-Release:        9%{?dist}
+Version:        1.3
+Release:        1%{?dist}
 Summary:        ninja-compatible build tool written in C
 
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

@@ -1,72 +1,57 @@
-%global source0_hash e9e62d3fd307ef9c52e43b33fd92759fc94c04d8b5178f85f641b183906d4353
+%global source0_hash none
 
 Name:           python-ftputil
-Version:        5.1.0
+Version:        5.2.0
 Release:        %autorelease
-Summary:        High-level FTP client library (virtual file system and more)
+# Fill in the actual package summary to submit package to Fedora
+Summary:        High-level FTP client library _virtual file system and more_
 
-# The entire source is BSD-3-Clause, except:
-#
-# BSD-3-Clause OR AFL-2.1:
-#   - ftputil/lrucache.py
-License:        BSD-3-Clause AND (BSD-3-Clause OR AFL-2.1)
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
 URL:            https://ftputil.sschwarzer.net/
-# Bug tracker: https://todo.sr.ht/~sschwarzer/ftputil
-# Git hosting: https://git.sr.ht/~sschwarzer/ftputil
 Source:         %{pypi_source ftputil}
 
-BuildSystem:            pyproject
-BuildOption(install):   -l ftputil
-
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-# There is no list of test dependencies anywhere in the PyPI sdist. We could
-# use an archive from https://git.sr.ht/~sschwarzer/ftputil, but it’s easier
-# just to list them manually:
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist freezegun}
-# For /usr/bin/ftp:
-BuildRequires:  ftp
 
-%global common_description %{expand:
-ftputil is a high-level FTP client library for the Python programming language.
-ftputil implements a virtual file system for accessing FTP servers, that is, it
-can generate file-like objects for remote files. The library supports many
-functions similar to those in the os, os.path and shutil modules. ftputil has
-convenience functions for conditional uploads and downloads, and handles FTP
-clients and servers in different timezones.}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'ftputil' generated automatically by pyp2spec.}
 
-%description %{common_description}
+%description %_description
 
-%package -n python3-ftputil
+%package -n     python3-ftputil
 Summary:        %{summary}
 
-# The file ftputil/lrucache.py is a bundled copy of
-# https://pypi.org/project/lrucache/; it cannot reasonably be unbundled because
-# the original project is defunct (last upstream release in 2004). The version
-# number is based on a comment in the source file.
-Provides:       bundled(python3dist(lrucache)) = 0.2
+%description -n python3-ftputil %_description
 
-Requires:       ftp
 
-%description -n python3-ftputil %{common_description}
+%prep
+%autosetup -p1 -n ftputil-%{version}
 
-%check -a
-# These tests require a real FTP server.
-ignore="${ignore-} --ignore=test/test_real_ftp.py"
 
-# This requires network access:
-k="${k-}${k+ and }not (TestPublicServers and test_servers)"
+%generate_buildrequires
+%pyproject_buildrequires
 
-# Required for TestAcceptEitherUnicodeOrBytes.test_upload, but not included in
-# the PyPI sdist. This doesn’t need to be a real Makefile; it just needs to
-# exist.
-touch Makefile
 
-%pytest ${ignore-} -k "${k-}" -v
+%build
+%pyproject_wheel
+
+
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-ftputil -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

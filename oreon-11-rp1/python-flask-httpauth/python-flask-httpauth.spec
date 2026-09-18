@@ -1,74 +1,64 @@
-%global source0_hash 66568a05bc73942c65f1e2201ae746295816dc009edd84b482c44c758d75097a
+%global source0_hash none
 
-%global pypi_name Flask-HTTPAuth
-%global pkg_name flask-httpauth
+Name:           python-flask-httpauth
+Version:        4.8.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        HTTP authentication for Flask routes
 
-Name:           python-%{pkg_name}
-Version:        4.8.0
-Release:        9%{?dist}
-Summary:        Basic and Digest HTTP authentication for Flask routes
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            http://github.com/miguelgrinberg/flask-httpauth/
-Source0:        https://files.pythonhosted.org/packages/source/F/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
-# https://github.com/miguelgrinberg/Flask-HTTPAuth/commit/52a13b15b
-Patch0:         python-flask-httpauth-toml.patch
-BuildRequires:  make
-BuildRequires:  python3-devel
-BuildRequires:  python3-flask+async
-BuildRequires:  python3-pytest
-BuildRequires:  python3-sphinx
+URL:            https://github.com/miguelgrinberg/flask-httpauth
+Source:         %{pypi_source flask_httpauth}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-FlaskHTTPAuth Basic and Digest HTTP authentication for Flask routes.
 
-%package -n     python-%{pkg_name}-doc
-Summary:        Documentation for Flask-HTTPAuth
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'flask-httpauth' generated automatically by pyp2spec.}
 
-%description -n python-%{pkg_name}-doc
-FlaskHTTPAuth Basic and Digest HTTP authentication for Flask routes.
+Patch0:         python-flask-httpauth-toml.patch
 
-This package provides the documentation.
+%description %_description
 
-%package -n     python3-%{pkg_name}
-Summary:        Basic and Digest HTTP authentication for Flask routes
-%{?python_provide:%python_provide python3-%{pkg_name}}
+%package -n     python3-flask-httpauth
+Summary:        %{summary}
 
-%description -n python3-%{pkg_name}
-FlaskHTTPAuth Basic and Digest HTTP authentication for Flask routes.
+%description -n python3-flask-httpauth %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-flask-httpauth dev,docs
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n flask_httpauth-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs
+
 
 %build
 %pyproject_wheel
- 
-# Build docs
-pushd docs
-make PYTHONPATH=%{buildroot}/%{python3_sitelib} SPHINXBUILD=sphinx-build-3 html
-rm -v _build/html/.buildinfo
-popd
+
 
 %install
 %pyproject_install
-%pyproject_save_files flask_httpauth
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python-%{pkg_name}-doc
-%license LICENSE
-%doc docs/_build/html
 
-%files -n python3-%{pkg_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.md
+%files -n python3-flask-httpauth -f %{pyproject_files}
 
 %changelog
 %autochangelog

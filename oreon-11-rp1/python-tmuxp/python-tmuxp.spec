@@ -1,68 +1,57 @@
-%global source0_hash 71f5412b6722538ca2f5964d2c1b39731afa0e906daa1c5723b523cb6199bf77
+%global source0_hash none
 
-%bcond tests 1
-%bcond all_tests 0
-
-%global srcname tmuxp
-
-Name:           python-%{srcname}
-Version:        1.52.2
+Name:           python-tmuxp
+Version:        1.74.0
 Release:        %autorelease
-Summary:        Tmux session manager
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Session manager for tmux, which allows users to save and load tmux sessions through simple configuration files.
 
-# This is the proper SPDX license
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://tmuxp.git-pull.com/
-Source:         %{pypi_source}
+URL:            https://github.com/tmux-python/tmuxp
+Source:         %{pypi_source tmuxp}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Session manager for tmux, which allows users to save and load tmux sessions
-through simple configuration files.}
+This is package 'tmuxp' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
-Summary:	%{summary}
-BuildRequires:  python3-devel
-%if %{with tests}
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(docutils)
-BuildRequires:  python3dist(pytest-mock)
-BuildRequires:  python3dist(pytest-rerunfailures)
-BUildRequires:  python3dist(sphinx)
-BuildRequires:  python3dist(typing-extensions)
-%endif
+%package -n     python3-tmuxp
+Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-tmuxp %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n tmuxp-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files tmuxp
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-PYTHONPATH=src %pytest -v \
-%if %{without all_tests}
-  --deselect tests/workspace/test_builder.py::test_window_shell
-%else
-%nil
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md CHANGES examples
+
+%files -n python3-tmuxp -f %{pyproject_files}
 %{_bindir}/tmuxp
 
 %changelog

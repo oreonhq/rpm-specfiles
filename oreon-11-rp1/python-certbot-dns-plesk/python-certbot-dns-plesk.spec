@@ -1,62 +1,62 @@
-%global source0_hash 82ea88a7ec3d42f2cd77364c881bcf5dbfce5636d0d9aeb187b45124db703416
+%global source0_hash none
 
-%global pypi_name certbot-dns-plesk
+Name:           python-certbot-dns-plesk
+Version:        0.4.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        plesk DNS Authenticator plugin for Certbot
 
-Name:           python-%{pypi_name}
-Version:        0.3.0
-Release:        18%{?dist}
-Summary:        Plesk DNS Authenticator plugin for Certbot
-
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-3.0-or-later
-URL:            https://pypi.org/project/%{pypi_name}
-Source0:        %{pypi_source}
+URL:            https://gitlab.com/spike77453/certbot-dns-plesk
+Source:         %{pypi_source certbot_dns_plesk}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-# Test dependencies:
-BuildRequires:  python3dist(pytest)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Plesk DNS Authenticator plugin for Certbot
-}
+This is package 'certbot-dns-plesk' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-certbot-dns-plesk
 Summary:        %{summary}
 
-# Provide the name users expect as a certbot plugin
-%if 0%{?fedora}
-Provides:       %{pypi_name} = %{version}-%{release}
-%endif
-# Recommend the CLI as that will be the interface most use
-Recommends:     certbot
+%description -n python3-certbot-dns-plesk %_description
 
-%description -n python3-%{pypi_name} %_description
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-certbot-dns-plesk test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n certbot_dns_plesk-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files certbot_dns_plesk
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.md
+
+%files -n python3-certbot-dns-plesk -f %{pyproject_files}
 
 %changelog
 %autochangelog

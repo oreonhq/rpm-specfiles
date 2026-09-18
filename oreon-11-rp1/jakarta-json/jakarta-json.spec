@@ -3,8 +3,8 @@
 %global giturl  https://github.com/jakartaee/jsonp-api
 
 Name:           jakarta-json
-Version:        2.1.3
-Release:        9%{?dist}
+Version:        2.1.3-RELEASE-RELEASE
+Release:        1%{?dist}
 Summary:        Jakarta JSON Processing
 
 License:        EPL-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0

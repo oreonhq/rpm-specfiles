@@ -2,8 +2,8 @@
 
 Summary: Old version of libpng, needed to run old binaries
 Name: libpng12
-Version: 1.2.57
-Release: 25%{?dist}
+Version: 1.6.58
+Release: 1%{?dist}
 License: zlib
 URL: http://www.libpng.org/pub/png/
 

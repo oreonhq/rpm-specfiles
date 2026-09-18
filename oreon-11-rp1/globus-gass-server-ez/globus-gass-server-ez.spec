@@ -4,8 +4,8 @@
 
 Name:		globus-gass-server-ez
 %global _name %(tr - _ <<< %{name})
-Version:	6.2
-Release:	10%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Globus Gass Server_ez
 
 License:	Apache-2.0

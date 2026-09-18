@@ -16,7 +16,7 @@
 %global crate_version 0.1.0-rc.0
 
 Name:           rust-blazesym-c
-Version:        0.1.0~rc.0
+Version:        0.1.10
 Release:        %autorelease
 Summary:        C bindings for blazesym
 

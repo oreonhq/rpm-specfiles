@@ -8,7 +8,7 @@
 %global crate rstest_macros
 
 Name:           rust-rstest_macros
-Version:        0.26.1
+Version:        0.27.0
 Release:        %autorelease
 Summary:        Rust fixture based test framework
 

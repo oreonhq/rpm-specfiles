@@ -14,8 +14,8 @@
 %global gh_project   phar-utils
 
 Name:           php-seld-phar-utils
-Version:        1.2.1
-Release:        9%{?dist}
+Version:        1.2.2
+Release:        1%{?dist}
 Summary:        PHAR file format utilities
 
 License:        MIT

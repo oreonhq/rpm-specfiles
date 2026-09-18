@@ -1,13 +1,13 @@
 %global source0_hash 90e2b78d43cc32fb3f6af027788162dc9d272941f9630b43fc34f203a55c86a7
 
 Name:           netpanzer
-Version:        0.8.7
-Release:        29%{?dist}
+Version:        0.9.1
+Release:        1%{?dist}
 Summary:        An Online Multiplayer Tactical Warfare Game
 
 License:        GPL-2.0-or-later
 URL:            http://www.netpanzer.info
-Source0:	http://www.netpanzer.info/Download/NetPanzer/Releases/0.8.7/netpanzer-0.8.7-source.zip
+Source0:	http://www.netpanzer.info/Download/NetPanzer/Releases/0.9.1/netpanzer-0.8.7-source.zip
 Source1:	netpanzer.desktop
 Patch4:         netpanzer-0.8.2-MapSelectionView-memory.patch
 Patch6:         netpanzer-0.8.7-ccflags.patch

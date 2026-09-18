@@ -7,7 +7,7 @@
 %global crate dns-lookup
 
 Name:           rust-dns-lookup
-Version:        3.0.1
+Version:        4.0.1
 Release:        %autorelease
 Summary:        Simple dns resolving api, much like rust's unstable api
 

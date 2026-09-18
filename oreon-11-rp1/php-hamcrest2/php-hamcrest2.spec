@@ -18,8 +18,8 @@
 %bcond_without       tests
 
 Name:           php-hamcrest2
-Version:        2.1.1
-Release:        3%{?dist}
+Version:        3.0.0
+Release:        1%{?dist}
 Summary:        PHP port of Hamcrest Matchers
 
 License:        BSD-3-Clause
@@ -39,7 +39,7 @@ BuildRequires:  php-fedora-autoloader-devel
 #               "phpunit/phpunit": "^4.8.36 || ^5.7 || ^6.5 || ^7.0 || ^8.0 || ^9.0"
 BuildRequires:  phpunit9
 BuildRequires:  php(language) >= 7.4
-# From phpcompatinfo report for 2.1.1
+# From phpcompatinfo report for 3.0.0
 BuildRequires:  php-ctype
 BuildRequires:  php-dom
 %endif
@@ -47,7 +47,7 @@ BuildRequires:  php-dom
 # composer.json, require:
 #      "php": "^7.4|^8.0"
 Requires:       php(language) >= 7.4
-# From phpcompatinfo report for 2.1.1
+# From phpcompatinfo report for 3.0.0
 Requires:       php-ctype
 Requires:       php-dom
 # Autoloader

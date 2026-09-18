@@ -1,8 +1,8 @@
 %global source0_hash 9e4fdf156b709397308536eb6b921e3aea1f463c6613f9a0c1dfec9614386027
 
 Name:           cpptest
-Version:        1.1.2
-Release:        30%{?dist}
+Version:        2.0.0
+Release:        1%{?dist}
 Summary:        A portable and powerful and simple unit testing framework for C++
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

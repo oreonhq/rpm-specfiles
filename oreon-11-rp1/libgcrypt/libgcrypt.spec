@@ -1,7 +1,7 @@
 %global source0_hash 7df5c08d952ba33f9b6bdabdb06a61a78b2cf62d2122c2d1d03a91a79832aa3c
 
 Name: libgcrypt
-Version: 1.12.1
+Version: 1.12.4
 Release: 1%{?dist}
 URL: https://www.gnupg.org/
 Source0:        https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-%{version}.tar.bz2

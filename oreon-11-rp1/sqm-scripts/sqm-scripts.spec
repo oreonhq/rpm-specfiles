@@ -1,8 +1,8 @@
 %global source0_hash d30ee75067b857773df84d540e09dc578223a43afe30ec4887fd2f6ac493dc9c
 
 Name: sqm-scripts
-Version: 1.6.0
-Release: 7%{?dist}
+Version: 1.8.0
+Release: 1%{?dist}
 Summary: Traffic shaper scripts for Smart Queue Management
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only

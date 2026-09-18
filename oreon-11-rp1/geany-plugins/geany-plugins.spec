@@ -1,11 +1,11 @@
 %global source0_hash 813f24570ca7590a9ae6e8e9ca4e5bd6c9f09d61fe36ad6feca89b7c2feaae70
 
 %global geany_plug_docdir %{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}}
-%global req_geany_ver 2.1
+%global req_geany_ver 2.1.0
 
 Name:           geany-plugins
-Version:        2.1
-Release:        3%{?dist}
+Version:        2.1.0
+Release:        1%{?dist}
 Summary:        Plugins for Geany
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

@@ -2,8 +2,8 @@
 
 Name:    skrooge
 Summary: Personal finances manager
-Version: 26.1.20
-Release: 2%{?dist}
+Version: 26.8.0
+Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later

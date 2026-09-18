@@ -2,8 +2,8 @@
 
 Name:		globus-gram-job-manager-pbs
 %global _name %(tr - _ <<< %{name})
-Version:	3.1
-Release:	21%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - PBS Job Manager Support
 
 License:	Apache-2.0

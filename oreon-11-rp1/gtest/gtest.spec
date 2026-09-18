@@ -2,12 +2,12 @@
 
 Summary:        Google C++ testing framework
 Name:           gtest
-Version:        1.17.0
+Version:        1.18.0
 
 %global forgeurl https://github.com/google/googletest
 %forgemeta
 
-Release:        2%{?dist}
+Release:        1%{?dist}
 # scripts/generator/* are Apache-2.0
 License:        BSD-3-Clause and Apache-2.0
 URL:            %forgeurl

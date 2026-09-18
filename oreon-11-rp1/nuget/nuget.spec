@@ -3,8 +3,8 @@
 %global debug_package %{nil}
 
 Name:           nuget
-Version:        2.8.7
-Release:        24%{?dist}
+Version:        6.6.1.2
+Release:        1%{?dist}
 Summary:        Package manager for .Net/Mono development platform
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0

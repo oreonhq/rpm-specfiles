@@ -6,8 +6,8 @@
 %global         shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           officeparser
-Version:        0.20180820
-Release:        15%{?dist}
+Version:        1.0.1
+Release:        1%{?dist}
 Summary:        Parse the format of OLE compound documents used by MS Office applications
 License:        MIT
 URL:            https://github.com/%{gituser}/%{gitname}

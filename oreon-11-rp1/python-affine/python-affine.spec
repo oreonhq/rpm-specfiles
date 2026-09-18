@@ -1,51 +1,57 @@
-%global source0_hash a24d818d6a836c131976d22f8c27b8d3ca32d0af64c1d8d29deb7bafa4da1eea
+%global source0_hash none
 
-%global srcname affine
-
-Name:           python-%{srcname}
-Version:        2.4.0
+Name:           python-affine
+Version:        3.0.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Matrices describing affine transformation of the plane
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://github.com/sgillies/affine
-Source0:        %pypi_source
+URL:            https://github.com/rasterio/affine
+Source:         %{pypi_source affine}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%global _description \
-Matrices describing affine transformation of the plane. The Affine package is \
-derived from Casey Duncan's Planar package.
 
-%description %{_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'affine' generated automatically by pyp2spec.}
 
-%package -n     python3-%{srcname}
+%description %_description
+
+%package -n     python3-affine
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-affine %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n affine-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{pytest} -v --pyargs affine
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
+
+%files -n python3-affine -f %{pyproject_files}
 
 %changelog
 %autochangelog

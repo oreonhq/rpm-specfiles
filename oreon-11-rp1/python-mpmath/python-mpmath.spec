@@ -1,142 +1,64 @@
-%global source0_hash 54f8dbba6993c43f25eb84db9927e5bde6308bcb8d1deaa88731ea9d7c93af77
-
-# Docs build is currently broken after the transition to wheels.
-# Somebody can figure this out if they care enough.
-%bcond docs 0
+%global source0_hash none
 
 Name:           python-mpmath
-Version:        1.4.0b3
+Version:        1.5.0~a1
 Release:        %autorelease
-Summary:        Pure-Python library for multiprecision floating-point arithmetic
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python library for arbitrary-precision floating-point arithmetic
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://mpmath.org
-# Source code
-Source0:        https://github.com/fredrik-johansson/mpmath/archive/%{version}/%{name}-%{version}.tar.gz
-
-# Switch to 'traditional' theme in RHEL since 'classic' isn't available
-Patch0:         python-mpmath-1.0.0-sphinx.patch
-
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  xwayland-run
-BuildRequires:  mutter
-BuildRequires:  mesa-dri-drivers
-
-%if %{with docs}
-# For building documentation
-BuildRequires:  dvipng
-BuildRequires:  latexmk
-BuildRequires:  make
-BuildRequires:  tex(latex)
-BuildRequires:  tex(capt-of.sty)
-BuildRequires:  tex(ellipse.sty)
-BuildRequires:  tex(fncychap.sty)
-BuildRequires:  tex(framed.sty)
-BuildRequires:  tex(needspace.sty)
-BuildRequires:  tex(pict2e.sty)
-BuildRequires:  tex(tabulary.sty)
-BuildRequires:  tex(tgtermes.sty)
-BuildRequires:  tex(txtt.tfm)
-BuildRequires:  tex(upquote.sty)
-BuildRequires:  tex(wrapfig.sty)
-%endif
+URL:            https://mpmath.org/
+Source:         %{pypi_source mpmath 1.5.0a1}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Mpmath is a pure-Python library for multiprecision floating-point
-arithmetic. It provides an extensive set of transcendental functions,
-unlimited exponent sizes, complex numbers, interval arithmetic,
-numerical integration and differentiation, root-finding, linear
-algebra, and much more. Almost any calculation can be performed just
-as well at 10-digit or 1000-digit precision, and in many cases mpmath
-implements asymptotically fast algorithms that scale well for
-extremely high precision work. If available, mpmath will (optionally)
-use gmpy to speed up high precision operations.}
+This is package 'mpmath' generated automatically by pyp2spec.}
+
+Patch0:         python-mpmath-1.0.0-sphinx.patch
 
 %description %_description
 
-%package -n python3-mpmath
-Summary:        A pure Python library for multiprecision floating-point arithmetic
-%if 0%{?fedora} || 0%{?rhel} > 7
-Recommends:     python3-matplotlib
-%endif
-%if %{without docs}
-Obsoletes:      python-mpmath-doc < %{version}-%{release}
-%endif
+%package -n     python3-mpmath
+Summary:        %{summary}
 
 %description -n python3-mpmath %_description
 
-If you require plotting capabilities in mpmath, install python3-matplotlib.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-mpmath ci,develop,docs,gmp,gmpy,gmpy2,tests
 
-%if %{with docs}
-%package doc
-Summary:        HTML documentation for %{name}
-Requires:       python3-mpmath = %{version}-%{release}
-
-# BSD-3-Clause: the content
-# BSD-2-Clause: files in html/_static and html/searchindex.js, added by Sphinx
-License:        BSD-3-Clause AND BSD-2-Clause
-
-%description doc
-This package contains the HTML documentation for %{name}.
-%endif
-
-%pyproject_extras_subpkg -n python3-mpmath gmpy
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n mpmath-1.5.0a1
 
-%setup -q -n mpmath-%{version}
-%if 0%{?rhel} == 7
-%patch -P0 -p1 -b .sphinx
-%endif
-
-# Drop the gmpy2 extra which requires an alpha release (gmpy2>=2.3.0a1,<2.3.0a2).
-# Rewrite the gmpy extra to directly depend on gmpy2 without the alpha constraint,
-# instead of going through the self-reference mpmath[gmpy2].
-sed -r -i "/^gmpy2 =/d" pyproject.toml
-sed -r -i "s/^gmpy = .*/gmpy = ['gmpy2']/" pyproject.toml
 
 %generate_buildrequires
-export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_MPMATH=%{version}
-%pyproject_buildrequires -x %{?with_docs:docs,}gmpy,tests
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x ci,develop,docs,gmp,gmpy,gmpy2,tests
+
 
 %build
-export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_MPMATH=%{version}
 %pyproject_wheel
 
-%if %{with docs}
-# Build documentation
-export PYTHONPATH=$PWD/build/lib
-mkdir -p docs/latex
-sphinx-build -b latex %{?_smp_mflags} docs docs/latex
-%make_build -C docs/latex
-mkdir -p docs/html
-sphinx-build -b html %{?_smp_mflags} docs docs/html
-rm -rf docs/html/.{buildinfo,doctrees}
-%endif
 
 %install
-export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_MPMATH=%{version}
 %pyproject_install
-%pyproject_save_files mpmath
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-cd mpmath/tests/
-OPTIONS=(
-    # Some of those tests fail with 'failed to import mpmath'.
-    --deselect=mpmath/tests/test_cli.py
-)
-xwfb-run -c mutter -- pytest-3 -v "${OPTIONS[@]}"
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-mpmath -f %{pyproject_files}
-%doc CHANGES README.rst
-
-%if %{with docs}
-%files doc
-%doc docs/latex/mpmath.pdf docs/html
-%endif
 
 %changelog
 %autochangelog

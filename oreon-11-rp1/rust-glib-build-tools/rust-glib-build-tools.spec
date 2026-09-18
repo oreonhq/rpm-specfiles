@@ -7,7 +7,7 @@
 %global crate glib-build-tools
 
 Name:           rust-glib-build-tools
-Version:        0.20.0
+Version:        0.22.8
 Release:        %autorelease
 Summary:        Rust bindings for the Gio library, build script utils crate
 

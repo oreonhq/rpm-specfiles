@@ -6,8 +6,8 @@
 Name:           python-pyliblo3
 %global snapinfo ^%{snapdate}git%{sub %{commit} 1 7}
 #Version:        0.16.2%%{snapinfo}
-Version:        0.16.3
-Release:        8%{?dist}
+Version:        0.16.4
+Release:        1%{?dist}
 Summary:        Python bindings for the liblo Open Sound Control (OSC) library
 # Main code is LGPL-2.1-or-later
 License:        LGPL-2.1-or-later

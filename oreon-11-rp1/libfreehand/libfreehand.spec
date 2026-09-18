@@ -3,7 +3,7 @@
 %global apiversion 0.1
 
 Name: libfreehand
-Version: 0.1.2
+Version: 0.1.4
 Release: %autorelease
 Summary: A library for import of Macromedia/Adobe FreeHand documents
 

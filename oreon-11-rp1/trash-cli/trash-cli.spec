@@ -2,7 +2,7 @@
 
 Summary:        Command line interface to the freedesktop.org trashcan
 Name:           trash-cli
-Version:        0.24.5.26
+Version:        0.26.9.14
 Release:        %autorelease
 License:        GPL-2.0-or-later
 URL  :          https://github.com/andreafrancia/trash-cli

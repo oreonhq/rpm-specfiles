@@ -2,8 +2,8 @@
 
 Name:		globus-gridmap-eppn-callout
 %global _name %(tr - _ <<< %{name})
-Version:	2.2
-Release:	18%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Globus gridmap ePPN callout
 
 License:	Apache-2.0

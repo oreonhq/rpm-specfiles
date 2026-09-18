@@ -1,59 +1,61 @@
-%global source0_hash b24a47bc37ffb14fee2d9525b4aa0b86eeb2aab24755fd6e74707c4e4d0b807a
+%global source0_hash none
 
 Name:           python-ovh
-Version:        1.1.2
-Release:        8%{?dist}
-Summary:        Lightweight wrapper around OVHcloud's APIs
+Version:        1.2.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        _Official module to perform HTTP requests to the OVHcloud APIs_
 
-License:        BSD
-URL:            https://github.com/ovh/python-ovh
-Source:         %{url}/archive/v%{version}/python-ovh-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/ovh/python-ovh.git
+Source:         %{pypi_source ovh}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# For building man pages
-BuildRequires:  make
-BuildRequires:  python3dist(sphinx)
-BuildRequires:  python3dist(pytest)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Lightweight wrapper around OVHcloud's APIs. Handles all the hard work
-including credential creation and requests signing.
-}
+This is package 'ovh' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-ovh
+%package -n     python3-ovh
 Summary:        %{summary}
 
 %description -n python3-ovh %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-ovh dev
 
-%autosetup -p1 -n python-ovh-%{version}
+
+%prep
+%autosetup -p1 -n ovh-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
-cd docs/ && make man
+
 
 %install
 %pyproject_install
-%pyproject_save_files ovh
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-mkdir -p %{buildroot}/%{_mandir}/man1/
-install -m 0644 docs/_build/man/python-ovh.1* %{buildroot}/%{_mandir}/man1/
 
 %check
-# Deselect network-dependent tests
-%pytest --deselect tests/test_client.py::TestClient::test_endpoints
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-ovh -f %{pyproject_files}
-%doc examples/ README.rst
-%{_mandir}/man1/python-ovh.1*
 
 %changelog
 %autochangelog

@@ -2,7 +2,7 @@
 
 Summary: Generator Tools for Coding SOAP/XML Web Services in C and C++
 Name: gsoap
-Version: 2.8.139
+Version: 2.8.144
 Release: 1%{?dist}
 
 # gsoap is licensed both under the gSOAP public license and under GPL version

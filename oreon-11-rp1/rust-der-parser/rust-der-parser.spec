@@ -7,7 +7,7 @@
 %global crate der-parser
 
 Name:           rust-der-parser
-Version:        7.0.0
+Version:        10.0.0
 Release:        %autorelease
 Summary:        Parser/encoder for ASN.1 BER/DER data
 

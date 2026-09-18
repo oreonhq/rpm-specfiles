@@ -7,7 +7,7 @@
 %global crate crypto-bigint
 
 Name:           rust-crypto-bigint
-Version:        0.5.5
+Version:        0.7.5
 Release:        %autorelease
 Summary:        Pure Rust implementation of a big integer library which has been desi...
 

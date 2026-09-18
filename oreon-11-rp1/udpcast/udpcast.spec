@@ -2,8 +2,8 @@
 
 Name:          udpcast
 Summary:       UDP broadcast file distribution and installation
-Version:       20211207
-Release:       13%{?dist}
+Version:       20250223
+Release:       1%{?dist}
 License:       GPL-2.0-or-later AND BSD-2-Clause-first-lines AND MPL-1.1
 URL:           http://udpcast.linux.lu/
 Source:        https://www.udpcast.linux.lu/download/%{name}-%{version}.tar.gz

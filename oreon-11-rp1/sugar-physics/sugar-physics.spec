@@ -1,8 +1,8 @@
 %global source0_hash 2dca71584a956a452cc85d25eefb569f08f334bc05930f3f0f52636bd48393bf
 
 Name:           sugar-physics
-Version:        35
-Release:        16%{?dist}
+Version:        36
+Release:        1%{?dist}
 Summary:        A physical world simulator and playground for Sugar
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

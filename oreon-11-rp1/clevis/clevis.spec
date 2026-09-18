@@ -1,7 +1,7 @@
 %global source0_hash a0388a544c77139dc751cdbf66bdd38fc29c43f9e81a1cdfd119c84109ffca3f
 
 Name:           clevis
-Version:        21
+Version:        23
 Release:        %autorelease
 Summary:        Automated decryption framework
 

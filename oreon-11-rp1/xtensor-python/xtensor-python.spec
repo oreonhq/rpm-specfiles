@@ -3,7 +3,7 @@
 %undefine __cmake_in_source_build
 
 Name:           xtensor-python
-Version:        0.28.0
+Version:        0.29.0
 Release:        %autorelease
 Summary:        Python bindings for xtensor
 # Automatically converted from old format: BSD - review is highly recommended.

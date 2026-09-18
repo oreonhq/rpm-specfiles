@@ -1,98 +1,61 @@
-%global source0_hash d916cff57a1c7f393a82d01bf89ca227fc33225b13dd0e93e99ae72272f5062e
+%global source0_hash none
 
-%global srcname Traits
-%global modname traits
-%global commit ac5d0296def6a389f932add5fbcab2eef6e7334e
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
-# Circular test deps with traitsui
-%bcond_with bootstrap
-
-Name:           python-%{srcname}
-Version:        7.0.2
+Name:           python-traits
+Version:        7.1.0
 Release:        %autorelease
-Summary:        Explicitly typed attributes for Python
-# Images have different licenses. For image license breakdown check
-# image_LICENSE.txt file.
-License:        BSD-3-Clause AND CC-BY-3.0
-URL:            http://docs.enthought.com/traits/
-#Source0:        https://github.com/enthought/traits/archive/%{commit}/%{modname}-%{shortcommit}.tar.gz
-Source0:        https://github.com/enthought/%{modname}/archive/%{version}/%{modname}-%{version}.tar.gz
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Observable typed attributes for Python classes
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/enthought/traits
+Source:         %{pypi_source traits}
+
+BuildRequires:  python3-devel
 BuildRequires:  gcc
-BuildRequires:  xorg-x11-server-Xvfb
 
-%description
-The traits package developed by Enthought provides a special type
-definition called a trait. Although they can be used as normal Python object
-attributes, traits also have several additional characteristics:
 
-* Initialization: A trait can be assigned a default value.
-* Validation: A trait attribute's type can be explicitly declared.
-* Delegation: The value of a trait attribute can be contained either
-  in another object.
-* Notification: Setting the value of a trait attribute can trigger
-  notification of other parts of the program.
-* Visualization: User interfaces that permit the interactive
-  modification of a trait's value can be automatically constructed
-  using the trait's definition.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'traits' generated automatically by pyp2spec.}
 
-%package -n python%{python3_pkgversion}-%{srcname}
+%description %_description
+
+%package -n     python3-traits
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
-# For tests
-BuildRequires:  python%{python3_pkgversion}-Cython
-BuildRequires:  python%{python3_pkgversion}-numpy
-BuildRequires:  python%{python3_pkgversion}-sphinx
-%if %{without bootstrap}
-BuildRequires:  python%{python3_pkgversion}-traitsui
-%endif
-Requires:       python%{python3_pkgversion}-numpy
-Provides:       python%{python3_pkgversion}-%{modname} = %{version}-%{release}
 
-%description -n python%{python3_pkgversion}-%{srcname}
-The traits package developed by Enthought provides a special type
-definition called a trait. Although they can be used as normal Python object
-attributes, traits also have several additional characteristics:
+%description -n python3-traits %_description
 
-* Initialization: A trait can be assigned a default value.
-* Validation: A trait attribute's type can be explicitly declared.
-* Delegation: The value of a trait attribute can be contained either
-  in another object.
-* Notification: Setting the value of a trait attribute can trigger
-  notification of other parts of the program.
-* Visualization: User interfaces that permit the interactive
-  modification of a trait's value can be automatically constructed
-  using the trait's definition.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-traits docs,examples,test
 
-Python 3 version.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n traits-%{version}
 
-%autosetup -n %{modname}-%{version} -p1
-# we already have a bit another flags
-sed -i -e '/extra_compile_args=/d' setup.py
 
 %generate_buildrequires
-# -x test has unpackaged deps
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,examples,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %modname
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-pushd build/lib.%{python3_platform}-*
-  export PYTHONPATH=%{buildroot}%{python3_sitearch}
-  xvfb-run %__python3 -s -m unittest discover -v
-popd
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %pyproject_files
-%doc CHANGES.rst examples/tutorials README.rst
+
+%files -n python3-traits -f %{pyproject_files}
 
 %changelog
 %autochangelog

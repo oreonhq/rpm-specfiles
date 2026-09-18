@@ -4,8 +4,8 @@
 %global alpha 0
 
 Name:           flmsg
-Version:        4.0.23
-Release:        8%{?dist}
+Version:        4.0.24
+Release:        1%{?dist}
 Summary:        Fast Light Message Amateur Radio Forms Manager
 
 # Embedded mongoose is GPLv2

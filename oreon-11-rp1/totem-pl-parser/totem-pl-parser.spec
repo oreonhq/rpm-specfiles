@@ -1,8 +1,8 @@
 %global source0_hash c0df0f68d5cf9d7da43c81c7f13f11158358368f98c22d47722f3bd04bd3ac1c
 
 Name:		totem-pl-parser
-Version:	3.26.6
-Release:	14%{?dist}
+Version:	3.26.7
+Release:	1%{?dist}
 Summary:	Totem Playlist Parser library
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

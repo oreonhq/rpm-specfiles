@@ -4,8 +4,8 @@
 %global appdata_id org.nicotine_plus.Nicotine
 
 Name:           nicotine+
-Version:        3.3.10
-Release:        6%{?dist}
+Version:        3.3.11
+Release:        1%{?dist}
 Summary:        A graphical client for Soulseek
 
 # - pynicotine/external/tinytag.py is MIT

@@ -1,7 +1,7 @@
 %global source0_hash 3bfb888355aae87c2dec9e409285d0b21061acaad075f5536dbf2aafbb6d48dc
 
 Name:           vmpk
-Version:        0.9.1
+Version:        0.9.2
 Release:        %autorelease
 Summary:        Virtual MIDI Piano Keyboard
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

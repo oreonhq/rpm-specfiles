@@ -1,56 +1,64 @@
-%global source0_hash 50057fd5ad5fcf047f542dfc6747a896e7ef982f1b5f8500daf51f3abd609962
+%global source0_hash none
 
-%global pypi_name dropbox
-Name:           python-%{pypi_name}
-Version:        12.0.2
-Release:        12%{?dist}
-Summary:        Official Dropbox REST API Client
+Name:           python-dropbox
+Version:        12.2.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Official Dropbox API Client
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-
-URL:            https://www.dropbox.com/developers/core/sdks
-Source0:        %pypi_source
-# Remove pytest-runner / setup.py test support
-# https://github.com/dropbox/dropbox-sdk-python/pull/523
-# Without changes to requirements.txt, which is not in the PyPI sdist
-Patch:          dropbox-12.0.2-no-pytest-runner.patch
+URL:            http://www.dropbox.com/developers
+Source:         %{pypi_source dropbox}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
 
-%description
-A Python library for Dropbox's HTTP-based Core and Datastore APIs.
 
-%package -n python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'dropbox' generated automatically by pyp2spec.}
+
+Patch:          dropbox-12.0.2-no-pytest-runner.patch
+
+%description %_description
+
+%package -n     python3-dropbox
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{pypi_name}}
-Requires:       python3-requests
-Requires:       python3-six
-Requires:       python3-urllib3
 
-%description -n python3-%{pypi_name}
-A Python library for Dropbox's HTTP-based Core and Datastore APIs.
+%description -n python3-dropbox %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-dropbox dev,docs,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n dropbox-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{pypi_name}
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/%{pypi_name}
-%{python3_sitelib}/%{pypi_name}-%{version}.dist-info/
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-dropbox -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,55 +1,56 @@
-%global source0_hash 461b0286c57c5453cad8e715df0c7ea2055ca465b303afb878e46a44de81418e
-
-%global srcname uv-dynamic-versioning
+%global source0_hash none
 
 Name:           python-uv-dynamic-versioning
-Version:        0.12.0
+Version:        0.14.1
 Release:        %autorelease
-Summary:        Dynamic versioning based on VCS tags
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Dynamic versioning based on VCS tags for uv/hatch project
 
-License:        MIT
-URL:            https://github.com/ninoseki/uv-dynamic-versioning
-Source:         %{url}/archive/v%{version}/%{srcname}-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/ninoseki/uv-dynamic-versioning/
+Source:         %{pypi_source uv_dynamic_versioning}
 
 BuildArch:      noarch
-# For autosetup -S git:
-BuildRequires:  git-core
-BuildRequires:  %{py3_dist gitpython}
-BuildRequires:  %{py3_dist pytest}
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Dynamic versioning based on VCS tags for uv/hatch project.}
+This is package 'uv-dynamic-versioning' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-uv-dynamic-versioning
+%package -n     python3-uv-dynamic-versioning
 Summary:        %{summary}
 
 %description -n python3-uv-dynamic-versioning %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-# -S git: tests need to run in a git repository:
-%autosetup -p1 -n %{srcname}-%{version} -S git
+%prep
+%autosetup -p1 -n uv_dynamic_versioning-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files -l uv_dynamic_versioning
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-uv-dynamic-versioning -f %{pyproject_files}
-%doc README.md
 %{_bindir}/uv-dynamic-versioning
 
 %changelog

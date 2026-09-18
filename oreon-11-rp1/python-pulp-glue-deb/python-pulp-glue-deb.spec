@@ -1,65 +1,57 @@
-%global source0_hash 322f938e7d13e2512a41c502fbc59ff1fbca366c719ead392349dd09029a6197
+%global source0_hash none
 
-Name: python-pulp-glue-deb
-Version: 0.4.3
-Release: %autorelease
-Summary: The version agnostic Pulp 3 client library in python (deb plugin)
-License: GPL-2.0-or-later
-URL: https://github.com/pulp/pulp-cli-deb
-BuildArch: noarch
+Name:           python-pulp-glue-deb
+Version:        0.5.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Version agnostic glue library to talk to pulpcore_s REST API. _deb plugin_
 
-Source: %{url}/archive/%{version}/pulp-cli-deb-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-2.0-or-later
+URL:            https://github.com/pulp/pulp-cli-deb
+Source:         %{pypi_source pulp_glue_deb}
 
-BuildRequires: python3-devel
-BuildRequires: python3-pytest
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-pulp-glue is a library to ease the programmatic communication with the Pulp3
-API. It helps to abstract different resource types with so called contexts and
-allows to build or even provides complex workflows like chunked upload or
-waiting on tasks.
-It is built around an openapi3 parser to provide client side validation of http
-requests, while accounting for known quirks and incompatibilities between
-different Pulp server component versions.}
+This is package 'pulp-glue-deb' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-pulp-glue-deb
-Summary: %{summary}
+%package -n     python3-pulp-glue-deb
+Summary:        %{summary}
 
 %description -n python3-pulp-glue-deb %_description
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pulp_glue_deb-%{version}
 
-%autosetup -p1 -n pulp-cli-deb-%{version}/pulp-glue-deb
-
-# Remove the Python version upper bound to enable building with new versions in Fedora
-# This will work up until 3.19, which should be enough for now
-sed -i '/requires-python =/s/,<3\.[0-9]\+//' pyproject.toml
-
-# Remove upper version bound on setuptools to enable building with new versions in Fedora
-sed -i '/requires =.*setuptools/s/<[0-9]\+//' pyproject.toml
-
-# Remove upper version bound on packaging to enable building with new versions in Fedora
-sed -i 's/"packaging.*"/"packaging"/' pyproject.toml
-
-# Remove upper version bound on multidict to enable building with new versions in Fedora
-sed -i '/"multidict/s/,<[0-9.]\+//' pyproject.toml
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pulp_glue
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pulp-glue-deb -f %{pyproject_files}
-%license ../LICENSE
-%doc README.*
 
 %changelog
 %autochangelog

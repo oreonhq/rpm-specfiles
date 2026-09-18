@@ -1,6 +1,6 @@
 %global source0_hash 4264edf9f5f5ff9bccaee1ab3f5b2613a0db526bc90c15d7c82eb05a3fc81307
 
-# Tests fails on s390x arch since 0.10.0
+# Tests fails on s390x arch since 0.11.0
 %ifnarch s390x
 %bcond_without test
 %else
@@ -10,7 +10,7 @@
 %global forgeurl https://github.com/WayfireWM/wf-config
 
 Name:           wf-config
-Version:        0.10.0
+Version:        0.11.0
 %forgemeta
 Release:        %autorelease
 Summary:        Library for managing configuration files, written for wayfire

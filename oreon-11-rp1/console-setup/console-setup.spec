@@ -1,8 +1,8 @@
 %global source0_hash 933b7ffd86676a76ca934fe217739ef0dbf9f785d7b87b38f1f32752efb238ae
 
 Name:		console-setup
-Version:	1.248
-Release:	3%{?dist}
+Version:	1.249
+Release:	1%{?dist}
 Summary:	Tools for configuring the console using X Window System key maps
 
 # For a breakdown of the licensing, see COPYRIGHT, copyright, copyright.fonts and copyright.xkb

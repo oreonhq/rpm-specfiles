@@ -1,55 +1,57 @@
-%global source0_hash 1118ba9a506540de229fcf908196312437c16eb7e85758c7a4e74bbf08126aaa
+%global source0_hash none
 
-%global pypi_name xvfbwrapper
-
-Name:           python-%{pypi_name}
-Version:        0.2.22
+Name:           python-xvfbwrapper
+Version:        0.2.34
 Release:        %autorelease
-Summary:        run headless display inside X virtual framebuffer (Xvfb)
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Manage headless displays with Xvfb _X virtual framebuffer_
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/cgoldberg/xvfbwrapper
-Source0:        %{pypi_source}
-BuildArch:      noarch
+Source:         %{pypi_source xvfbwrapper}
 
-%global _description\
-Python wrapper for running a display inside X virtual framebuffer (Xvfb)
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'xvfbwrapper' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{pypi_name}
-Summary:        run headless display inside X virtual framebuffer (Xvfb)
+%package -n     python3-xvfbwrapper
+Summary:        %{summary}
 
-BuildRequires: python3-devel
-BuildRequires: xorg-x11-server-Xvfb
+%description -n python3-xvfbwrapper %_description
 
-%description -n python3-%{pypi_name}
-Python wrapper for running a display inside X virtual framebuffer (Xvfb)
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n xvfbwrapper-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-
-# remove shebang
-sed -i '1{\@^#!/usr/bin/env python@d}' xvfbwrapper.py
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-export DISPLAY=:0.0
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-xvfbwrapper -f %{pyproject_files}
 
 %changelog
 %autochangelog

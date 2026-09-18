@@ -29,8 +29,8 @@
 # NOTICE: used by phpunit 6, 7 and 8
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        3.0.5
-Release:        5%{?dist}
+Version:        8.1.0
+Release:        1%{?dist}
 Summary:        Traverses array and object to enumerate all referenced objects, version %{major}
 
 License:        BSD-3-Clause

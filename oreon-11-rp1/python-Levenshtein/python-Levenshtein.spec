@@ -1,74 +1,59 @@
-%global source0_hash bc052cc7ac742b4a2dcfb82212b157f4adce9193ed27fe4d495f1349546eecdd
+%global source0_hash none
 
-%global srcname Levenshtein
+Name:           python-levenshtein
+Version:        0.27.5
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python extension for computing string edit distances and similarities.
 
-%global forgeurl https://github.com/rapidfuzz/%{srcname}
-Version:        0.27.3
-%forgemeta
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-2.0-or-later
+URL:            https://github.com/rapidfuzz/Levenshtein
+Source:         %{pypi_source levenshtein}
 
-Name:         python-%{srcname}
-Summary:      Python extension computing string distances and similarities
-Release:      %{autorelease}
+BuildRequires:  python3-devel
+BuildRequires:  gcc
 
-License:      GPL-2.0-or-later
 
-# Levenshtein is the latest name of the package, though the python-Levenshtein repo
-# is still being kept up-to-date in lock-step to this official upstream.
-URL:          %{forgeurl}
-
-Source0:      %{forgesource}
-Patch0:       levenshtein-0.27.1-cython-cpp.patch
-
-BuildRequires: cmake
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: python3-devel
-BuildRequires: python3-pytest
-BuildRequires: rapidfuzz-cpp-static
-
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Levenshtein computes Levenshtein distances, similarity ratios, generalized
-medians and set medians of Strings and Unicodes.}
+This is package 'levenshtein' generated automatically by pyp2spec.}
+
+Patch0:       levenshtein-0.27.1-cython-cpp.patch
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-levenshtein
+Summary:        %{summary}
 
-Summary:  %{summary}
+%description -n python3-levenshtein %_description
 
-%description -n python3-%{srcname} %_description
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n levenshtein-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
-# Remove Cython's upper constraint
-sed -i '/Cython>=3\.[0-9]\+\./s/,\s*<3\.[0-9]\+\.[0-9a-z]*[0-9]*//' pyproject.toml
-
-# Open up the rapidfuzz version constraint.
-sed -i 's/rapidfuzz 3.2.0/rapidfuzz 3.2...<4/' CMakeLists.txt
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
-# To avoid empty debugsourcefiles.list, we need to build the package
-# with RelWithDebInfo
-# Upstream issue: https://github.com/scikit-build/scikit-build-core/issues/915
-export SKBUILD_CMAKE_BUILD_TYPE=RelWithDebInfo
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
-%license LICENSE
+
+%files -n python3-levenshtein -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,54 +1,59 @@
-%global source0_hash 92f668d43b51b87952b26be45c0fb1eef325e3bf76a1a2cecc8d2b8a05fc3c8a
+%global source0_hash none
 
-Summary: A Python client for the Akamai Fast Purge API
-Name: python-fastpurge
-Version: 1.0.5
-Release: %autorelease
-URL: https://github.com/release-engineering/python-fastpurge
-# PyPI tarball doesn't have tests
-Source: %{url}/archive/v%{version}/fastpurge-%{version}.tar.gz
-License: GPL-3.0-or-later
-BuildArch: noarch
+Name:           python-fastpurge
+Version:        1.0.6
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A client for the Akamai Fast Purge API
 
-# https://github.com/release-engineering/python-fastpurge/pull/34
-Patch: 0001-Use-unittest.mock-on-Python-3.3.patch
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-3.0-or-later
+URL:            https://release-engineering.github.io/python-fastpurge/
+Source:         %{pypi_source fastpurge}
 
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This library provides a simple asynchronous Python wrapper for the Fast
-Purge API, including authentication and error recovery.}
+This is package 'fastpurge' generated automatically by pyp2spec.}
+
+Patch: 0001-Use-unittest.mock-on-Python-3.3.patch
 
 %description %_description
 
-%package -n python3-fastpurge
-Summary:	%{summary}
-BuildRequires:	python3-devel
+%package -n     python3-fastpurge
+Summary:        %{summary}
 
 %description -n python3-fastpurge %_description
 
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n fastpurge-%{version}
 
-%autosetup -p 1 -n python-fastpurge-%{version}
-
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-sed -e '/bandit/d' -i test-requirements.txt
 
 %generate_buildrequires
-%pyproject_buildrequires test-requirements.txt
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l fastpurge
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-fastpurge -f %{pyproject_files}
-%doc README.md
-%doc CHANGELOG.md
 
 %changelog
 %autochangelog

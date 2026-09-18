@@ -7,7 +7,7 @@
 %global crate dirs
 
 Name:           rust-dirs
-Version:        6.0.0
+Version:        7.0.0
 Release:        %autorelease
 Summary:        A tiny low-level library that provides platform-specific standard loc...
 

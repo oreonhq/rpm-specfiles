@@ -1,8 +1,8 @@
 %global source0_hash 93c2c277f5e1fc334afd4794ef35faf0ada6fbd7acdd7085f37618d4eff53c1f
 
 Name:           squidclamav
-Version:        7.4
-Release:        3%{?dist}
+Version:        7.5
+Release:        1%{?dist}
 Summary:        HTTP Antivirus for Squid based on ClamAv and the ICAP protocol
 License:        GPL-3.0-or-later
 URL:            https://squidclamav.darold.net/

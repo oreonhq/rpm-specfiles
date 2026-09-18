@@ -7,7 +7,7 @@
 %global crate hecs
 
 Name:           rust-hecs
-Version:        0.10.5
+Version:        0.11.1
 Release:        %autorelease
 Summary:        Fast, minimal, and ergonomic entity-component-system library
 

@@ -1,91 +1,65 @@
-%global source0_hash b8683ba13f0d39c6cd5d625d2c5f65421d6d707b013b375c355751557cbe8e09
-
-%bcond tests 1
-%bcond docs %{undefined rhel}
+%global source0_hash none
 
 Name:           python-service-identity
-Version:        24.2.0
+Version:        26.1.0
 Release:        %autorelease
-Summary:        Service identity verification for pyOpenSSL & cryptography
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Service identity verification for pyOpenSSL _ cryptography.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/pyca/service-identity
 Source:         %{pypi_source service_identity}
-# Downstream-only patch to remove coverage[toml] test dependency
-Patch:          0001-Remove-coverage-toml-test-dependency.patch
-# Downstream-only patch to remove hatch-fancy-pypi-readme build-system dependency
-Patch:          0002-Remove-hatch-fancy-pypi-readme-build-system-dependency.patch
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:	python3dist(furo)
-BuildRequires:	python3dist(sphinx-notfound-page)
 
-%global common_description %{expand:
-Use this package if you want to verify that a PyCA cryptography certificate is
-valid for a certain hostname or IP address, or if you use pyOpenSSL and don’t
-want to be MITMed, or if you want to inspect certificates from either for
-service IDs.  service-identity aspires to give you all the tools you need for
-verifying whether a certificate is valid for the intended purposes.  In the
-simplest case, this means host name verification.  However, service-identity
-implements RFC 6125 fully.}
 
-%description %{common_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'service-identity' generated automatically by pyp2spec.}
+
+Patch:          0001-Remove-coverage-toml-test-dependency.patch
+Patch:          0002-Remove-hatch-fancy-pypi-readme-build-system-dependency.patch
+
+%description %_description
 
 %package -n     python3-service-identity
 Summary:        %{summary}
 
-%description -n python3-service-identity %{common_description}
+%description -n python3-service-identity %_description
 
-%package doc
-Summary:        Documentation for %{name}
-
-%description doc
-%{common_description}
-
-This is the documentation package for %{name}.
-
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
 %pyproject_extras_subpkg -n python3-service-identity idna
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n service_identity-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-x tests,idna} %{?with_docs:-x docs}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x idna
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l service_identity
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with docs}
-# Previously the docs were built with PYTHONPATH=%%{pyproject_build_lib}, but
-# that macro is now deprecated.  It also only works with setuptools, and
-# upstream switched to hatchling.  Building the docs relies on the library
-# being installed, so we have to do it here in %%install instead of in %%build.
-PYTHONPATH=%{buildroot}%{python3_sitelib} sphinx-build docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
-%endif
 
 %check
-%if %{with tests}
-%pytest -v
-%else
-%pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-service-identity -f %{pyproject_files}
-%doc README.md
-
-%if %{with docs}
-%files doc
-%doc html
-%license LICENSE
-%endif
 
 %changelog
 %autochangelog

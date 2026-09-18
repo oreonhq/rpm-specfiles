@@ -2,11 +2,11 @@
 
 Name:           printrun
 Epoch:          1
-Version:        2.0.0
+Version:        2.2.0
 %global prerel  rc8
 %global uver    %{version}%{?prerel}
 %global tag     %{name}-%{uver}
-Release:        0.41.%{prerel}%{?dist}
+Release:        1.41.%{prerel}%{?dist}
 
 Summary:        RepRap printer interface and tools
 # Only AppData is FSFAP

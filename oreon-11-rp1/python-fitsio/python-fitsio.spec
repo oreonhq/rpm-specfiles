@@ -1,78 +1,62 @@
-%global source0_hash e2394fb0dca62f46feaaf61a48ad89fad6d2428a5a96a78ebfb4299a084b9260
+%global source0_hash none
 
-%global srcname fitsio
-%global sum A full featured python library to read from and write to FITS files
-
-Name:           python-%{srcname}
-Version:        1.3.0
+Name:           python-fitsio
+Version:        1.4.2
 Release:        %autorelease
-Summary:        %{sum}
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A full featured python library to read from and write to FITS files.
 
-License:        GPL-2.0-only
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-2.0-or-later
 URL:            https://github.com/esheldon/fitsio
-Source0:        %{pypi_source}
+Source:         %{pypi_source fitsio}
 
-# General
-BuildRequires:  cfitsio-devel
-BuildRequires:  zlib-devel
-BuildRequires:  gcc
-# Python 3
 BuildRequires:  python3-devel
+BuildRequires:  gcc
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is a python extension written in c and python. Data are read 
-into numerical python arrays.}
+This is package 'fitsio' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
-Summary:        %{sum}
-BuildRequires: %{py3_dist pytest}
-Requires: %{py3_dist pytest}
+%package -n     python3-fitsio
+Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-fitsio %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-fitsio dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n fitsio-%{version}
 
-FITSIO_USE_SYSTEM_FITSIO=""
-export FITSIO_USE_SYSTEM_FITSIO
-FITSIO_SYSTEM_FITSIO_INCLUDEDIR="%{_includedir}/cfitsio"
-export FITSIO_SYSTEM_FITSIO_INCLUDEDIR
-FITSIO_SYSTEM_FITSIO_LIBDIR="%{_libdir}"
-export FITSIO_SYSTEM_FITSIO_LIBDIR
-%autosetup -p1 -n %{srcname}-%{version}
-
-# Remove egg files from source
-rm -r %{srcname}.egg-info
-# Remove bundled cfitsio, to be sure we are not using it
-rm -rf cfitsio-*
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
-FITSIO_USE_SYSTEM_FITSIO=""
-export FITSIO_USE_SYSTEM_FITSIO
-FITSIO_SYSTEM_FITSIO_INCLUDEDIR="%{_includedir}/cfitsio"
-export FITSIO_SYSTEM_FITSIO_INCLUDEDIR
-FITSIO_SYSTEM_FITSIO_LIBDIR="%{_libdir}"
-export FITSIO_SYSTEM_FITSIO_LIBDIR
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files fitsio
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-pushd %{buildroot}/%{python3_sitearch}
-  %pytest fitsio
-  rm -rf .pytest_cache
-popd
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE.txt
-%doc README.md
+
+%files -n python3-fitsio -f %{pyproject_files}
 
 %changelog
 %autochangelog

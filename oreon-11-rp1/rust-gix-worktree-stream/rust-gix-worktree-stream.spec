@@ -7,7 +7,7 @@
 %global crate gix-worktree-stream
 
 Name:           rust-gix-worktree-stream
-Version:        0.26.0
+Version:        0.36.1
 Release:        %autorelease
 Summary:        generate a byte-stream from a git-tree
 

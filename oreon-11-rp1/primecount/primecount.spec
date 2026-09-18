@@ -1,8 +1,8 @@
 %global source0_hash eda5d4b867ce95accfc74135f595a238fcd60f19cfc997f4950a5c74fbdd3ac1
 
 Name:           primecount
-Version:        8.1
-Release:        9%{?dist}
+Version:        8.7
+Release:        1%{?dist}
 Summary:        Fast prime counting function implementation
 
 # BSD-2-Clause: the project as a whole

@@ -1,105 +1,59 @@
-%global source0_hash 0f398b0daeb2ffd2358f75c06f1dd47b9ba76f1a77dfe938cccf7080c58227d7
+%global source0_hash none
 
-%global srcname pikepdf
-
-# Bconds are needed for Python bootstrap
-%bcond docs 0
-%bcond tests 1
-
-Name:           python-%{srcname}
-Version:        10.2.0
+Name:           python-pikepdf
+Version:        10.13.0^post1
 Release:        %autorelease
-Summary:        Read and write PDFs with Python, powered by qpdf
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Read, write, repair, and transform PDFs in Python, powered by qpdf
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MPL-2.0
 URL:            https://github.com/pikepdf/pikepdf
-Source:         %pypi_source %{srcname}
-# Pinned only for wheel building purposes.
+Source:         %{pypi_source pikepdf 10.13.0.post1}
+
+BuildRequires:  python3-devel
+BuildRequires:  gcc
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pikepdf' generated automatically by pyp2spec.}
+
 Patch:          0001-Unpin-python-xmp-toolkit.patch
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch: %{ix86}
+%description %_description
 
-BuildRequires:  gcc-c++
-BuildRequires:  qpdf-devel >= 11.5.0
-BuildRequires:  python3-devel
-BuildRequires:  tomcli
-BuildRequires:	python3dist(pytest-xdist) >= 2.5
-%if %{with tests}
-# Tests:
-BuildRequires:  poppler-utils
-%endif
-
-%description
-pikepdf is a Python library for reading and writing PDF files. pikepdf is
-based on QPDF, a powerful PDF manipulation and repair library.
-
-%package -n     python3-%{srcname}
+%package -n     python3-pikepdf
 Summary:        %{summary}
 
-%description -n python3-%{srcname}
-pikepdf is a Python library for reading and writing PDF files. pikepdf is
-based on QPDF, a powerful PDF manipulation and repair library.
+%description -n python3-pikepdf %_description
 
-%if %{with docs}
-%package -n python-%{srcname}-doc
-Summary:        pikepdf documentation
-
-# Not autorequired because it's a Fedora-specific subpackage.
-BuildRequires:  python3-ipython-sphinx
-
-%description -n python-%{srcname}-doc
-Documentation for pikepdf
-%endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pikepdf-10.13.0.post1
 
-%autosetup -n %{srcname}-%{version} -p1
-
-# Drop coverage requirements
-tomcli set pyproject.toml arrays delitem 'project.optional-dependencies.test' 'coverage.*'
-tomcli set pyproject.toml arrays delitem 'project.optional-dependencies.test' 'pytest-cov.*'
-
-%if %{with docs}
-# We don't build docs against the installed version, so force the version.
-sed -i -e "s/release = .\+/release = '%{version}'/g" docs/conf.py
-%endif
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_docs: -x docs} %{?with_tests: -x test}
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
-%if %{with docs}
-# generate html docs
-export PYTHONPATH="$PWD/build/lib.%{python3_platform}-cpython-%{python3_version_nodots}"
-pushd docs
-sphinx-build-3 . ../html
-popd
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
-%endif
 
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-%{pytest} -ra
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE.txt
-%doc README.md
 
-%if %{with docs}
-%files -n python-%{srcname}-doc
-%doc html
-%license LICENSE.txt
-%endif
+%files -n python3-pikepdf -f %{pyproject_files}
 
 %changelog
 %autochangelog

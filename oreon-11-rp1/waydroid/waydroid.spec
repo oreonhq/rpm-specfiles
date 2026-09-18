@@ -3,7 +3,7 @@
 %global forgeurl https://github.com/waydroid/waydroid
 %global selinuxtype targeted
 
-Version:        1.6.2
+Version:        1.6.3
 %global tag %{version}
 
 %forgemeta

@@ -1,71 +1,64 @@
-%global source0_hash fb4a14e3b4f44f67fa7478a597937f36f21038ab178f538be4879956738a5f80
-
-%bcond tests 1
-
-# When bootstrapping, we do not include the “grpc” extra in the BR’s. That adds
-# a BR on python3dist(grpcio), but this package is required by
-# python3dist(grpcio-status), which creates a circular dependency with grpc.
-%bcond_with bootstrap
+%global source0_hash none
 
 Name:           python-googleapis-common-protos
-Version:        1.63.0
+Version:        1.75.3
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Common protobufs used in Google APIs
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://github.com/googleapis/python-api-common-protos
-Source:         %{url}/archive/v%{version}/python-api-common-protos-%{version}.tar.gz
-
-# fix: increase upper limit for protobuf 5.X versions
-# https://github.com/googleapis/python-api-common-protos/pull/212
-Patch:          %{url}/pull/212.patch
+URL:            https://github.com/googleapis/google-cloud-python/tree/main/packages/googleapis-common-protos
+Source:         %{pypi_source googleapis_common_protos}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%if %{with tests}
-BuildRequires:  python3dist(pytest)
-%endif
 
-%global common_description %{expand:
-%{summary}.}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'googleapis-common-protos' generated automatically by pyp2spec.}
 
-%description %{common_description}
+Patch:          %{url}/pull/212.patch
 
-%package -n python3-googleapis-common-protos
+%description %_description
+
+%package -n     python3-googleapis-common-protos
 Summary:        %{summary}
 
-%description -n python3-googleapis-common-protos %{common_description}
+%description -n python3-googleapis-common-protos %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
 %pyproject_extras_subpkg -n python3-googleapis-common-protos grpc
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n python-api-common-protos-%{version} -p1
+%prep
+%autosetup -p1 -n googleapis_common_protos-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires %{?!with_bootstrap:-x grpc}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x grpc
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l google
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-# NOTE(mhayden): Setting PYTHONUSERBASE as a hack for PEP 420 namespaces.
-# Thanks to churchyard for the fix.
-PYTHONUSERBASE=%{buildroot}%{_prefix} \
-    %pytest tests/unit
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-googleapis-common-protos -f %{pyproject_files}
-%doc CHANGELOG.md
-%doc README.rst
 
 %changelog
 %autochangelog

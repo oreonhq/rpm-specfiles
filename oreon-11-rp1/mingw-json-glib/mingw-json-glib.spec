@@ -5,7 +5,7 @@
 %define glib2_version 2.54.0
 
 Name:           mingw-%{pkgname}
-Version:        1.6.6
+Version:        1.10.8
 Release:        %autorelease
 Summary:        MinGW compiled library for JavaScript Object Notation format
 

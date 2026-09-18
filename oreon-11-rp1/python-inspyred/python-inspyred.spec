@@ -1,77 +1,62 @@
-%global source0_hash 3f6e4487a4519ba727689788685f0dec9bc85643aac6970892af8bb6346b3830
-
-%global _description %{expand:
-inspyred is a free, open source framework for creating biologically-inspired
-computational intelligence algorithms in Python, including evolutionary
-computation, swarm intelligence, and immunocomputing. Additionally, inspyred
-provides easy-to-use canonical versions of many bio-inspired algorithms for
-users who do not need much customization.}
+%global source0_hash none
 
 Name:           python-inspyred
-Version:        1.0.2
+Version:        1.0.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A framework for creating bio-inspired computational intelligence algorithms in Python
 
-%global forgeurl https://github.com/aarongarrett/inspyred/
-%forgemeta
-
-Release:        %{autorelease}
-Summary:        Library for bio-inspired computational intelligence
-
-# spdx checked
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            %{forgeurl}
-Source:         %{forgesource}
+URL:            https://github.com/aarongarrett/inspyred
+Source:         %{pypi_source inspyred}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'inspyred' generated automatically by pyp2spec.}
+
 %description %_description
 
-%package -n python3-inspyred
+%package -n     python3-inspyred
 Summary:        %{summary}
 
 %description -n python3-inspyred %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-inspyred all,dev,doc
+
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n inspyred-%{version}
 
-%forgeautosetup -p1
-
-# Remove unneeded BRs
-sed -e '/flake8/ d' \
-    -e '/tox/ d' \
-    -e '/coverage/ d' \
-    -e '/Sphinx/ d' \
-    -i requirements_dev.txt
-
-# pp is not packaged (nor maintained), so skip its test
-# upstream has been informed: https://github.com/aarongarrett/inspyred/pull/21#issue-1061517666
-sed -i -e '/test_parallel_evaluation_pp/i \    @unittest.skip("pp unavailable")' tests/evaluator_tests.py
-
-# May fail simply because of randomisation, so we skip it
-# https://github.com/aarongarrett/inspyred/blob/d5976ab503cc9d51c6f586cbb7bb601a38c01128/tests/operator_tests.py#L69
-sed -i -e '/test_multiprocessing_migration/i \    @unittest.skip("unreliable")' tests/operator_tests.py
 
 %generate_buildrequires
-%pyproject_buildrequires -r requirements_dev.txt
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,dev,doc
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files inspyred
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Make tests that are working discoverable
-mv -v tests/example_tests.py tests/test_example.py
-mv -v tests/supplemental_tests.py tests/test_supplemental.py
-%pytest -v
-# Since the tests are bit brittle also run import check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-inspyred -f %{pyproject_files}
-%doc README.rst HISTORY.rst CONTRIBUTING.rst
-%doc examples
 %{_bindir}/inspyred
 
 %changelog

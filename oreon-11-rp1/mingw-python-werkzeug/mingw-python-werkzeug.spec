@@ -7,8 +7,8 @@
 
 Name:          mingw-python-%{mod_name}
 Summary:       MinGW Windows Python %{pypi_name} library
-Version:       3.1.4
-Release:       2%{?dist}
+Version:       3.1.8
+Release:       1%{?dist}
 BuildArch:     noarch
 
 License:       BSD-3-Clause

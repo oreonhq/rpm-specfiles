@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:             freeipmi
-Version:          1.6.15
+Version:          1.6.19
 Release:          %autorelease
 Summary:          IPMI remote console and system management software
 License:          GPL-3.0-or-later

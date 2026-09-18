@@ -1,7 +1,7 @@
 %global source0_hash 3911e307b7e4ac55f694406bc1a0485df495c3d6930da6150fd4de1889154061
 
 Name:           python-bioread
-Version:        2025.05.02
+Version:        2025.5.2
 Release:        %autorelease
 Summary:        Utilities to read BIOPAC AcqKnowledge files
 

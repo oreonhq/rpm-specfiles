@@ -1,48 +1,29 @@
-%global source0_hash db6e2ef491eecc1a0d93711a76f28dec2e05999f93afd48795da1c1137142c66
-
-%global extras cli,rich,ws
+%global source0_hash none
 
 Name:           python-mcp
-Version:        1.26.0
+Version:        2.2.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Model Context Protocol SDK
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://modelcontextprotocol.io
 Source:         %{pypi_source mcp}
 
-# The uv-dynamic-version library is not present in Fedora 43, only Fedora 44.
-# The below patch is replacing the dependency for `hatch-vcs`, as the sole
-# purpose is to detect the version for this library.
-Patch:          replace-uv-dynamic-version-with-hatchling-vcs.diff
-# While pytest-xdist is available to use, it makes the logs of %%pytest very
-# confusing to follow, so, it's better to just drop the CLI args that uses in
-# the pytest invocation.
-Patch1:         remove-pytest-xdist-cli-args.diff
-# The test `test_lifespan_cleanup_executed` works correctly when executed
-# locally inside a virtual env, but it fails in CI as we have a custom
-# `PYTHONPATH` during the build, the test can't find the "mcp" library. That
-# test in particular writes a python script to a temporary directory and tries
-# to execute with.
-Patch2:         pass_pythonpath_for_subprocess.diff
-# The `subject` parameter was never by the pyjwt library to decode the jwt
-# request, thus, causing a failure in Fedora 43 in the tests. This doesn't
-# affect the testing itself.
-Patch3:         remove-subject-from-exchange-request-test.diff
-
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  tomcli
-# Test dependencies
-BuildRequires:  python3-pytest
-BuildRequires:  python3-requests
-BuildRequires:  python3-inline-snapshot
-BuildRequires:  python3-dirty-equals
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The Model Context Protocol allows applications to provide context for LLMs in a
-standardized way, separating the concerns of providing context from the actual
-LLM interaction. This Python SDK implements the full MCP specification.}
+This is package 'mcp' generated automatically by pyp2spec.}
+
+Patch:          replace-uv-dynamic-version-with-hatchling-vcs.diff
+Patch1:         remove-pytest-xdist-cli-args.diff
+Patch2:         pass_pythonpath_for_subprocess.diff
+Patch3:         remove-subject-from-exchange-request-test.diff
 
 %description %_description
 
@@ -51,41 +32,36 @@ Summary:        %{summary}
 
 %description -n python3-mcp %_description
 
-%pyproject_extras_subpkg -n python3-mcp %{extras}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-mcp cli,rich
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n mcp-%{version}
 
-# relax dependency for pyjwt[crypto] as f43 has 2.8.0 and rawhide has 2.10+.
-tomcli set pyproject.toml arrays replace project.dependencies '^pyjwt\[crypto\].*$' "pyjwt[crypto]>=2.8.0,<=2.11.0"
 
 %generate_buildrequires
-%pyproject_buildrequires -x %{extras}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x cli,rich
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l mcp
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-# The following tests are ignored/disbaled due to:
-#   * test_examples.py - Mainly verifying that the examples provided are
-#   working as expected. No real coverage of code.
-#
-#   * test_command_execution - Tries to launch a mcp server that will reach out
-#   to internet (python website), for that, it's disabled.
-%pytest --ignore tests/test_examples.py -k "not test_command_execution"
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-mcp -f %{pyproject_files}
-%license LICENSE
-%doc README.md
-%doc SECURITY.md
-%doc CODE_OF_CONDUCT.md
 %{_bindir}/mcp
 
 %changelog

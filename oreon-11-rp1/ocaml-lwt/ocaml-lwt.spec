@@ -6,8 +6,8 @@ ExcludeArch: %{ix86}
 %global giturl  https://github.com/ocsigen/lwt
 
 Name:           ocaml-lwt
-Version:        5.9.1
-Release:        4%{?dist}
+Version:        6.1.2
+Release:        1%{?dist}
 Summary:        OCaml lightweight thread library
 
 # The project as a whole is MIT.  The following files are BSD-2-Clause:

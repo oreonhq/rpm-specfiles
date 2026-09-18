@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        1.0.25
+Version:        1.1.0
 Release:        %autorelease
 Summary:        FFI domain specific language, on top of hsc2hs
 

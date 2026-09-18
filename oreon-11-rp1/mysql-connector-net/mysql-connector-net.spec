@@ -3,8 +3,8 @@
 %global debug_package %{nil}
 
 Name:           mysql-connector-net
-Version:        6.9.9
-Release:        24%{?dist}
+Version:        9.2.0
+Release:        1%{?dist}
 Summary:        Mono ADO.NET driver for MySQL
 
 # The entire source code is GPLv2 except Source/MySql.Data/zlib/ which is BSD

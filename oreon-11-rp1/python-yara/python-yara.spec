@@ -1,7 +1,7 @@
 %global source0_hash 7932922f661663d91ddac4f0f3fe6c290e7c4493d093b551df26939895d7f4e3
 
 Name:           python-yara
-Version:        4.5.4
+Version:        4.5.8
 Summary:        Python binding for the YARA pattern matching tool
 License:        Apache-2.0
 URL:            https://github.com/VirusTotal/yara-python/

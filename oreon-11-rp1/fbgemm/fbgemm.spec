@@ -15,7 +15,7 @@ fusion opportunities in order to overcome the unique challenges of matrix
 multiplication at lower precision with bandwidth-bound operations.}
 
 Name:		fbgemm
-Version:	1.0.0
+Version:	1.9.0-rc2
 Release:	%autorelease
 Summary:	Facebook General Matrix-Matrix Multiplication
 

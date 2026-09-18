@@ -7,7 +7,7 @@
 %global crate html5ever
 
 Name:           rust-html5ever
-Version:        0.35.0
+Version:        0.40.1
 Release:        %autorelease
 Summary:        High-performance browser-grade HTML5 parser
 

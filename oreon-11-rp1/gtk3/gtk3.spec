@@ -26,8 +26,8 @@
 %global __provides_exclude_from ^%{_libdir}/gtk-3.0
 
 Name:    gtk3
-Version: 3.24.51
-Release: 3%{?dist}
+Version: 3.24.52
+Release: 1%{?dist}
 Summary: GTK+ graphical user interface library
 
 License: LGPL-2.0-or-later

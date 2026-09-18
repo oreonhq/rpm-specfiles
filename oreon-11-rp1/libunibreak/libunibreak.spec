@@ -2,7 +2,7 @@
 %global tag libunibreak_6_1
 
 Name:           libunibreak
-Version:        6.1
+Version:        8.0
 Release:        %autorelease
 Summary:        A Unicode line-breaking library
 License:        Zlib

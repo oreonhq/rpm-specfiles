@@ -7,7 +7,7 @@
 %global crate cursive-tabs
 
 Name:           rust-cursive-tabs
-Version:        0.7.0
+Version:        0.8.0
 Release:        %autorelease
 Summary:        Tabs for gyscos/cursive views
 

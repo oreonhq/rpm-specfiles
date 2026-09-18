@@ -1,8 +1,8 @@
 %global source0_hash 1bc03214a29c4fc461a7aa11b9a3debde419b1271fa5110273ded961774e2b6f
 
 Name:		psftools
-Version:	1.0.10
-Release:	19%{?dist}
+Version:	1.1.3
+Release:	1%{?dist}
 Summary:	Conversion tools for .PSF fonts
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

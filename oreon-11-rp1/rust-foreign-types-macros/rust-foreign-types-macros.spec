@@ -7,7 +7,7 @@
 %global crate foreign-types-macros
 
 Name:           rust-foreign-types-macros
-Version:        0.2.3
+Version:        0.2.4
 Release:        %autorelease
 Summary:        Internal crate used by foreign-types
 

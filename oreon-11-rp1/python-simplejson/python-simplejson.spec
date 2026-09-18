@@ -1,93 +1,57 @@
-%global source0_hash 8e086896c36210ab6050f2f9f095a5f1e03c83fa0e7f296d6cba425411364680
-
-# Build conditions for bootstrapping purposes
-%bcond_without docs
-%bcond_without tests
+%global source0_hash none
 
 Name:           python-simplejson
-Version:        3.19.3
+Version:        4.1.2
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Simple, fast, extensible JSON encoder/decoder for Python
 
-# The main code is licensed MIT.
-# The docs include jquery which is licensed MIT or GPLv2
-# Automatically converted from old format: (MIT or AFL) and (MIT or GPLv2) - review is highly recommended.
-License:        (LicenseRef-Callaway-MIT OR LicenseRef-Callaway-AFL) AND (LicenseRef-Callaway-MIT OR GPL-2.0-only)
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT OR AFL-2.1
 URL:            https://github.com/simplejson/simplejson
-Source0:        %{pypi_source simplejson}
+Source:         %{pypi_source simplejson}
 
-%global _description \
-simplejson is a simple, fast, complete, correct and extensible JSON\
-<http://json.org> encoder and decoder for Python. It is pure Python code\
-with no dependencies, but includes an optional C extension for a serious speed\
-boost.\
-\
-The encoder may be subclassed to provide serialization in any kind of\
-situation, without any special support by the objects to be serialized\
-(somewhat like pickle).\
-\
-The decoder can handle incoming JSON strings of any specified encoding (UTF-8\
-by default).\
-\
-simplejson is the externally maintained development version of the JSON library\
-included with Python. It gets updated more regularly than the JSON module in\
-the Python stdlib.
+BuildRequires:  python3-devel
+BuildRequires:  gcc
 
-%description %{_description}
 
-%package -n python%{python3_pkgversion}-simplejson
-Summary:        Simple, fast, extensible JSON encoder/decoder for Python 3
-%{?python_provide:%python_provide python%{python3_pkgversion}-simplejson}
-BuildRequires: gcc
-BuildRequires: python%{python3_pkgversion}-devel
-%if %{with tests}
-BuildRequires: python%{python3_pkgversion}-pytest
-%endif
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'simplejson' generated automatically by pyp2spec.}
 
-%if %{with docs}
-%package -n python-simplejson-doc
-Summary:        simplejson documentation
+%description %_description
 
-BuildRequires: python%{python3_pkgversion}-sphinx
+%package -n     python3-simplejson
+Summary:        %{summary}
 
-%description -n python-simplejson-doc
-Documentation for simplejson
-%endif
+%description -n python3-simplejson %_description
 
-%description -n python%{python3_pkgversion}-simplejson %{_description}
+
+%prep
+%autosetup -p1 -n simplejson-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%setup -q -n simplejson-%{version}
 
 %build
 %pyproject_wheel
 
-%if %{with docs}
-PYTHONPATH=${PWD} %{__python3} scripts/make_docs.py
-rm -f docs/.{buildinfo,nojekyll}
-%endif
 
 %install
 %pyproject_install
-%pyproject_save_files simplejson
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-simplejson -f %{pyproject_files}
-%license LICENSE.txt
 
-%if %{with docs}
-%files -n python-simplejson-doc
-%doc docs
-%endif
+%files -n python3-simplejson -f %{pyproject_files}
 
 %changelog
 %autochangelog

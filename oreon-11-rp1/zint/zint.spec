@@ -1,8 +1,8 @@
 %global source0_hash bce37d9b86e6127cac63c8b6267ac421116d4ac086519d726eb724f5462d98c7
 
 Name:      zint
-Version:   2.15.0
-Release:   3%{?dist}
+Version:   2.16.0
+Release:   1%{?dist}
 Summary:   Barcode generator library
 License:   BSD-3-Clause AND GPL-3.0-or-later
 URL:       http://www.zint.org.uk

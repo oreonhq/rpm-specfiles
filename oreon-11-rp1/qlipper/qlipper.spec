@@ -1,8 +1,8 @@
 %global source0_hash e4e70f54d007e1e1cd715944b6742c4c70bab5b28838aa33d673de0c7a6c1570
 
 Name:		qlipper
-Version:	6.0.0
-Release:	2%{?dist}
+Version:	6.1.0
+Release:	1%{?dist}
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:	GPL-3.0-or-later
 Summary:	Lightweight clipboard history

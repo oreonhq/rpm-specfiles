@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-c-ares
-Version:        1.17.2
-Release:        13%{?dist}
+Version:        1.34.8
+Release:        1%{?dist}
 Summary:        Library that performs asynchronous DNS operations
 
 # ares_getopt.c ares_getopt.h are BSD (3 clause)

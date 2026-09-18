@@ -1,7 +1,7 @@
 %global source0_hash 381d325a76db77211565cadea0bb0869d388fd00ea06335294ea9bc152bf87e3
 
 Name:           bout++
-Version:        5.1.1
+Version:        5.2.0
 Release:        %autorelease
 Summary:        Library for the BOUndary Turbulence simulation framework
 

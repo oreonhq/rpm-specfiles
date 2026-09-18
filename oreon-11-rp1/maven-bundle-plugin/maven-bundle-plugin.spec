@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           maven-bundle-plugin
-Version:        5.1.9
+Version:        6.1.2
 Release:        %autorelease
 Summary:        Maven Bundle Plugin
 License:        Apache-2.0
@@ -35,7 +35,7 @@ BuildRequires:  mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-build-api)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 5.1.9-20
+Obsoletes:      %{name}-javadoc < 6.1.2-20
 
 %description
 Provides a maven plugin that supports creating an OSGi bundle

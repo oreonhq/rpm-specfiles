@@ -7,7 +7,7 @@
 %global crate radix_trie
 
 Name:           rust-radix_trie
-Version:        0.2.1
+Version:        0.3.0
 Release:        %autorelease
 Summary:        Generic radix trie data-structure.
 

@@ -1,97 +1,65 @@
-%global source0_hash ff0410a598bc5f6b01b602851a3296ede6f91389f913a5d5f8c496003836f636
+%global source0_hash none
 
-# Note that this is https://pypi.org/project/python-ulid/; the canonical
-# project name ulid, https://pypi.org/project/ulid/, belongs to a different and
-# apparently defunct project. See
-#   https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_library_naming
-# and the issue filed upstream:
-#   Possible confusion with the "ulid" package
-#   https://github.com/mdomke/python-ulid/issues/13
-Name:           python-python-ulid
-Version:        3.1.0
+Name:           python-ulid
+Version:        4.0.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Universally unique lexicographically sortable identifier
 
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/mdomke/python-ulid
-Source0:        %{pypi_source python_ulid}
-# Man pages hand-written for Fedora in groff_man(7) format based on --help
-Source10:       ulid.1
-Source11:       ulid-build.1
-Source12:       ulid-show.1
-
-# Depend on typing-extensions for Python<3.11; avoid it otherwise
-#
-# Conditionalize the import of `typing_extensions`, needed only in Python 3.10
-# and older; use `typing` instead for Python 3.11 and later. Add a dependency
-# on `typing-extensions`, appropriately conditioned on the Python interpreter
-# version.
-#
-# Based on https://github.com/mdomke/python-ulid/pull/47 and
-# https://github.com/mdomke/python-ulid/pull/47#issuecomment-3431221960.
-#
-# Fixes https://github.com/mdomke/python-ulid/issues/44.
-#
-# Without changes to uv.lock, since we don’t use the lockfile and to avoid
-# merge conflicts.
-#
-# Fixes https://bugzilla.redhat.com/show_bug.cgi?id=2436255.
-Patch:          0001-Depend-on-typing-extensions-for-Python-3.11-avoid-it.patch
-
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -x pydantic
-BuildOption(install):   -l ulid
+Source:         %{pypi_source python_ulid}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-# Test dependencies are defined in [envs.default] in hatch.toml. They have
-# tight version pins and include coverage tools; it is easier to maintain a
-# manual list.
-BuildRequires:  %{py3_dist freezegun}
-BuildRequires:  %{py3_dist pytest}
 
-%global common_description %{expand:
-A ULID is a universally unique lexicographically sortable identifier. It is
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'python-ulid' generated automatically by pyp2spec.}
 
-  * 128-bit compatible with UUID
-  * 1.21e+24 unique ULIDs per millisecond
-  * Lexicographically sortable!
-  * Canonically encoded as a 26 character string, as opposed to the 36
-    character UUID
-  * Uses Crockford's base32 for better efficiency and readability (5 bits per
-    character)
-  * Case insensitive
-  * No special characters (URL safe)
+Patch:          0001-Depend-on-typing-extensions-for-Python-3.11-avoid-it.patch
 
-For more information have a look at the original specification,
-https://github.com/alizain/ulid#specification.}
-# this is here to fix vim's syntax highlighting
+%description %_description
 
-%description %{common_description}
-
-%package -n python3-python-ulid
+%package -n     python3-python-ulid
 Summary:        %{summary}
 
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_provides_for_importable_modules
-%py_provides python3-ulid
+%description -n python3-python-ulid %_description
 
-%description -n python3-python-ulid %{common_description}
-
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
 %pyproject_extras_subpkg -n python3-python-ulid pydantic
 
-%install -a
-install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 \
-    '%{SOURCE10}' '%{SOURCE11}' '%{SOURCE12}'
 
-%check -a
-%pytest -v
+%prep
+%autosetup -p1 -n python_ulid-%{version}
+
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x pydantic
+
+
+%build
+%pyproject_wheel
+
+
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-python-ulid -f %{pyproject_files}
-%doc CHANGELOG.rst
-%doc README.rst
 %{_bindir}/ulid
-%{_mandir}/man1/ulid{,-*}.1*
 
 %changelog
 %autochangelog

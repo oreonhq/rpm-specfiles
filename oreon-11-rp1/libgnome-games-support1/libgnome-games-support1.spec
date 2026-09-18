@@ -1,8 +1,8 @@
 %global source0_hash 28434604a7b038731ac0231731388ff104f565bb2330cc24e78cda04cfd3ef7d
 
 Name:           libgnome-games-support1
-Version:        1.8.2
-Release:        8%{?dist}
+Version:        2.0.2
+Release:        1%{?dist}
 Summary:        Support library for GNOME games
 
 License:        LGPLv3+

@@ -3,8 +3,8 @@
 # -*-Mode: rpm-spec -*-
 
 Name:     wlr-sunclock
-Version:  1.0.0
-Release:  11%{?dist}
+Version:  1.2.0
+Release:  1%{?dist}
 Summary:  Show the sun's shadows on earth
 
 # src/astro.[ch] are by John Walker in 1988 and placed in the Public Domain.

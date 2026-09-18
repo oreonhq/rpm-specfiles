@@ -1,65 +1,62 @@
-%global source0_hash c3d0d2f47602b21949ffb8669a7ef0a8ca5fa13ed5c1ee1d2d81edf05616187f
+%global source0_hash none
 
-%bcond_without tests
+Name:           python-urwid
+Version:        4.1.4
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A full-featured console _xterm et al._ user interface library
 
-%global srcname urwid
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        LGPL-2.1-only
+URL:            https://urwid.org/
+Source:         %{pypi_source urwid}
 
-Name:          python-%{srcname}
-Version:       3.0.4
-Release:       %autorelease
-Summary:       Console user interface library
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-# examples/twisted_serve_ssh.py is MIT
-License:       LGPL-2.1-or-later AND MIT
-URL:           http://excess.org/urwid/
-Source0:        https://files.pythonhosted.org/packages/source/u/urwid/urwid-3.0.4.tar.gz
 
-BuildArch:     noarch
-
-%global _description\
-Urwid is a Python library for making text console applications.  It has\
-many features including fluid interface resizing, support for UTF-8 and\
-CJK encodings, standard and custom text layout modes, simple markup for\
-setting text attributes, and a powerful, dynamic list box that handles a\
-mix of widget types.  It is flexible, modular, and leaves the developer in\
-control.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'urwid' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
-Summary: %summary
-%{?python_provide:%python_provide python3-urwid}
-BuildRequires: python3-devel
-BuildRequires: python3-pytest
+%package -n     python3-urwid
+Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-urwid %_description
 
-%generate_buildrequires
-%pyproject_buildrequires
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-urwid curses,glib,lcd,serial,tornado,trio,twisted,zmq
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{srcname}-%{version}
-sed -i -e 's/--cov=urwid//' pyproject.toml
-find urwid -type f -name "*.py" -exec sed -i -e '/^#!\//, 1d' {} \;
-find urwid -type f -name "*.py" -exec chmod 644 {} \;
+%autosetup -p1 -n urwid-%{version}
+
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x curses,glib,lcd,serial,tornado,trio,twisted,zmq
+
 
 %build
 %pyproject_wheel
-find examples -type f -exec chmod 0644 \{\} \;
 
-%check
-%if %{with tests}
-%pytest tests/
-%endif
 
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license COPYING
-%doc README.rst examples docs
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-urwid -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.4-1

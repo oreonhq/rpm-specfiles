@@ -1,37 +1,24 @@
-%global source0_hash 7611c87d8754ec77d75dc650e93713c24d1f923250406df3eeddff1d876365da
+%global source0_hash none
 
 Name:           python-junitparser
-Version:        4.0.2
+Version:        5.0.3
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Manipulates JUnit/xUnit Result XML files
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/weiwei/junitparser
-# PyPI source does not have documentation
-Source:         %{url}/archive/%{version}/junitparser-%{version}.tar.gz
+Source:         %{pypi_source junitparser}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# Tests
-BuildRequires:  python3dist(pytest)
-# Documentation
-BuildRequires:  graphviz
-BuildRequires:  python3dist(sphinx)
-BuildRequires:  texinfo
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-junitparser handles JUnit/xUnit Result XML files. Use it to parse and
-manipulate existing Result XML files, or create new JUnit/xUnit result XMLs
-from scratch.
-
-FEATURES:
-- Parse or modify existing JUnit/xUnit XML files
-- Parse or modify non-standard or customized JUnit/xUnit XML files, by
-  monkey patching existing element definitions
-- Create JUnit/xUnit test results from scratch
-- Merge test result XML files
-- Specify XML parser. For example you can use lxml to speed things up
-- Invoke from command line, or python -m junitparser}
+This is package 'junitparser' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -40,42 +27,32 @@ Summary:        %{summary}
 
 %description -n python3-junitparser %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n junitparser-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
-pushd docs
-sphinx-build -b texinfo . texinfo
-pushd texinfo
-makeinfo --docbook junitparser.texi
-popd
-popd
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l junitparser
-mkdir -p %{buildroot}%{_datadir}/help/en/python-junitparser
-install -p -m644 docs/texinfo/junitparser.xml \
-   %{buildroot}%{_datadir}/help/en/python-junitparser
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-# Tests require different console locale settings
-k="${k-}${k+ and }not (Test_Locale and test_fromstring_numbers_locale_insensitive)"
-%pytest -k "${k-}"
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-junitparser -f %{pyproject_files}
 %{_bindir}/junitparser
-%doc README.rst
-%doc CHANGELOG.md
-%doc %dir  %{_datadir}/help/en
-%doc %lang(en) %{_datadir}/help/en/python-junitparser
 
 %changelog
 %autochangelog

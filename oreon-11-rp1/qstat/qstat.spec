@@ -5,7 +5,7 @@
 
 Summary: Real-time Game Server Status for FPS game servers
 Name: qstat
-Version: 2.17
+Version: 2.18
 Release: %autorelease
 License: Artistic-2.0
 URL: https://github.com/multiplay/qstat

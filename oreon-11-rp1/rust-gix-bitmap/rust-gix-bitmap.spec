@@ -7,7 +7,7 @@
 %global crate gix-bitmap
 
 Name:           rust-gix-bitmap
-Version:        0.2.16
+Version:        0.4.0
 Release:        %autorelease
 Summary:        A crate of the gitoxide project dedicated implementing the standard g...
 

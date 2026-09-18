@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.14.1
+Version:        0.15.0
 Release:        %autorelease
 Summary:        A compatibility layer for base
 

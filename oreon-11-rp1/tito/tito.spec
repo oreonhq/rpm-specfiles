@@ -24,8 +24,8 @@
 %endif
 
 Name: tito
-Version: 0.6.27
-Release: 7%{?dist}
+Version: 0.6.28-1
+Release: 1%{?dist}
 Summary: A tool for managing rpm based git projects
 
 License: GPL-2.0-only

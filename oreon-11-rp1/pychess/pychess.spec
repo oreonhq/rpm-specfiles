@@ -4,8 +4,8 @@
 %bcond_without tests
 
 Name:           pychess
-Version:        1.0.5
-Release:        3%{?dist}
+Version:        1.1.0
+Release:        1%{?dist}
 Summary:        Chess game for GNOME
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

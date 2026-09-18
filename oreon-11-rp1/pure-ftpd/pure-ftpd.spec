@@ -1,8 +1,8 @@
 %global source0_hash b3b879468275e0344555458c8e62465dcf525205ecf9ad78c3f208557d0c1947
 
 Name:       pure-ftpd
-Version:    1.0.52
-Release:    3%{?dist}
+Version:    1.0.54
+Release:    1%{?dist}
 Summary:    Lightweight, fast and secure FTP server
 # Automatically converted from old format: BSD - review is highly recommended.
 License:    LicenseRef-Callaway-BSD

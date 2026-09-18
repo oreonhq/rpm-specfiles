@@ -7,7 +7,7 @@
 %global crate crypto-auditing-agent
 
 Name:           rust-crypto-auditing-agent
-Version:        0.2.4
+Version:        0.3.2
 Release:        %autorelease
 Summary:        Event collector agent for crypto-auditing project
 

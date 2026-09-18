@@ -8,7 +8,7 @@ security and privacy easy to obtain for regular users. It uses NaCl
 for its encryption and authentication.}
 
 Name:           toxcore
-Version:        0.2.20
+Version:        0.2.23
 Release:        %autorelease
 Summary:        Peer to peer instant messenger
 

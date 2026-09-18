@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name: subscription-manager-rhsm-certificates
-Version: 20220623
-Release: 8%{?dist}
+Version: 20220623-1-1
+Release: 1%{?dist}
 Summary: Certificates required to communicate with a Red Hat Unified Entitlement Platform
 URL: https://www.candlepinproject.org/
 %if 0%{?suse_version}

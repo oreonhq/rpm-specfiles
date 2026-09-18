@@ -1,8 +1,8 @@
 %global source0_hash eeb282b2adc8db5614b852596340b69da6f3954cf6cfbdc4392da509c934208a
 
 Name:		slurp
-Version:	1.5.0
-Release:	6%{?dist}
+Version:	1.6.0
+Release:	1%{?dist}
 Summary:	Select a region in Sway
 
 License:	MIT

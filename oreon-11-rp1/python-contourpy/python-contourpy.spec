@@ -1,61 +1,62 @@
-%global source0_hash 083e12155b210502d0bca491432bb04d56dc3432f95a979b429f2848c3dbe880
+%global source0_hash none
 
-%bcond_with bootstrap
-
-%global srcname contourpy
-
-Name:           python-%{srcname}
-Version:        1.3.3
+Name:           python-contourpy
+Version:        1.4.0
 Release:        %autorelease
-Summary:        Python library for calculating contours in 2D quadrilateral grids
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python library for calculating contours of 2D quadrilateral grids
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://contourpy.readthedocs.io/
-Source0:        %pypi_source %{srcname}
+URL:            https://github.com/contourpy/contourpy
+Source:         %{pypi_source contourpy}
 
 BuildRequires:  python3-devel
-BuildRequires:  gcc-c++
-# for %%pyproject_buildrequires -p:
-BuildRequires:  pyproject-rpm-macros >= 1.15.1
+BuildRequires:  gcc
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-ContourPy is a Python library for calculating contours of 2D quadrilateral
-grids. It is written in C++11 and wrapped using pybind11.
+This is package 'contourpy' generated automatically by pyp2spec.}
 
-It contains the 2005 and 2014 algorithms used in Matplotlib as well as a newer
-algorithm that includes more features and is available in both serial and
-multithreaded versions. It provides an easy way for Python libraries to use
-contouring algorithms without having to include Matplotlib as a dependency.
-}
+%description %_description
 
-%description %{_description}
-
-%package -n     python3-%{srcname}
+%package -n     python3-contourpy
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-contourpy %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-contourpy bokeh,docs,mypy,test,test-no-images
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n contourpy-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires -p -x test%{?with_bootstrap:-no-images}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x bokeh,docs,mypy,test,test-no-images
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest %{?with_bootstrap:-k 'not image'}
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
-%license LICENSE
+
+%files -n python3-contourpy -f %{pyproject_files}
 
 %changelog
 %autochangelog

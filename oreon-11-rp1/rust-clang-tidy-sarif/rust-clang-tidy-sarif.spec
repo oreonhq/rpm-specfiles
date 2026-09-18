@@ -6,7 +6,7 @@
 %global crate clang-tidy-sarif
 
 Name:           rust-clang-tidy-sarif
-Version:        0.5.0
+Version:        0.8.0
 Release:        %autorelease
 Summary:        Convert clang-tidy output to SARIF
 

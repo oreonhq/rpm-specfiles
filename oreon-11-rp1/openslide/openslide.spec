@@ -1,7 +1,7 @@
 %global source0_hash cc227c44316abb65fb28f1c967706eb7254f91dbfab31e9ae6a48db6cf4ae562
 
 Name:		openslide
-Version:	4.0.0
+Version:	4.0.1
 Release:	%autorelease
 Summary:	C library for reading virtual slides
 

@@ -1,49 +1,62 @@
-%global source0_hash f9fb6e3f1c3410958fc57134fc0f25152eb28e3c0116ffdc7a383e5939b6367a
+%global source0_hash none
 
 Name:           python-jaraco-test
-Version:        5.6.0
+Version:        5.7.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Testing support by jaraco
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/jaraco/jaraco.test
 Source:         %{pypi_source jaraco_test}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# needs test module which is part of python stdlib
-BuildRequires:  python3-test
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Testing support by jaraco.}
+This is package 'jaraco-test' generated automatically by pyp2spec.}
 
 %description %_description
 
 %package -n     python3-jaraco-test
 Summary:        %{summary}
-Requires:       python3-test
 
 %description -n python3-jaraco-test %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-jaraco-test check,cover,doc,enabler,test,type
 
+
+%prep
 %autosetup -p1 -n jaraco_test-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x check,cover,doc,enabler,test,type
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l jaraco
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{py3_test_envvars} %{python3} -m pytest -v
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-jaraco-test -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

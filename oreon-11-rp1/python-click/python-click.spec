@@ -1,42 +1,39 @@
-%global source0_hash df2fb64b9c3f0b5fbf65f1b69dd164cd2d8e7d5d8f6ee3abdafcff7fe2d63719
-
-%bcond tests 1
+%global source0_hash none
 
 Name:           python-click
-Epoch:          1
-Version:        8.3.1
+Version:        8.5.0
 Release:        %autorelease
-Summary:        Simple wrapper around optparse for powerful command line utilities
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Composable command line interface toolkit
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://github.com/pallets/click
-Source0:        https://github.com/pallets/click/archive/refs/tags/8.3.1.tar.gz#/click-8.3.1.tar.gz
+URL:            https://github.com/pallets/click/
+Source:         %{pypi_source click}
 
 BuildArch:      noarch
-BuildRequires:  python%{python3_pkgversion}-devel
-
-%global _description \
-click is a Python package for creating beautiful command line\
-interfaces in a composable way with as little amount of code as necessary.\
-It's the "Command Line Interface Creation Kit".  It's highly configurable but\
-comes with good defaults out of the box.
-
-%description %{_description}
+BuildRequires:  python3-devel
 
 
-%package -n     python%{python3_pkgversion}-click
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'click' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-click
 Summary:        %{summary}
 
-%description -n python%{python3_pkgversion}-click %{_description}
+%description -n python3-click %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n click-%{version} -p1
+%autosetup -p1 -n click-%{version}
 
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-g tests}
+%pyproject_buildrequires
 
 
 %build
@@ -45,20 +42,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %pyproject_install
-%pyproject_save_files click
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-%pyproject_check_import
-%if %{with tests}
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files -n python%{python3_pkgversion}-click -f %pyproject_files
-%license LICENSE.txt
-%doc README.md CHANGES.rst
-
+%files -n python3-click -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.3.1-1

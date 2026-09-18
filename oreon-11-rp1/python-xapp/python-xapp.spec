@@ -1,8 +1,8 @@
 %global source0_hash 2078766e2553eea0ff2ee598212d4883a226df63d014d060756c6274db024823
 
 Name:           python-xapp
-Version:        3.0.2
-Release:        2%{?dist}
+Version:        3.0.3
+Release:        1%{?dist}
 Summary:        Python bindings for xapps
 
 # Automatically converted from old format: LGPLv2 - review is highly recommended.

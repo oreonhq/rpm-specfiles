@@ -25,8 +25,8 @@
 %endif
 
 Name:           php-sebastian-resource-operations%{major}
-Version:        2.0.3
-Release:        6%{?dist}
+Version:        3.0.4
+Release:        1%{?dist}
 Summary:        Provides a list of PHP built-in functions that operate on resources, version %{major}
 
 License:        BSD-3-Clause

@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/automata
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.16
+Version:        1.17
 Release:        %autorelease
 Summary:        Finite automata algorithms
 

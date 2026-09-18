@@ -1,75 +1,64 @@
-%global source0_hash 4be0cc459b9f3d9f24726f0f448ac67ff8d4c87a7010453dca817b556bd0b841
+%global source0_hash none
 
-%global pypi_name listparser
+Name:           python-listparser
+Version:        0.20
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Parse OPML subscription lists
 
-Name:           python-%{pypi_name}
-Version:        0.18
-Release:        29%{?dist}
-Summary:        Parse OPML, FOAF, and iGoogle subscription lists
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/kurtmckee/listparser/
+Source:         %{pypi_source listparser}
 
-License:        LGPL-3.0-or-later
-URL:            https://github.com/kurtmckee/listparser
-Source0:        %pypi_source
 BuildArch:      noarch
-Patch0:         2to3.patch
- 
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(sphinx)
 
-%description
-listparser is a Python library that parses subscription lists (also called
-reading lists) and returns all of the feeds, subscription lists, and
-"opportunity" URLs that it finds. It supports OPML, RDF+FOAF, and the iGoogle
-exported settings format.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'listparser' generated automatically by pyp2spec.}
+
+Patch0:         2to3.patch
+
+%description %_description
+
+%package -n     python3-listparser
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-listparser is a Python library that parses subscription lists (also called
-reading lists) and returns all of the feeds, subscription lists, and
-"opportunity" URLs that it finds. It supports OPML, RDF+FOAF, and the iGoogle
-exported settings format.
+%description -n python3-listparser %_description
 
-%package -n python-%{pypi_name}-doc
-Summary:        listparser documentation
-%description -n python-%{pypi_name}-doc
-Documentation for listparser.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-listparser http,lxml
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n listparser-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p0
-chmod 644 COPYING
-chmod 644 COPYING.LESSER
-chmod 644 README.rst
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x http,lxml
+
 
 %build
 %pyproject_wheel
-# generate html docs 
-PYTHONPATH=${PWD} sphinx-build-3 docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-#%check
-#%{__python3} lptest.py test
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.rst
 
-%files -n python-%{pypi_name}-doc
-%license COPYING COPYING.LESSER
-%doc html
+%files -n python3-listparser -f %{pyproject_files}
 
 %changelog
 %autochangelog

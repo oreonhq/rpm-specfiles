@@ -2,8 +2,8 @@
 
 Name:		globus-gram-job-manager-callout-error
 %global _name %(tr - _ <<< %{name})
-Version:	4.2
-Release:	13%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Globus GRAM Jobmanager Callout Errors
 
 License:	Apache-2.0

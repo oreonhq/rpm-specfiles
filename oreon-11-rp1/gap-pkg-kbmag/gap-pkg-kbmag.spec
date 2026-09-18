@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/kbmag
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.5.11
+Version:        1.6.1
 Release:        %autorelease
 Summary:        Knuth-Bendix on Monoids and Automatic Groups
 

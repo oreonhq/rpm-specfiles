@@ -1,8 +1,8 @@
 %global source0_hash 1e9da038deafddd3d0c1c510626c28be5a0f4f17b9091d577fd30e7c5ba88680
 
 Name:           clearsilver
-Version:        0.10.5
-Release:        82%{?dist}
+Version:        0.11.0
+Release:        1%{?dist}
 Summary:        Fast and powerful HTML templating system
 # Technically, the license is "Neotonic ClearSilver", but it is a copy of 
 # ASL 1.1 with the trademarks as the only difference.

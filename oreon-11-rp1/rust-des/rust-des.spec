@@ -7,7 +7,7 @@
 %global crate des
 
 Name:           rust-des
-Version:        0.8.1
+Version:        0.9.0
 Release:        %autorelease
 Summary:        DES and Triple DES (3DES, TDES) block ciphers implementation
 

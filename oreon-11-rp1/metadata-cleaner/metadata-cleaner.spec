@@ -6,7 +6,7 @@
 %global gtk_version 4.6
 
 Name:       metadata-cleaner
-Version:    2.5.5
+Version:    2.5.6
 %forgemeta
 Release:    %autorelease
 Summary:    View and clean metadata in files, using mat2

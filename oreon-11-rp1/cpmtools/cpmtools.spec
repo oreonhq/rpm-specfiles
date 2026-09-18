@@ -1,8 +1,8 @@
 %global source0_hash 7839b19ac15ba554e1a1fc1dbe898f62cf2fd4db3dcdc126515facc6b929746f
 
 Name:		cpmtools
-Version:	2.23
-Release:	12%{?dist}
+Version:	2.24
+Release:	1%{?dist}
 Summary:	Programs for accessing CP/M disks
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

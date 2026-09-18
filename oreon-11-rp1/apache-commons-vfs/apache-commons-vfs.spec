@@ -6,7 +6,7 @@
 %bcond mina   0
 
 Name:           apache-commons-vfs
-Version:        2.9.0
+Version:        2.10.0
 Release:        %autorelease
 Summary:        Commons Virtual File System
 License:        Apache-2.0

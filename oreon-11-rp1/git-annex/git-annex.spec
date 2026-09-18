@@ -8,7 +8,7 @@
 %endif
 
 Name:           git-annex
-Version:        10.20260115
+Version:        10.20260901
 Release:        1%{?dist}
 Summary:        Manage files with git, without checking their contents into git
 

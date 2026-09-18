@@ -4,7 +4,7 @@
 
 Summary:	Object-oriented, high-level language for implementing smart contracts
 Name:		solidity
-Version:	0.8.34
+Version:	0.8.37
 Release:	%autorelease
 # Not enough deps on x86 and does not work on big-endian arches
 ExcludeArch:	%{ix86} s390x

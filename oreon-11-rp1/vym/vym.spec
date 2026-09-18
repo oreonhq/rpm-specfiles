@@ -3,8 +3,8 @@
 %global __requires_exclude .*BugzillaClient.*
 
 Name:           vym
-Version:        2.9.26
-Release:        6%{?dist}
+Version:        3.0.0
+Release:        1%{?dist}
 Summary:        View your mind
 
 License:        GPL-2.0-or-later

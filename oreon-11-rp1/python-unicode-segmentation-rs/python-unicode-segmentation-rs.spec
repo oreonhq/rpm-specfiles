@@ -1,68 +1,57 @@
-%global source0_hash 137246f8ccadf249e4978503a88438de68205d89bf360ddeece340938c33caec
+%global source0_hash none
 
-%global pypi_name unicode-segmentation-rs
-%global srcname unicode_segmentation_rs
-
-%global common_description %{expand:
-Python bindings for the Rust unicode-segmentation and unicode-width crates.
-It provides functions to correctly split strings by words, sentences, or
-grapheme clusters according to Unicode Standard Annex #29.}
-
-Name:           python-%{pypi_name}
-Version:        0.2.0
-Release:        2%{?dist}
+Name:           python-unicode-segmentation-rs
+Version:        0.3.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Unicode segmentation and width for Python using Rust
 
-License:        MIT AND (MIT OR Apache-2.0)
-URL:            https://github.com/WeblateOrg/unicode-segmentation-rs
-Source0:        https://files.pythonhosted.org/packages/source/u/%{srcname}/%{srcname}-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0
+URL:            https://weblate.org/
+Source:         %{pypi_source unicode_segmentation_rs}
 
 BuildRequires:  python3-devel
-BuildRequires:  cargo-rpm-macros
 BuildRequires:  gcc
 
-%description %{common_description}
 
-%package -n python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'unicode-segmentation-rs' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-unicode-segmentation-rs
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %{common_description}
+%description -n python3-unicode-segmentation-rs %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n unicode_segmentation_rs-%{version}
 
-%autosetup -n %{srcname}-%{version}
-
-rm -f Cargo.lock
-
-sed -i 's/maturin>=1.10/maturin>=1.9/' pyproject.toml
-
-sed -i 's/"generate-import-lib",//g' Cargo.toml
-sed -i 's/, "generate-import-lib"//g' Cargo.toml
-
-%cargo_prep
 
 %generate_buildrequires
-%cargo_generate_buildrequires
 %pyproject_buildrequires
 
-%build
-%cargo_license_summary
-%{cargo_license} > LICENSE.dependencies
 
+%build
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%license LICENSE.dependencies
-%doc README.md
+
+%files -n python3-unicode-segmentation-rs -f %{pyproject_files}
 
 %changelog
 %autochangelog

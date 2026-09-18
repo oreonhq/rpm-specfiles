@@ -1,23 +1,24 @@
-%global source0_hash d52716d3c13d530fb564cb55d3e3d5a814d49a9cd95e5759f67989d9547b14ba
+%global source0_hash none
 
 Name:           python-buildman
-Version:        0.0.6
+Version:        0.0.7
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Buildman build tool for U-Boot
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
 URL:            https://docs.u-boot.org/en/latest/build/buildman.html
 Source:         %{pypi_source buildman}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  sed
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This tool handles building U-Boot to check that you have not broken it with
-your patch series. It can build each individual commit and report which boards
-fail on which commits, and which errors come up. It aims to make full use of
-multi-processor machines.}
+This is package 'buildman' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -26,29 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-buildman %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n buildman-%{version}
 
-# Remove unnecessary shebangs
-sed -i "\|#!/usr/bin/env python3|d" src/buildman/*.py
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files buildman
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-buildman -f %{pyproject_files}
-%doc README.rst
 %{_bindir}/buildman
 
 %changelog

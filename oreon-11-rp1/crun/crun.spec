@@ -41,10 +41,10 @@ Epoch: 102
 # If that's what you're reading, Version must be 0, and will be updated by Packit for
 # copr and koji builds.
 # If you're reading this on dist-git, the version is automatically filled in by Packit.
-Version: 1.26
+Version: 1.29.1
 Release: %autorelease
 URL: https://github.com/containers/%{name}
-Source0:        https://github.com/containers/crun/releases/download/1.26/crun-1.26.tar.zst
+Source0:        https://github.com/containers/crun/releases/download/1.29.1/crun-1.26.tar.zst
 License: GPL-2.0-only
 %if %{defined golang_arches_future}
 ExclusiveArch: %{golang_arches_future}

@@ -13,7 +13,7 @@
 %endif
 
 Name:           poco
-Version:        1.14.1
+Version:        1.15.3
 Release:        %autorelease
 Summary:        C++ class libraries for network-centric applications
 License:        BSL-1.0

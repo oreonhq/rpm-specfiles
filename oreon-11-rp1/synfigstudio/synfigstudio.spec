@@ -2,7 +2,7 @@
 
 %define debug_package %{nil}
 Name:           synfigstudio
-Version:        1.5.4
+Version:        1.5.5
 Release:        1%{?dist}
 Summary:        Vector-based 2D animation studio
 

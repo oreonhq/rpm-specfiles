@@ -1,69 +1,58 @@
-%global source0_hash e11c37bec51e9e0a9422b41ee2db36728e1ee699aa202ae94bc2e77f7fa6b99e
+%global source0_hash none
 
 Name:           python-evdev
-Version:        1.9.3
+Version:        2.0.0
 Release:        %autorelease
-Summary:        Python bindings for the Linux input handling subsystem
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Bindings to the Linux input handling subsystem
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://python-evdev.readthedocs.io
-Source0:        https://github.com/gvalkov/%{name}/archive/refs/tags/v%{version}.tar.gz#/python-evdev-1.9.3.tar.gz
+URL:            https://github.com/gvalkov/python-evdev
+Source:         %{pypi_source evdev}
 
-BuildRequires:  gcc
-BuildRequires:  kernel-headers
-
-
-%global _description \
-This package provides python bindings to the generic input event interface in \
-Linux. The evdev interface serves the purpose of passing events generated in \
-the kernel directly to userspace through character devices that are typically \
-located in /dev/input/. \
- \
-This package also comes with bindings to uinput, the userspace input subsystem. \
-Uinput allows userspace programs to create and handle input devices that can \
-inject events directly into the input subsystem. \
- \
-In other words, python-evdev allows you to read and write input events on Linux. \
-An event can be a key or button press, a mouse movement or a tap on a \
-touchscreen.
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
 
-%description %{_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'evdev' generated automatically by pyp2spec.}
 
+%description %_description
 
-%package -n python3-evdev
+%package -n     python3-evdev
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-evdev}
-%description -n python3-evdev %{_description}
+
+%description -n python3-evdev %_description
 
 
-#------------------------------------------------------------------------------
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
+%autosetup -p1 -n evdev-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
-#------------------------------------------------------------------------------
+
 %build
 %pyproject_wheel
 
-#------------------------------------------------------------------------------
+
 %install
 %pyproject_install
-%pyproject_save_files evdev
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import -t
+%_pyproject_check_import_allow_no_modules -t
 
 
-#------------------------------------------------------------------------------
 %files -n python3-evdev -f %{pyproject_files}
-%license LICENSE
-%doc README.md
 
-#------------------------------------------------------------------------------
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9.3-1
 - Prepare for Oreon 11 (RP1)

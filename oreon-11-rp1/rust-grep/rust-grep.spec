@@ -7,7 +7,7 @@
 %global crate grep
 
 Name:           rust-grep
-Version:        0.3.2
+Version:        0.4.1
 Release:        %autorelease
 Summary:        Fast line oriented regex searching as a library
 

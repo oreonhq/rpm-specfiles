@@ -5,8 +5,8 @@
 %define gtk2_version 2.20.0
 
 Name: vte
-Version: 0.28.2
-Release: 46%{?dist}
+Version: 0.84.1
+Release: 1%{?dist}
 Summary: A terminal emulator
 License: LGPL-2.0-or-later
 #VCS: git:git://git.gnome.org/vte

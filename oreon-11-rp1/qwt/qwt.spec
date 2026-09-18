@@ -8,8 +8,8 @@
 
 Name:    qwt
 Summary: Qt Widgets for Technical Applications
-Version: 6.2.0
-Release: 11%{?dist}
+Version: 6.3.0
+Release: 1%{?dist}
 
 License: LGPL-2.1-or-later WITH Qwt-exception-1.0
 URL:     http://qwt.sourceforge.net

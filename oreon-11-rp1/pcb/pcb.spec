@@ -2,11 +2,11 @@
 
 # Features in Fedora/Free Electronic Lab
 
-%global         pcbver    4.2.0
+%global         pcbver    4.3.0
 
 Name:           pcb
 Version:        %{pcbver}
-Release:        20%{?dist}
+Release:        1%{?dist}
 
 Summary:        An interactive printed circuit board editor
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

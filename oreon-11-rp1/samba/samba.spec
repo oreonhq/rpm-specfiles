@@ -144,7 +144,7 @@
 %bcond varlink 0
 %endif
 
-%global samba_version 4.24.2
+%global samba_version 4.24.7
 
 # The release field is extended:
 # <pkgrel>[.<extraver>][.<snapinfo>]%%{?dist}[.<minorbump>]

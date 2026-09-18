@@ -7,7 +7,7 @@
 %global crate cmac
 
 Name:           rust-cmac
-Version:        0.7.2
+Version:        0.8.0
 Release:        %autorelease
 Summary:        Generic implementation of Cipher-based Message Authentication Code
 

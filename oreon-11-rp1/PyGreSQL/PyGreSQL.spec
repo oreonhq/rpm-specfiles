@@ -1,13 +1,13 @@
 %global source0_hash 917e794c03ecef6b553f960739444f7e92ea62f35c33aeaa787655f4d5e10580
 
 %global srcname	PyGreSQL
-%global uversion 6.1.0
+%global uversion 6.2.3
 
 %{!?runselftest:%global runselftest 1}
 
 Name:		%{srcname}
-Version:	6.1.0
-Release:	6%{?dist}
+Version:	6.2.3
+Release:	1%{?dist}
 Summary:	Python client library for PostgreSQL
 
 URL:		http://www.pygresql.org/

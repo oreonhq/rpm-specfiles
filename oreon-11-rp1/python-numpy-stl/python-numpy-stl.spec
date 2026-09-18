@@ -1,78 +1,65 @@
-%global source0_hash 5a20c3f79cddaa0abc6a4b99f5486aceed4f88152f29b19a57acc844e183fd4d
+%global source0_hash none
 
 Name:           python-numpy-stl
-Version:        3.2.0
+Version:        4.0.1
 Release:        %autorelease
-Summary:        Library for reading, writing and modifying STL files
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Library to make reading, writing and modifying both binary and ascii STL files easy.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/WoLpH/numpy-stl/
 Source:         %{pypi_source numpy_stl}
 
-BuildRequires:  gcc
-
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-Cython
-BuildRequires:  python3-pytest
-BuildRequires:  python3-sphinx
-BuildRequires:  python3-PyQt5
-BuildRequires:  /usr/bin/xvfb-run
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11
-ExcludeArch:    %{ix86}
-%endif
 
-%description
-Simple library to make working with STL files (and 3D objects in general) fast
-and easy. Due to all operations heavily relying on numpy this is one of the
-fastest STL editing libraries for Python available.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'numpy-stl' generated automatically by pyp2spec.}
+
+%description %_description
 
 %package -n     python3-numpy-stl
 Summary:        %{summary}
 
-%description -n python3-numpy-stl
-Simple library to make working with STL files (and 3D objects in general) fast
-and easy. Due to all operations heavily relying on NumPy this is one of the
-fastest STL editing libraries for Python available.
+%description -n python3-numpy-stl %_description
 
-%package        doc
-Summary:        %{name} documentation
-Suggests:       python3-numpy-stl
-BuildArch:      noarch
-%description doc
-Documentation for %{name}.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-numpy-stl dev,docs,fast,tests,tox
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n numpy_stl-%{version}
 
-%autosetup -n numpy_stl-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs,fast,tests,tox
+
 
 %build
 %pyproject_wheel
-# generate html docs
-sphinx-build-3 docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
+
 
 %install
 %pyproject_install
-%pyproject_save_files stl
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-numpy-stl -f %{pyproject_files}
-%doc README.rst
 %{_bindir}/stl
-%{_bindir}/stl2bin
 %{_bindir}/stl2ascii
-
-%files doc
-%doc html
+%{_bindir}/stl2bin
 
 %changelog
 %autochangelog

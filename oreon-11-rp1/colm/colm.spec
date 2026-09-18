@@ -1,8 +1,8 @@
 %global source0_hash 6037b31c358dda6f580f7321f97a182144a8401c690b458fcae055c65501977d
 
 Name:           colm
-Version:        0.14.7
-Release:        12%{?dist}
+Version:        7.0.4
+Release:        1%{?dist}
 Summary:        Programming language designed for the analysis of computer languages
 
 # aapl/ and some headers from src/ are the LGPLv2+

@@ -1,8 +1,8 @@
 %global source0_hash 02fdc312b8ceeb5786b28bf905f54328f414040ff42f45c83007f24b76cc9f7a
 
 Name:           bmon
-Version:        4.0
-Release:        15%{?dist}
+Version:        5.0
+Release:        1%{?dist}
 Summary:        Bandwidth monitor and rate estimator
 
 License:        BSD-2-Clause and MIT

@@ -8,7 +8,7 @@
 %global crate ar_archive_writer
 
 Name:           rust-ar_archive_writer
-Version:        0.5.2
+Version:        0.5.3
 Release:        %autorelease
 Summary:        A writer for object file ar archives
 

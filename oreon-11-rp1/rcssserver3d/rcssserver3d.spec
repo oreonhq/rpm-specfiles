@@ -1,8 +1,8 @@
 %global source0_hash 114ce3b41802cf1ffc2d9196328781227d201c6e537fa6685ac53df2518b91b5
 
 Name:           rcssserver3d
-Version:        0.7.6
-Release:        8%{?dist}
+Version:        0.7.9
+Release:        1%{?dist}
 Summary:        Robocup 3D Soccer Simulation Server
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.

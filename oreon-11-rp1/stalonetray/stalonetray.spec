@@ -1,8 +1,8 @@
 %global source0_hash 17cd2bf2212355473007c456eb2df9774b54ed08277fd141d6cc59512c873240
 
 Name:           stalonetray
-Version:        0.9.0
-Release:        2%{?dist}
+Version:        1.5.0
+Release:        1%{?dist}
 Summary:        A stand alone notification area
 
 # License is only mentioned in COPYING

@@ -14,8 +14,8 @@
 %bcond_with xpp3
 
 Name:           xstream
-Version:        1.4.20
-Release:        11%{?dist}
+Version:        1.4.21
+Release:        1%{?dist}
 Summary:        Java XML serialization library
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD

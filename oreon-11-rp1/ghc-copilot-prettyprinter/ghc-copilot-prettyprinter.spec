@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        4.5.1
+Version:        4.8.1
 Release:        %autorelease
 Summary:        A prettyprinter of Copilot Specifications
 

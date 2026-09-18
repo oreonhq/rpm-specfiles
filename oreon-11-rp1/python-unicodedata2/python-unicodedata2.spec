@@ -1,64 +1,61 @@
-%global source0_hash ffa2f0d6834642fe996d356e728da887201533bb540974ae7ac975e66ecc0e3a
+%global source0_hash none
 
-%global pypi_name unicodedata2
-%global pypi_version %{version}
+Name:           python-unicodedata2
+Version:        17.0.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Unicodedata backport updated to the latest Unicode version.
 
-Name:           python-%{pypi_name}
-Version:        17.0.0
-Release:        2%{?dist}
-Summary:        Unicodedata backport updated to the latest Unicode version
-
-License:        Apache-2.0
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            http://github.com/fonttools/unicodedata2
-Source0:        %{pypi_source}
+Source:         %{pypi_source unicodedata2}
 
-BuildRequires:  gcc
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-randomly)
-BuildRequires:  python3dist(pytest-xdist)
+BuildRequires:  gcc
 
-%description
-This module provides access to the Unicode Character Database (UCD)
-which defines character properties for all Unicode characters. The
-data contained in this database is compiled from the UCD version 13.0.0.
 
-The versions of this package match Unicode versions, so unicodedata2==13.0.0
-is data from Unicode 13.0.0.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'unicodedata2' generated automatically by pyp2spec.}
 
-%package -n     python3-%{pypi_name}
+%description %_description
+
+%package -n     python3-unicodedata2
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-This module provides access to the Unicode Character Database (UCD) 
-which defines character properties for all Unicode characters. The 
-data contained in this database is compiled from the UCD version 13.0.0.
+%description -n python3-unicodedata2 %_description
 
-The versions of this package match Unicode versions, so unicodedata2==13.0.0 
-is data from Unicode 13.0.0.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-unicodedata2 testing
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n unicodedata2-%{version}
 
-%autosetup -n %{pypi_name}-%{pypi_version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x testing
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%pytest -v
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
+%files -n python3-unicodedata2 -f %{pyproject_files}
 
 %changelog
 %autochangelog

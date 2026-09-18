@@ -7,7 +7,7 @@ apps built for elementary.}
 
 Name:           granite
 Summary:        elementary companion library for GTK+ and GLib
-Version:        6.2.0
+Version:        7.8.1
 Release:        %autorelease
 License:        LGPL-3.0-or-later
 

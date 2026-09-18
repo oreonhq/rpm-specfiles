@@ -3,8 +3,8 @@
 %define shortname forms
 
 Name:           jgoodies-forms
-Version:        1.9.0
-Release:        17%{?dist}
+Version:        1.26.1
+Release:        1%{?dist}
 Summary:        Framework to lay out and implement elegant Swing panels in Java
 
 # Automatically converted from old format: BSD - review is highly recommended.

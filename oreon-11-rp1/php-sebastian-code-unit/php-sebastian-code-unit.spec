@@ -26,8 +26,8 @@
 %global ns_project   CodeUnit
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        1.0.8
-Release:        14%{?dist}
+Version:        3.0.0
+Release:        1%{?dist}
 Summary:        Collection of value objects that represent the PHP code units, version 1
 
 License:        BSD-3-Clause

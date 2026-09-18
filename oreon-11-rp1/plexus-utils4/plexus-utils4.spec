@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           plexus-utils4
-Version:        4.0.2
+Version:        4.1.0
 Release:        %autorelease
 Summary:        Plexus Common Utilities
 # ASL 1.1: several files in src/main/java/org/codehaus/plexus/util/
@@ -27,7 +27,7 @@ BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.codehaus.plexus:plexus:pom:)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 4.0.2-3
+Obsoletes:      %{name}-javadoc < 4.1.0-3
 
 %description
 The Plexus project seeks to create end-to-end developer tools for
@@ -41,7 +41,7 @@ is like a J2EE application server, without all the baggage.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n plexus-utils-plexus-utils-%{version}
-%mvn_compat_version : 4.0.2 4.0.1
+%mvn_compat_version : 4.1.0 4.0.1
 
 %build
 %mvn_build -j -f

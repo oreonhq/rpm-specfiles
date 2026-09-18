@@ -5,7 +5,7 @@
 %bcond check 1 0
 
 %global forgeurl https://github.com/mfem/mfem
-Version:        4.9
+Version:        4.10
 %global sover   %{version}.0
 %forgemeta
 

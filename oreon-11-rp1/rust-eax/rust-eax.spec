@@ -7,7 +7,7 @@
 %global crate eax
 
 Name:           rust-eax
-Version:        0.5.0
+Version:        0.6.1
 Release:        %autorelease
 Summary:        Pure Rust implementation of the EAX
 

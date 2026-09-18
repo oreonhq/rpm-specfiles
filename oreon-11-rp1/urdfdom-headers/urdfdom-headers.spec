@@ -3,8 +3,8 @@
 %global realname urdfdom_headers
 
 Name:		urdfdom-headers
-Version:	1.1.2
-Release:	3%{?dist}
+Version:	3.0.1
+Release:	1%{?dist}
 Summary:	The URDF (U-Robot Description Format) headers
 
 License:	BSD-3-Clause

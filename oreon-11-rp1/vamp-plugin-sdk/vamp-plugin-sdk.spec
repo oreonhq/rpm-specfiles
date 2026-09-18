@@ -1,7 +1,7 @@
 %global source0_hash b552bc91817294c7f90ea07d70938642ebf15d5e3bafc81cf7d55efab9995399
 
 Name:           vamp-plugin-sdk
-Version:        2.10
+Version:        2.10.0
 Release:        %autorelease
 Summary:        An API for audio analysis and feature extraction plugins
 

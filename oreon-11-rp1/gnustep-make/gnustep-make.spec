@@ -11,7 +11,7 @@
 d=%{_sysconfdir}/rpm; echo $d)
 
 Name:           gnustep-make
-Version:        2.9.3
+Version:        2_9_3
 Release:        %autorelease
 Summary:        GNUstep makefile package
 License:        GPL-3.0-or-later

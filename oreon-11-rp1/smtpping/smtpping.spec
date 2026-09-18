@@ -1,8 +1,8 @@
 %global source0_hash beca8c44133b91ebe9fdfd044d8dee0947aa7683cba7b0e509ce15cda8fef74a
 
 Name:		smtpping
-Version:	1.1.4
-Release:	11%{?dist}
+Version:	1.1.5
+Release:	1%{?dist}
 Summary:	Small tool for measuring SMTP parameters
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

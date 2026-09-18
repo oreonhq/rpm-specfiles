@@ -4,7 +4,7 @@
 %global         testshortcommit  %(c=%{testcommit}; echo ${c:0:7})
 %global         srcname muon
 Name:           muon-meson
-Version:        0.5.0
+Version:        5.3.1
 Release:        %{autorelease}
 Summary:        C implementation of meson
 

@@ -32,7 +32,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 Name:           objenesis
-Version:        3.5
+Version:        3.6
 Release:        %autorelease
 Summary:        A library for instantiating Java objects
 License:        Apache-2.0

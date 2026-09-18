@@ -6,7 +6,7 @@
 %global DATE 20260808
 %global gcc_tree gcc-16-%{DATE}
 %global gitrev d776f42bb910ebccf652b010b80c22bcca736f7f
-%global gcc_version 16.1.1
+%global gcc_version 16.2.0
 %global gcc_major 16
 # Note, gcc_release must be integer, if you want to add suffixes to
 # %%{release}, append them after %%{gcc_release} on Release: line.

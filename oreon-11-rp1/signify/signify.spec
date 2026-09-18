@@ -1,8 +1,8 @@
 %global source0_hash 6dd1b97fd9273d268b70c1be3c2592cbbe1488bca5e45c12c58f8c74362758d5
 
 Name:     signify
-Version:  32
-Release:  5%{?dist}
+Version:  33
+Release:  1%{?dist}
 Summary:  Sign and verify signatures on files
 
 # signify itself is ISC but uses other source codes, breakdown:

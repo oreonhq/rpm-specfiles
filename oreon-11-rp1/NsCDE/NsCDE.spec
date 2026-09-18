@@ -12,7 +12,7 @@
 %bcond check 1
 
 Name:           NsCDE
-Version:        2.2
+Version:        2.3
 Release:        %autorelease
 Summary:        Modern and functional CDE desktop based on FVWM
 

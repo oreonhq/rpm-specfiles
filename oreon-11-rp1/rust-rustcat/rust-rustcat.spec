@@ -6,7 +6,7 @@
 %global crate rustcat
 
 Name:           rust-rustcat
-Version:        1.3.0
+Version:        3.0.0
 Release:        %autorelease
 Summary:        Rustcat - The Modern Port Listener & Reverse Shell
 

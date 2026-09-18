@@ -7,7 +7,7 @@
 %global crate cose-rust
 
 Name:           rust-cose-rust
-Version:        0.1.7
+Version:        0.1.8
 Release:        %autorelease
 Summary:        COSE Rust implementation
 

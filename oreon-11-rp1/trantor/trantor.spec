@@ -1,7 +1,7 @@
 %global source0_hash e47092938aaf53d51c8bc72d8f54ebdcf537e6e4ac9c8276f3539413d6dfeddf
 
 Name:           trantor
-Version:        1.5.26
+Version:        1.5.28
 Release:        %autorelease
 Summary:        A non-blocking I/O tcp network lib based on c++14/17
 

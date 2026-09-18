@@ -7,7 +7,7 @@
 %global crate simple_asn1
 
 Name:           rust-simple_asn1
-Version:        0.6.3
+Version:        0.6.4
 Release:        %autorelease
 Summary:        Simple DER/ASN.1 encoding/decoding library
 

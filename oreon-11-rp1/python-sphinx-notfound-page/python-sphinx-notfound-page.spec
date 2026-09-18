@@ -1,62 +1,66 @@
-%global source0_hash 45f5da22c69d9a6195de10f3752948958142ef82d83eea748a9666ffe01a159a
+%global source0_hash none
 
-%global pypi_name sphinx-notfound-page
-%global srcname sphinx_notfound_page
-%global importname notfound
-%global project_owner readthedocs
-%global github_name sphinx-notfound-page
-%global desc Create a custom 404 page with absolute URLs hardcoded
+Name:           python-sphinx-notfound-page
+Version:        1.1.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Sphinx extension to build a 404 page with absolute URLs
 
-Name:           python-%{pypi_name}
-Version:        1.0.4
-Release:        7%{?dist}
-Summary:        Create a custom 404 page with absolute URLs hardcoded
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pypi.python.org/pypi/%{pypi_name}
-Source0:        https://github.com/%{project_owner}/%{github_name}/archive/%{version}.tar.gz
-# Patch to remove . and no longer needed pdbpp from tox deps
-# From https://github.com/readthedocs/sphinx-notfound-page/pull/225
+URL:            https://github.com/readthedocs/sphinx-notfound-page
+Source:         %{pypi_source sphinx_notfound_page}
+
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sphinx-notfound-page' generated automatically by pyp2spec.}
+
 Patch:         tox-no-dot-no-pdbpp.patch
-# Already upstream patch to fix tests with sphinx 7.3.x
 Patch:         https://patch-diff.githubusercontent.com/raw/readthedocs/sphinx-notfound-page/pull/245.patch
-# Already upstream patch to fix tests with sphinx 8.x
 Patch:         https://patch-diff.githubusercontent.com/raw/readthedocs/sphinx-notfound-page/pull/250.patch
 
-BuildArch:      noarch
-BuildRequires:	python3dist(tox-current-env) >= 0.0.16
+%description %_description
 
-%description
-%desc
-
-%package -n     python%{python3_pkgversion}-%{pypi_name}
+%package -n     python3-sphinx-notfound-page
 Summary:        %{summary}
-BuildArch:      noarch
 
-%description -n python%{python3_pkgversion}-%{pypi_name}
-%desc
+%description -n python3-sphinx-notfound-page %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sphinx-notfound-page doc,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sphinx_notfound_page-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files notfound
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%tox
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst CHANGELOG.rst docs
+
+%files -n python3-sphinx-notfound-page -f %{pyproject_files}
 
 %changelog
 %autochangelog

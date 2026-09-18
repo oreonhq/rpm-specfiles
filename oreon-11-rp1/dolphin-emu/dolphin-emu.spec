@@ -23,7 +23,7 @@
 %endif
 
 Name:           dolphin-emu
-Version:        2503a
+Version:        2606a
 Release:        %autorelease
 Summary:        GameCube / Wii / Triforce Emulator
 

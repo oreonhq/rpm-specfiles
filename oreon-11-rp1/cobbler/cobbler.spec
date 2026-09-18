@@ -10,7 +10,7 @@
 %bcond check 0
 
 Name:           cobbler
-Version:        3.3.7
+Version:        4.0.0b6
 Release:        %autorelease
 Summary:        Boot server configurator
 URL:            https://cobbler.github.io/

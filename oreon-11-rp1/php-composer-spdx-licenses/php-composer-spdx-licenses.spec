@@ -17,8 +17,8 @@
 %bcond_without       tests
 
 Name:           php-composer-spdx-licenses
-Version:        1.5.9
-Release:        3%{?gh_date:.%{gh_date}git%{gh_short}}%{?dist}
+Version:        1.6.0
+Release:        1%{?gh_date:.%{gh_date}git%{gh_short}}%{?dist}
 Summary:        SPDX licenses list and validation library
 
 License:        MIT

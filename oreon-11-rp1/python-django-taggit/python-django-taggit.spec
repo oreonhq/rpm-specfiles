@@ -1,54 +1,56 @@
-%global source0_hash e5bb62891f458d55332e36a32e19c08d20142c43f74bc5656c803f8af25c084a
+%global source0_hash none
 
-%global srcname django-taggit
-
-Name:           python-%{srcname}
-Version:        1.5.1
+Name:           python-django-taggit
+Version:        6.1.0
 Release:        %autorelease
-Summary:        Reusable Django application for simple tagging
+# Fill in the actual package summary to submit package to Fedora
+Summary:        django-taggit is a reusable Django application for simple tagging.
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/jazzband/django-taggit
-Source:         %{pypi_source}
+Source:         %{pypi_source django_taggit}
 
 BuildArch:      noarch
-
-%global _description %{expand:
-%{summary}.}
-
-%description %{_description}
-
-%package     -n python3-%{srcname}
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
 
-%description -n python3-%{srcname} %{_description}
 
-Python 3 version.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'django-taggit' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-django-taggit
+Summary:        %{summary}
+
+%description -n python3-django-taggit %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n django_taggit-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
-rm -vr *.egg-info
-# remove unnecessary language ressources:
-rm taggit/locale/*/LC_MESSAGES/django.po
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
-%find_lang django
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{srcname} -f django.lang
-%license LICENSE
-%doc README.rst CHANGELOG.rst
-%{python3_sitelib}/django_taggit-*.egg-info/
-%{python3_sitelib}/taggit/
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-django-taggit -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -8,7 +8,7 @@
 %global crate libspa
 
 Name:           rust-libspa
-Version:        0.9.2
+Version:        0.10.1
 Release:        %autorelease
 Summary:        Rust bindings for libspa
 

@@ -1,15 +1,15 @@
 %global source0_hash none
 
 Name:           libnetfilter_cttimeout
-Version:        1.0.0
-Release:        29%{?dist}
+Version:        1.0.1
+Release:        1%{?dist}
 Summary:        Timeout policy tuning for Netfilter/conntrack
 License:        GPL-2.0-or-later
 URL:            http://netfilter.org
 Source0:        https://www.netfilter.org/projects/%{name}/files/%{name}-%{version}.tar.bz2
 
 BuildRequires:  gcc
-BuildRequires:  libmnl-devel >= 1.0.0, pkgconfig, kernel-headers
+BuildRequires:  libmnl-devel >= 1.0.1, pkgconfig, kernel-headers
 BuildRequires: make
 
 %description
@@ -23,7 +23,7 @@ policy to the kernel.
 %package        devel
 Summary:        Timeout policy tuning for Netfilter/conntrack
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       libmnl-devel >= 1.0.0
+Requires:       libmnl-devel >= 1.0.1
 Requires:       kernel-headers
 
 %description    devel

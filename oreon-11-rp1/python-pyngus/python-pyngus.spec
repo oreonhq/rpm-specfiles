@@ -1,69 +1,56 @@
-%global source0_hash 08cccdfb892dafe825e22c0d1740f7c0848910c3398b3a0f01f29a92ffe97998
+%global source0_hash none
 
-%global srcname pyngus
-%global commit 60b6f102e4dc2d976292aa974866c4acce492e27
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-%global snapshotdate 20200513
+Name:           python-pyngus
+Version:        2.3.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Callback API implemented over Proton
 
-Name:          python-%{srcname}
-# Uses the snapshot because the upstream does not provides the latest version from git.
-# Please see: https://github.com/kgiusti/pyngus/issues/14
-Version:       2.3.0^%{snapshotdate}git%{shortcommit}
-Release:       12.%{snapshotdate}git%{shortcommit}%{?dist}
-Summary:       Callback API implemented over Proton
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/kgiusti/pyngus
+Source:         %{pypi_source pyngus}
 
-License:       Apache-2.0
-URL:           https://github.com/kgiusti/%{srcname}
-# Uses the commit because the upstream does not provides the latest version from git.
-# Please see: https://github.com/kgiusti/pyngus/issues/14
-Source:  https://github.com/kgiusti/pyngus/archive/%{commit}/%{srcname}-%{shortcommit}.tar.gz 
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildArch:     noarch
-BuildRequires: python3-devel
-# Please see: https://bugzilla.redhat.com/show_bug.cgi?id=2245641
-BuildRequires: python3dist(legacy-cgi)
 
-# Explicitly requires.
-Requires: python3dist(qpid-proton)
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pyngus' generated automatically by pyp2spec.}
 
-%global _description \
-A connection oriented messaging framework using QPID Proton.\
-It provides a callback-based API for message passing.
+%description %_description
 
-%description %{_description}
-
-%package -n python3-%{srcname}
+%package -n     python3-pyngus
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-pyngus %_description
 
-Python 3 version.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pyngus-%{version}
 
-%autosetup -n %{srcname}-%{commit} 
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
-%install
-%py3_shebang_fix setup.py
-%pyproject_install
-%py3_shebang_fix tests/test-runner tests/perf-test.py setup.py examples/perf-tool.py examples/rpc-server.py examples/server.py examples/send.py examples/recv.py examples/rpc-client.py
 
-%pyproject_save_files -l %{srcname}
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%py3_test_envvars PYTHONPATH=%{buildroot}:%{buildroot}/tests
-PYTHONPATH=.:tests tests/test-runner -i "unit_tests.connection.CyrusTest.test_cyrus_sasl_ok" -i "unit_tests.connection.CyrusTest.test_cyrus_sasl_fail"
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-pyngus -f %{pyproject_files}
 
 %changelog
 %autochangelog

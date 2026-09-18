@@ -7,8 +7,8 @@ Name: rang
 License: Unlicense
 Summary: Minimal, header-only, Modern C++ library for terminal goodies
 
-Version: 3.2
-Release: 10%{?dist}
+Version: 3.3
+Release: 1%{?dist}
 
 URL: https://agauniyal.github.io/rang/
 Source0: https://github.com/agauniyal/rang/archive/v%{version}/rang-v%{version}.tar.gz

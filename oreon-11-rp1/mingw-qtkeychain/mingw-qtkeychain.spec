@@ -5,8 +5,8 @@
 %global pkgname qtkeychain
 
 Name:           mingw-%{pkgname}
-Version:        0.15.0
-Release:        2%{?dist}
+Version:        0.17.0
+Release:        1%{?dist}
 Summary:        MinGW Windows %{pkgname} library
 BuildArch:      noarch
 

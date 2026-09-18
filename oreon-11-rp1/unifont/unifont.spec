@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:            unifont
-Version:         16.0.01
+Version:         18.0.01
 Release:         %autorelease
 License:         GPL-2.0-or-later AND OFL-1.1 AND GFDL-1.3-or-later
 Url:             https://savannah.gnu.org/projects/unifont

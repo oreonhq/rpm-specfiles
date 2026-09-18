@@ -2,8 +2,8 @@
 
 Summary: C++ wrapper library around CGAL for PostGIS
 Name: SFCGAL
-Version: 2.0.0
-Release: 5%{?dist}
+Version: 2.1.0
+Release: 1%{?dist}
 License: LGPL-2.0-or-later
 URL: https://gitlab.com/Oslandia/SFCGAL/
 Source: https://gitlab.com/sfcgal/SFCGAL/-/archive/v%{version}/SFCGAL-v%{version}.tar.bz2

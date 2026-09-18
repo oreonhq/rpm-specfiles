@@ -1,8 +1,8 @@
 %global source0_hash bc61cb9e84d5045cbcaffbdd707940d399d8bf62874663dfe5809a0bfb87e9b6
 
 Name:		vkd3d
-Version:	1.17
-Release:	2%{?dist}
+Version:	2.1
+Release:	1%{?dist}
 Summary:	D3D12 to Vulkan translation library
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    dragon
 Summary: Media player
-Version: 26.04.3
+Version: 26.08.1
 Release: 1%{?dist}
 
 # code: KDE e.V. may determine that future GPL versions are accepted

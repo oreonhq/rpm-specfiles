@@ -1,7 +1,7 @@
 %global source0_hash 7a1c6d67a9ac39cbc800f3b4494c4f74c00c12e27f332b5fd73247f17982f06c
 
 Name:           x11docker
-Version:        7.6.0
+Version:        7.8.0
 Release:        %autorelease
 Summary:        Run GUI applications and desktops in Linux containers
 

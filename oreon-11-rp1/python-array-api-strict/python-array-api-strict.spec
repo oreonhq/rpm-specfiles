@@ -1,65 +1,63 @@
-%global source0_hash 48dfaff53830cda61509bc175480f7700d1a0ff603383a4a683b2d532f78ab46
+%global source0_hash none
 
 Name:           python-array-api-strict
-Version:        2.0.1
-Release:        %{autorelease}
-Summary:        Strict implementation of the Python array API
+Version:        2.6.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A strict, minimal implementation of the Python array API standard.
 
-License:        BSD-3-Clause
-URL:            https://github.com/data-apis/array-api-strict
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://data-apis.org/array-api-strict/
 Source:         %{pypi_source array_api_strict}
 
-# Fix test_iter with Python 3.14.0b1
-# Rebased from https://github.com/data-apis/array-api-strict/pull/154 (merged)
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'array-api-strict' generated automatically by pyp2spec.}
+
 Patch:          Fix-test_iter-with-Python-3.14-beta-1.patch
 
-BuildArch:      noarch
-
-BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  python3-hypothesis
-
-%global _description %{expand:
-array_api_strict is a strict, minimal implementation of the Python array API.
-
-The purpose of array-api-strict is to provide an implementation of the array
-API for consuming libraries to test against so they can be completely sure
-their usage of the array API is portable.
-
-It is not intended to be used by end-users. End-users of the array API should
-just use their favorite array library (NumPy, CuPy, PyTorch, etc.) as usual. It
-is also not intended to be used as a dependency by consuming libraries.
-Consuming library code should use the array-api-compat package to support the
-array API. Rather, it is intended to be used in the test suites of consuming
-libraries to test their array API usage.}
-
-%description %{_description}
+%description %_description
 
 %package -n     python3-array-api-strict
 Summary:        %{summary}
 
-%description -n python3-array-api-strict %{_description}
+%description -n python3-array-api-strict %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-array-api-strict test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n array_api_strict-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l array_api_strict
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-array-api-strict -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

@@ -3,7 +3,7 @@
 %global realname sidejob
 
 Name:		erlang-%{realname}
-Version:	2.0.2
+Version:	2.1.0
 Release:	%autorelease
 BuildArch:	noarch
 Summary:	An Erlang library that implements a parallel, capacity-limited request pool

@@ -1,150 +1,62 @@
-%global source0_hash 7571f0e09a6d6eb22168993f94d35867b4dcbd0d34224e0eb7b392b905b3f12f
+%global source0_hash none
 
-%bcond_without tests
-
-%{!?python3_pkgversion:%global python3_pkgversion 3}
-
-%global srcname cryptography
-
-Name:           python-%{srcname}
-Version:        46.0.5
+Name:           python-cryptography
+Version:        50.0.1
 Release:        %autorelease
-Summary:        PyCA's cryptography library
+# Fill in the actual package summary to submit package to Fedora
+Summary:        cryptography is a package which provides cryptographic recipes and primitives to Python developers.
 
-# cryptography is dual licensed under the Apache-2.0 and BSD-3-Clause,
-# as well as the Python Software Foundation license for the OS random
-# engine derived by CPython.
-# Rust crate dependency licenses:
-# Apache-2.0
-# Apache-2.0 OR MIT
-# BSD-3-Clause
-# MIT
-# MIT OR Apache-2.0
-License:        (Apache-2.0 OR BSD-3-Clause) AND PSF-2.0 AND Apache-2.0 AND BSD-3-Clause AND MIT AND (MIT OR Apache-2.0)
-URL:            https://cryptography.io/en/latest/
-Source0:        https://github.com/pyca/cryptography/archive/refs/tags/%{version}.tar.gz#/%{srcname}-%{version}.tar.gz
-Source1:        conftest-skipper.py
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0 OR BSD-3-Clause
+URL:            https://github.com/pyca/cryptography
+Source:         %{pypi_source cryptography}
 
-ExclusiveArch:  %{rust_arches}
-
-BuildRequires:  openssl-devel
+BuildRequires:  python3-devel
 BuildRequires:  gcc
-BuildRequires:  gnupg2
-%if 0%{?fedora}
-BuildRequires:  rust-packaging
-%else
-BuildRequires:  rust-toolset
-%endif
 
-BuildRequires:  python%{python3_pkgversion}-cffi >= 1.12
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
-BuildRequires:  python%{python3_pkgversion}-setuptools-rust >= 0.11.4
 
-%if %{with tests}
-%if 0%{?fedora}
-BuildRequires:  python%{python3_pkgversion}-certifi
-BuildRequires:  python%{python3_pkgversion}-hypothesis >= 1.11.4
-BuildRequires:  python%{python3_pkgversion}-iso8601
-BuildRequires:  python%{python3_pkgversion}-pretend
-BuildRequires:  python%{python3_pkgversion}-pytest-benchmark
-BuildRequires:  python%{python3_pkgversion}-pytest-xdist
-%endif
-BuildRequires:  python%{python3_pkgversion}-pytest >= 6.2.0
-%endif
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cryptography' generated automatically by pyp2spec.}
 
-%description
-cryptography is a package designed to expose cryptographic primitives and
-recipes to Python developers.
+%description %_description
 
-%package -n  python%{python3_pkgversion}-%{srcname}
-Summary:        PyCA's cryptography library
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
+%package -n     python3-cryptography
+Summary:        %{summary}
 
-Requires:       openssl-libs
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 9
-# Can be safely removed in Fedora 37
-Obsoletes: python%{python3_pkgversion}-cryptography-vectors < 3.4.7
-%endif
+%description -n python3-cryptography %_description
 
-%description -n python%{python3_pkgversion}-%{srcname}
-cryptography is a package designed to expose cryptographic primitives and
-recipes to Python developers.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-cryptography ssh
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{srcname}-%{version}
-%cargo_prep
-sed -i 's/locked = true//g' pyproject.toml
-
-%if ! 0%{?fedora}
-sed -i 's,--benchmark-disable,,' pyproject.toml
-%endif
+%autosetup -p1 -n cryptography-%{version}
 
 
 %generate_buildrequires
-%pyproject_buildrequires
-%if 0%{?fedora}
-# Fedora: use RPMified crates
-%cargo_generate_buildrequires
-%endif
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x ssh
 
 
 %build
-export RUSTFLAGS="%build_rustflags"
-export OPENSSL_NO_VENDOR=1
-export CFLAGS="${CFLAGS} -DOPENSSL_NO_ENGINE=1 "
 %pyproject_wheel
-
-%cargo_license_summary
-%{cargo_license} > LICENSE.dependencies
-%if ! 0%{?fedora}
-%cargo_vendor_manifest
-%endif
 
 
 %install
-# Actually other *.c and *.h are appropriate
-# see https://github.com/pyca/cryptography/issues/1463
-find . -name .keep -print -delete
-find . -name Cargo.toml -print -delete
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-%if %{with tests}
-%if 0%{?rhel}
-# skip benchmark and hypothesis tests on RHEL
-rm -rf tests/bench tests/hypothesis
-# append skipper to skip iso8601 and pretend tests
-cat < %{SOURCE1} >> tests/conftest.py
-%endif
-
-# enable SHA-1 signatures for RSA tests
-# also see https://github.com/pyca/cryptography/pull/6931 and rhbz#2060343
-export OPENSSL_ENABLE_SHA1_SIGNATURES=yes
-
-# see https://github.com/pyca/cryptography/issues/4885 and
-# see https://bugzilla.redhat.com/show_bug.cgi?id=1761194 for deselected tests
-# see rhbz#2042413 for memleak. It's unstable under Python 3.11 and makes
-# not much sense for downstream testing.
-# see rhbz#2171661 for test_load_invalid_ec_key_from_pem: error:030000CD:digital envelope routines::keymgmt export failure
-PYTHONPATH=${PWD}/vectors:%{buildroot}%{python3_sitearch} \
-    %{__python3} -m pytest \
-    --ignore vendor \
-    -k "not (test_buffer_protocol_alternate_modes or test_dh_parameters_supported or test_load_ecdsa_no_named_curve or test_decrypt_invalid_decrypt or test_openssl_memleak or test_load_invalid_ec_key_from_pem)"
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
-%doc README.rst docs
-%license LICENSE LICENSE.APACHE LICENSE.BSD
-%license LICENSE.dependencies
-%if ! 0%{?fedora}
-%license cargo-vendor.txt
-%endif
-
+%files -n python3-cryptography -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 46.0.5-1

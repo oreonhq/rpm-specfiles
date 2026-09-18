@@ -9,7 +9,7 @@
 %global _python_bytecompile_errors_terminate_build 0
 
 Name:           pygsl
-Version:        2.6.4
+Version:        2.6.6
 Release:        %autorelease
 Summary:        %{sum}
 

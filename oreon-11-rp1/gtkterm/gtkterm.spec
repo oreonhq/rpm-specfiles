@@ -1,8 +1,8 @@
 %global source0_hash 47e39011067ccaa5e965308225d8f80ea4e1793ca884d7f32600fa1fb9ae6628
 
 Name:           gtkterm
-Version:        1.3.1
-Release:        5%{?dist}
+Version:        1.9.1
+Release:        1%{?dist}
 Summary:        Serial port terminal
 License:        GPL-2.0-or-later AND GPL-3.0-or-later
 URL:            https://github.com/wvdakker/gtkterm

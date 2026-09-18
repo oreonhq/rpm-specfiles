@@ -16,8 +16,8 @@
 
 Name:           compat-gpgme124
 Summary:        GnuPG Made Easy - high level crypto API
-Version:        1.24.3
-Release:        12%{?dist}
+Version:        2.2.0
+Release:        1%{?dist}
 
 # MIT: src/cJSON.{c,h} (used by gpgme-json)
 License:        LGPL-2.1-or-later AND MIT

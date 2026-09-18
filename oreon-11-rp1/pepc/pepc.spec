@@ -1,7 +1,7 @@
 %global source0_hash 1a3b5df5589b633de807f79cc8c2048bfadebf00b21fada0050483682d324519
 
 Name:		pepc
-Version:	1.6.10
+Version:	2.0.5
 Release:	%autorelease
 Summary:	Power, Energy, and Performance Configurator
 

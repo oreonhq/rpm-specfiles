@@ -2,8 +2,8 @@
 
 Name:    txt2tags
 Summary: Summary: Converts text files to HTML, XHTML, LaTeX, and other formats
-Version: 3.3
-Release: 23%{?dist}
+Version: 3.9
+Release: 1%{?dist}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
 URL:     http://txt2tags.sourceforge.net/

@@ -27,7 +27,7 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        8.0.0
+Version:        8.1.7
 Release:        1%{?dist}
 Summary:        Diff implementation, version %{major}
 

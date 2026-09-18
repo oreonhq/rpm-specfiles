@@ -12,8 +12,8 @@
 
 Summary:        IRC services designed for flexibility and ease of use
 Name:           anope
-Version:        2.1.4
-Release:        6%{?dist}
+Version:        2.1.27
+Release:        1%{?dist}
 # Anope itself is GPL-2.0-only but uses other source codes, breakdown:
 # BSD-3-Clause: include/pstdint.h and modules/encryption/enc_sha256.cpp
 # MIT: src/siphash.cpp

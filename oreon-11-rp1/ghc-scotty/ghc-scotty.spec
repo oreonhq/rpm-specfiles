@@ -10,7 +10,7 @@
 # testsuite missing deps: hspec-wai
 
 Name:           ghc-%{pkg_name}
-Version:        0.22
+Version:        0.30
 Release:        %autorelease
 Summary:        Haskell web framework inspired by Ruby's Sinatra, using WAI and Warp
 

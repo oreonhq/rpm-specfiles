@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:          android-tools
-Version:       35.0.2
+Version:       37.0.0
 Release:       %autorelease
 Epoch:         1
 Summary:       Android platform tools(adb, fastboot)

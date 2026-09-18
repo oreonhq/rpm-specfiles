@@ -1,92 +1,63 @@
-%global source0_hash 9f525fe20db88fe8b41e53d809c9d2d51502f559229ac3d45181dc5646f55b1d
+%global source0_hash none
 
-%global pypi_name pyahocorasick
-
-Name:           python-%{pypi_name}
-Version:        2.3.0
+Name:           python-pyahocorasick
+Version:        2.3.1
 Release:        %autorelease
-Summary:        Python module (C extension and plain Python) implementing Aho-Corasick algorithm
+# Fill in the actual package summary to submit package to Fedora
+Summary:        pyahocorasick is a fast and memory efficient library for exact or approximate multi-pattern string search.  With the __ahocorasick.Automaton__ class, you can find multiple key string occurrences at once in some input text.  You can use it as a plain dict-like Trie or convert a Trie to an automaton for efficient Aho-Corasick search. And pickle to disk for easy reuse of large automatons. Implemented in C and tested on Python 3.6+. Works on Linux, macOS and Windows. BSD-3-Cause license.
 
-License:        BSD-3-Clause AND LicenseRef-Fedora-Public-Domain
-URL:            https://github.com/WojciechMula/pyahocorasick
-Source:         %url/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
-# Fix big-endian results.
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            http://github.com/WojciechMula/pyahocorasick
+Source:         %{pypi_source pyahocorasick}
+
+BuildRequires:  python3-devel
+BuildRequires:  gcc
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pyahocorasick' generated automatically by pyp2spec.}
+
 Patch:          https://github.com/WojciechMula/pyahocorasick/pull/193.patch
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch: %{ix86}
+%description %_description
 
-BuildRequires:  gcc
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(sphinx)
-
-%global common_description %{expand:
-pyahocorasick is a fast and memory efficient library for exact or approximate
-multi-pattern string search meaning that you can find multiple key strings
-occurrences at once in some input text. The strings "index" can be built ahead
-of time and saved (as a pickle) to disk to reload and reuse later. The library
-provides an ahocorasick Python module that you can use as a plain dict-like Trie
-or convert a Trie to an automaton for efficient Aho-Corasick search.
-
-pyahocorasick is implemented in C and tested on Python 3.8 and up. It works on
-64 bits Linux, macOS and Windows.}
-
-%description %{common_description}
-
-%package -n python3-%{pypi_name}
+%package -n     python3-pyahocorasick
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %{common_description}
+%description -n python3-pyahocorasick %_description
 
-%package -n python-%{pypi_name}-doc
-Summary:        Documentation for python-%{pypi_name}
-# BSD-2-Clause: Sphinx javascript
-# MIT: jquery
-License:        BSD-3-Clause AND BSD-2-Clause AND MIT
-BuildArch:      noarch
-Requires:       python3-%{pypi_name} = %{?epoch:%{epoch}:}%{version}-%{release}
-Provides:       bundled(js-doctools)
-Provides:       bundled(js-language_data)
-Provides:       bundled(js-searchtools)
-Provides:       bundled(js-sidebar)
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pyahocorasick testing
 
-%description -n python-%{pypi_name}-doc
-%{common_description}
-
-This package is providing the documentation for %{pypi_name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pyahocorasick-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x testing
+
 
 %build
-# https://github.com/WojciechMula/pyahocorasick/issues/199
-export CFLAGS="%{build_cflags} -std=c99"
 %pyproject_wheel
 
-# generate html docs
-sphinx-build-3 -b html docs/ html
-# remove the sphinx-build-3 leftovers
-rm -rf html/.{doctrees,buildinfo}
 
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%doc CHANGELOG.rst
-%{python3_sitearch}/ahocorasick.*.so
-%{python3_sitearch}/%{pypi_name}-%{version}.dist-info
 
-%files -n python-%{pypi_name}-doc
-%doc html
+%files -n python3-pyahocorasick -f %{pyproject_files}
 
 %changelog
 %autochangelog

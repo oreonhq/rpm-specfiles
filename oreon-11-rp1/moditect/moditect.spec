@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           moditect
-Version:        1.1.0
+Version:        1.3.0.Final
 Release:        %autorelease
 Summary:        Tooling for the Java Module System
 License:        Apache-2.0
@@ -11,7 +11,7 @@ URL:            https://github.com/moditect/moditect
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/moditect/moditect/archive/refs/tags/1.1.0.tar.gz#/moditect-1.1.0.tar.gz
+Source0:        https://github.com/moditect/moditect/archive/refs/tags/1.3.0.Final.tar.gz#/moditect-1.1.0.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -29,7 +29,7 @@ BuildRequires:  mvn(org.eclipse.aether:aether-util)
 BuildRequires:  mvn(org.ow2.asm:asm)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.1.0-12
+Obsoletes:      %{name}-javadoc < 1.3.0.Final-12
 
 %description
 The ModiTect project aims at providing productivity tools for working with the

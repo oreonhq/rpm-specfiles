@@ -1,70 +1,59 @@
-%global source0_hash 47293d32ac8a8a6346a829a2badf25d12464fd71598ca572eaadde25184e9359
+%global source0_hash none
 
-%global pypi_name managesieve
-
-# Pull from GitLab (prerequisite for Packit)
-%global forgeurl https://gitlab.com/htgoebel/managesieve
-
-Name:           python-%{pypi_name}
-Version:        0.7.1
+Name:           python-managesieve
+Version:        0.8.1
 Release:        %autorelease
-Summary:        Accessing a Sieve-Server for managing Sieve scripts
-%global tag v%{version}
-%forgemeta
+# Fill in the actual package summary to submit package to Fedora
+Summary:        RFC-5804 Manage Sieve client library for remotely managing Sieve scripts
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        PSF-2.0 AND GPL-3.0-only
-URL:            https://managesieve.readthedocs.io/
-Source0:        %forgesource
-# ssl.wrap_socket is deprecated and Python 3.12 removed it entirely
-# https://gitlab.com/htgoebel/managesieve/-/issues/8
-Patch:          fix_ssl_wrap_socket_error.patch
+URL:            https://gitlab.com/htgoebel/managesieve/
+Source:         %{pypi_source managesieve}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildRequires:  python3-devel, git-core
-BuildRequires:  python3-pytest
-BuildRequires:  make
-BuildRequires:  python3-sphinx
-BuildRequires:  python3-sphinx_rtd_theme
 
-%description
-This module allows accessing a Sieve-Server for managing Sieve scripts there.
-It is accompanied by a simple yet functional user application ‘sieveshell’.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'managesieve' generated automatically by pyp2spec.}
 
-%package -n     python3-%{pypi_name}
+Patch:          fix_ssl_wrap_socket_error.patch
+
+%description %_description
+
+%package -n     python3-managesieve
 Summary:        %{summary}
-# Package `cyrus-imapd-utils` also provides /usr/bin/sieveshell
-# However `python-managesieve` provided a Python script installed at
-# /usr/bin/sieveshell from its inception when version 0.6 was packaged
-# in 2020. Upstream's HISTORY file documents it being present since 0.2
-# released in 2004. Clearly this has been missed during package review.
-# https://bugzilla.redhat.com/show_bug.cgi?id=2228002
-Conflicts:      cyrus-imapd-utils
 
-%description -n python3-%{pypi_name}
-This module allows accessing a Sieve-Server for managing Sieve scripts there.
-It is accompanied by a simple yet functional user application ‘sieveshell’.
+%description -n python3-managesieve %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n managesieve-%{version}
 
-%forgeautosetup -p1 -S git
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files managesieve
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.txt HISTORY
-%{_bindir}/sieveshell
+
+%files -n python3-managesieve -f %{pyproject_files}
 
 %changelog
 %autochangelog

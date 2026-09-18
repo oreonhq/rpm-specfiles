@@ -7,7 +7,7 @@
 %global crate warp
 
 Name:           rust-warp
-Version:        0.3.7
+Version:        0.4.3
 Release:        %autorelease
 Summary:        Serve the web at warp speeds
 

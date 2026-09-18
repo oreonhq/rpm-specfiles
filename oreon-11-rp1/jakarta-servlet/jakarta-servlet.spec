@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           jakarta-servlet
-Version:        5.0.0
+Version:        6.1.0
 Release:        %autorelease
 Summary:        Jakarta Servlet
 # most of the project is EPL-2.0 or GPLv2 w/exceptions,
@@ -24,7 +24,7 @@ BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 5.0.0-37
+Obsoletes:      %{name}-javadoc < 6.1.0-37
 Provides:       glassfish-servlet-api = %{version}-%{release}
 
 %description

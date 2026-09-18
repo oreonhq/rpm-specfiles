@@ -2,7 +2,7 @@
 
 Summary: Intrusion Detection System
 Name: suricata
-Version: 8.0.4
+Version: 8.0.7
 Release: 1%{?dist}
 License: GPL-2.0-only
 URL: https://suricata.io/

@@ -31,10 +31,10 @@
 
 Name:           uhd
 URL:            http://github.com/EttusResearch/uhd
-Version:        4.9.0.1
+Version:        4.11.0.0
 #%%global images_ver %%{version}
 %global images_ver 4.9.0.0
-Release:        3%{?dist}
+Release:        1%{?dist}
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 BuildRequires:  make

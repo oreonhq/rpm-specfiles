@@ -1,65 +1,62 @@
-%global source0_hash 4288be9519248bd83475b56c122ba70485382175d8689c86be42ab087951970f
+%global source0_hash none
 
-%global         srcname         recipe-scrapers
-%global         forgeurl        https://github.com/hhursev/%{srcname}
-Version:        15.11.0
-%global         tag             v%{version}
-%forgemeta
-
-Name:           python-%{srcname}
+Name:           python-recipe-scrapers
+Version:        15.12.0
 Release:        %autorelease
-Summary:        Package for scraping recipe data
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python package, scraping recipes from all over the internet
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            %{forgeurl}
-# Test data does not have license information, so
-# remove it
-Source:         %{srcname}-%{version}-clean.tar.gz
-# Script to download source files and rmeove test data
-Source:         prepare.sh
+URL:            https://github.com/hhursev/recipe-scrapers/
+Source:         %{pypi_source recipe_scrapers}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
 
-BuildArch: noarch
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A simple scraping tool for recipe webpages.
-}
+This is package 'recipe-scrapers' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-recipe-scrapers
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-recipe-scrapers %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-recipe-scrapers all,dev,docs,linters,online,tests
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n recipe_scrapers-%{version}
 
-%autosetup -n %{srcname}-%{version}
-# restore removed test data directory as it is used
-# for tests
-mkdir -p tests/test_data
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,dev,docs,linters,online,tests
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files recipe_scrapers -l
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-# Tests that do not use test data
-%pytest -k 'not (TestMainMethods and test_online_mode_html_retrieval)'
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
-%doc docs/
+
+%files -n python3-recipe-scrapers -f %{pyproject_files}
 
 %changelog
 %autochangelog

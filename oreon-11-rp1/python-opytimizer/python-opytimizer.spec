@@ -1,103 +1,63 @@
-%global source0_hash 8e317103c5ae272064eb511c107c024230f43a2629dc25e35305da8bdc665866
-
-%global desc %{expand: \
-Opytimizer is a Python library consisting of
-meta-heuristic optimization algorithms}
-
-%bcond_with docs
-
-%bcond_without tests
-
-%global forgeurl https://github.com/gugarosa/opytimizer
+%global source0_hash none
 
 Name:           python-opytimizer
-Version:        3.1.4
+Version:        4.1.0
 Release:        %autorelease
-Summary:        Python implementation of metaheuristic optimization algorithms
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Nature-Inspired Python Optimizer
 
-%forgemeta
-
-License:        Apache-2.0
-URL:            https://github.com/gugarosa/opytimizer
-Source0:        %forgesource
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/recogna-lab/opytimizer
+Source:         %{pypi_source opytimizer}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-# Remove development dependencies out from the main dependencies
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'opytimizer' generated automatically by pyp2spec.}
+
 Patch:          remove-ci-deps.patch
 
-%description
-%{desc}
+%description %_description
 
-%package -n python3-opytimizer
-Summary:        %{summary}
-BuildRequires:      python3-devel
-
-%if %{with tests}
-BuildRequires:      %{py3_dist pytest}
-
-# for several X11 tests
-BuildRequires:  xorg-x11-server-Xvfb
-
-%endif
-
-# sphinx-autoapi is missing
-%if %{with docs}
-BuildRequires:  make
-BuildRequires:  python3-sphinx-latex
-BuildRequires:  latexmk
-BuildRequires:  %{py3_dist sphinx}
-BuildRequires:  %{py3_dist sphinx-rtd-theme}
-%endif
-
-%description -n python3-opytimizer
-%{desc}
-
-%if %{with docs}
-%package doc
-BuildArch:      noarch
+%package -n     python3-opytimizer
 Summary:        %{summary}
 
-%description doc
-Documentation for %{name}.
-%endif
+%description -n python3-opytimizer %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-opytimizer tests
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n opytimizer-%{version}
 
-%forgeautosetup -p1
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x tests
+
 
 %build
 %pyproject_wheel
 
-%if %{with docs}
-%make_build -C docs latex SPHINXOPTS='%{?_smp_mflags}'
-%make_build -C docs/_build/latex LATEXMKOPTS='-quiet'
-%endif
 
 %install
 %pyproject_install
-%pyproject_save_files opytimizer
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
+%_pyproject_check_import_allow_no_modules -t
 
-# despite the use of xvfb, several plots are shown
-%if %{with tests}
-xvfb-run -a %{python3} -m pytest -k 'not plot and not test_cdo_update'
-%endif
 
 %files -n python3-opytimizer -f %{pyproject_files}
-%doc README.md
-
-%if %{with docs}
-%files doc
-%license LICENSE
-%doc CODE_OF_CONDUCT.md
-%doc docs/_build/latex/opytimizer.pdf
-%endif
 
 %changelog
 %autochangelog

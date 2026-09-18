@@ -4,7 +4,7 @@
 %bcond_with doc
 
 Name:           esmi_ib_library
-Version:        4.3
+Version:        5.2.1.1
 
 %global major_version %(echo %{version} | cut -d. -f1)
 %global minor_version %(echo %{version} | cut -d. -f2)

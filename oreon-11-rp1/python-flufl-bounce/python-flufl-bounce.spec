@@ -1,22 +1,24 @@
-%global source0_hash 25504aeb976ec0fe5a19cd6c413a3410cb514fdcdbdca9f9b5d8d343a8603831
+%global source0_hash none
 
 Name:           python-flufl-bounce
-Version:        4.0
+Version:        5.0.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Email bounce detectors
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://fluflbounce.readthedocs.io/en/latest/
-Source:         %{pypi_source flufl.bounce}
+URL:            https://fluflbounce.readthedocs.io
+Source:         %{pypi_source flufl_bounce}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
 # Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The flufl.bounce library provides a set of heuristics and an API for detecting
-the original bouncing email addresses from a bounce message. Many formats found
-in the wild are supported, as are VERP and RFC 3464 (DSN).}
+This is package 'flufl-bounce' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -25,26 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-flufl-bounce %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n flufl.bounce-%{version}
+%prep
+%autosetup -p1 -n flufl_bounce-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files flufl
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-flufl-bounce -f %{pyproject_files}
-%{python3_sitelib}/flufl.bounce-%{version}-py%{python3_version}-nspkg.pth
 
 %changelog
 %autochangelog

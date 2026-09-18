@@ -7,7 +7,7 @@
 %global crate argh_derive
 
 Name:           rust-argh_derive
-Version:        0.1.13
+Version:        0.1.19
 Release:        %autorelease
 Summary:        Derive-based argument parsing optimized for code size
 

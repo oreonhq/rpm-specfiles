@@ -3,7 +3,7 @@
 %bcond bootstrap 0
 
 Name:           stax2-api
-Version:        4.2.2
+Version:        4.3.0
 Release:        %autorelease
 Summary:        Streaming API for XML
 License:        BSD-2-Clause
@@ -20,7 +20,7 @@ Patch:          0001-Add-BSD-2-license-file.patch
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 4.2.2-6
+Obsoletes:      %{name}-javadoc < 4.3.0-6
 
 BuildSystem:    maven
 BuildOption:    usesJavapackagesBootstrap

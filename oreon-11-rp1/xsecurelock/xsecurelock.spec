@@ -1,8 +1,8 @@
 %global source0_hash a311206a67719b0ec764694d1a827e12cc745600a5ed12549e25e7a8fd87fbc4
 
 Name:           xsecurelock
-Version:        1.8.0
-Release:        10%{?dist}
+Version:        1.9.0
+Release:        1%{?dist}
 Summary:        X11 screen lock utility with security in mind
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0

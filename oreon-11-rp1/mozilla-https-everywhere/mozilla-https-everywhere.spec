@@ -10,8 +10,8 @@
 %global seamonkey_inst_dir %{moz_extensions}/%{seamonkey_app_id}
 
 Name:           mozilla-https-everywhere
-Version:        2022.5.11
-Release:        10%{?dist}
+Version:        2022.5.24
+Release:        1%{?dist}
 Summary:        HTTPS enforcement extension for Mozilla Firefox
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

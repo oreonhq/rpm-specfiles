@@ -10,7 +10,7 @@
 # testsuite missing deps: pgp-wordlist quickcheck-instances
 
 Name:           ghc-%{pkg_name}
-Version:        1.7.1
+Version:        1.7.2
 Release:        %autorelease
 Summary:        A modern, easy to use, well-documented, extensible pretty-printer
 

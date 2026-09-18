@@ -6,7 +6,7 @@
 %global crate scx_rustland
 
 Name:           rust-scx_rustland
-Version:        0.0.3
+Version:        1.1.3
 Release:        %autorelease
 Summary:        A simple user-space scheduler written in Rust
 

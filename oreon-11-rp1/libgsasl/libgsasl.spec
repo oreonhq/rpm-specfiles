@@ -1,8 +1,8 @@
 %global source0_hash f1b553384dedbd87478449775546a358d6f5140c15cccc8fb574136fdc77329f
 
 Name:           libgsasl
-Version:        1.10.0
-Release:        14%{?dist}
+Version:        2.2.4
+Release:        1%{?dist}
 Summary:        GNU SASL library
 License:        LGPL-2.1-or-later
 URL:            https://www.gnu.org/software/gsasl/

@@ -1,8 +1,8 @@
 %global source0_hash fff28052d0d93d136fe8d66fadf134c037156c0196933bf9c0a798276e0c3344
 
 Name:           aprsdigi
-Version:        3.5.1
-Release:        32%{?dist}
+Version:        3.10.0
+Release:        1%{?dist}
 Summary:        AX.25 Automatic Position Reporting System
 
 License:        GPL-2.0-only

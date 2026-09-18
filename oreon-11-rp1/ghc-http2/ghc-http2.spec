@@ -14,9 +14,9 @@
 # testsuite missing deps: network-run
 
 Name:           ghc-%{pkg_name}
-Version:        5.3.10
+Version:        5.4.4
 # can only be reset when all subpkgs bumped
-Release:        5%{?dist}
+Release:        1%{?dist}
 Summary:        HTTP/2 library
 
 License:        BSD-3-Clause

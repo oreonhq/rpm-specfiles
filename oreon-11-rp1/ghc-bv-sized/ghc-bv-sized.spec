@@ -10,7 +10,7 @@
 # testsuite missing deps: hedgehog parameterized-utils tasty-hedgehog
 
 Name:           ghc-%{pkg_name}
-Version:        1.0.6
+Version:        1.0.8
 Release:        %autorelease
 Summary:        A bitvector datatype that is parameterized by the vector width
 

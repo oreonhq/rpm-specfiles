@@ -1,7 +1,7 @@
 %global source0_hash 555720a4158fe5961d89fe2325e70d1764ca4519964be193ef006bcf2420cb27
 
 Name:           python-fastar
-Version:        0.9.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        High-level bindings for the Rust tar crate
 

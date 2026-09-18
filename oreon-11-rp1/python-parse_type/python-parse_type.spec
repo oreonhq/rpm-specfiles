@@ -1,75 +1,62 @@
-%global source0_hash 2e839d5b4e588f92f4986948e101ac62cdc9d3a476bfc96f711dfaf85dc722a4
+%global source0_hash none
 
-%global srcname parse_type
-
-Name:           python-%{srcname}
-Version:        0.6.2
+Name:           python-parse-type
+Version:        0.6.6
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Simplifies to build parse types based on the parse module
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            http://github.com/jenisys/parse_type
-Source0:        %{url}/archive/%{srcname}-%{version}.tar.gz
+URL:            https://github.com/jenisys/parse_type
+Source:         %{pypi_source parse_type}
 
 BuildArch:      noarch
-
-%{?python_enable_dependency_generator}
-
-%global _description \
-"parse_type" extends the "parse" module (opposite of\
-"string.format()") with the following features:\
-* build type converters for common use cases (enum/mapping, choice)\
-* build a type converter with a cardinality constraint (0..1,\
-  0..*, 1..*) from the type converter with cardinality=1.\
-* compose a type converter from other type converters\
-* an extended parser that supports the CardinalityField naming\
-  schema and creates missing type variants (0..1, 0..*, 1..*) from\
-  the primary type converter
-
-%description %{_description}
-
-%package -n python3-%{srcname}
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
 BuildRequires:  python3-devel
 
-%description -n python3-%{srcname} %{_description}
 
-Python 3 version.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'parse-type' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-parse-type
+Summary:        %{summary}
+
+%description -n python3-parse-type %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-parse-type develop,docs,testing
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n parse_type-%{version}
 
-%autosetup -n %{srcname}-%{version}
-
-# remove deps on pytest-html
-sed -i -e '/^\s*"pytest-html >= /d' setup.py
-sed -i -e '/^\s*"pytest-html >= /d' pyproject.toml
-sed -i -e '/^pytest-html >= /d' py.requirements/testing.txt
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x develop,docs,testing
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# we don't care about html output from pytest, plus pytest-html isn't in fedora
-sed -i \
-  -e '/^addopts = --metadata PACKAGE_UNDER_TEST parse_type/d' \
-  -e '/^    --metadata PACKAGE_VERSION [0-9].[0-9].[0-9]/d' \
-  -e '\%    --html=build/testing/report.html --self-contained-html%d' \
-  -e '\%    --junit-xml=build/testing/report.xml%d' \
-  pytest.ini
-%tox
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
+
+%files -n python3-parse-type -f %{pyproject_files}
 
 %changelog
 %autochangelog

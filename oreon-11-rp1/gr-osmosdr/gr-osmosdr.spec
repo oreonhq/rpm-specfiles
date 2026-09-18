@@ -13,8 +13,8 @@
 
 Name:          gr-osmosdr
 URL:           http://sdr.osmocom.org/trac/wiki/GrOsmoSDR
-Version:       0.2.5
-Release:       25%{?dist}
+Version:       0.2.6
+Release:       1%{?dist}
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:       GPL-3.0-or-later
 BuildRequires: cmake

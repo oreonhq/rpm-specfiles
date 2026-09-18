@@ -25,8 +25,8 @@
 %global ns_project   Complexity
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        2.0.3
-Release:        8%{?dist}
+Version:        4.0.0
+Release:        1%{?dist}
 Summary:        Calculating the complexity of PHP code units, version 2
 
 License:        BSD-3-Clause

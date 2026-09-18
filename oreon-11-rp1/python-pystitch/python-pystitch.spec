@@ -1,30 +1,24 @@
-%global source0_hash d8f2d325e6513d948ff4d2b5e3c8495aa6e0f3849247143ff17e927246733968
+%global source0_hash none
 
 Name:           python-pystitch
-Version:        1.0.0
+Version:        1.0.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Embroidery IO library
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/inkstitch/pystitch
-VCS:            git:%{url}.git
-Source:         %{url}/archive/v%{version}/pystitch-%{version}.tar.gz
+URL:            https://github.com/inkstitch/pystitch.git
+Source:         %{pypi_source pystitch}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Python library for the reading and writing of embroidery files.
-
-pystitch was coded from the ground up with all projects in mind. It includes a
-lot of high and middle level pattern composition abilities, and should account
-for any known error. If you know an error it does not account for, raise an
-issue. It should be highly robust with a simple api so as to be reasonable for
-any python embroidery project.
-
-It should be complex enough to go very easily from points to stitches, fine
-grained enough to let you control everything, and good enough that you shouldn't
-want to.}
+This is package 'pystitch' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -33,29 +27,29 @@ Summary:        %{summary}
 
 %description -n python3-pystitch %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n pystitch-%{version}
-# Use older license declarations for f42 and f41
-%if 0%{?fedora_version} < 43
-sed -i 's/license = "MIT"/license = { text = "MIT" }/g' pyproject.toml
-sed -i '/license-files/d' pyproject.toml
-%endif
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l pystitch
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%{py3_test_envvars} %{python3} -m unittest discover test
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pystitch -f %{pyproject_files}
 

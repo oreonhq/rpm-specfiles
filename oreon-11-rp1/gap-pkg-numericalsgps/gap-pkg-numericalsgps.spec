@@ -5,7 +5,7 @@
 %global giturl      https://github.com/gap-packages/numericalsgps
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.4.0
+Version:        1.5.0
 Release:        %autorelease
 Summary:        Compute with numerical semigroups and affine semigroups
 

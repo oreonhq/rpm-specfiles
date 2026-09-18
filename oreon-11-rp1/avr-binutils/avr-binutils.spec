@@ -3,8 +3,8 @@
 %define target avr
 
 Name:           %{target}-binutils
-Version:        2.45
-Release:        6%{?dist}
+Version:        2.47
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Cross Compiling GNU binutils targeted at %{target}
 License:        GPL-2.0-or-later
@@ -14,11 +14,11 @@ Source1:        README.fedora
 #add widespread options to avr-size: --format=avr -mcu=XX
 Patch1: http://distribute.atmel.no/tools/opensource/avr-gcc/binutils-2.20.1/30-binutils-2.20.1-avr-size.patch
 Patch2: avr-binutils-config.patch
-# from upstream, for == 2.45, rhbz#2400335
+# from upstream, for == 2.47, rhbz#2400335
 Patch3:         binutils-2.45-cve-2025-11081.patch
-# from upstream, for == 2.45, rhbz#2400340
+# from upstream, for == 2.47, rhbz#2400340
 Patch4:         binutils-2.45-cve-2025-11082.patch
-# from upstream, for == 2.45, rhbz#2400336
+# from upstream, for == 2.47, rhbz#2400336
 Patch5:         binutils-2.45-cve-2025-11083.patch
 
 BuildRequires:  gawk texinfo gcc

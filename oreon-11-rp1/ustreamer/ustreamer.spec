@@ -1,8 +1,8 @@
 %global source0_hash 6ebfebdad21cf381f2026f0b0b0c9dc024b1dd6d156b71b7a6977fdbe2db8a0b
 
 Name: ustreamer
-Version: 6.12
-Release: 6%{?dist}
+Version: 6.67
+Release: 1%{?dist}
 Summary: Lightweight and fast MJPG-HTTP streamer
 License: GPL-3.0-or-later
 URL: https://github.com/pikvm/ustreamer

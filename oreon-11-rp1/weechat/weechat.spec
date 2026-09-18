@@ -3,7 +3,7 @@
 %global __provides_exclude_from ^%{_libdir}/weechat/plugins/.*$
 
 Name:      weechat
-Version:   4.8.2
+Version:   4.10.1
 Release:   %autorelease
 Summary:   Portable, fast, light and extensible IRC client
 Group:     Applications/Communications

@@ -1,7 +1,7 @@
 %global source0_hash f23767d1df005c26f25a1fc203d89b5d46b75a120227c97dd1094d1e16733336
 
 Name:           python-annotated-doc
-Version:        0.0.4
+Version:        0.0.5
 Release:        %autorelease
 Summary:        Document parameters, class attributes, return types, and variables inline
 

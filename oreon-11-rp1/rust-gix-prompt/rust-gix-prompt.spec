@@ -7,7 +7,7 @@
 %global crate gix-prompt
 
 Name:           rust-gix-prompt
-Version:        0.12.0
+Version:        0.17.0
 Release:        %autorelease
 Summary:        A crate of the gitoxide project for handling prompts in the terminal
 

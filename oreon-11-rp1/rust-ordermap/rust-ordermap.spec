@@ -7,7 +7,7 @@
 %global crate ordermap
 
 Name:           rust-ordermap
-Version:        1.1.0
+Version:        1.2.2
 Release:        %autorelease
 Summary:        Hash table with consistent order and fast iteration
 

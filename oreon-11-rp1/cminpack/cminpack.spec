@@ -4,8 +4,8 @@
 %global soversion 1
 
 Name:           cminpack
-Version:        1.3.8
-Release:        12%{?dist}
+Version:        1.3.14
+Release:        1%{?dist}
 Summary:        Solver for nonlinear equations and nonlinear least squares problems
 
 # Automatically converted from old format: BSD - review is highly recommended.

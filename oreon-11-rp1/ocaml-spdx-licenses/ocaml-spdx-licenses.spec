@@ -5,7 +5,7 @@
 %endif
 
 Name:           ocaml-spdx-licenses
-Version:        1.4.0
+Version:        1.6.0
 Release:        %autorelease
 Summary:        SPDX License Expression parser in OCaml
 
@@ -18,7 +18,7 @@ Source:         %{url}/archive/v%{version}/spdx_licenses-%{version}.tar.gz
 ExcludeArch:    %{ix86}
 
 BuildRequires:  ocaml >= 4.08
-BuildRequires:  ocaml-alcotest-devel >= 1.4.0
+BuildRequires:  ocaml-alcotest-devel >= 1.6.0
 BuildRequires:  ocaml-dune >= 2.3
 
 %description

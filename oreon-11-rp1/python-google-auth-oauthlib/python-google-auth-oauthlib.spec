@@ -1,54 +1,61 @@
-%global source0_hash 3ca93859c6cc9003c8e12b2a0868915209d7953f05a70f4880ab57d57e56ee3e
+%global source0_hash none
 
-%global pypi_name google-auth-oauthlib
-
-Name:           python-%{pypi_name}
-Version:        1.2.4
+Name:           python-google-auth-oauthlib
+Version:        1.4.1
 Release:        %autorelease
-Summary:        Google oAuth Authentication Library
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Google Authentication Library
 
-License:        Apache-2.0
-URL:            https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib
-Source0:        %{pypi_source google_auth_oauthlib}
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/googleapis/google-cloud-python/tree/main/packages/google-auth-oauthlib
+Source:         %{pypi_source google_auth_oauthlib}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
-BuildRequires:  python3dist(click)
-BuildRequires:  python3dist(pytest)
 
-%description
-This library provides oauthlib integration with google-auth.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'google-auth-oauthlib' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-google-auth-oauthlib
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-This library provides oauthlib integration with google-auth.
+%description -n python3-google-auth-oauthlib %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-google-auth-oauthlib tool
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n google_auth_oauthlib-%{version}
 
-%autosetup -n google_auth_oauthlib-%{version} -p1
-rm -rf /docs/
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x tool
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files google_auth_oauthlib
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Re-enable when the authpin patch is dropped.
-#%%check
-#%%pytest -k 'not test_run_local_server_bind_addr'
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-google-auth-oauthlib -f %{pyproject_files}
 %{_bindir}/google-oauthlib-tool
 
 %changelog

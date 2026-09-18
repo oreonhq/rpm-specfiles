@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        9.12.3.20251228
+Version:        9.14.1.20251220
 Release:        %autorelease
 Summary:        The GHC API, decoupled from GHC versions
 

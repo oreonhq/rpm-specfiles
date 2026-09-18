@@ -3,8 +3,8 @@
 # -*-Mode: rpm-spec -*-
 
 Name: swappy
-Version: 1.5.1
-Release: 8%{?dist}
+Version: 1.8.0
+Release: 1%{?dist}
 Summary: Wayland native snapshot editing tool, inspired by Snappy on macOS
 License: MIT
 URL:     https://github.com/jtheoof/swappy

@@ -7,7 +7,7 @@
 %global crate gix-quote
 
 Name:           rust-gix-quote
-Version:        0.6.2
+Version:        0.8.0
 Release:        %autorelease
 Summary:        A crate of the gitoxide project dealing with various quotations used...
 

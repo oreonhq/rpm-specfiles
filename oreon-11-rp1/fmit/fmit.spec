@@ -2,8 +2,8 @@
 
 Summary:       Free Music Instrument Tuner
 Name:          fmit
-Version:       1.2.14
-Release:       14%{?dist}
+Version:       1.4.6
+Release:       1%{?dist}
 # Automatically converted from old format: GPLv2+ and LGPLv2+ - review is highly recommended.
 License:       GPL-2.0-or-later AND LicenseRef-Callaway-LGPLv2+
 URL:           http://gillesdegottex.github.io/fmit/

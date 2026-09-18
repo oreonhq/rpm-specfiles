@@ -17,8 +17,8 @@
 %define _lto_cflags %{nil}
 
 Name:		blis
-Version:	2.0
-Release:	5%{?dist}
+Version:	2.1
+Release:	1%{?dist}
 Summary:	BLAS-like Library Instantiation Software Framework
 License:	BSD-3-Clause
 URL:		https://github.com/flame/blis

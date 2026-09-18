@@ -1,7 +1,7 @@
 %global source0_hash e735d24135629dfa70001b50e2b7e812300a20f312a0587b7cc03016c278815b
 
 Name:           libXNVCtrl
-Version:        580.82.09
+Version:        580.178.04
 Release:        %autorelease
 Summary:        Library providing the NV-CONTROL API
 License:        GPL-2.0-or-later

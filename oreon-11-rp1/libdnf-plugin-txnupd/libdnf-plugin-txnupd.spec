@@ -5,7 +5,7 @@
 %global tukit_minver 3.6.2
 
 Name:           libdnf-plugin-txnupd
-Version:        0.2.0
+Version:        0.3.0
 Release:        1%{?dist}
 Summary:        libdnf5 plugin to implement transactional updates
 

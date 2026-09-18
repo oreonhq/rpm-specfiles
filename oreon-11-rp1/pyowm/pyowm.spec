@@ -5,8 +5,8 @@
 %global with_tests 0
 
 Name:           pyowm
-Version:        2.6.1
-Release:        32%{?dist}
+Version:        3.5.0
+Release:        1%{?dist}
 Summary:        A Python wrapper around the OpenWeatherMap web API
 
 License:        MIT

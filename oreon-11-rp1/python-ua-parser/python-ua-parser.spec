@@ -1,64 +1,64 @@
-%global source0_hash d7c24ac421d42db55fb25345f077e7fd223167ee7b82d35e48cefbfb5bd2921d
+%global source0_hash none
 
-%global pkg_name ua-parser
-%global uap_core_version d668d6c6157db7737edfc0280adc6610c1b88029
-%global run_unittests 0
+Name:           python-ua-parser
+Version:        1.0.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python port of Browserscope_s user agent parser
 
-Name:           python-%{pkg_name}
-Version:        1.0.1
-Release:        6%{?dist}
-Summary:        Python port of Browserscope's user agent parser
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/ua-parser/uap-python
-BuildArch:      noarch
-Source0:        %{pypi_source ua_parser}
-%if 0%{?run_unittests}
-Source1:        https://github.com/ua-parser/uap-core/archive/%{uap_core_version}/uap-core-%{uap_core_version}.tar.gz
-%endif
+Source:         %{pypi_source ua_parser}
 
-# ua_parser_rs resolver is currently not packaged for Fedora
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'ua-parser' generated automatically by pyp2spec.}
+
 Patch0:         ua_parser-no-ua_parse_rs.patch
 
-Suggests:       python3-re2
+%description %_description
 
-BuildRequires:  python3-devel
-BuildRequires:  python3-pip
-BuildRequires:  python3-re2
+%package -n     python3-ua-parser
+Summary:        %{summary}
 
-%description
-Python port of Browserscope's user agent parser.
+%description -n python3-ua-parser %_description
 
-%package -n python3-%{pkg_name}
-Summary:        Python port of Browserscope's user agent parser
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-ua-parser re2,regex,yaml
 
-%description -n python3-%{pkg_name}
-Python port of Browserscope's user agent parser.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n ua_parser-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x re2,regex,yaml
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l ua_parser
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%if 0%{?run_unittests}
-tar xf %{SOURCE1} --transform 's|uap-core-%{uap_core_version}|uap-core|'
-PYTHONPATH=%{buildroot}%{python3_sitelib} %{__python3} ua_parser/user_agent_parser_test.py
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pkg_name} -f %{pyproject_files}
-%doc README.rst
+
+%files -n python3-ua-parser -f %{pyproject_files}
 
 %changelog
 %autochangelog

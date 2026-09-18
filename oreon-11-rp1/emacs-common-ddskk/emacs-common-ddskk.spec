@@ -6,7 +6,7 @@
 
 Summary: Daredevil SKK - Simple Kana to Kanji conversion program for Emacs
 Name: emacs-common-ddskk
-Version: 17.1
+Version: 17.2_Mena
 Release: %{?autorelease}%{!?autorelease:1%{?dist}}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later

@@ -1,63 +1,57 @@
-%global source0_hash a7dd79401855ad952920c49dde0febc396da6619b67ec6a3f4f36d665a9a0d12
-
-%bcond tests %{undefined rhel}
+%global source0_hash none
 
 Name:           python-respx
-Version:        0.22.0
+Version:        0.23.1
 Release:        %autorelease
-Summary:        Utility for mocking out the HTTPX and HTTP Core libraries
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A utility for mocking out the Python HTTPX and HTTP Core libraries.
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://lundberg.github.io/respx/
-Source0:        https://github.com/lundberg/respx/archive/%{version}/respx-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://github.com/lundberg/respx
+Source:         %{pypi_source respx}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-An utility for mocking out the Python HTTPX and HTTP Core libraries.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'respx' generated automatically by pyp2spec.}
+
+%description %_description
 
 %package -n     python3-respx
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-%if %{with tests}
-# Test requirements
-BuildRequires:  python3dist(flask)
-BuildRequires:  python3dist(starlette)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-asyncio)
-BuildRequires:  python3dist(trio)
-%endif
+%description -n python3-respx %_description
 
-%description -n python3-respx
-An utility for mocking out the Python HTTPX and HTTP Core libraries.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n respx-%{version}
 
-%autosetup -n respx-%{version} -p1
-# We don't care about coverage in downstream builds,
-# and running it is against the Python Packaging Guidelines.
-sed -i -e '/--cov/d' setup.cfg
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files respx
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-%pytest -v tests -k "not test_pass_through" --asyncio-mode=auto
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-respx -f %{pyproject_files}
-%license LICENSE.md
-%doc README.md
 
 %changelog
 %autochangelog

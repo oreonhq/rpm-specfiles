@@ -7,7 +7,7 @@
 %global crate criterion
 
 Name:           rust-criterion0.3
-Version:        0.3.4
+Version:        0.3.6
 Release:        %autorelease
 Summary:        Statistics-driven micro-benchmarking library
 

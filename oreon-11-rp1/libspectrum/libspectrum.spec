@@ -1,8 +1,8 @@
 %global source0_hash a353cb46e9b1a281061d816353ea010d0a6fe78e6a17aa0b7b74271ca5e4acfc
 
 Name:           libspectrum
-Version:        1.5.0
-Release:        13%{?dist}
+Version:        1.6.4
+Release:        1%{?dist}
 Summary:        A library for reading spectrum emulator file formats
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

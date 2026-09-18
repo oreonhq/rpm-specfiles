@@ -9,8 +9,8 @@
 %endif
 
 Name:           lttng-tools
-Version:        2.14.0
-Release:        5%{?dist}
+Version:        2.16.0
+Release:        1%{?dist}
 License:        GPL-2.0-only AND LGPL-2.1-only
 URL:            http://lttng.org
 Summary:        LTTng control and utility programs
@@ -29,7 +29,7 @@ BuildRequires:  g++
 BuildRequires:  kmod-devel
 BuildRequires:  libtool
 BuildRequires:  libxml2-devel >= 2.7.6
-BuildRequires:  lttng-ust-devel >= 2.14.0
+BuildRequires:  lttng-ust-devel >= 2.16.0
 BuildRequires:  lttng-ust-devel < 2.15.0
 BuildRequires:  make
 BuildRequires:  popt-devel >= 1.13

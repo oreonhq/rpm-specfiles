@@ -1,7 +1,7 @@
 %global source0_hash 90db08fd33e9494aea3f00f9b71cdcf3114c65457ee35558e8274df6ebac43f3
 
 Name:              bstring
-Version:           1.0.3
+Version:           1.1.1
 Release:           1%{?dist}
 Summary:           A string abstraction data type for the C language
 License:           BSD-3-Clause OR GPL-2.0-only

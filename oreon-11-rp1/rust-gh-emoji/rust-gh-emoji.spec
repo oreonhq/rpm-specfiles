@@ -7,7 +7,7 @@
 %global crate gh-emoji
 
 Name:           rust-gh-emoji
-Version:        1.0.8
+Version:        1.0.9
 Release:        %autorelease
 Summary:        Convert :emoji: to Unicode using GitHub's emoji names
 

@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        3.2.2.0
+Version:        3.3.0.0
 Release:        %autorelease
 Summary:        Parallel programming library
 

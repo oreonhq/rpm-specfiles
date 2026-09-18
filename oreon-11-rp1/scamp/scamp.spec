@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           scamp
-Version:        2.14.0
+Version:        2.15.0
 Release:        %autorelease
 Summary:        compute astrometric and photometric solutions from sextractor catalogs
 

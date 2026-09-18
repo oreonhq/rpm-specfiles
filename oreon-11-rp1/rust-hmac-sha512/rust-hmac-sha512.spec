@@ -7,7 +7,7 @@
 %global crate hmac-sha512
 
 Name:           rust-hmac-sha512
-Version:        1.1.6
+Version:        1.1.12
 Release:        %autorelease
 Summary:        Small, self-contained SHA512, HMAC-SHA512, SHA384 and HMAC-SHA384 implementation
 

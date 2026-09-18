@@ -5,8 +5,8 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:		emacs-lua
-Version:	20201010
-Release:	13.20210121git2d9a468%{?dist}
+Version:	20210802
+Release:	1.20210121git2d9a468%{?dist}
 Summary:	Lua major mode for GNU Emacs
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

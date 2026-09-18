@@ -12,9 +12,9 @@
 %global subpkgs %{cryptotoken}
 
 Name:           ghc-%{pkg_name}
-Version:        0.0.8
+Version:        0.1.0
 # can only be reset when subpkg bumped
-Release:        4%{?dist}
+Release:        1%{?dist}
 Summary:        In-memory TLS session DB and session ticket
 
 License:        BSD-3-Clause

@@ -4,7 +4,7 @@
 %global debug_package %{nil}
 
 Name:           simpleini
-Version:        4.25
+Version:        4.27
 Release:        %autorelease
 Summary:        Cross-platform C++ library to read and write INI-style configuration files
 License:        MIT

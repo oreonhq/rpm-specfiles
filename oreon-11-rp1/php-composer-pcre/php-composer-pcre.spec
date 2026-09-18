@@ -22,8 +22,8 @@
 %global major        %nil
 
 Name:           php-%{gh_owner}-%{gh_project}%{major}
-Version:        1.0.1
-Release:        10%{?gh_date:.%{gh_date}git%{gh_short}}%{?dist}
+Version:        3.4.0
+Release:        1%{?gh_date:.%{gh_date}git%{gh_short}}%{?dist}
 Summary:        PCRE wrapping library version 1
 
 License:        MIT

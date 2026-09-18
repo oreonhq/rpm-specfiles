@@ -2,8 +2,8 @@
 
 Name:           liferea
 Epoch:          1
-Version:        1.16.7
-Release:        2%{?dist}
+Version:        2.0.1
+Release:        1%{?dist}
 Summary:        An RSS/RDF feed reader
 
 License:        GPL-2.0-or-later

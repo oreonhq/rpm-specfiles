@@ -1,63 +1,56 @@
-%global source0_hash c4e181f1b525c931a318d4812fa8de656c2c8fb77fccf1571ecf0cc5fe8e7f8f
+%global source0_hash none
 
 Name:           python-pytest-cases
-Version:        3.9.1
+Version:        3.10.1
 Release:        %autorelease
-Summary:        Separate test code from test cases in pytest
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Separate test code from test cases in pytest.
 
-License:        BSD-3-Clause
-URL:            https://pypi.org/project/pytest-cases/
-Source0:        %{pypi_source pytest_cases}
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/smarie/python-pytest-cases
+Source:         %{pypi_source pytest_cases}
 
 BuildArch:      noarch
-BuildRequires:  pyproject-rpm-macros
-BuildRequires:  python3dist(makefun) > 1.7
-BuildRequires:  python3dist(decopatch)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-harvest) > 1.10
-BuildRequires:  python3dist(pytest-asyncio)
+BuildRequires:  python3-devel
 
-%description
-%{summary}.
 
-%package -n python3-pytest-cases
-Summary: %{summary}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pytest-cases' generated automatically by pyp2spec.}
 
-%description -n python3-pytest-cases
-%{summary}.
+%description %_description
+
+%package -n     python3-pytest-cases
+Summary:        %{summary}
+
+%description -n python3-pytest-cases %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_cases-%{version}
 
-%autosetup -n pytest_cases-%{version}
-cat >pyproject.toml <<EOF
-[build-system]
-requires = [
-    "decopatch",
-    "pytest-steps",
-    "setuptools_scm",
-    "pypandoc",
-    "six"]
-build-backend = "setuptools.build_meta"
-EOF
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-PYTHONPATH=build/lib %{python3} -m pytest -v
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-pytest-cases
-%license LICENSE
-%doc README.md
-%{python3_sitelib}/pytest_cases/
-%{python3_sitelib}/pytest_cases-%{version}.dist-info/
+
+%files -n python3-pytest-cases -f %{pyproject_files}
 
 %changelog
 %autochangelog

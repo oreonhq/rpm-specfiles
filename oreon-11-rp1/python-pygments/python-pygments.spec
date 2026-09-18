@@ -1,74 +1,46 @@
-%global source0_hash 61c16d2a8576dc0649d9f39e089b5f02bcd27fba10d8fb4dcc28173f7a45151f
-
-# when bootstrapping, we cannot yet use sphinx and pytest
-# on RHEL, we don't need to build the documentation
-%bcond docs %{undefined rhel}
-%bcond tests 1
+%global source0_hash none
 
 Name:           python-pygments
-Version:        2.19.1
+Version:        2.21.0
 Release:        %autorelease
-Summary:        Syntax highlighting engine written in Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Pygments is a syntax highlighting package written in Python.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
-URL:            https://pygments.org/
-Source0:        https://files.pythonhosted.org/packages/source/p/pygments/pygments-2.19.1.tar.gz
-# https://github.com/pygments/pygments/issues/2992
-# https://github.com/pygments/pygments/pull/3016
-Patch0:         0001-Fix-test_lexer_classes-search-path.patch
+URL:            https://pygments.org
+Source:         %{pypi_source pygments}
 
 BuildArch:      noarch
-
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  pyproject-rpm-macros
-%if %{with tests}
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  python%{python3_pkgversion}-lxml
-%if %{undefined rhel}
-# this is only used in tests.contrast.test_contrasts
-# to avoid pulling this package into RHEL, the test is ignored in %%check
-BuildRequires:  python%{python3_pkgversion}-wcag-contrast-ratio
-%endif
-%endif
-%if %{with docs}
-BuildRequires:  make
-BuildRequires:  python%{python3_pkgversion}-sphinx
-# the sphinx config imports tests.contrast.test_contrasts:
-BuildRequires:  python%{python3_pkgversion}-wcag-contrast-ratio
-%endif
+BuildRequires:  python3-devel
 
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Pygments is a generic syntax highlighter suitable for use in code hosting,
-forums, wikis or other applications that need to prettify source code.
+This is package 'pygments' generated automatically by pyp2spec.}
 
-Highlights are:
-
- * a wide range of over 500 languages and other text formats is supported
- * special attention is paid to details that increase highlighting quality
- * support for new languages and formats are added easily;
-   most languages use a simple regex-based lexing mechanism
- * a number of output formats is available, among them HTML, RTF, LaTeX
-   and ANSI sequences
- * it is usable as a command-line tool and as a library}
+Patch0:         0001-Fix-test_lexer_classes-search-path.patch
 
 %description %_description
 
-
-%package -n python%{python3_pkgversion}-pygments
+%package -n     python3-pygments
 Summary:        %{summary}
-Provides:       pygmentize = %{?epoch:%{epoch}:}%{version}-%{release}
 
-%description -n python%{python3_pkgversion}-pygments %_description
+%description -n python3-pygments %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pygments plugins,windows-terminal
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n pygments-%{version}
 
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x plugins,windows-terminal
 
 
 %build
@@ -77,31 +49,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %pyproject_install
-%pyproject_save_files pygments
-
-install doc/pygmentize.1 -Dt %{buildroot}%{_mandir}/man1/
-
-%if %{with docs}
-%make_build -C doc html
-rm doc/_build/html/.buildinfo
-rm -rf doc/_build/html/_sources
-chmod -x %{buildroot}%{_mandir}/man1/*.1
-%endif
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
-%if %{with tests}
 %check
-%pytest %{?rhel:--ignore tests/contrast/test_contrasts.py}
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files -n python%{python3_pkgversion}-pygments -f %{pyproject_files}
-%doc AUTHORS CHANGES
-%{?with_docs:%doc doc/_build/html}
-%license LICENSE
+%files -n python3-pygments -f %{pyproject_files}
 %{_bindir}/pygmentize
-%lang(en) %{_mandir}/man1/pygmentize.1*
-
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.19.1-1

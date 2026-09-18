@@ -13,8 +13,8 @@
 %global rjcommit 24b5e7a8b27f42fa16b96fc70aade9106cf7102f
 
 Name:           OpenTimelineIO
-Version:        0.17.0
-Release:        5%{?dist}
+Version:        0.18.1
+Release:        1%{?dist}
 Summary:        Editorial timeline information API
 # OpenTimelineIO is Apache-2.0, rapidjson is MIT
 License:        Apache-2.0 AND MIT

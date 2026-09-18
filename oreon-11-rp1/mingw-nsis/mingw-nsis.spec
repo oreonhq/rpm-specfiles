@@ -4,8 +4,8 @@
 %global sconsopts64 %{sconsopts} TARGET_ARCH=amd64
 
 Name:           mingw-nsis
-Version:        3.11
-Release:        3%{?dist}
+Version:        3.12
+Release:        1%{?dist}
 Summary:        Nullsoft Scriptable Install System
 
 License:        Zlib AND CPL-1.0

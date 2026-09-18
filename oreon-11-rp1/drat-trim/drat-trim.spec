@@ -5,12 +5,12 @@
 %global forgeurl https://github.com/marijnheule/drat-trim
 
 Name:           drat-trim
-Version:        0
+Version:        05.22.2023
 Summary:        Proof checker for DIMACS proofs
 
 %forgemeta
 
-Release:        0.30%{?dist}
+Release:        1.30%{?dist}
 License:        MIT
 URL:            %{forgeurl}
 VCS:            git:%{forgeurl}.git

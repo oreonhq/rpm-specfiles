@@ -1,8 +1,8 @@
 %global source0_hash 0950c600bf33447e169a539ee6655ef9f36d6cebf2c1be67f7ab55dacb753023
 
 Name:       xeyes
-Version:    1.3.0
-Release:    7%{?dist}
+Version:    1.3.1
+Release:    1%{?dist}
 Summary:    A follow the mouse X demo
 
 License:    X11

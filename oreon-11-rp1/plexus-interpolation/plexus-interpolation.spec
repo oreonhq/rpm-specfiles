@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           plexus-interpolation
-Version:        1.27
+Version:        1.30.0
 Release:        %autorelease
 Summary:        Plexus Interpolation API
 # Most of the code is ASL 2.0, a few source files are ASL 1.1 and some tests are MIT
@@ -26,7 +26,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus:pom:)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.27-13
+Obsoletes:      %{name}-javadoc < 1.30.0-13
 
 %description
 Plexus interpolator is the outgrowth of multiple iterations of development

@@ -1,8 +1,8 @@
 %global source0_hash 161a11bddb91fa32f625175b0f4015ecf72a943f6781385c719ebe78f26e3358
 
 Name:           IPAddress
-Version:        5.2.1
-Release:        24%{?dist}
+Version:        5.4.2-retracted
+Release:        1%{?dist}
 Summary:        Library for handling IP addresses and subnets, both IPv4 and IPv6
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0

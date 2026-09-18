@@ -1,61 +1,64 @@
-%global source0_hash ef46901a99bacdad339b6157b2349f3791627bde12b62946837fbe6ebd17104d
+%global source0_hash none
 
-%global modname svg.path
+Name:           python-svg-path
+Version:        7.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        SVG path objects and parser
 
-Name:               python-svg-path
-Version:            6.3
-Release:            %autorelease
-Summary:            SVG path objects and parser
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/regebro/svg.path
+Source:         %{pypi_source svg_path}
 
-License:            MIT
-URL:                http://pypi.python.org/pypi/svg.path
-Source0:            https://github.com/regebro/svg.path/archive/%{version}.tar.gz
-# Patch to fix tests with newer pillow versions
-# Already proposed upstream by debian maintainer
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'svg-path' generated automatically by pyp2spec.}
+
 Patch0:             https://patch-diff.githubusercontent.com/raw/regebro/svg.path/pull/105.patch
-
-BuildArch:          noarch
-
-BuildRequires:      python3-devel
-BuildRequires:      python3-pytest
-BuildRequires:      python3-pillow
-
-%global _description\
-svg.path is a collection of objects that implement the different path\
-commands in SVG, and a parser for SVG path definitions.
 
 %description %_description
 
-%package -n python3-svg-path
-Summary:            SVG path objects and parser
+%package -n     python3-svg-path
+Summary:        %{summary}
 
-Requires:           python3-setuptools
+%description -n python3-svg-path %_description
 
-%description -n python3-svg-path
-svg.path is a collection of objects that implement the different path
-commands in SVG, and a parser for SVG path definitions.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-svg-path test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n svg_path-%{version}
 
-%autosetup -p1 -n %{modname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files -l svg
 
 %check
-%{py3_test_envvars} %{python3} -m unittest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-svg-path -f %{pyproject_files}
-%doc README.rst CHANGES.txt CONTRIBUTORS.txt
 
 %changelog
 %autochangelog

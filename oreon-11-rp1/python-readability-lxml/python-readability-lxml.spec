@@ -1,67 +1,57 @@
-%global source0_hash e6650d608174fde8e9feb07cb86c16f5d42e09e0dd446093d1b529d55f2b939a
+%global source0_hash none
 
-%global _python_bytecompile_errors_terminate_build 0
-
-%global pypi_name readability-lxml
-
-Name:           python-%{pypi_name}
-Version:        0.8.1
+Name:           python-readability-lxml
+Version:        0.9
 Release:        %autorelease
-Summary:        Fast html to text parser (article readability tool)
+# Fill in the actual package summary to submit package to Fedora
+Summary:        fast html to text parser _article readability tool_ with python 3 support
 
-License:        Apache-2.0 
-URL:            https://github.com/buriy/python-readability
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0
+URL:            ...
+Source:         %{pypi_source readability_lxml}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(chardet)
-BuildRequires:  python3dist(cssselect)
-BuildRequires:  python3dist(lxml)
-BuildRequires:  python3dist(lxml-html-clean)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(timeout-decorator)
 
-%description
-Given a html document, it pulls out the main body text and cleans it up.
 
-This is a python port of a ruby port of arc90's readability project.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'readability-lxml' generated automatically by pyp2spec.}
 
-%package -n     python3-%{pypi_name}
+%description %_description
+
+%package -n     python3-readability-lxml
 Summary:        %{summary}
-Requires:  python3dist(lxml-html-clean)
 
-%description -n python3-%{pypi_name}
-Given a html document, it pulls out the main body text and cleans it up.
+%description -n python3-readability-lxml %_description
 
-This is a python port of a ruby port of arc90's readability project.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n readability_lxml-%{version}
 
-%autosetup -n python-readability-%{version} -p1
-
-# Remove shebang from Python libraries
-for lib in readability/*.py; do
- sed '1{\@^#!/usr/bin/env python@d}' $lib > $lib.new &&
- touch -r $lib $lib.new &&
- mv $lib.new $lib
-done
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{pypi_name}
-%doc README.rst
-%license LICENSE
-%{python3_sitelib}/readability/
-%{python3_sitelib}/readability_lxml-*.dist-info/
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-readability-lxml -f %{pyproject_files}
 
 %changelog
 %autochangelog

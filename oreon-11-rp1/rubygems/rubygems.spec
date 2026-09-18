@@ -16,7 +16,7 @@
 %global rubygems_uri_version 1.1.1
 
 # Requires versions
-%global bundler_version 4.0.6
+%global bundler_version 4.0.21
 %global psych_version 5.3.1
 %global rdoc_version 7.0.3
 
@@ -40,7 +40,7 @@
 
 Summary: The Ruby standard for packaging ruby libraries
 Name: rubygems
-Version: 4.0.6
+Version: 4.0.21
 Release: 1%{?dist}
 # BSD-2-Clause OR Ruby:
 #   lib/rubygems/net-http/

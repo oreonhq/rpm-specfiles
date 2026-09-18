@@ -1,56 +1,57 @@
-%global source0_hash fe699c913ecb9f62713beba34f7fdd22e5b4485536746d722f79ff61041b9d44
+%global source0_hash none
 
-%global srcname scp
-%global pypi_name scp
-%global forgeurl https://github.com/jbardin/scp.py
+Name:           python-scp
+Version:        0.16.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        scp module for paramiko
 
-Name:    python-%{srcname}
-Version: 0.15.0
-%forgemeta
-Release: %autorelease
-Summary: Scp module for paramiko
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        LGPL-2.1-or-later
+URL:            https://github.com/jbardin/scp.py
+Source:         %{pypi_source scp}
 
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
-License: LicenseRef-Callaway-LGPLv2+
-URL:     %{forgeurl}
-Source0: %{forgesource}
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildArch: noarch
 
-BuildRequires: python3-devel
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'scp' generated automatically by pyp2spec.}
 
-%global common_description %{expand:
-The scp.py module uses a paramiko transport to send and receive files via the
-scp1 protocol. This is the protocol as referenced from the openssh scp program,
-and has only been tested with this implementation.
-}
+%description %_description
 
-%description %{common_description}
+%package -n     python3-scp
+Summary:        %{summary}
 
-%package -n python3-%{srcname}
-Summary: %{summary}
-%py_provides python%{python3_pkgversion}-%{srcname}
-%description -n python%{python3_pkgversion}-%{srcname} %{common_description}
+%description -n python3-scp %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n scp-%{version}
 
-%forgeautosetup
+
 %generate_buildrequires
-
 %pyproject_buildrequires
+
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{pypi_name} -f %{pyproject_files}
-%doc README.rst
+
+%files -n python3-scp -f %{pyproject_files}
 
 %changelog
 %autochangelog

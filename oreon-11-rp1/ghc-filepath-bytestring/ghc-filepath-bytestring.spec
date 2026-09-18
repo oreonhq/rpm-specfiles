@@ -10,7 +10,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        1.5.2.0.3
+Version:        1.5.2.0.5
 Release:        %autorelease
 Summary:        Library for manipulating RawFilePaths in a cross platform way
 

@@ -1,52 +1,62 @@
-%global source0_hash f09059ab37403a47c7933bca396fabb7f3058732d132462eade5333bc4bcac5f
+%global source0_hash none
 
-%global srcname django-rq
+Name:           python-django-rq
+Version:        4.2.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        An app that provides django integration for RQ _Redis Queue_
 
-Name:           python-%{srcname}
-Version:        2.4.1
-Release:        19%{?dist}
-Summary:        App that provides django integration for RQ (Redis Queue)
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/rq/django-rq
-Source:         %{pypi_source}
+URL:            https://python-rq.org/patterns/django/
+Source:         %{pypi_source django_rq}
 
 BuildArch:      noarch
-
-%global _description %{expand:
-Django integration with RQ, a Redis based Python queuing library.
-Django-RQ is a simple app that allows you to configure your queues
-in django's settings.py and easily use them in your project.}
-
-%description %{_description}
-
-%package     -n python3-%{srcname}
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
 
-%description -n python3-%{srcname} %{_description}
 
-Python 3 version.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'django-rq' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-django-rq
+Summary:        %{summary}
+
+%description -n python3-django-rq %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-django-rq prometheus,testing
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n django_rq-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
-rm -vr *.egg-info
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x prometheus,testing
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{srcname}
-%license LICENSE.txt
-%doc README.rst
-%{python3_sitelib}/django_rq-*.egg-info/
-%{python3_sitelib}/django_rq/
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-django-rq -f %{pyproject_files}
 
 %changelog
 %autochangelog

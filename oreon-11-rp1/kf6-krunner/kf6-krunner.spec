@@ -3,10 +3,10 @@
 %global framework krunner
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.29
+%global majmin_ver_kf6 6.30
 
 Name:    kf6-%{framework}
-Version: 6.29.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 solution with parallelized query system
 

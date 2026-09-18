@@ -4,7 +4,7 @@
 
 Name:           sequeler
 Summary:        Easily connect to your local or remote database
-Version:        0.9.0
+Version:        0.9.0-1-1
 Release:        %autorelease
 
 # The entire source is GPL-3.0-or-later (the LICENSE file is GPLv3, and both

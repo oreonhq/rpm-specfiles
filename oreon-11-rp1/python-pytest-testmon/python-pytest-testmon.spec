@@ -1,59 +1,57 @@
-%global source0_hash cc3dd31f9bf30f6ec11c5153da3c606df7545f3cd90bfb90ce6bd4c48e717aaf
+%global source0_hash none
 
-%global pypi_name pytest-testmon
-
-Name:           python-%{pypi_name}
-Version:        2.1.4
+Name:           python-pytest-testmon
+Version:        2.2.0
 Release:        %autorelease
-Summary:        A py.test plug-in which executes only tests affected by recent changes
+# Fill in the actual package summary to submit package to Fedora
+Summary:        selects tests affected by changed files and methods
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            http://testmon.org/
-Source0:        %pypi_source
+URL:            ...
+Source:         %{pypi_source pytest_testmon}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  python3-coverage
-#BuildRequires:  python3-unittest_mixins
 
-%description
-This is a py.test plug-in which automatically selects and re-
-executes only tests affected by recent changes.
 
-%package -n     python3-%{pypi_name}
-Summary:        A py.test plug-in which executes only tests affected by recent changes
-%{?python_provide:%python_provide python3-%{pypi_name}}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pytest-testmon' generated automatically by pyp2spec.}
 
-Requires:       python3-pytest
-Requires:       python3-coverage
-Requires:       python3-setuptools
-%description -n python3-%{pypi_name}
-This is a py.test plug-in which automatically selects and re-
-executes only tests affected by recent changes.
+%description %_description
 
-This a Python 3 version of the package.
+%package -n     python3-pytest-testmon
+Summary:        %{summary}
+
+%description -n python3-pytest-testmon %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_testmon-%{version}
 
-%autosetup -n pytest_testmon-%{version} -p1
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files testmon
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# This project doesn't appear to have tests
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.md
+
+%files -n python3-pytest-testmon -f %{pyproject_files}
 
 %changelog
 %autochangelog

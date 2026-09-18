@@ -4,8 +4,8 @@ Name: jc
 Summary: Serialize the output of CLI tools and file-types to structured JSON
 License: MIT
 
-Version: 1.25.6
-Release: 2%{?dist}
+Version: 1.25.7
+Release: 1%{?dist}
 
 URL: https://github.com/kellyjonbrazil/%{name}
 Source0: %{URL}/archive/v%{version}/%{name}-%{version}.tar.gz

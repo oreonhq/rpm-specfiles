@@ -3,7 +3,7 @@
 %global pkgname pnpm
 
 Name:           nodejs-%{pkgname}
-Version:        10.27.0
+Version:        12.4.2
 Release:        %{autorelease}
 Summary:        Fast, disk space efficient package manager
 

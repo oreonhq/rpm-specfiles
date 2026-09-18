@@ -2,8 +2,8 @@
 
 Name:           apache-logging-parent
 Summary:        Parent pom for Apache Logging Services projects
-Version:        9
-Release:        13%{?dist}
+Version:        12.1.1
+Release:        1%{?dist}
 License:        Apache-2.0
 
 URL:            https://logging.apache.org/

@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-usbredir
-Version:        0.14.0
-Release:        5%{?dist}
+Version:        0.15.0
+Release:        1%{?dist}
 Summary:        MinGW USB network redirection protocol libraries
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

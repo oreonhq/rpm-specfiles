@@ -1,11 +1,11 @@
 %global source0_hash 53ffeb333f3e44b0c88e5b17475cdbf87d3f652eb81a6422de76250c061e2909
 
-%global tools_version 2.11.1
-%global linux_version 2.11.1
+%global tools_version 3.4.0
+%global linux_version 3.4.0
 
 Name:           dahdi-tools
 Version:        %{tools_version}
-Release:        39%{?dist}
+Release:        1%{?dist}
 Summary:        Userspace tools to configure the DAHDI kernel modules
 
 # Automatically converted from old format: GPLv2 and LGPLv2 - review is highly recommended.

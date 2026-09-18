@@ -1,8 +1,8 @@
 %global source0_hash 444080f0554a1d65db32231ee18f9a662bfa6148a15cb006eba838c2463e7a2f
 
 Name:           kcheckers
-Version:        0.8.1
-Release:        38%{?dist}
+Version:        0.9.0
+Release:        1%{?dist}
 Summary:        Checkers board game
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

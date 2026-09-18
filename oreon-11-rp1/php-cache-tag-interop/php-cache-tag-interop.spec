@@ -13,7 +13,7 @@
 
 %global github_owner     php-cache
 %global github_name      tag-interop
-%global github_version   1.0.0
+%global github_version   2.0.0
 %global github_commit    c7496dd81530f538af27b4f2713cde97bc292832
 
 %global composer_vendor  cache
@@ -22,14 +22,14 @@
 # "php": "^5.5 || ^7.0"
 %global php_min_ver 5.5
 # "psr/cache": "^1.0"
-%global psr_cache_min_ver 1.0
+%global psr_cache_min_ver 2.0
 %global psr_cache_max_ver 2.0
 
 %{!?phpdir:  %global phpdir  %{_datadir}/php}
 
 Name:          php-%{composer_vendor}-%{composer_project}
 Version:       %{github_version}
-Release:       20%{?github_release}%{?dist}
+Release:       1%{?github_release}%{?dist}
 Summary:       Framework interoperable interfaces for tags
 
 License:       MIT
@@ -50,7 +50,7 @@ BuildRequires: php-composer(fedora/autoloader)
 Requires:      php(language) >= %{php_min_ver}
 Requires:      php-composer(psr/cache) >= %{psr_cache_min_ver}
 Requires:      php-composer(psr/cache) <  %{psr_cache_max_ver}
-# phpcompatinfo (computed from version 1.0.0)
+# phpcompatinfo (computed from version 2.0.0)
 #     <none>
 # Autoloader
 Requires:      php-composer(fedora/autoloader)

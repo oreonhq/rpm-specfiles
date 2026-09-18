@@ -10,7 +10,7 @@
 %global obsrel 2.1
 
 Name:           obs-build
-Version:        20260312
+Version:        20260910
 Release:        %{obsrel}.%{autorelease}
 Summary:        A generic package build script
 

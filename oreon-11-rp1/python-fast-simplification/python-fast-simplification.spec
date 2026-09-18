@@ -7,7 +7,7 @@
 %bcond tests 1
 
 Name:           python-fast-simplification
-Version:        0.1.13
+Version:        0.2.0
 Release:        %autorelease
 Summary:        Wrapper around the Fast-Quadric-Mesh-Simplification library
 

@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        9.7.0
+Version:        9.8.2
 Release:        %autorelease
 Summary:        Monadic parser combinators
 

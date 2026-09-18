@@ -7,7 +7,7 @@
 %global crate rav1e
 
 Name:           rust-rav1e
-Version:        0.7.1
+Version:        0.8.1
 Release:        %autorelease
 Summary:        The fastest and safest AV1 encoder
 

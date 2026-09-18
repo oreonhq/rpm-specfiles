@@ -1,7 +1,7 @@
 %global source0_hash 1e432270ae78c7852110dcf2c2e215893bcc338299a4998f14a1f6b26e37bfac
 
 Name:       buku
-Version:    4.9
+Version:    5.1.1
 Release:    %autorelease
 Summary:    Powerful command-line bookmark manager
 

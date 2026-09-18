@@ -1,122 +1,63 @@
-%global source0_hash 5cbbb34ac3546039d0086deb2938cdec06b12da3cdb836e813258eb33cd28487
+%global source0_hash none
 
-%global cmapdir %(echo `rpm -qls ghostscript | grep CMap | awk '{print $2}'`)
-%global pypi_name reportlab
-
-%global debug_package %{nil}
-
-%bcond_without tests
-
-Name:           python-%{pypi_name}
-Version:        4.4.10
+Name:           python-reportlab
+Version:        5.0.1
 Release:        %autorelease
-Summary:        Library for generating PDFs and graphics
-License:        BSD-3-Clause AND BSD-4-Clause AND MIT
-URL:            https://www.reportlab.com/opensource/
-Source0:        https://files.pythonhosted.org/packages/source/r/reportlab/reportlab-4.4.10.tar.gz
-Patch0:         %{name}-fix_python_3.15.patch
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The Reportlab Toolkit
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://www.reportlab.com/
+Source:         %{pypi_source reportlab}
+
 BuildArch:      noarch
-
-BuildRequires:  gcc
-BuildRequires:  freetype-devel
-BuildRequires:  ghostscript
-Buildrequires:  fontpackages-devel
-Buildrequires:  python3-html5lib+chardet
-%global fonts font(dejavusans)
-BuildRequires:  %{fonts}
-
-Obsoletes:      %{name}-doc < 0:3.5.21-1
-
-%description
-This is the ReportLab PDF Toolkit. It allows rapid creation of rich PDF
-documents, and also creation of charts in a variety of bitmap and vector
-formats.
-
-%package -n     python3-%{pypi_name}
-Summary:        Library for generating PDFs and graphics
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-pillow
-Requires:       %{fonts}
-%py_provides python3-%{pypi_name}
-Obsoletes: python2-reportlab < 0:%{version}-%{release}
 
-%description -n python3-%{pypi_name}
-This is the ReportLab PDF Toolkit. It allows rapid creation of rich PDF 
-documents, and also creation of charts in a variety of bitmap and vector 
-formats.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'reportlab' generated automatically by pyp2spec.}
+
+Patch0:         %{name}-fix_python_3.15.patch
+
+%description %_description
+
+%package -n     python3-reportlab
+Summary:        %{summary}
+
+%description -n python3-reportlab %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-reportlab accel,bidi,pycairo,shaping
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{pypi_name}-%{version} -N
+%autosetup -p1 -n reportlab-%{version}
 
-%if 0%{?python3_version_nodots} >= 315
-%patch -P 0 -p1
-%endif
-
-# clean up hashbangs from libraries
-find src -name '*.py' | xargs sed -i -e '/^#!\//d'
-# patch the CMap path by adding Fedora ghostscript path before the match
-sed -i '/\~\/\.local\/share\/fonts\/CMap/i''\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ '\'%{cmapdir}\''\,' src/reportlab/rl_settings.py
-
-# Remove Upstream Egg
-rm -rf src/reportlab.egg-info
-
-# Remove bundled libart
-rm -rf src/rl_addons/renderPM/libart_lgpl
 
 %generate_buildrequires
-%pyproject_buildrequires -x tests
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x accel,bidi,pycairo,shaping
+
 
 %build
-# "--no-download-t1-files" flag exists to avoid T1 font curves files downloading, anyway it cannot be passed with pyproject macros.
-# This issue does not prevent package building
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Unbundled fonts
-ln -srf $(fc-match -f "%{file}" "DejaVu Sans:style=Regular") %{buildroot}%{python3_sitelib}/reportlab/fonts/Vera.ttf
-ln -srf $(fc-match -f "%{file}" "DejaVu Sans:style=Bold Oblique") %{buildroot}%{python3_sitelib}/reportlab/fonts/VeraBI.ttf
-ln -srf $(fc-match -f "%{file}" "DejaVu Sans:style=Bold") %{buildroot}%{python3_sitelib}/reportlab/fonts/VeraBd.ttf
-ln -srf $(fc-match -f "%{file}" "DejaVu Sans:style=Condensed Oblique") %{buildroot}%{python3_sitelib}/reportlab/fonts/VeraIt.ttf
 
-cp -a demos %{buildroot}%{python3_sitelib}/reportlab/
-cp -a tools %{buildroot}%{python3_sitelib}/reportlab/
-
-# Fix shebang in individual files
-%py3_shebang_fix %{buildroot}%{python3_sitelib}/reportlab/demos/tests/testdemos.py
-%py3_shebang_fix %{buildroot}%{python3_sitelib}/reportlab/tools/docco/docpy.py
-%py3_shebang_fix %{buildroot}%{python3_sitelib}/reportlab/tools/docco/graphdocpy.py
-%py3_shebang_fix %{buildroot}%{python3_sitelib}/reportlab/tools/docco/rl_doc_utils.py
-%py3_shebang_fix %{buildroot}%{python3_sitelib}/reportlab/tools/pythonpoint/pythonpoint.py
-
-chmod 0755 %{buildroot}%{python3_sitelib}/reportlab/demos/tests/testdemos.py
-chmod 0755 %{buildroot}%{python3_sitelib}/reportlab/tools/docco/docpy.py
-chmod 0755 %{buildroot}%{python3_sitelib}/reportlab/tools/docco/graphdocpy.py
-chmod 0755 %{buildroot}%{python3_sitelib}/reportlab/tools/docco/rl_doc_utils.py
-chmod 0755 %{buildroot}%{python3_sitelib}/reportlab/tools/pythonpoint/pythonpoint.py
-
-%if %{with tests}
 %check
-# Tests need in-build compiled Python modules to be executed
-# Tests pre-generate userguide PDF
-cp -a build/lib/reportlab tests/
-cp -a build/lib/reportlab docs/
-cp -a build/lib/reportlab docs/userguide/
-%{py3_test_envvars} %{__python3} setup.py tests --verbose-tests
-%pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.txt CHANGES.md docs/reportlab-userguide.pdf
-%{python3_sitelib}/reportlab/demos/
-%{python3_sitelib}/reportlab/tools/
 
+%files -n python3-reportlab -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.4.10-1

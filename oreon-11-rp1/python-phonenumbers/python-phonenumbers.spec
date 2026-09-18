@@ -1,57 +1,57 @@
-%global source0_hash a5380121d4411f0b614470fa900fd49436a998e80a56f590f63bfc79fede18b3
+%global source0_hash none
 
-%global pypi_name phonenumbers
+Name:           python-phonenumbers
+Version:        9.0.39
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python version of Google_s common library for parsing, formatting, storing and validating international phone numbers.
 
-%global desc A Python port of libphonenumber, Google's common Java, C++, and\
-JavaScript library for parsing, formatting, and validating international phone\
-numbers.\
-
-Name:           python-%{pypi_name}
-Version:        8.13.48
-Release:        7%{?dist}
-Summary:        A Python port of Google's libphonenumber
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://github.com/daviddrysdale/%{name}
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+URL:            https://github.com/daviddrysdale/python-phonenumbers
+Source:         %{pypi_source phonenumbers}
+
 BuildArch:      noarch
-
-%description
-%{desc}
-
-%package -n python3-%{pypi_name}
-Summary:        %{summary}
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-%{?python_provide:%python_provide python3-%{pypi_name}}
 
-%description -n python3-%{pypi_name}
-%{desc}
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'phonenumbers' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-phonenumbers
+Summary:        %{summary}
+
+%description -n python3-phonenumbers %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n phonenumbers-%{version}
 
-%autosetup
 
-# Snip the #! from the util.py module
-sed -i -e '/^#!\//, 1d' python/%{pypi_name}/util.py
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-cd python
-%py3_build
+%pyproject_wheel
+
 
 %install
-cd python
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-cd python
-%{__python3} ./testwrapper.py -v
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%license LICENSE
-%doc README.md
-%{python3_sitelib}/%{pypi_name}
-%{python3_sitelib}/%{pypi_name}-*.egg-info
+
+%files -n python3-phonenumbers -f %{pyproject_files}
 
 %changelog
 %autochangelog

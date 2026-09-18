@@ -1,8 +1,8 @@
 %global source0_hash 4e201ea54cdc20a93258c43556f6389441af99740de7dca6ca1ff524172fbd47
 
 Name:             zathura-cb
-Version:          0.1.11
-Release:          4%{?dist}
+Version:          2026.07.18
+Release:          1%{?dist}
 Summary:          Comic book support for zathura
 License:          Zlib
 URL:              https://pwmt.org/projects/%{name}

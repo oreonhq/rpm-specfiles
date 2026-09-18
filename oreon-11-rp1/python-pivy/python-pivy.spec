@@ -5,8 +5,8 @@
 %global gitdate 20191108
 
 Name:           python-pivy
-Version:        0.6.9
-Release:        7%{?dist}
+Version:        0.6.11
+Release:        1%{?dist}
 Summary:        Python binding for Coin
 
 License:        ISC

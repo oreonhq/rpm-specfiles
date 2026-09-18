@@ -3,7 +3,7 @@
 %global	hash_thread1	2501673c
 %global	hash_thread2	5d70
 
-%global	main_version	2.1.5
+%global	main_version	2.1.11
 
 %global	use_gcc_strict_sanitize	0
 

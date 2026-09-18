@@ -1,7 +1,7 @@
 %global source0_hash bebae43c8afa35f5c16fe295c811ecb0ec13bfc606b245c7d3ebebee99fdcf2a
 
 Name:           python-configargparse
-Version:        1.7.5
+Version:        1.7.7
 Release:        %autorelease
 Summary:        Replacement for argparse that allows options to be set via config files
 

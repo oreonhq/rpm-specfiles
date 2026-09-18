@@ -7,7 +7,7 @@
 %global crate libadwaita
 
 Name:           rust-libadwaita0.8
-Version:        0.8.0
+Version:        0.8.1
 Release:        %autorelease
 Summary:        Rust bindings for libadwaita
 

@@ -1,76 +1,58 @@
-%global source0_hash aa5cb816553bb6647b63eec5e7528aa9a1d17ce1d5a43f4cb58cc13f56d33a1b
+%global source0_hash none
 
-%global pypi_name pyopnsense
-%global pkg_name opnsense
+Name:           python-pyopnsense
+Version:        0.4.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A python API client for OPNsense
 
-Name:           python-%{pkg_name}
-Version:        0.3.0
-Release:        22%{?dist}
-Summary:        Python API client for OPNsense
-
-# Automatically converted from old format: GPLv3 - review is highly recommended.
-License:        GPL-3.0-only
-URL:            https://github.com/mtreinish/pyopnsense
-Source0:        %{pypi_source}
-# Maintainers, please upstream
-Patch0:         python-opnsense-rm-python-mock-usage.diff
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            ...
+Source:         %{pypi_source pyopnsense}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-A Python API client for the OPNsense API. This module provides a Python
-interface for interacting with the OPNsense API.
 
-%package -n     python3-%{pkg_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pyopnsense' generated automatically by pyp2spec.}
+
+Patch0:         python-opnsense-rm-python-mock-usage.diff
+
+%description %_description
+
+%package -n     python3-pyopnsense
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(coverage)
-BuildRequires:  python3dist(pbr)
-BuildRequires:  python3dist(requests)
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(six)
-BuildRequires:  python3dist(stestr)
-%{?python_provide:%python_provide python3-%{pkg_name}}
+%description -n python3-pyopnsense %_description
 
-%description -n python3-%{pkg_name}
-A Python API client for the OPNsense API. This module provides a Python
-interface for interacting with the OPNsense API.
-
-%package -n python-%{pkg_name}-doc
-Summary:        pyopnsense documentation
-
-BuildRequires:  python3dist(sphinx)
-%description -n python-%{pkg_name}-doc
-Documentation for pyopnsense.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pyopnsense-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
-rm -rf %{pypi_name}.egg-info
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
-PYTHONPATH=${PWD} sphinx-build-3 doc/source html
-rm -rf html/.{doctrees,buildinfo}
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v pyopnsense/tests
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pkg_name}
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/%{pypi_name}/
-%{python3_sitelib}/%{pypi_name}-%{version}-py%{python3_version}.egg-info/
 
-%files -n python-%{pkg_name}-doc
-%doc html
-%license LICENSE
+%files -n python3-pyopnsense -f %{pyproject_files}
 
 %changelog
 %autochangelog

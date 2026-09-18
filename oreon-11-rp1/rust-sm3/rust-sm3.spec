@@ -7,7 +7,7 @@
 %global crate sm3
 
 Name:           rust-sm3
-Version:        0.4.2
+Version:        0.5.0
 Release:        %autorelease
 Summary:        SM3 (OSCCA GM/T 0004-2012) hash function
 

@@ -3,8 +3,8 @@
 %global pkg s
 
 Name:           emacs-%{pkg}
-Version:        1.13.0
-Release:        10%{?dist}
+Version:        1.13.1
+Release:        1%{?dist}
 Summary:        The long lost Emacs string manipulation library
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

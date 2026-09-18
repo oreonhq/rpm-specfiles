@@ -14,9 +14,9 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        3.2.6
+Version:        3.2.7
 # can only be reset when subpkg bumped
-Release:        29%{?dist}
+Release:        1%{?dist}
 Summary:        A fast logging system
 
 License:        BSD-3-Clause

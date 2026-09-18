@@ -5,7 +5,7 @@
 %global pkgname poppler
 
 Name:          mingw-%{pkgname}
-Version:       26.01.0
+Version:       26.08.0
 Release:       1%{?dist}
 Summary:       MinGW Windows Poppler library
 

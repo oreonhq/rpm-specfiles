@@ -18,8 +18,8 @@
 }
 
 Name:          rpy
-Version:       3.5.16
-Release:       11%{?dist}
+Version:       3.6.7
+Release:       1%{?dist}
 Summary:       %{sum}
 License:       GPL-2.0-or-later
 Url:           https://pypi.python.org/pypi/rpy2

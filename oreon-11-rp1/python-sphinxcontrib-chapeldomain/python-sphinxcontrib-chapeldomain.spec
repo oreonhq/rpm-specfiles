@@ -1,36 +1,26 @@
-%global source0_hash a3b07910b84969317c4f2ad29f85559527400112ae105586eb2f91fdb7fbf9a6
+%global source0_hash none
 
 Name:           python-sphinxcontrib-chapeldomain
-Version:        0.0.40
+Version:        0.0.41
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Chapel domain for Sphinx
 
-# The entire source is Apache-2.0, except that
-# sphinxcontrib/chapeldomain/README.md is BSD-2-Clause
-# (sphinxcontrib/chapeldomain/LICENSE).
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0 AND BSD-2-Clause
 URL:            https://github.com/chapel-lang/sphinxcontrib-chapeldomain
-# PyPI source does not have documentation
-Source:         %{url}/archive/%{version}/sphinxcontrib-chapeldomain-%{version}.tar.gz
-# Relax pinned dependency requirements
-Patch:          relax-dep-requirements.patch
+Source:         %{pypi_source sphinxcontrib_chapeldomain}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# Documentation requirements
-BuildRequires:  make
-BuildRequires:  python3dist(sphinx)
-BuildRequires:  python3dist(sphinx-rtd-theme)
-BuildRequires:  python3dist(snowballstemmer)
-BuildRequires:  texinfo
-# Test requirements
-BuildRequires:  python3dist(pytest)
-# chapel.py is vendored from Pygments; see
-# sphinxcontrib/chapeldomain/README.md for justification
-Provides:       bundled(python3dist(pygments))
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Chapel domain for Sphinx.}
+This is package 'sphinxcontrib-chapeldomain' generated automatically by pyp2spec.}
+
+Patch:          relax-dep-requirements.patch
 
 %description %_description
 
@@ -39,41 +29,31 @@ Summary:        %{summary}
 
 %description -n python3-sphinxcontrib-chapeldomain %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n sphinxcontrib-chapeldomain-%{version}
+%prep
+%autosetup -p1 -n sphinxcontrib_chapeldomain-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
-pushd docs
-make texinfo
-pushd _build
-pushd texinfo
-makeinfo --docbook ChapelDomain.texi
-popd
-popd
-popd
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l sphinxcontrib
-mkdir -p %{buildroot}%{_datadir}/help/en/python-sphinxcontrib-chapeldomain
-install -p -m644 docs/_build/texinfo/ChapelDomain.xml \
-   %{buildroot}%{_datadir}/help/en/python-sphinxcontrib-chapeldomain
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-sphinxcontrib-chapeldomain -f %{pyproject_files}
-%{python3_sitelib}/sphinxcontrib_chapeldomain-%{version}-py%{python3_version}-nspkg.pth
-%doc README.rst
-%doc %dir  %{_datadir}/help/en
-%doc %lang(en) %{_datadir}/help/en/python-sphinxcontrib-chapeldomain
 
 %changelog
 %autochangelog

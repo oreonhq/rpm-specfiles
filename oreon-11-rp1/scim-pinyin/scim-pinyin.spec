@@ -1,8 +1,8 @@
 %global source0_hash 70727224a642c2f2c7739b82ebd0b4d6a6f444c9ad4311cf2a3c76230dd21d9e
 
 Name:       scim-pinyin
-Version:    0.5.92
-Release:    31%{?dist}
+Version:    1.4.18
+Release:    1%{?dist}
 Summary:    Smart Pinyin IMEngine for Smart Common Input Method platform
 
 License:    GPL-2.0-only

@@ -1,8 +1,8 @@
 %global source0_hash d787b4a45b3a38513f1e80e025c4059918f1390b815944c6a541bd07eeb0ccae
 
 Name:           persepolis
-Version:        5.1.1
-Release:        7%{?dist}
+Version:        5.2.0
+Release:        1%{?dist}
 Summary:        A powerful graphical download manager
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

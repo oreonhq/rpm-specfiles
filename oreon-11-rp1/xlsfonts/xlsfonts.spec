@@ -2,7 +2,7 @@
 
 Summary:    X font list utility
 Name:       xlsfonts
-Version:    1.0.8
+Version:    1.0.9
 Release:    %autorelease
 License:    MIT
 URL:        http://www.x.org

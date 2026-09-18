@@ -3,8 +3,8 @@
 Summary: NFS utilities and supporting clients and daemons for the kernel NFS server
 Name: nfs-utils
 URL: http://linux-nfs.org/
-Version: 2.8.7
-Release: 0%{?dist}
+Version: 2.9.2
+Release: 1%{?dist}
 Epoch: 1
 
 # group all 32bit related archs

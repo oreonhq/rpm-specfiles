@@ -7,7 +7,7 @@
 %global crate heapless
 
 Name:           rust-heapless
-Version:        0.8.0
+Version:        0.9.3
 Release:        %autorelease
 Summary:        `static` friendly data structures that don't require dynamic memory a...
 

@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        3.2.4
+Version:        3.2.5
 Release:        %autorelease
 Summary:        Web Application Interface
 

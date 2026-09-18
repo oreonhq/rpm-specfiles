@@ -2,8 +2,8 @@
 
 Name:          lxqt-about
 Summary:       About application for LXQt desktop suite
-Version:       2.3.0
-Release:       2%{?dist}
+Version:       2.4.0
+Release:       1%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:       LicenseRef-Callaway-LGPLv2+
 URL:           https://lxqt-project.org/

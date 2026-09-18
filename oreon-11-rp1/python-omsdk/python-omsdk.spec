@@ -1,7 +1,7 @@
 %global source0_hash 507af6e8b8f02e5ce2134fdb850cf32db77fbed2373907998da4cd91c57f100a
 
 Name:           python-omsdk
-Version:        1.2.518
+Version:        1.2.519
 Release:        %autorelease
 Summary:        Dell EMC OpenManage Python SDK 
 

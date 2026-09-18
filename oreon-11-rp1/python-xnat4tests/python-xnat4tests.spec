@@ -3,7 +3,7 @@
 %global pypi_name xnat4tests
 
 Name:           python-%{pypi_name}
-Version:        0.3.14
+Version:        0.4.1
 Release:        %autorelease
 Summary:        Create basic XNAT instance for API tests
 

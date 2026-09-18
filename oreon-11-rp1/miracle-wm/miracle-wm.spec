@@ -6,8 +6,8 @@
 %global miracle_configlib_somajor 0
 
 Name:           miracle-wm
-Version:        0.8.3
-Release:        3%{?dist}
+Version:        0.11.0
+Release:        1%{?dist}
 Summary:        A tiling Wayland compositor based on Mir
 
 License:        GPL-3.0-or-later and MIT

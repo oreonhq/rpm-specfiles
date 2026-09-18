@@ -7,7 +7,7 @@
 %global crate gix-archive
 
 Name:           rust-gix-archive
-Version:        0.26.0
+Version:        0.36.1
 Release:        %autorelease
 Summary:        archive generation from of a worktree stream
 

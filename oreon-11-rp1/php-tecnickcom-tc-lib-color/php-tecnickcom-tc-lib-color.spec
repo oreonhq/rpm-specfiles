@@ -17,7 +17,7 @@
 %global with_tests   0%{!?_without_tests:1}
 
 Name:           php-%{gh_owner}-%{gh_project}
-Version:        2.3.8
+Version:        3.0.5
 Release:        1%{?dist}
 Summary:        PHP library to manipulate various color representations
 

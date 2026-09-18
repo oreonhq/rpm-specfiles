@@ -1,8 +1,8 @@
 %global source0_hash 32e9d89929a76cd7d3fcbaf79f441868bdabedf17317d1d1843faa1f19338d95
 
 Name:             zathura-djvu
-Version:          0.2.10
-Release:          4%{?dist}
+Version:          2026.07.18
+Release:          1%{?dist}
 Summary:          DjVu support for zathura
 License:          Zlib
 URL:              http://pwmt.org/projects/%{name}

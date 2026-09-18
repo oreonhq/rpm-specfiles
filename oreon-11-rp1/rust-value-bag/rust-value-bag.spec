@@ -7,7 +7,7 @@
 %global crate value-bag
 
 Name:           rust-value-bag
-Version:        1.13.1
+Version:        1.14.1
 Release:        %autorelease
 Summary:        Anonymous structured values
 

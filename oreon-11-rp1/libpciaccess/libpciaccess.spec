@@ -1,8 +1,8 @@
 %global source0_hash 214c9d0d884fdd7375ec8da8dcb91a8d3169f263294c9a90c575bf1938b9f489
 
 Name:           libpciaccess
-Version:        0.16
-Release:        17%{?dist}
+Version:        0.19
+Release:        1%{?dist}
 Summary:        PCI access library
 
 License:        HPND AND MIT

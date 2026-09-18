@@ -1,7 +1,7 @@
 %global source0_hash 1f4a0577df3ae64fd35d75d30ece458fa18d57bdc7bc777aea3bfdfcb841dbeb
 
 Name:           sudo-rs
-Version:        0.2.12
+Version:        0.2.15
 Release:        %autorelease
 Summary:        Memory safe implementation of sudo and su
 

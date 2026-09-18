@@ -4,7 +4,7 @@
 %global commit 42af7b5db78eb22210ae6cf2dd1b913c64ca3183
 
 Name:           legendary
-Version:        0.20.34
+Version:        0.21.1
 %forgemeta
 Release:        %autorelease
 Summary:        Free and open-source replacement for the Epic Games Launcher

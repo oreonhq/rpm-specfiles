@@ -7,7 +7,7 @@
 %global crate gix-revision
 
 Name:           rust-gix-revision
-Version:        0.39.0
+Version:        0.49.1
 Release:        %autorelease
 Summary:        A crate of the gitoxide project dealing with finding names for revisi...
 

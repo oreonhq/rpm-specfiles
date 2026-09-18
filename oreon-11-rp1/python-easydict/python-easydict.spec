@@ -1,55 +1,57 @@
-%global source0_hash b1eaedab1d1a4c5d8fd24d6bf0adc2a7ea259bebff6680a1bddcbe99e204370d
+%global source0_hash none
 
-%global         pypi_name       easydict
-Version:        1.10
-%global         forgeurl        https://github.com/makinacorpus/easydict
-%global         tag             %{version}
-%forgemeta
+Name:           python-easydict
+Version:        1.13
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Access dict values as attributes _works recursively_.
 
-Name:           python-%{pypi_name}
-Release:        11%{?dist}
-Summary:        Access dict values as attributes (works recursively) 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        LGPL-3.0
+URL:            https://github.com/makinacorpus/easydict
+Source:         %{pypi_source easydict}
 
-License:        LGPL-3.0-only
-URL:            %{forgeurl}
-Source0:        %{forgesource} 
-
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildArch: noarch
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-EasyDict allows to access dict values as attributes (works recursively).
-A Javascript-like properties dot notation for python dicts.}
+This is package 'easydict' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{pypi_name}
+%package -n     python3-easydict
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-easydict %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n easydict-%{version}
 
-%forgeautosetup
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-# No tests available
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.rst
-%doc CHANGES
+
+%files -n python3-easydict -f %{pyproject_files}
 
 %changelog
 %autochangelog

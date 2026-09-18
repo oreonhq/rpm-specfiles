@@ -1,48 +1,58 @@
-%global source0_hash 15d16e4a875b9e217b038d02f029c3800c4a6ad645e3f73c9e107ea26bab3adb
+%global source0_hash none
 
-%global srcname show-in-file-manager
-%{?python_enable_dependency_generator}
+Name:           python-show-in-file-manager
+Version:        1.1.6
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Open the system file manager and select files in it
 
-Name:          python-%{srcname}
-Version:       1.1.4
-Release:       17%{?dist}
-Summary:       Show in File Manager is a Python package to open the system file manager and optionally select files in it.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/damonlynch/showinfilemanager
+Source:         %{pypi_source show_in_file_manager}
 
-License:       MIT
-URL:           https://github.com/damonlynch/showinfilemanager
-Source0:       %{pypi_source}
-BuildArch:     noarch
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-%{summary}.
 
-%package -n python3-%{srcname}
-Summary:       %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
-Provides:      %{srcname} = %{version}-%{release}
-BuildRequires: python3-devel
-BuildRequires: python3-setuptools
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'show-in-file-manager' generated automatically by pyp2spec.}
 
-%description -n python3-%{srcname}
-%{summary}.
+%description %_description
+
+%package -n     python3-show-in-file-manager
+Summary:        %{summary}
+
+%description -n python3-show-in-file-manager %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n show_in_file_manager-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%{py3_build}
+%pyproject_wheel
+
 
 %install
-%{py3_install}
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{srcname}
-%doc README.md CHANGELOG.md
-%license LICENSE
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-show-in-file-manager -f %{pyproject_files}
 %{_bindir}/showinfilemanager
-%{python3_sitelib}/showinfm/
-%{python3_sitelib}/show_in_file_manager-*.egg-info/
 
 %changelog
 %autochangelog

@@ -3,8 +3,8 @@
 %?mingw_package_header
 
 Name:           mingw-cairomm
-Version:        1.12.0
-Release:        26%{?dist}
+Version:        1.15.5
+Release:        1%{?dist}
 Summary:        MinGW Windows C++ API for the cairo graphics library
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

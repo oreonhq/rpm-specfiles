@@ -1,7 +1,7 @@
 %global source0_hash 0c27d1d7e2b12a2bd9cd1934dc6f5c7ae5ebfba0e2c7d4abf53d9a021b40e15a
 
 Name:           lazygal
-Version:        0.11
+Version:        0.12
 Release:        %autorelease
 Summary:        A static web gallery generator
 

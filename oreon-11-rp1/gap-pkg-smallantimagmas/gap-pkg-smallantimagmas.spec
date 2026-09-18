@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/smallantimagmas
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        0.5.1
+Version:        0.6.0
 Release:        %autorelease
 Summary:        Library of antiassociative magmas of small order
 

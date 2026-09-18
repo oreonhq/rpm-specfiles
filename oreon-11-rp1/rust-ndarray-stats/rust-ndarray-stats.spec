@@ -7,7 +7,7 @@
 %global crate ndarray-stats
 
 Name:           rust-ndarray-stats
-Version:        0.6.0
+Version:        0.7.0
 Release:        %autorelease
 Summary:        Statistical routines for ArrayBase
 

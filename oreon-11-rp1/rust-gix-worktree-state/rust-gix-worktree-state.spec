@@ -7,7 +7,7 @@
 %global crate gix-worktree-state
 
 Name:           rust-gix-worktree-state
-Version:        0.24.0
+Version:        0.34.1
 Release:        %autorelease
 Summary:        A crate of the gitoxide project implementing setting the worktree to...
 

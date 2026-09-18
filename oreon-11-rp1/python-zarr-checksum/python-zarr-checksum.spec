@@ -1,68 +1,63 @@
-%global source0_hash 8c75e9ed7e7961675b9245d0e12c674bc77f62a4ccb6dd9abf72ca48800e8662
+%global source0_hash none
 
-%global pypi_name zarr-checksum
- 
-Name:           python-%{pypi_name}
-Version:        0.4.2
-Release:        %{autorelease}
-Summary:        Algorithms for calculating a zarr checksum against local or cloud storage
+Name:           python-zarr-checksum
+Version:        0.4.7
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Checksum support for zarrs stored in various backends
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
+URL:            https://github.com/dandi/zarr_checksum
+Source:         %{pypi_source zarr_checksum}
 
-# ref was setting to 0.4.2 by forge causing download to fail.
-# so manually set it
-%global ref v%{version} 
-%global forgeurl https://github.com/dandi/zarr_checksum
-%forgemeta
-URL:            %forgeurl
-Source:         %forgesource
- 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# Test dependencies:
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(boto3)
-BuildRequires:  python3dist(zarr)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Algorithms for calculating a zarr checksum against local or cloud storage.}
- 
-%description %_description
- 
-%package -n python3-%{pypi_name}
-Summary:        %{summary}
-# Allow users to install this rpm as 'zarrsum'
-Provides: zarrsum = %{version}-%{release}
- 
-%description -n python3-%{pypi_name} %_description
- 
- 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+This is package 'zarr-checksum' generated automatically by pyp2spec.}
 
-%forgeautosetup
- 
- 
+%description %_description
+
+%package -n     python3-zarr-checksum
+Summary:        %{summary}
+
+%description -n python3-zarr-checksum %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-zarr-checksum boto,dev,format,lint,test
+
+
+%prep
+%autosetup -p1 -n zarr_checksum-%{version}
+
+
 %generate_buildrequires
-%pyproject_buildrequires
- 
- 
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x boto,dev,format,lint,test
+
+
 %build
 %pyproject_wheel
- 
+
+
 %install
 %pyproject_install
-%pyproject_save_files -L zarr_checksum
- 
- 
-%check
-%pytest -r fEs
-%pyproject_check_import
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-zarr-checksum -f %{pyproject_files}
 %{_bindir}/zarrsum
-%doc README.md NOTICE
-%license LICENSE
- 
- 
+
 %changelog
 %autochangelog

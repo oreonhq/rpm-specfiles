@@ -1,55 +1,64 @@
-%global source0_hash 106e7bd782bcc0cb5119fc9225b0c9a71dfc53adb938be905223adaef22b1174
+%global source0_hash none
 
 Name:           python-transaction
-Version:        5.0
+Version:        5.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Transaction management for Python
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ZPL-2.1
-URL:            https://pypi.io/project/transaction
-Source0:        %pypi_source transaction
-Patch1:         transaction-no-explicit-setuptools-req.patch
+URL:            https://github.com/zopefoundation/transaction
+Source:         %{pypi_source transaction}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  python3-zope-interface
 
-%global _description\
-This package contains a generic transaction implementation for Python. It is\
-mainly used by the ZODB, though.
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'transaction' generated automatically by pyp2spec.}
+
+Patch1:         transaction-no-explicit-setuptools-req.patch
 
 %description %_description
 
-%package -n python3-transaction
-Summary:        Transaction management for Python 3
-
-Requires:       python3-zope-interface
+%package -n     python3-transaction
+Summary:        %{summary}
 
 %description -n python3-transaction %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-transaction docs,testing
 
-%autosetup -n transaction-%{version} -p1
+
+%prep
+%autosetup -p1 -n transaction-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,testing
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files transaction
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-transaction -f %{pyproject_files}
-%doc README.rst LICENSE.txt COPYRIGHT.txt
 
 %changelog
 %autochangelog

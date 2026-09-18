@@ -1,7 +1,7 @@
 %global source0_hash 52338a8192b8b6350338b053008ce6e3e9ae8f766044f59f91c426abb62320c9
 
 Name:           virtnbdbackup
-Version:        2.46
+Version:        2.53
 Release:        1%{?dist}
 Summary:        Backup utility for libvirt
 License:        GPL-3.0-or-later

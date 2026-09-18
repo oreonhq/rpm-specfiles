@@ -7,7 +7,7 @@
 %global crate gix-url
 
 Name:           rust-gix-url
-Version:        0.34.0
+Version:        0.38.0
 Release:        %autorelease
 Summary:        A crate of the gitoxide project implementing parsing and serializatio...
 

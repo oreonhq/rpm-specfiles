@@ -1,62 +1,62 @@
-%global source0_hash 5581db0b209972fec4a0fe861af5081c42bfeca2d4350948bc13fd1ccaf301be
+%global source0_hash none
 
 Name:           python-aiomysql
-Version:        0.2.0
-Release:        11%{?dist}
-Summary:        MySQL driver for asyncio
+Version:        0.3.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        MySQL driver for asyncio.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/aio-libs/aiomysql
-Source0:        %{url}/archive/v%{version}/aiomysql-%{version}.tar.gz
+Source:         %{pypi_source aiomysql}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-aiomysql is a “driver” for accessing a MySQL database from the asyncio
-(PEP-3156/tulip) framework. It depends on and reuses most parts of PyMySQL .
-aiomysql tries to be like awesome aiopg library and preserve same api, look and
-feel.}
+This is package 'aiomysql' generated automatically by pyp2spec.}
 
-%description %{_description}
+%description %_description
 
 %package -n     python3-aiomysql
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
+%description -n python3-aiomysql %_description
 
-%description -n python3-aiomysql %{_description}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-aiomysql rsa,sa
 
-%pyproject_extras_subpkg -n python3-aiomysql sa rsa
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n aiomysql-%{version}
 
-%autosetup -n aiomysql-%{version}
-# Upstream has pinned setuptools_scm due to the generated wheel version being wrong:
-# https://github.com/aio-libs/aiomysql/commit/fb85893635d7f9c0da3b1ff8c6d0fc436357633a
-# We must work with what we have.
-sed -r -i 's/"(setuptools_scm.*), <.*"/"\1"/' pyproject.toml
-# Furthermore, we don’t need setuptools_scm_git_archive.
-sed -r -i '/"setuptools_scm_git_archive/d' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires -x sa,rsa
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x rsa,sa
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files aiomysql
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-# Upstream testing is done with a Docker container. Setting up a MySQL server
-# for testing might be possible, but not trivial. See the python-asyncmy
-# package for inspiration.
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-aiomysql -f %{pyproject_files}
-# LICENSE is handled by pyproject_files; verify with “rpm -qL -p …”
-%doc README.rst
 
 %changelog
 %autochangelog

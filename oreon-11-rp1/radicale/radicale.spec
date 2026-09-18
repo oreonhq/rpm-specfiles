@@ -22,7 +22,7 @@
 
 %define radicale_major  3
 
-%define radicale_version  3.6.1
+%define radicale_version  3.8.0
 %define radicale_release  1
 #define gitcommit 8e9fdf391acb79d3fb1cb6e6b8f882f8999192cf
 

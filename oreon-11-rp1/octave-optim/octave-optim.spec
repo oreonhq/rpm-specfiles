@@ -3,8 +3,8 @@
 %global octpkg optim
 
 Name:           octave-%{octpkg}
-Version:        1.6.2
-Release:        16%{?dist}
+Version:        1.6.3
+Release:        1%{?dist}
 Summary:        A non-linear optimization tool kit for Octave
 # C++ and .m are GPLv3+, documentation is GFDL
 # Automatically converted from old format: GPLv3+ and GFDL - review is highly recommended.

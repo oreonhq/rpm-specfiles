@@ -1,7 +1,7 @@
 %global source0_hash f502b8335899470dd07d775455a153019fde706f09c398d4e9cd1bbf9795ad16
 
 Name:           python-glymur
-Version:        0.14.7
+Version:        0.14.8
 %global srcversion %(echo '%{version}' | sed -r 's/\\.(post)/\\1/')
 Release:        %autorelease
 Summary:        Interface to the OpenJPEG library for working with JPEG 2000 files

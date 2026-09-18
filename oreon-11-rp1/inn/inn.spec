@@ -4,8 +4,8 @@
 
 Summary: The InterNetNews system, an Usenet news server
 Name: inn
-Version: 2.7.3
-Release: 5%{?dist}
+Version: 2.7.4
+Release: 1%{?dist}
 # most files are under ISC, except:
 # contrib/analyze-traffic.in: public-domain
 # contrib/mm_ckpasswd: GPL-2.0-or-later

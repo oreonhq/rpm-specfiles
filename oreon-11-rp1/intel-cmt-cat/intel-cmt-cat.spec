@@ -8,8 +8,8 @@ including, Cache Monitoring Technology (CMT), Memory Bandwidth Monitoring
 (CDP) and Memory Bandwidth Allocation (MBA).}
 
 Name:		intel-cmt-cat
-Version:	25.04
-Release:	4%{?dist}
+Version:	26.06
+Release:	1%{?dist}
 Summary:	Intel cache monitoring and allocation technology config tool
 
 License:	BSD-3-Clause

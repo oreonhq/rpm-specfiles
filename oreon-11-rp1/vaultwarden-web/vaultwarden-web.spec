@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           vaultwarden-web
-Version:        2025.7.0
-Release:        2%{?dist}
+Version:        2026.7.0
+Release:        1%{?dist}
 Summary:        Web vault for vaultwarden
 
 License:        GPL-3.0-only AND MIT AND BSD-3-Clause AND (MIT OR GPL-3.0-only)

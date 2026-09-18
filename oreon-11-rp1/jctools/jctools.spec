@@ -4,7 +4,7 @@
 %global srcname JCTools
 
 Name:           jctools
-Version:        4.0.5
+Version:        4.0.7
 Release:        %autorelease
 Summary:        Java Concurrency Tools for the JVM
 License:        Apache-2.0

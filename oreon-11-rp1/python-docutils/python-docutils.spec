@@ -1,56 +1,38 @@
-%global source0_hash 4db53b1fde9abecbb74d91230d32ab626d94f6badfc575d6db9194a49df29968
+%global source0_hash none
 
 Name:           python-docutils
-Version:        0.22.4
+Version:        0.23
 Release:        %autorelease
-Summary:        System for processing plaintext documentation
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Docutils -- Python Documentation Utilities
 
-# See COPYING.txt for information
-# PSF-2.0 was chosen for the SPDX identifier as it's the spirit of the original
-# author's notice, even though the shipped license text is copied from Python 2.1.1
-# See: https://gitlab.com/fedora/legal/fedora-license-data/-/issues/216
-License:        LicenseRef-Fedora-Public-Domain AND BSD-2-Clause AND BSD-3-Clause AND PSF-2.0 AND GPL-3.0-or-later
-URL:            https://docutils.sourceforge.net
-Source0:        https://sourceforge.net/projects/docutils/files/docutils/%{version}/docutils-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://docutils.sourceforge.io
+Source:         %{pypi_source docutils}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildRequires:  pyproject-rpm-macros
-BuildRequires:  python%{python3_pkgversion}-devel
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The Docutils project specifies a plaintext markup language, reStructuredText,
-which is easy to read and quick to write.  The project includes a python
-library to parse rST files and transform them into other useful formats such
-as HTML, XML, and TeX as well as commandline tools that give the enduser
-access to this functionality.
-
-Currently, the library supports parsing rST that is in standalone files and
-PEPs (Python Enhancement Proposals).  Work is underway to parse rST from
-Python inline documentation modules and packages.}
+This is package 'docutils' generated automatically by pyp2spec.}
 
 %description %_description
 
-
-%package -n python%{python3_pkgversion}-docutils
+%package -n     python3-docutils
 Summary:        %{summary}
 
-%description -n python%{python3_pkgversion}-docutils %_description
+%description -n python3-docutils %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n docutils-%{version}
-
-# Remove shebang from library files
-sed -i -e '/#! *\/usr\/bin\/.*/{1D}' $(grep -Erl '^#!.+python' docutils)
-
-# We want the licenses but don't need this build file
-rm -f licenses/docutils.conf
 
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+%pyproject_buildrequires
 
 
 %build
@@ -59,20 +41,27 @@ rm -f licenses/docutils.conf
 
 %install
 %pyproject_install
-%pyproject_save_files docutils
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-export PYTHONPATH=%{buildroot}%{python3_sitelib}
-%{python3} test/alltests.py
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files -n python%{python3_pkgversion}-docutils -f %{pyproject_files}
-%license COPYING.rst licenses/*
-%doc BUGS.rst FAQ.rst HISTORY.rst README.rst RELEASE-NOTES.rst THANKS.rst
-%{_bindir}/rst*
+%files -n python3-docutils -f %{pyproject_files}
 %{_bindir}/docutils
-
+%{_bindir}/rst2html
+%{_bindir}/rst2html4
+%{_bindir}/rst2html5
+%{_bindir}/rst2latex
+%{_bindir}/rst2man
+%{_bindir}/rst2odt
+%{_bindir}/rst2pseudoxml
+%{_bindir}/rst2s5
+%{_bindir}/rst2xetex
+%{_bindir}/rst2xml
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.22.4-1

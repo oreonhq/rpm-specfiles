@@ -1,59 +1,57 @@
-%global source0_hash 3496e6a697b2d2d052dda96f15bf02ed8d5244b722735b5da01febf93392bf30
+%global source0_hash none
 
-%global         srcname         kiss-headers
-%global         forgeurl        https://github.com/jawah/kiss-headers
-Version:        2.4.3
-%global         tag             %{version}
-%forgemeta
-
-Name:           python-%{srcname}
+Name:           python-kiss-headers
+Version:        2.5.0
 Release:        %autorelease
-Summary:        Object-oriented HTTP and IMAP headers
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Object-oriented HTTP and IMAP _structured_ headers.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            %{forgeurl}
-Source:         %{forgesource}
+URL:            https://jawah.github.io/kiss-headers
+Source:         %{pypi_source kiss_headers}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(requests)
-BuildArch: noarch
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Python package for HTTP/1.1 style headers. Parse
-headers to objects. Most advanced available structure
-for http headers.}
+This is package 'kiss-headers' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-kiss-headers
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-kiss-headers %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n kiss_headers-%{version}
 
-%forgeautosetup
-# Do not measure test coverage
-sed -i '/"--cov=kiss_headers --doctest-modules --cov-report=term-missing -rxXs"/d' \
-    pyproject.toml
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files kiss_headers
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Do not run tests that access external network
-%pytest -k 'not encode_decode and not httpbin and not parse_response'
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
- 
+
+%files -n python3-kiss-headers -f %{pyproject_files}
+
 %changelog
 %autochangelog

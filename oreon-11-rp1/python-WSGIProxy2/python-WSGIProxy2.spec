@@ -1,55 +1,57 @@
-%global source0_hash cee2a64abc193cc96c7ff1208b709335e9a4d1316ce84b91501102166d814c9a
+%global source0_hash none
 
-%global pypi_name WSGIProxy2
-%global package_name wsgiproxy
+Name:           python-wsgiproxy2
+Version:        0.5.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A WSGI Proxy with various http client backends
 
-Name:           python-%{pypi_name}
-Version:        0.4.6
-Release:        25%{?dist}
-Summary:        WSGI Proxy that supports several HTTP backends
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/gawel/WSGIProxy2/
-Source0:        https://files.pythonhosted.org/packages/source/W/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source WSGIProxy2}
+
 BuildArch:      noarch
- 
-%global _description\
-WSGI Proxy that supports several HTTP backends.
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'wsgiproxy2' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{pypi_name}
-Summary:        WSGI Proxy that supports several HTTP backends
-BuildRequires:  python3-devel
-BuildRequires:  python3-requests
-BuildRequires:  python3-webtest
-Requires:       python3-webob
-Requires:       python3-six
+%package -n     python3-wsgiproxy2
+Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-wsgiproxy2 %_description
 
-Python 3 version.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n WSGIProxy2-%{version}
 
-%setup -q -n %{pypi_name}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{package_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README_fixt.py README.rst
+
+%files -n python3-wsgiproxy2 -f %{pyproject_files}
 
 %changelog
 %autochangelog

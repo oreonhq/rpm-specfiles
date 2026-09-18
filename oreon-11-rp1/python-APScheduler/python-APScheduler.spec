@@ -1,60 +1,62 @@
-%global source0_hash 2a9966b052ec805f020c8c4c3ae6e6a06e24b1bf19f2e11d91d8cca0473eef41
+%global source0_hash none
 
-%global _description %{expand:
-Advanced Python Scheduler (APScheduler) is a Python library that lets you
-schedule your Python code to be executed later, either just once or
-periodically. You can add new jobs or remove old ones on the fly as you
-please. If you store your jobs in a database, they will also survive
-scheduler restarts and maintain their state. When the scheduler is
-restarted, it will then run all the jobs it should have run while it was
-offline.}
-
-Name:           python-APScheduler
-Version:        3.11.2
+Name:           python-apscheduler
+Version:        3.11.3
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        In-process task scheduler with Cron-like capabilities
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pypi.org/project/APScheduler/
-Source0:        %{pypi_source apscheduler}
+URL:            https://github.com/agronholm/apscheduler
+Source:         %{pypi_source apscheduler}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'apscheduler' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-APScheduler
+%package -n     python3-apscheduler
 Summary:        %{summary}
-BuildRequires:  python3-devel
 
-%description -n python3-APScheduler %_description
+%description -n python3-apscheduler %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-apscheduler doc,etcd,gevent,mongodb,redis,rethinkdb,sqlalchemy,test,tornado,twisted,zookeeper
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n apscheduler-%{version}
 
-%autosetup -n apscheduler-%{version} -p1
-# Remove that test as it require services (redis, zookeeper, ...)
-# up and running. Upstream provides a docker compose to spawn
-# services before running these tests.
-rm tests/test_jobstores.py
-# Skip missing dependency in Fedora 43
-sed -i 's/,rethinkdb//' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires -x test -x tornado
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,etcd,gevent,mongodb,redis,rethinkdb,sqlalchemy,test,tornado,twisted,zookeeper
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files apscheduler
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Default timezone to UTC otherwise unit tests fail.
-export TZ=UTC
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-APScheduler -f %{pyproject_files}
-%doc README.rst
+
+%files -n python3-apscheduler -f %{pyproject_files}
 
 %changelog
 %autochangelog

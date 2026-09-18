@@ -2,7 +2,7 @@
 
 Summary:        Wherever Change Directory: chdir for DOS and Unix
 Name:           wcd
-Version:        6.0.5
+Version:        6.0.7
 Release:        %autorelease
 
 License:        GPL-2.0-or-later

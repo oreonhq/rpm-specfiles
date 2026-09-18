@@ -4,7 +4,7 @@
 %global _cmake_generator "Unix Makefiles"
 
 Name:		stp
-Version:	2.3.4
+Version:	2.4.1
 Release:	%autorelease
 Summary:	Constraint solver/decision procedure
 

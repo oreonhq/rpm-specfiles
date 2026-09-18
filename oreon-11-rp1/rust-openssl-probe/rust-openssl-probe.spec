@@ -7,7 +7,7 @@
 %global crate openssl-probe
 
 Name:           rust-openssl-probe
-Version:        0.1.6
+Version:        0.2.1
 Release:        %autorelease
 Summary:        Tool for helping to find SSL certificate locations on the system for...
 

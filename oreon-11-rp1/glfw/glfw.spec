@@ -1,7 +1,7 @@
 %global source0_hash c038d34200234d071fae9345bc455e4a8f2f544ab60150765d7704e08f3dac01
 
 Name:           glfw
-Version:        3.4
+Version:        3.5.1
 Release:        %autorelease
 Epoch:          1
 Summary:        A cross-platform multimedia library

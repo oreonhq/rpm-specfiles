@@ -7,7 +7,7 @@
 %global crate libdav1d-sys
 
 Name:           rust-libdav1d-sys
-Version:        0.6.0
+Version:        0.7.1+libdav1d.1.4.3
 Release:        %autorelease
 Summary:        Builds and statically links dav1d AV1 decoder. Part of libavif-sys
 

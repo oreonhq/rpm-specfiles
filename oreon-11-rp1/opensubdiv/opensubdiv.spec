@@ -7,7 +7,7 @@
 #%%global         prerelease RC1
 
 Name:           opensubdiv
-Version:        3.7.0
+Version:        3_7_0
 Release:        %autorelease %{?prerelease:-p -e %{prerelease}}
 Summary:        High performance subdivision surface libraries
 

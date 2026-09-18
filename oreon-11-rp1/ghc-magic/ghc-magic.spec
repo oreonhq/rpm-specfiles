@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        1.1
+Version:        2.0.0
 Release:        %autorelease
 Summary:        Interface to C file/magic library
 

@@ -10,7 +10,7 @@
 %global freetype_version 2.1.5
 
 Name:    pango
-Version: 1.57.0
+Version: 1.58.2
 Release: %autorelease
 Summary: System for layout and rendering of internationalized text
 

@@ -2,8 +2,8 @@
 
 %global __cmake_in_source_build 1
 Name:           scantailor
-Version:        0.9.11.1
-Release:        41%{?dist}
+Version:        0_9_12_2
+Release:        1%{?dist}
 Summary:        An interactive post-processing tool for scanned pages
 
 License:        GPL-3.0-or-later OR LGPL-2.1-only

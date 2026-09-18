@@ -3,7 +3,7 @@
 %global app_id	org.gnome.Gtranslator
 
 Name:		gtranslator
-Version:	50.0
+Version:	51.0
 Release:	1%{?dist}
 Summary:	Gettext po file editor for GNOME
 

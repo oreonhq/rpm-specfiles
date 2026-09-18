@@ -1,8 +1,8 @@
 %global source0_hash 73f827924663c7c6b451a74c8385304d99feaa13c81f4e0a171da597c6843574
 
 Name:           meld
-Version:        3.23.1
-Release:        2%{?dist}
+Version:        3.24.0
+Release:        1%{?dist}
 Summary:        Visual diff and merge tool
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

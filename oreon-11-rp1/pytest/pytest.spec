@@ -1,7 +1,7 @@
 %global source0_hash 86c0d0b93306b961d58d62a4db4879f27fe25513d4b969df351abdddb3c30e01
 
 Name:           pytest
-Version:        8.4.2
+Version:        9.1.1
 Release:        %autorelease
 Summary:        Simple powerful testing with Python
 # SPDX

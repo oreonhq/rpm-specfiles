@@ -3,8 +3,8 @@
 %global pypi_name pyftdi
 
 Name:           python-%{pypi_name}
-Version:        0.57.1
-Release:        4%{?dist}
+Version:        0.57.2
+Release:        1%{?dist}
 Summary:        Python support for FTDI devices
 
 License:        BSD-3-Clause

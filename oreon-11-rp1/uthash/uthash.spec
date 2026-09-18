@@ -1,8 +1,8 @@
 %global source0_hash e10382ab75518bad8319eb922ad04f907cb20cccb451a3aa980c9d005e661acc
 
 Name:           uthash
-Version:        2.3.0
-Release:        11%{?dist}
+Version:        2.4.0
+Release:        1%{?dist}
 Summary:        A hash table for C structures
 
 License:        BSD-1-Clause
@@ -27,8 +27,8 @@ retrieve or delete items from the hash table.
 Summary:        A hash table for C structures (headers only)
 
 # c-compiled libraries have been dropped upstream.
-Obsoletes:      libut          < 2.3.0
-Obsoletes:      libut-devel    < 2.3.0
+Obsoletes:      libut          < 2.4.0
+Obsoletes:      libut-devel    < 2.4.0
 
 Provides:       %{name}        = %{version}-%{release}
 Provides:       %{name}-static = %{version}-%{release}

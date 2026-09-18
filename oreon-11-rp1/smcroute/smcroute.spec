@@ -1,8 +1,8 @@
 %global source0_hash 5963f9383564c641eb81be41d3b6743339adb415a252bed1945ad0f9e53bdd52
 
 Name:    smcroute
-Version: 2.5.7
-Release: 5%{?dist}
+Version: 2.6.0
+Release: 1%{?dist}
 
 Summary: Static multicast routing for UNIX
 

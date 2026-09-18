@@ -1,105 +1,57 @@
-%global source0_hash 88727037138f759a3952f6391ae3751536f04ad8be6023607620ea49695a3a83
+%global source0_hash none
 
-%global pypi_name pluginlib
-%global sum  A framework for creating and importing plugins in Python
-%global desc Pluginlib is a Python framework for creating and importing plugins.\
-Pluginlib makes creating plugins for your project simple.
+Name:           python-pluginlib
+Version:        0.11.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A framework for creating and importing plugins
 
-%bcond_without python3
-
-Name:           python-%{pypi_name}
-Version:        0.9.4
-Release:        7%{?dist}
-Summary:        %{sum}
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MPL-2.0
 URL:            https://github.com/Rockhopper-Technologies/pluginlib
-Source0:        https://files.pythonhosted.org/packages/source/p/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source pluginlib}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%if %{with python3}
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
-%endif
 
-%if 0%{?with_python3_other}
-BuildRequires:  python%{python3_other_pkgversion}-devel
-BuildRequires:  python%{python3_other_pkgversion}-setuptools
-%endif
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pluginlib' generated automatically by pyp2spec.}
 
-%description
-%{desc}
+%description %_description
 
-# Python 3 package
-%if %{with python3}
-%package -n     python%{python3_pkgversion}-%{pypi_name}
-Summary:        %{sum}
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
-Requires:       python%{python3_pkgversion}-setuptools
+%package -n     python3-pluginlib
+Summary:        %{summary}
 
-%description -n python%{python3_pkgversion}-%{pypi_name}
-%{desc}
-%endif
+%description -n python3-pluginlib %_description
 
-# Python 3 other package
-%if 0%{?with_python3_other}
-%package -n     python%{python3_other_pkgversion}-%{pypi_name}
-Summary:        %{sum}
-%{?python_provide:%python_provide python%{python3_other_pkgversion}-%{pypi_name}}
-Requires:       python%{python3_other_pkgversion}-setuptools
-
-%description -n python%{python3_other_pkgversion}-%{pypi_name}
-%{desc}
-%endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pluginlib-%{version}
 
-%autosetup -p0 -n %{pypi_name}-%{version}
 
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%if %{with python3}
-%py3_build
-%endif
+%pyproject_wheel
 
-%if 0%{?with_python3_other}
-%py3_other_build
-%endif
 
 %install
-%if 0%{?with_python3_other}
-%py3_other_install
-%endif
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with python3}
-%py3_install
-%endif
 
 %check
-%if %{with python3}
-%{__python3} -m unittest
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%if 0%{?with_python3_other}
-%{__python3_other} -m unittest
-%endif
 
-%if %{with python3}
-%files -n python%{python3_pkgversion}-%{pypi_name}
-%doc README*
-%license LICENSE
-%{python3_sitelib}/pluginlib*
-%endif
-
-%if 0%{?with_python3_other}
-%files -n python%{python3_other_pkgversion}-%{pypi_name}
-%doc README*
-%license LICENSE
-%{python3_other_sitelib}/pluginlib*
-%endif
+%files -n python3-pluginlib -f %{pyproject_files}
 
 %changelog
 %autochangelog

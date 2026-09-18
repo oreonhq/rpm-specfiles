@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.2
+Version:        0.2.0.2
 Release:        %autorelease
 Summary:        Exceptions which are explicit in the type signature
 

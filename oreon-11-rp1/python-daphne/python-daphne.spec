@@ -1,67 +1,61 @@
-%global source0_hash 5f898e700a1fda7addf1541d7c328606415e96a7bd768405f0463c312fcb31b3
-
-%bcond_without  tests
+%global source0_hash none
 
 Name:           python-daphne
-Version:        4.2.1
+Version:        4.2.3
 Release:        %autorelease
-Summary:        Django ASGI (HTTP/WebSocket) server
-License:        BSD-3-Clause
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Django ASGI _HTTP/WebSocket_ server
+
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/django/daphne
 Source:         %{pypi_source daphne}
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%if %{with tests}
-# List test dependencies manually, since the test extra contains many unwanted
-# linters, coverage-analysis tools, typecheckers, etc.:
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-BuildRequires:  %{py3_dist django}
-BuildRequires:  %{py3_dist hypothesis}
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist pytest-asyncio}
-%endif
 
-%global common_description %{expand:
-Daphne is a HTTP, HTTP2 and WebSocket protocol server for ASGI and ASGI-HTTP,
-developed to power Django Channels.  It supports automatic negotiation of
-protocols; there is no need for URL prefixing to determine WebSocket endpoints
-versus HTTP endpoints.}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'daphne' generated automatically by pyp2spec.}
 
-%description %{common_description}
+%description %_description
 
-%package -n python3-daphne
+%package -n     python3-daphne
 Summary:        %{summary}
 
-%description -n python3-daphne %{common_description}
+%description -n python3-daphne %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-daphne tests
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n daphne-%{version}
 
-%autosetup -p 1 -n daphne-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x tests
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l daphne twisted
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-# This test assumes that twisted/plugins/fd_endpoint.py is installed in the
-# system site-packages, but we have it in the buildroot site-packages.
-k="${k-}${k+ and }not test_fd_endpoint_plugin_installed"
-%pytest -k "${k-}"
-%else
-%pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-daphne -f %{pyproject_files}
-%doc README.rst CHANGELOG.txt
 %{_bindir}/daphne
 
 %changelog

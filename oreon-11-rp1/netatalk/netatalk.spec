@@ -2,7 +2,7 @@
 
 Name:              netatalk
 Epoch:             5
-Version:           4.4.1
+Version:           4.5.1
 Release:           1%{?dist}
 Summary:           Open Source Apple Filing Protocol(AFP) File Server
 # Automatically converted from old format: GPL+ and GPLv2 and GPLv2+ and LGPLv2+ and BSD and FSFUL and MIT - review is highly recommended.

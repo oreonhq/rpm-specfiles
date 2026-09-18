@@ -7,7 +7,7 @@
 %global crate oid
 
 Name:           rust-oid
-Version:        0.2.1
+Version:        0.3.0
 Release:        %autorelease
 Summary:        Rust-native library for building, parsing, and formating Object Ident...
 

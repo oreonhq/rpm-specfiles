@@ -7,7 +7,7 @@
 %global crate gix-lock
 
 Name:           rust-gix-lock
-Version:        20.0.1
+Version:        24.0.0
 Release:        %autorelease
 Summary:        A git-style lock-file implementation
 

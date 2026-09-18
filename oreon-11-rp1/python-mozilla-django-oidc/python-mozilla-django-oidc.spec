@@ -1,46 +1,62 @@
-%global source0_hash c9e6e0e33c319d1261d53cbd474df0dbacb79ddcff1ace97bbbcaf2fe6636df5
+%global source0_hash none
 
-%global shortname mozilla-django-oidc
-Name:          python-%{shortname}
-Version:       4.0.1
-Release:       5%{?dist}
-Summary:       A django OpenID Connect library
+Name:           python-mozilla-django-oidc
+Version:        5.0.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A lightweight authentication and access management library for integration with OpenID Connect enabled authentication services.
 
-License:       MPL-2.0
-URL:           https://github.com/mozilla/%{shortname}/
-Source0:       https://github.com/mozilla/%{shortname}/archive/%{version}.tar.gz#/%{shortname}-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MPL-2.0
+URL:            https://github.com/mozilla/mozilla-django-oidc
+Source:         %{pypi_source mozilla_django_oidc}
 
-BuildArch: noarch
-BuildRequires: python3-devel
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-A django OpenID Connect library.
 
-%package -n python3-%{shortname}
-Summary:       A django OpenID Connect library
-%{?python_provide:%python_provide python3-%{shortname}}
-Requires:      python3-django
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'mozilla-django-oidc' generated automatically by pyp2spec.}
 
-%description -n python3-%{shortname}
-A django OpenID Connect library.
+%description %_description
+
+%package -n     python3-mozilla-django-oidc
+Summary:        %{summary}
+
+%description -n python3-mozilla-django-oidc %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-mozilla-django-oidc build,dev,docs,drf,lint,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n mozilla_django_oidc-%{version}
 
-%autosetup -n %{shortname}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x build,dev,docs,drf,lint,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files mozilla_django_oidc
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{shortname} -f %{pyproject_files}
-%license LICENSE
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-mozilla-django-oidc -f %{pyproject_files}
 
 %changelog
 %autochangelog

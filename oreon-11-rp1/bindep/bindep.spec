@@ -8,8 +8,8 @@
 %bcond tests 1
 
 Name:           bindep
-Version:        2.11.0
-Release:        12%{?dist}
+Version:        2.14.0
+Release:        1%{?dist}
 Summary:        Binary dependency utility
 
 License:        Apache-2.0

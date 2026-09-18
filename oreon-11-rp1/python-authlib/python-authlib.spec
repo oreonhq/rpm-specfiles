@@ -1,26 +1,24 @@
-%global source0_hash 6f94a1259f69645d6d6c4ecf9a8f32a9c3e2b2d2e6b8163cc90bc0e4a7245939
-
-%bcond tests 1
-%bcond tests_clients %{undefined rhel}
-%bcond tests_flask %{undefined rhel}
-%bcond tests_django %{undefined rhel}
-%bcond tests_jose %{undefined rhel}
+%global source0_hash none
 
 Name:           python-authlib
-Version:        1.5.2
+Version:        1.8.0
 Release:        %autorelease
-Summary:        Build OAuth and OpenID Connect servers in Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The ultimate Python library in building OAuth and OpenID Connect servers and clients.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://github.com/lepture/authlib
-Source0:        %{url}/archive/v%{version}/authlib-%{version}.tar.gz
+URL:            https://github.com/authlib/authlib
+Source:         %{pypi_source authlib}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Python library for building OAuth and OpenID Connect servers. JWS, JWK, JWA,
-JWT are included.}
+This is package 'authlib' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -29,42 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-authlib %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n authlib-%{version}
 
-# Remove OAuth 1 tests, because they require support for SHA1.
-sed -i '/tests\.django\.test_oauth1/d' tests/django/settings.py
-rm -rf \
-  tests/django/test_oauth1 \
-  tests/flask/test_oauth1 \
-  tests/clients/test_requests/test_oauth1_session.py \
-  tests/clients/test_httpx/test_oauth1_client.py
-
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-sed -i 's/coverage run --source=authlib -p -m pytest/python3 -m pytest/' tox.ini
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-e %{toxenv}%{?with_tests_clients:,%{toxenv}-clients}%{?with_tests_flask:,%{toxenv}-flask}%{?with_tests_django:,%{toxenv}-django}%{?with_tests_jose:,%{toxenv}-jose}}
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files authlib
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-%tox
-%endif
-# for import check, we exclude modules with optional dependencies:
-%pyproject_check_import -e '*django*' -e '*flask*' -e '*httpx*' -e '*requests*' -e '*sqla*' -e '*starlette*'
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-authlib -f %{pyproject_files}
-%license LICENSE
-%doc README.md
 
 %changelog
 %autochangelog

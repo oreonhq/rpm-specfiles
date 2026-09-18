@@ -1,7 +1,7 @@
 %global source0_hash 7a4b86658a7701253ed0fe8a66471e54e4cacbba66d7278f1759d3b3a33a02c9
 
 Name:           xfontsel
-Version:        1.1.1
+Version:        1.1.2
 Release:        %autorelease
 Summary:        Tool to list X11 core protocol fonts
 

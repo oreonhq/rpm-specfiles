@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           mockito
-Version:        5.8.0
+Version:        5.23.0
 Release:        %autorelease
 Summary:        Tasty mocking framework for unit tests in Java
 License:        MIT
@@ -37,7 +37,7 @@ BuildRequires:  mvn(org.objenesis:objenesis)
 BuildRequires:  mvn(org.opentest4j:opentest4j)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 5.8.0-16
+Obsoletes:      %{name}-javadoc < 5.23.0-16
 
 %description
 Mockito is a mocking framework that tastes really good. It lets you write

@@ -15,7 +15,7 @@
 %global bootstrap 0
 %global github_owner     webmozart
 %global github_name      assert
-%global github_version   1.12.1
+%global github_version   2.4.1
 %global github_commit    9be6926d8b485f55b9229203f962b51ed377ba68
 
 %global composer_vendor  webmozart
@@ -40,7 +40,7 @@
 
 Name:          php-%{composer_vendor}-%{composer_project}
 Version:       %{github_version}
-Release:       2%{?github_release}%{?dist}
+Release:       1%{?github_release}%{?dist}
 Summary:       Assertions to validate method input/output with nice error messages
 
 License:       MIT

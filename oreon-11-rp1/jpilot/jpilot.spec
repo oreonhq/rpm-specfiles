@@ -2,8 +2,8 @@
 
 Summary: pilot desktop software
 Name: jpilot
-Version: 1.8.2
-Release: 35%{?dist}
+Version: 2.1.0
+Release: 1%{?dist}
 License: GPL-2.0-only
 URL: https://www.jpilot.org/
 Source0: https://www.jpilot.org/tarballs/jpilot-%{version}.tar.gz

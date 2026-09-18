@@ -1,7 +1,7 @@
 %global source0_hash d34bd88dc89c5c1ed2545ec5c61e4606fc28beb200a6fecf8c3ed17694181866
 
 Name:           xml-commons-apis
-Version:        1.4.01
+Version:        2.0.2
 Release:        %autorelease
 Summary:        APIs for DOM, SAX, and JAXP
 License:        Apache-2.0 AND W3C AND SAX-PD-2.0
@@ -22,7 +22,7 @@ BuildRequires:  javapackages-local-openjdk25
 BuildRequires:  ant-openjdk25 
 BuildRequires:  apache-parent
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.4.01-59
+Obsoletes:      %{name}-javadoc < 2.0.2-59
 Provides:       xml-commons = %{version}-%{release}
 
 %description

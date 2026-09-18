@@ -36,8 +36,8 @@
 
 Summary: Low-level DNS(SEC) library with API
 Name: ldns
-Version: 1.9.0
-Release: 2%{?dist}
+Version: 1.9.2
+Release: 1%{?dist}
 
 License: BSD-3-Clause
 Url: https://www.nlnetlabs.nl/%{name}/

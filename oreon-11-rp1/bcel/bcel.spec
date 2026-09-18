@@ -1,7 +1,7 @@
 %global source0_hash 8ee16c601567363b484183f1816738d337ae93413cd2aa052e59f0003513151e
 
 Name:           bcel
-Version:        6.10.0
+Version:        6.13.0
 Release:        %autorelease
 Summary:        Byte Code Engineering Library
 License:        Apache-2.0

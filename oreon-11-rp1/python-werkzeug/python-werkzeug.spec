@@ -1,106 +1,64 @@
-%global source0_hash 210c6bede5a420a913956b4791a7f4d6843a43b6fcee4dfa08a65e93007d0d25
+%global source0_hash none
 
-%global srcname werkzeug
-%global modname werkzeug
-
-# Tests require among others python-greenlet which is not available
-# during the early phases of a new Python integration, which in turn blocks
-# many other important packages from building.
-# With the conditionalized build, the rebuild can proceed
-%bcond tests 1
-
-Name:           python-%{modname}
-Version:        3.1.6
+Name:           python-werkzeug
+Version:        3.1.8
 Release:        %autorelease
-Summary:        Comprehensive WSGI web application library
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The comprehensive WSGI web application library.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
-URL:            https://werkzeug.palletsprojects.com
-Source0:        https://files.pythonhosted.org/packages/source/w/werkzeug/werkzeug-3.1.6.tar.gz
-
-# Fixes PYTHONPATH handling in tests
-# Upstream: https://github.com/pallets/werkzeug/pull/2172
-Patch:          preserve-any-existing-PYTHONPATH-in-tests.patch
+URL:            https://github.com/pallets/werkzeug/
+Source:         %{pypi_source werkzeug}
 
 BuildArch:      noarch
-
-%global _description %{expand:
-Werkzeug
-========
-
-Werkzeug started as simple collection of various utilities for WSGI
-applications and has become one of the most advanced WSGI utility
-modules.  It includes a powerful debugger, full featured request and
-response objects, HTTP utilities to handle entity tags, cache control
-headers, HTTP dates, cookie handling, file uploads, a powerful URL
-routing system and a bunch of community contributed addon modules.
-
-Werkzeug is unicode aware and doesn't enforce a specific template
-engine, database adapter or anything else.  It doesn't even enforce
-a specific way of handling requests and leaves all that up to the
-developer. It's most useful for end user applications which should work
-on as many server environments as possible (such as blogs, wikis,
-bulletin boards, etc.).}
-
-%description %{_description}
-
-%package -n python3-%{modname}
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{modname}}
-BuildRequires:  make
 BuildRequires:  python3-devel
 
-%description -n python3-%{modname} %{_description}
 
-%package -n python3-werkzeug-doc
-Summary:        Documentation for python3-werkzeug
-Requires:       python3-werkzeug = %{version}-%{release}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'werkzeug' generated automatically by pyp2spec.}
 
-%description -n python3-werkzeug-doc
-Documentation and examples for python3-werkzeug.
+Patch:          preserve-any-existing-PYTHONPATH-in-tests.patch
 
-%generate_buildrequires
-%if %{with tests}
-# -t picks test.txt by default which contains too tight pins
-%pyproject_buildrequires -g docs,tests
-%else
-%pyproject_buildrequires -g docs
-%endif
+%description %_description
+
+%package -n     python3-werkzeug
+Summary:        %{summary}
+
+%description -n python3-werkzeug %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-werkzeug watchdog
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{srcname}-%{version}
-# Allow to use python-sphinx>=9
-sed -i 's/sphinx<9/sphinx/g' pyproject.toml
-find examples/ -type f -name '*.png' -executable -print -exec chmod -x "{}" +
+%autosetup -p1 -n werkzeug-%{version}
+
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x watchdog
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{modname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-pushd docs
-# PYTHONPATH to prevent "'Werkzeug' must be installed to build the documentation."
-make PYTHONPATH=%{buildroot}/%{python3_sitelib} SPHINXBUILD=sphinx-build-3 html
-rm -v _build/html/.buildinfo
-popd
 
 %check
-%py3_check_import %{modname}
-%if %{with tests}
-# deselect the test_exclude_patterns test case as it's failing
-# when we set PYTHONPATH: https://github.com/pallets/werkzeug/issues/2404
-%pytest -Wdefault --deselect tests/test_serving.py::test_exclude_patterns
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{modname} -f %{pyproject_files}
-%license LICENSE.txt
-%doc CHANGES.rst README.md
 
-%files -n python3-werkzeug-doc
-%doc docs/_build/html examples
+%files -n python3-werkzeug -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.1.6-1

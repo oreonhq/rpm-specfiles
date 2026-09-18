@@ -1,7 +1,7 @@
 %global source0_hash 69170ef84891a0e3ccce50833ac90db75de26b2c8432050256c1bf4ec26c8ad7
 
 Name:           uacme
-Version:        1.8.0 
+Version:        1.8.1 
 Release:        1%{?dist}
 Summary:        Lightweight SSL certificate verification and issue client
 

@@ -10,8 +10,8 @@
 %global podofo_resources_commit 394fcb3ea4c8e89bbabafbc1aa6caf20f801620c
 
 Name:           podofo
-Version:        1.0.3
-Release:        3%{?dist}
+Version:        1.1.2
+Release:        1%{?dist}
 Summary:        Tools and libraries to work with the PDF file format
 
 License:        LGPL-2.0-or-later

@@ -1,65 +1,64 @@
-%global source0_hash 582db6e14315f9b08cbd2df39b136dc344bfe8a27c2f05b995460fb0969ec19e
+%global source0_hash none
 
-%global srcname pytest-mpl
+Name:           python-pytest-mpl
+Version:        0.19.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        pytest plugin to help with testing figures output from Matplotlib
 
-Name:           python-%{srcname}
-Version:        0.13
-Release:        20%{?dist}
-Summary:        Pytest plugin for testing figure output from Matplotlib
-
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-2-Clause
 URL:            https://github.com/matplotlib/pytest-mpl
-Source0:        https://files.pythonhosted.org/packages/source/p/%{srcname}/%{srcname}-%{version}.tar.gz
-# Probably not going upstream.
-Patch0001:      0001-Increase-tolerance-for-new-FreeType.patch
+Source:         %{pypi_source pytest_mpl}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%global _description \
-This is a plugin to facilitate image comparison for Matplotlib figures. \
-For each figure to test, an image is generated and then subtracted from an \
-existing reference image. If the RMS of the residual is larger than \
-a user-specified tolerance, the test will fail. Alternatively, the generated \
-image can be hashed and compared to an expected value.
 
-%description %{_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pytest-mpl' generated automatically by pyp2spec.}
 
-%package -n     python3-%{srcname}
+Patch0001:      0001-Increase-tolerance-for-new-FreeType.patch
+
+%description %_description
+
+%package -n     python3-pytest-mpl
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(matplotlib)
-BuildRequires:  python3dist(pillow)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(setuptools)
+%description -n python3-pytest-mpl %_description
 
-%description -n python3-%{srcname} %{_description}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pytest-mpl docs,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_mpl-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
-# Remove bundled egg-info
-rm -rf %{srcname}.egg-info
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Skip networked tests.
-MPLBACKEND=Agg %{pytest} --mpl tests -k 'not test_succeeds_remote and not test_succeeds_faulty_mirror'
-MPLBACKEND=Agg %{pytest} tests -k 'not test_succeeds_remote and not test_succeeds_faulty_mirror'
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname}
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/pytest_mpl/
-%{python3_sitelib}/pytest_mpl-%{version}-py%{python3_version}.egg-info/
+
+%files -n python3-pytest-mpl -f %{pyproject_files}
 
 %changelog
 %autochangelog

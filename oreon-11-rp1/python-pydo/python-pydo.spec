@@ -1,56 +1,62 @@
-%global source0_hash 77c7e97b1b7fe3ef9aeed2198e5846e06502585ed1ac6f255ee1f215e5f5deda
+%global source0_hash none
 
-%global srcname pydo
+Name:           python-pydo
+Version:        0.40.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The official client for interacting with the DigitalOcean API
 
-Name: python-%{srcname}
-Summary: PyDo - DigitalOcean python library
-Version: 0.24.0
-Release: 3%{?dist}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0
+URL:            https://github.com/digitalocean/pydo
+Source:         %{pypi_source pydo}
 
-License: ASL 2.0
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-Url: https://github.com/digitalocean/%{srcname}
-Source:         %{url}/archive/v%{version}/pydo-%{version}.tar.gz
 
-BuildArch: noarch
-BuildRequires: python3-devel
-BuildRequires: python3dist(poetry-core)
-# Test dependencies
-BuildRequires:  python3dist(aioresponses)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-asyncio)
-BuildRequires:  python3dist(responses)
-
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Official DigitalOcean Python Client based on the DO OpenAPIv3 specification.}
+This is package 'pydo' generated automatically by pyp2spec.}
+
 %description %_description
 
-%package -n python3-pydo
-Summary: %{summary}
+%package -n     python3-pydo
+Summary:        %{summary}
+
 %description -n python3-pydo %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pydo aio
 
-%autosetup -n %{srcname}-%{version}
+
+%prep
+%autosetup -p1 -n pydo-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x aio
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest -rA --tb=short tests/mocked/.
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
-%license LICENSE
+
+%files -n python3-pydo -f %{pyproject_files}
 
 %changelog
 %autochangelog

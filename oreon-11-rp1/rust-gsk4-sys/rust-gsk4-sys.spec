@@ -7,7 +7,7 @@
 %global crate gsk4-sys
 
 Name:           rust-gsk4-sys
-Version:        0.11.1
+Version:        0.11.4
 Release:        %autorelease
 Summary:        FFI bindings of GSK 4
 

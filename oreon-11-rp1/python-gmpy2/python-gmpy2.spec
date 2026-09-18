@@ -1,106 +1,62 @@
-%global source0_hash 2d943cc9051fcd6b15b2a09369e2f7e18c526bc04c210782e4da61b62495eb4a
-
-# If docs should point to local python3-docs rather than website.
-# python3-docs is not shipped in RHEL 9+
-%bcond py3docs %{undefined rhel}
-# tests require hypothesis, which is not included in RHEL
-%bcond tests %{undefined rhel}
+%global source0_hash none
 
 Name:           python-gmpy2
-Version:        2.3.0
+Version:        2.3.1
 Release:        %autorelease
-Summary:        Python interface to GMP, MPFR, and MPC
+# Fill in the actual package summary to submit package to Fedora
+Summary:        gmpy2 interface to GMP, MPFR, and MPC for Python
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-3.0-or-later
-URL:            https://gmpy2.readthedocs.io/
-VCS:            git:https://github.com/aleaxit/gmpy.git
-Source:         %pypi_source gmpy2
+URL:            https://github.com/gmpy2/gmpy2
+Source:         %{pypi_source gmpy2}
 
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x docs%{?with_tests:,tests}
-BuildOption(install): -l gmpy2
-
+BuildRequires:  python3-devel
 BuildRequires:  gcc
-BuildRequires:  gmp-devel
-BuildRequires:  libmpc-devel
-BuildRequires:  make
-BuildRequires:  pkgconfig(mpfr)
-%if %{with py3docs}
-BuildRequires:  python3-docs
-%endif
-BuildRequires:  %{py3_dist sphinx}
 
-%global _docdir_fmt %{name}
 
-%global common_desc %{expand:This package contains a C-coded Python extension module that supports
-multiple-precision arithmetic.  It is the successor to the original gmpy
-module.  The gmpy module only supported the GMP multiple-precision library.
-Gmpy2 adds support for the MPFR (correctly rounded real floating-point
-arithmetic) and MPC (correctly rounded complex floating-point arithmetic)
-libraries.  It also updates the API and naming conventions to be more
-consistent and support the additional functionality.}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'gmpy2' generated automatically by pyp2spec.}
 
-%description
-%common_desc
+%description %_description
 
-%package -n python3-gmpy2
-Summary:        Python 3 interface to GMP, MPFR, and MPC
+%package -n     python3-gmpy2
+Summary:        %{summary}
 
-%description -n python3-gmpy2
-%common_desc
+%description -n python3-gmpy2 %_description
 
-%package doc
-# The content is LGPL-3.0-or-later.  Files added by Sphinx have the following
-# licences:
-# _static/*: BSD-2-Clause, except for the following:
-# _static/css/*: MIT
-# _static/jquery.js: MIT
-# _static/js/*: MIT
-# _static/pygments.css: LGPL-3.0-or-later
-# genindex.html: BSD-2-Clause
-# search.html: BSD-2-Clause
-# searchindex.js: BSD-2-Clause
-License:        LGPL-3.0-or-later AND BSD-2-Clause AND MIT
-Summary:        Documentation for gmpy2
-BuildArch:      noarch
-Provides:       bundled(js-jquery)
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-gmpy2 docs,tests
 
-%description doc
-This package contains API documentation for gmpy2.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n gmpy2-%{version}
 
-%autosetup -n gmpy2-%{version} -p1
 
-%if %{with py3docs}
-# Use local objects.inv for intersphinx
-sed -e "s|\('https://docs\.python\.org/3/', \)None|\1'%{_docdir}/python3-docs/html/objects.inv'|" \
-    -i docs/conf.py
-%endif
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,tests
 
-# Permit use of setuptools 80
-sed -i 's/,<80//' pyproject.toml
 
-%build -p
-# Do not pass -pthread to the compiler or linker
-export LDSHARED="gcc -shared"
+%build
+%pyproject_wheel
 
-%install -a
-PYTHONPATH=%{buildroot}%{python3_sitearch} make -C docs html
+
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-%pytest -v
-%else
-%pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-gmpy2 -f %{pyproject_files}
-%doc README.rst
-
-%files doc
-%doc docs/_build/html/*
 
 %changelog
 %autochangelog

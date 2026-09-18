@@ -1,8 +1,8 @@
 %global source0_hash 064f8d2c358895c7e0bea9ae956f8d46f3f057772cb97f2743a11d478a0f68a0
 
 Name:           platform
-Version:        2.1.0.1
-Release:        25%{?dist}
+Version:        2.2.0
+Release:        1%{?dist}
 Summary:        Platform support library used by libCEC and binary add-ons for Kodi
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

@@ -7,7 +7,7 @@
 %global crate kbs-types
 
 Name:           rust-kbs-types
-Version:        0.14.0
+Version:        0.18.0
 Release:        %autorelease
 Summary:        Rust (de)serializable types for KBS
 

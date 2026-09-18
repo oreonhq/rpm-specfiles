@@ -4,7 +4,7 @@
 %global debug_package %{nil}
 
 %global forgeurl https://github.com/jlblancoc/nanoflann
-Version:        1.8.0
+Version:        1.13.0
 %forgemeta
 
 Name:           nanoflann

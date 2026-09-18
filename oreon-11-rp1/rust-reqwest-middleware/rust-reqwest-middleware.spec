@@ -7,7 +7,7 @@
 %global crate reqwest-middleware
 
 Name:           rust-reqwest-middleware
-Version:        0.5.1
+Version:        0.5.2
 Release:        %autorelease
 Summary:        Wrapper around reqwest to allow for client middleware chains
 

@@ -7,7 +7,7 @@
 %global crate freetype
 
 Name:           rust-freetype
-Version:        0.7.2
+Version:        0.8.0
 Release:        %autorelease
 Summary:        Bindings for Freetype used by Servo
 

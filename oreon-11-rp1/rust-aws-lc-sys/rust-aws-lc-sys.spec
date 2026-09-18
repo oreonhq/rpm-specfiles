@@ -7,7 +7,7 @@
 %global crate aws-lc-sys
 
 Name:           rust-aws-lc-sys
-Version:        0.41.0
+Version:        0.45.0
 Release:        %autorelease
 Summary:        AWS-LC is a general-purpose cryptographic library maintained by the A...
 

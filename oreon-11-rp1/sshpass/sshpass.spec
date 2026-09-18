@@ -2,8 +2,8 @@
 
 Summary:    Non-interactive SSH authentication utility
 Name:       sshpass
-Version:    1.09
-Release:    12%{?dist}
+Version:    1.10
+Release:    1%{?dist}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:    GPL-2.0-only
 Url:        http://sshpass.sourceforge.net/

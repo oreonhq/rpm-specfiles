@@ -21,8 +21,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{pk_vendor}-%{pk_project}
-Version:        2.0.1
-Release:        11%{?gh_date:.%{gh_date}git%{gh_short}}%{?dist}
+Version:        2.0.3
+Release:        1%{?gh_date:.%{gh_date}git%{gh_short}}%{?dist}
 Summary:        Check Symfony requirements and give recommendations
 
 License:        MIT

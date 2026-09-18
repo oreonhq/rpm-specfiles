@@ -1,57 +1,56 @@
-%global source0_hash 8867fa6966aeae3fe854697c9fb7d429666ae7ae8edda9b77c87c8e616ba6c65
+%global source0_hash none
 
-%global srcname geodatasets
-
-Name:           python-%{srcname}
-Version:        2023.12.0
+Name:           python-geodatasets
+Version:        2026.5.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Spatial data examples
 
-License:        BSD-3-Clause
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/geopandas/geodatasets
-Source0:        %pypi_source geodatasets
+Source:         %{pypi_source geodatasets}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-# Test requirements
-BuildRequires:  python3-geopandas
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Fetch links or download and cache spatial data example files.
+This is package 'geodatasets' generated automatically by pyp2spec.}
 
-The geodatasets contains an API on top of a JSON with metadata of externally
-hosted datasets containing geospatial information useful for illustrative and
-educational purposes.}
+%description %_description
 
-%description %{_description}
-
-%package -n     python3-%{srcname}
+%package -n     python3-geodatasets
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-geodatasets %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n geodatasets-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{pytest} -m 'not request'
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-geodatasets -f %{pyproject_files}
 
 %changelog
 %autochangelog

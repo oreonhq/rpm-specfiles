@@ -1,73 +1,61 @@
-%global source0_hash d14b2ab39f0b24ac3a5dfe4bb1c64cee423e2cc097658056f27f121960c70885
+%global source0_hash none
 
-%global modname boxsdk
+Name:           python-boxsdk
+Version:        10.15.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Official Box Python SDK
 
-%bcond_with tests
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/box/box-python-sdk.git
+Source:         %{pypi_source boxsdk}
 
-Name:               python-boxsdk
-Version:            10.3.0
-Release:            2%{?dist}
-Summary:            Python wrapper for the Box API
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-License:            Apache-2.0 
-URL:                https://github.com/box/box-python-sdk
-Source0:            %{url}/archive/v%{version}/%{modname}-%{version}.tar.gz
-BuildArch:          noarch
 
-%description
-%{summary}.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'boxsdk' generated automatically by pyp2spec.}
 
-%package -n python%{python3_pkgversion}-%{modname}
-Summary:            %{summary}
-BuildRequires:      python%{python3_pkgversion}-devel
-BuildRequires:      python%{python3_pkgversion}-requests
-BuildRequires:      python%{python3_pkgversion}-six
-BuildRequires:      python%{python3_pkgversion}-wrapt
-BuildRequires:      python%{python3_pkgversion}-requests-toolbelt
-BuildRequires:      python%{python3_pkgversion}-attrs
-# Tests don't pass at the moment.
-# https://github.com/box/box-python-sdk/issues/494
-%if %{with tests}
-BuildRequires:      python%{python3_pkgversion}-pytest
-BuildRequires:      python%{python3_pkgversion}-bottle
-BuildRequires:      python%{python3_pkgversion}-redis
-BuildRequires:      python%{python3_pkgversion}-mock
-BuildRequires:      python%{python3_pkgversion}-sqlalchemy
-BuildRequires:      python%{python3_pkgversion}-jsonpatch
-BuildRequires:      python%{python3_pkgversion}-cryptography
-BuildRequires:      python%{python3_pkgversion}-pytz
-BuildRequires:      python%{python3_pkgversion}-jwt
-%endif
+%description %_description
 
-%description -n python%{python3_pkgversion}-%{modname}
-%{summary}.
+%package -n     python3-boxsdk
+Summary:        %{summary}
 
-Python %{python3_version} version.
+%description -n python3-boxsdk %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-boxsdk dev,jwt,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n boxsdk-%{version}
 
-%autosetup -n box-python-sdk-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,jwt,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l box_sdk_gen
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-pytest-3
-%endif
 
-%files -n python%{python3_pkgversion}-%{modname} -f %{pyproject_files}
-%doc *.md
+%files -n python3-boxsdk -f %{pyproject_files}
 
 %changelog
 %autochangelog

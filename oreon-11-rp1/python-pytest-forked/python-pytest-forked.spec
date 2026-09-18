@@ -1,58 +1,59 @@
-%global source0_hash 4dafd46a9a600f65d822b8f605133ecf5b3e1941ebb3588e943b4e3eb71a5a3f
+%global source0_hash none
 
-%global pypi_name pytest-forked
+Name:           python-pytest-forked
+Version:        1.7.5
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        run tests in isolated forked subprocesses
 
-Name:           python-%{pypi_name}
-Version:        1.6.0
-Release:        14%{?dist}
-Summary:        py.test plugin for running tests in isolated forked subprocesses
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/pytest-dev/pytest-forked
-Source0:        %{pypi_source}
-
-# compatibility with pytest 8
-Patch:          https://github.com/pytest-dev/pytest-forked/commit/b2742322d3.patch
+Source:         %{pypi_source pytest_forked}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The pytest-forked plugin extends py.test by adding an option to run tests in
-isolated forked subprocesses. This is useful if you have tests involving C or
-C++ libraries that might crash the process. To use the plugin, simply use the
---forked argument when invoking py.test.}
+This is package 'pytest-forked' generated automatically by pyp2spec.}
+
+Patch:          https://github.com/pytest-dev/pytest-forked/commit/b2742322d3.patch
 
 %description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-pytest-forked
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{pypi_name}}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-pytest-forked %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_forked-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p1
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%doc example/boxed.txt README.rst
-%license LICENSE
-%{python3_sitelib}/pytest_forked*
+
+%files -n python3-pytest-forked -f %{pyproject_files}
 
 %changelog
 %autochangelog

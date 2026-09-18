@@ -7,7 +7,7 @@
 %global crate descape
 
 Name:           rust-descape
-Version:        2.0.3
+Version:        3.0.0
 Release:        %autorelease
 Summary:        Adds a single extension trait for &str to unescape any backslashes.
 

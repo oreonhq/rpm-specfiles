@@ -1,64 +1,62 @@
-%global source0_hash 9374d047a575c8f781b94454db5cab590b6029505f488d12899ddb10a4af1cf4
+%global source0_hash none
 
-%global pypi_name responses
+Name:           python-responses
+Version:        0.26.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A utility library for mocking out the _requests_ Python library.
 
-Name:           python-%{pypi_name}
-Version:        0.25.8
-Release:        4%{?dist}
-Summary:        Python library to mock out calls with Python requests
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/getsentry/responses
-Source:         %{pypi_source}
+Source:         %{pypi_source responses}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# Upstream added various requirements in its "tests" extras which are only
-# required tests we don't want to run in Fedora (coverage) and strict version
-# requirements (pytest >= 7.0 as of March 2022 - not yet in rawhide).
-# Patching setup.py is error prone as the patch file has to be regenerated
-# every time upstream bumps a version requirement.
-# Therefore just list the build requirements here explicitely.
-BuildRequires:  python3-pytest python3-pytest-xdist
 
-%description
-A utility library for mocking out the requests Python library.
 
-%package -n python3-%{pypi_name}
-Summary:        Python library to mock out calls with Python requests
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'responses' generated automatically by pyp2spec.}
 
-%description -n python%{python3_pkgversion}-%{pypi_name}
-A utility library for mocking out the requests Python library.
+%description %_description
+
+%package -n     python3-responses
+Summary:        %{summary}
+
+%description -n python3-responses %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-responses tests
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n responses-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p1
-
-# Remove unnecessary dependencies
-sed -i '/coverage/d' setup.py
-sed -i '/pytest-cov/d' setup.py
-sed -i '/flake8/d' setup.py
-sed -i '/types-requests/d' setup.py
-sed -i '/mypy/d' setup.py
 
 %generate_buildrequires
-%pyproject_buildrequires -r -x tests
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x tests
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
-# we do not ship tests
-sed -i -e '/\/tests\//d' %{pyproject_files}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -n auto --asyncio-mode=auto
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.rst
+
+%files -n python3-responses -f %{pyproject_files}
 
 %changelog
 %autochangelog

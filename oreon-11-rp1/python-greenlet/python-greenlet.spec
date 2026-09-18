@@ -1,75 +1,65 @@
-%global source0_hash 5d854395dc71b38a22e7e25467e7fc66e6a6fe538165318416cd2bb892692c6c
+%global source0_hash none
 
-%global         modname greenlet
-
-Name:           python-%{modname}
-Version:        3.3.0
-Release:        2%{?dist}
+Name:           python-greenlet
+Version:        3.5.6
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Lightweight in-process concurrent programming
-License:        MIT AND PSF-2.0
-URL:            https://github.com/python-greenlet/greenlet
-Source0:        https://github.com/python-greenlet/greenlet/archive/refs/tags/3.3.0.tar.gz#/greenlet-3.3.0.tar.gz
 
-# Skip leak checking to avoid a missing dependency, `objgraph`
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT AND PSF-2.0
+URL:            https://greenlet.readthedocs.io
+Source:         %{pypi_source greenlet}
+
+BuildRequires:  python3-devel
+BuildRequires:  gcc
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'greenlet' generated automatically by pyp2spec.}
+
 Patch:        https://patch-diff.githubusercontent.com/raw/python-greenlet/greenlet/pull/482.patch
-# Backport patch to fix python 3.15 builds
 Patch:          https://patch-diff.githubusercontent.com/raw/python-greenlet/greenlet/pull/482.patch
 
-BuildRequires:  gcc-c++
+%description %_description
 
-%global _description \
-The greenlet package is a spin-off of Stackless, a version of CPython\
-that supports micro-threads called "tasklets". Tasklets run\
-pseudo-concurrently (typically in a single or a few OS-level threads)\
-and are synchronized with data exchanges on "channels".
-
-%description %{_description}
-
-%package -n     python3-%{modname}
+%package -n     python3-greenlet
 Summary:        %{summary}
-BuildRequires:  python3-devel
-# For tests
-BuildRequires:  python3-psutil
 
-%description -n python3-%{modname} %{_description}
+%description -n python3-greenlet %_description
 
-Python 3 version.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-greenlet docs,test
 
-%package -n     python3-%{modname}-devel
-Summary:        C development headers for python3-%{modname}
-Requires:       python3-%{modname}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
-%description -n python3-%{modname}-devel
-%{summary}.
-
-Python 3 version.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{modname}-%{version} -p1
+%autosetup -p1 -n greenlet-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{modname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-cd /
-PYTHONPATH="%{buildroot}%{python3_sitearch}" \
-  %{python3} -m unittest discover -v \
-  -s "%{buildroot}%{python3_sitearch}/greenlet/tests" \
-  -t "%{buildroot}%{python3_sitearch}"
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{modname} -f %{pyproject_files}
-%doc AUTHORS README.rst
 
-%files -n python3-greenlet-devel
-%{_includedir}/python%{python3_version}*/%{modname}/
+%files -n python3-greenlet -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.3.0-2

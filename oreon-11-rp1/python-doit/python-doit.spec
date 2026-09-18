@@ -1,95 +1,65 @@
-%global source0_hash 71d07ccc9514cb22fe59d98999577665eaab57e16f644d04336ae0b4bae234bc
+%global source0_hash none
 
-%global srcname doit
+Name:           python-doit
+Version:        0.37.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        doit - Automation Tool
 
-Name:           python-%{srcname}
-Version:        0.36.0
-Release:        7%{?dist}
-Summary:        Automation Tool
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pydoit.org/
-Source0:        https://pypi.io/packages/source/d/%{srcname}/%{srcname}-%{version}.tar.gz
-Patch1:         python-doit_ignore_versions.patch
+URL:            https://pydoit.org
+Source:         %{pypi_source doit}
 
 BuildArch:      noarch
-
-BuildRequires:  make
-BuildRequires:  strace
 BuildRequires:  python3-devel
 
-%global _description %{expand:
-python-doit is a build tool (in the same class as make, cmake, scons,
-ant and others)
 
-python-doit can be used as:
-  * a build tool (generic and flexible)
-  * home of your management scripts (it helps you organize and combine
-   shell scripts and python scripts)
-  * a functional tests runner (combine together different tools)
-  * a configuration management system
-  * manage computational pipelines}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'doit' generated automatically by pyp2spec.}
+
+Patch1:         python-doit_ignore_versions.patch
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-doit
 Summary:        %{summary}
-%{?python_enable_dependency_generator}
-%{?python_provide:%python_provide python3-%{srcname}}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-doit %_description
 
-%package -n python3-%{srcname}-doc
-Summary:        Documentation for %{name}
-Requires:       python3-%{srcname} = %{version}-%{release}
-%{?python_provide:%python_provide python3-%{srcname}-doc}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-doit cloudpickle,toml
 
-%description -n python3-%{srcname}-doc
-%{name} documentation
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n doit-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-
-find -type f -exec sed -i '1s=^#! /usr/bin/\(python\|env python\)[23]\?=#!%{__python3}=' {} +
 
 %generate_buildrequires
-%pyproject_buildrequires dev_requirements.txt doc_requirements.txt -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x cloudpickle,toml
+
 
 %build
 %pyproject_wheel
 
-cd doc
-PYTHONPATH=.. make html SPHINXBUILD=sphinx-build-3
-rm -rf _build/html/_sources/ _build/html/.buildinfo
-cd -
 
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-install -p -D -m 0644 bash_completion_doit %{buildroot}%{_sysconfdir}/bash_completion.d/doit
-%pyproject_save_files %{srcname}
 
 %check
-# Is impossible to run tests because the testsuite is not ready for Python 3
-# environment and there is also one unresolved test dependency doit-py
-# %{__python3} -m pytest
-%py3_check_import %{srcname}
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
+
+%files -n python3-doit -f %{pyproject_files}
 %{_bindir}/doit
-%license LICENSE
-%doc README.rst
-%{_sysconfdir}/bash_completion.d/doit
-
-%files -n python3-%{srcname}-doc
-%license LICENSE
-# doc is not present in the tar ball (reported upstream)
-#%doc doc/tutorial
-%doc doc/_build/html
-%doc CHANGES
-%doc TODO.txt
 
 %changelog
 %autochangelog

@@ -14,8 +14,8 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        0.14.3
-Release:        8%{?dist}
+Version:        0.14.4
+Release:        1%{?dist}
 Summary:        Constraint manipulation
 
 License:        BSD-2-Clause

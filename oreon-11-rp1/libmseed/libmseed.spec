@@ -1,8 +1,8 @@
 %global source0_hash 77a2d335416a1debd2e01251e9cbca5d7f81dc993dc59ca356810c24ab8c84ec
 
 Name:		libmseed
-Version:	2.19.5
-Release:	22%{?dist}
+Version:	3.5.4
+Release:	1%{?dist}
 License:	LGPL-3.0-or-later
 Summary:	A C library framework for manipulating and managing SEED data records
 Url:		https://www.iris.edu/ds/nodes/dmc/software/downloads/libmseed

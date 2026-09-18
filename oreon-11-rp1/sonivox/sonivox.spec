@@ -1,7 +1,7 @@
 %global source0_hash 23a7f29c617e791dfcb50b75eef41464e4bf3fca15b19da395a64373ff5d8456
 
 Name:           sonivox
-Version:        3.6.12
+Version:        4.0.2
 Release:        %{autorelease}
 Summary:        Fork of the AOSP 'platform_external_sonivox' to use out of Android
 

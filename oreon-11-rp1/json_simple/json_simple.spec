@@ -1,8 +1,8 @@
 %global source0_hash d1e45020d3d08855d8b393c6e6c4457931cf2c98c0c61f2b77f8bfb8348e7a1d
 
 Name:           json_simple
-Version:        1.1.1
-Release:        40%{?dist}
+Version:        1_1_1
+Release:        1%{?dist}
 Summary:        Simple Java toolkit for JSON
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0

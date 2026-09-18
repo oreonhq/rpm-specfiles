@@ -35,8 +35,8 @@
 %global _package_note_file  %{_builddir}/%{name}-%{version}/.package_note-%{name}-%{version}-%{release}.%{_arch}.ld
 
 Name:           cgit
-Version:        1.2.3
-Release:        19%{?dist}
+Version:        1.3.1
+Release:        1%{?dist}
 Summary:        A fast web interface for git
 
 License:        GPL-2.0-only

@@ -1,51 +1,62 @@
-%global source0_hash b6e6bbd7e7eef4287a8b4f6f4ae61769d0de1a38db7d61ef68f8b991e2bd6012
+%global source0_hash none
 
-%global srcname fitdecode
-
-Name:           python-%{srcname}
-Version:        0.10.0
+Name:           python-fitdecode
+Version:        0.11.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        FIT file parser and decoder
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/polyvertex/fitdecode
-# PyPI tarball doesn't include tests
-Source:         %{url}/archive/v%{version}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source fitdecode}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package provides a FIT file parsing and decoding library for Python.}
+This is package 'fitdecode' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{srcname}
+%package -n     python3-fitdecode
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-fitdecode %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-fitdecode dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n fitdecode-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst HISTORY.rst
+
+%files -n python3-fitdecode -f %{pyproject_files}
 %{_bindir}/fitjson
 %{_bindir}/fittxt
 

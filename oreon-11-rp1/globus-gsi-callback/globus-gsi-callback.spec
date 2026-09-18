@@ -2,8 +2,8 @@
 
 Name:		globus-gsi-callback
 %global _name %(tr - _ <<< %{name})
-Version:	6.2
-Release:	14%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Globus GSI Callback Library
 
 License:	Apache-2.0

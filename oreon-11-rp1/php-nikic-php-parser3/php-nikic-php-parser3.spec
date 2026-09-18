@@ -27,8 +27,8 @@
 %global eolv2   0
 
 Name:           php-%{gh_owner}-%{pk_project}%{major}
-Version:        3.1.5
-Release:        20%{?dist}
+Version:        5.9.0
+Release:        1%{?dist}
 Summary:        A PHP parser written in PHP - version %{major}
 
 # Automatically converted from old format: BSD - review is highly recommended.

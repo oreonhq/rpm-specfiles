@@ -1,9 +1,9 @@
 %global source0_hash 6215121737b4d659c063d2c49a4a246c85d7ff2d6be3ef14adfcc3203bd35f9f
 
-%global upstream_version     1.5.1
+%global upstream_version     1.7.2
 
 Name:            supernovas
-Version:         1.5.1
+Version:         1.7.2
 Release:         %autorelease
 Summary:         The Naval Observatory's NOVAS C astronomy library, made better 
 License:         Unlicense

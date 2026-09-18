@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/autpgrp
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.11.1
+Version:        1.12.0
 Release:        %autorelease
 Summary:        Compute the automorphism group of a p-Group in GAP
 

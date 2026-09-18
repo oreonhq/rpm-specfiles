@@ -1,8 +1,8 @@
 %global source0_hash d0ea664053e6f35cc556e060b161905004f03d0695473772d2fb8a37cf445591
 
 Name:           xapps
-Version:        3.2.2
-Release:        3%{?dist}
+Version:        3.3.5-unstable
+Release:        1%{?dist}
 Summary:        Common files for XApp desktop apps
 
 License:        LGPL-3.0-only

@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           javassist
-Version:        3.30.2
+Version:        3.33.0-GA
 Release:        %autorelease
 Summary:        Java Programming Assistant for Java bytecode manipulation
 License:        MPL-1.1 OR LGPL-2.1-or-later OR Apache-2.0
@@ -22,7 +22,7 @@ BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.hamcrest:hamcrest-all)
 
 # TODO Remove in Fedora 47
-Obsoletes:      %{name}-javadoc < 3.30.2-10
+Obsoletes:      %{name}-javadoc < 3.33.0-GA-10
 
 %description
 Javassist enables Java programs to define a new class at runtime and to

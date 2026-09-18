@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name: modulemd-tools
-Version: 0.16
-Release: 14%{?dist}
+Version: 0.16-1-1
+Release: 1%{?dist}
 Summary: Collection of tools for modular (in terms of Fedora Modularity origin) content creators
 License: MIT
 BuildArch: noarch

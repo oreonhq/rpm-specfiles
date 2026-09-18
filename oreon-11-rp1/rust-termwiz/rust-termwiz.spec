@@ -7,7 +7,7 @@
 %global crate termwiz
 
 Name:           rust-termwiz
-Version:        0.22.0
+Version:        0.23.3
 Release:        %autorelease
 Summary:        Terminal Wizardry for Unix and Windows
 

@@ -1,8 +1,8 @@
 %global source0_hash cb760211b056bfe44f4a1e180cc7cb201137e4d1572f2002cc1be728efd22660
 
 Name:           SDL2_mixer
-Version:        2.8.1
-Release:        4%{?dist}
+Version:        3.2.4
+Release:        1%{?dist}
 Summary:        Simple DirectMedia Layer - Sample Mixer Library
 
 License:        Zlib

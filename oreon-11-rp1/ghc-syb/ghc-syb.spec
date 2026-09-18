@@ -11,7 +11,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        0.7.2.4
+Version:        0.7.4
 Release:        %autorelease
 Summary:        Scrap Your Boilerplate
 

@@ -7,7 +7,7 @@
 %global crate freetype-rs
 
 Name:           rust-freetype-rs
-Version:        0.37.0
+Version:        0.38.0
 Release:        %autorelease
 Summary:        Bindings for FreeType font library
 

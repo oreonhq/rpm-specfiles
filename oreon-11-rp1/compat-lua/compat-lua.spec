@@ -1,8 +1,8 @@
 %global source0_hash 2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333
 
 Name:           compat-lua
-Version:        5.1.5
-Release:        31%{?dist}
+Version:        5.5.1
+Release:        1%{?dist}
 Summary:        Powerful light-weight programming language (compat version)
 License:        MIT
 URL:            http://www.lua.org/

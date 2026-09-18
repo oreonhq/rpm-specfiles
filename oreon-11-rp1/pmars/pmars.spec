@@ -1,8 +1,8 @@
 %global source0_hash 2ae8638ec6b65350cf9f813a60e338b534dffa78c3e85f1823a2bee8b7c20a34
 
 Name:           pmars
-Version:        0.9.2
-Release:        37%{?dist}
+Version:        0.9.5
+Release:        1%{?dist}
 Summary:        Portable corewar system with ICWS'94 extensions
 
 License:        GPL-2.0-or-later

@@ -7,7 +7,7 @@
 %global crate eui48
 
 Name:           rust-eui48
-Version:        0.4.6
+Version:        1.1.0
 Release:        %autorelease
 Summary:        A library to generate and parse IEEE EUI-48 and EUI-64, also known as...
 

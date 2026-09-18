@@ -14,8 +14,8 @@
 
 Summary: Network UPS Tools
 Name: nut
-Version: 2.8.4
-Release: 7%{?dist}
+Version: 2.8.5
+Release: 1%{?dist}
 License: GPL-2.0-or-later AND GPL-3.0-or-later
 Url: https://www.networkupstools.org/
 Source: https://www.networkupstools.org/source/2.8/%{name}-%{version}.tar.gz

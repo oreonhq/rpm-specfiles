@@ -4,8 +4,8 @@
 %global pypiname PyWebDAV3
 
 Name:           pywebdav
-Version:        0.9.12
-Release:        28%{?dist}
+Version:        0.11.0
+Release:        1%{?dist}
 Summary:        WebDAV library
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

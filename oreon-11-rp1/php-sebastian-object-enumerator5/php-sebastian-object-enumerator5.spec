@@ -25,8 +25,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        5.0.0
-Release:        10%{?dist}
+Version:        6.0.0
+Release:        1%{?dist}
 Summary:        Traverses array and object to enumerate all referenced objects, version %{major}
 
 License:        BSD-3-Clause
@@ -53,7 +53,7 @@ BuildRequires:  phpunit10
 Requires:       php(language) >= 7.3
 Requires:       (php-composer(%{pk_vendor}/object-reflector) >= 3.0   with php-composer(%{pk_vendor}/object-reflector) < 4)
 Requires:       (php-composer(sebastian/recursion-context)   >= 5.0   with php-composer(sebastian/recursion-context)   < 6)
-# from phpcompatinfo report for version 5.0.0:
+# from phpcompatinfo report for version 6.0.0:
 #nothing
 # Autoloader
 Requires:       php-composer(fedora/autoloader)

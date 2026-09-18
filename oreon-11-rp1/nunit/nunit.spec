@@ -3,8 +3,8 @@
 %global debug_package %{nil}
 
 Name:           nunit
-Version:        3.7.1
-Release:        23%{?dist}
+Version:        4.6.1
+Release:        1%{?dist}
 Summary:        Unit test framework for CLI
 # Automatically converted from old format: MIT with advertising - review is highly recommended.
 License:        LicenseRef-Callaway-MIT-with-advertising

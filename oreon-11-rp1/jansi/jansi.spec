@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           jansi
-Version:        2.4.2
+Version:        2.4.3
 Release:        %autorelease
 Summary:        Generate and interpret ANSI escape sequences in Java
 License:        Apache-2.0

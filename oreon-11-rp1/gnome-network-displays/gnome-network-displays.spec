@@ -3,8 +3,8 @@
 %global major_minor_version %%(cut -d "." -f 1,2 <<<%{version})
 
 Name:           gnome-network-displays
-Version:        0.97.0
-Release:        3%{?dist}
+Version:        0.99.0
+Release:        1%{?dist}
 Summary:        Screencasting for GNOME
 
 # The icon is licensed CC-BY-SA

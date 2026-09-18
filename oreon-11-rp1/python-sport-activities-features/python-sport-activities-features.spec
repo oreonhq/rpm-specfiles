@@ -1,116 +1,57 @@
-%global source0_hash 8ada757c3f53dedbf47914eb408155fd31eaa6b3765a45a2fe1a72d093e3789a
+%global source0_hash none
 
-%global pypi_name sport-activities-features
-
-%bcond tests 1
-
-Name:           python-%{pypi_name}
-Version:        0.5.2
+Name:           python-sport-activities-features
+Version:        0.5.4
 Release:        %autorelease
-Summary:        A minimalistic toolbox for extracting features from sports activity files
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A minimalistic toolbox for extracting features from sport activity files
 
-%global forgeurl https://github.com/firefly-cpp/sport-activities-features
-%global tag %{version}
-%forgemeta
-
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            %forgeurl
-Source:         %forgesource
+URL:            https://github.com/firefly-cpp/sport-activities-features
+Source:         %{pypi_source sport_activities_features}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  tomcli
-%if %{with tests}
-BuildRequires:  %{py3_dist pytest}
-%endif
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A minimalistic toolbox for extracting features from sport activity files
-written in Python. Proposed software supports the extraction of following
-topographic features from sport activity files: number of hills, average
-altitude of identified hills, total distance of identified hills, climbing
-ratio (total distance of identified hills vs. total distance), average ascent
-of hills, total ascent, total descent and many others.}
+This is package 'sport-activities-features' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{pypi_name}
+%package -n     python3-sport-activities-features
 Summary:        %{summary}
-%if !0%{?fc39} && !0%{?fc40}
-Obsoletes:      python3-%{pypi_name}-tests < 0.4.2-1
-%endif
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-sport-activities-features %_description
 
-%if 0%{?fc39} || 0%{?fc40}
-%package -n python3-%{pypi_name}-tests
-Summary:        Tests for python3-%{pypi_name}
-
-Requires:       python3-%{pypi_name} = %{version}-%{release}
-
-%description -n python3-%{pypi_name}-tests
-%{summary}.
-%endif
-
-%package doc
-Summary:        Documentation and examples for %{name}
-Requires:       python3-%{pypi_name} = %{version}-%{release}
-
-%description doc
-%{summary}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sport_activities_features-%{version}
 
-%forgeautosetup -p1
-rm -fv poetry.lock
-
-# Drop version pinning (we use the versions available in Fedora)
-for DEP in $(tomcli get -F newline-keys pyproject.toml tool.poetry.dependencies)
-do
-    tomcli set pyproject.toml replace tool.poetry.dependencies.${DEP} ".*" "*"
-done
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files sport_activities_features
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with tests}
-# Upstream excludes some tests. We follow suit.
-k="${k-}${k+ and }not test_overpy_node_manipulation"
-k="${k-}${k+ and }not test_weather"
-k="${k-}${k+ and }not test_data_analysis"
-%pytest -r fEs ${k:+-k "$k"}
-%else
-%pyproject_check_import
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.md
 
-%if 0%{?fc39} || 0%{?fc40}
-%files -n python3-%{pypi_name}-tests
-%doc tests/
-%endif
-
-%files doc
-# Depends on base package, which provides the LICENSE file
-%doc AUTHORS.rst
-%doc CHANGELOG.md
-%doc CITATION.cff
-%doc CODE_OF_CONDUCT.md
-%doc CONTRIBUTING.md
-%doc docs/preprints/A_minimalistic_toolbox.pdf
-%doc examples/
+%files -n python3-sport-activities-features -f %{pyproject_files}
 
 %changelog
 %autochangelog

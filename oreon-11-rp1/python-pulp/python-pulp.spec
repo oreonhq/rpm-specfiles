@@ -4,7 +4,7 @@
 %bcond tests 1
 
 Name:           python-pulp
-Version:        3.3.0
+Version:        3.3.2
 Release:        %autorelease
 Summary:        Linear and mixed integer programming modeler
 

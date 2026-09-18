@@ -1,99 +1,66 @@
-%global source0_hash d146ea078f21ddcaa412f3e86b4295420ad148a515e28ff0f4bc59e667636d8b
+%global source0_hash none
 
-# Tests don't currently run:
-# using hatch requires setting up a local dev environment
-# using pytest breaks as sources are split between src/fixit and legacy
-%bcond_with tests
-
-%global pypi_name fixit
-
-%global common_description %{expand:
-Fixit is a lint framework that complements Flake8. It’s based on LibCST
-which makes it possible to provide auto-fixes. Lint rules are made easy to
-build through pattern matching, a test toolkit, and utility helpers (e.g.
-scope analysis) for non-trivial boilerplate. It is optimized for efficiency,
-easy to customize and comes with many builtin lint rules.}
-
-%global date 20230223
-%global commit d2b59da3f822555e433eb6776e1f40f4b92c18d5
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
-Name:           python-%{pypi_name}
-Version:        0.1.5~%{date}g%{shortcommit}
+Name:           python-fixit
+Version:        2.2.1
 Release:        %autorelease
-Summary:        A lint framework that writes better Python code for you
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A lint framework that writes better Python code for you.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/Instagram/Fixit
-# PyPI tarball doesn't include docs
-# Source:         %%{url}/archive/v%%{version}/Fixit-%%{version}.tar.gz
-Source:         %{url}/archive/%{commit}/%{pypi_name}-%{shortcommit}.tar.gz
+Source:         %{pypi_source fixit}
+
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'fixit' generated automatically by pyp2spec.}
+
 Patch:          %{name}-pregenerate_version.diff
 Patch:          %{name}-rm-unused-inventories.diff
-BuildArch:      noarch
 
-BuildRequires:  sed
-BuildRequires:  python3-devel
-BuildRequires:  python3-docs
-BuildRequires:  python3dist(sphinx)
-BuildRequires:  python3dist(sphinx-mdinclude)
+%description %_description
 
-%description
-%{common_description}
-
-%package -n     python3-%{pypi_name}
+%package -n     python3-fixit
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-%{common_description}
+%description -n python3-fixit %_description
 
-%package        doc
-Summary:        %{name} documentation
-Requires:       python3-docs
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-fixit dev,docs,lsp,pretty
 
-%description    doc
-Documentation for %{name}
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n fixit-%{version}
 
-%autosetup -n Fixit-%{commit} -p1
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
-# Use local intersphinx inventory
-sed -r \
-    -e 's|https://docs.python.org/3|%{_docdir}/python3-docs/html|' \
-    -i docs/conf.py
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs,lsp,pretty
+
 
 %build
 %pyproject_wheel
 
-# generate html docs
-PYTHONPATH=${PWD}/src sphinx-build-3 docs html
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
 
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%if %{with tests}
-hatch run test
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst CHANGELOG.md
+
+%files -n python3-fixit -f %{pyproject_files}
 %{_bindir}/fixit
-
-%files doc
-%doc html
-%license LICENSE
 
 %changelog
 %autochangelog

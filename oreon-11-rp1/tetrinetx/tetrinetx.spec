@@ -1,8 +1,8 @@
 %global source0_hash 2b7210a0c8950c13e648d8abc36b7bca8ce58035999526301a715aacd40d15d4
 
 Name:           tetrinetx
-Version:        1.13.16
-Release:        43%{?dist}
+Version:        1.40c
+Release:        1%{?dist}
 Summary:        The GNU TetriNET server
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.

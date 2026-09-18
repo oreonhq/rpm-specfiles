@@ -1,8 +1,8 @@
 %global source0_hash 22914e48ef48f894bb5143c5efc3d01ab96e0a0cde80de11058d3b4301377d34
 
 Name:           dia
-Version:        0.97.3
-Release:        32%{?dist}
+Version:        1
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Diagram drawing program
 License:        GPL-2.0-or-later

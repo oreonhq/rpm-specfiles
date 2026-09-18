@@ -1,7 +1,7 @@
 %global source0_hash 10dc34e78d726325f2716b0e1d9078f479f4eb6e2176ccea2bb326ac45e54caa
 
 Name:           pyinstrument
-Version:        4.6.2
+Version:        5.1.3
 Release:        %autorelease
 Summary:        Python profiler with colorful output
 

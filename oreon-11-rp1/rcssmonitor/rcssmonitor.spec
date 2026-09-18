@@ -1,8 +1,8 @@
 %global source0_hash 1416d1d0c5abb9b96fde52f55e6db92eb552e4275f751ad536a38a4265654e91
 
 Name:           rcssmonitor
-Version:        19.0.0
-Release:        7%{?dist}
+Version:        19.0.1
+Release:        1%{?dist}
 Summary:        RoboCup 2D Soccer Simulator Monitor
 
 # rcss/ libraries are under LGPLv2+

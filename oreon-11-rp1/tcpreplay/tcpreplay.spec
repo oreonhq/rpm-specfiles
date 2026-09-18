@@ -11,8 +11,8 @@
 %define _legacy_common_support 1
 
 Name:           tcpreplay
-Version:        4.5.2
-Release:        2%{?dist}
+Version:        4.6.1
+Release:        1%{?dist}
 Summary:        Replay captured network traffic
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

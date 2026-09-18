@@ -4,8 +4,8 @@
 %global modname libravatar
 
 Name:               python-pylibravatar
-Version:            1.6
-Release:            44%{?dist}
+Version:            2.0.2
+Release:            1%{?dist}
 Summary:            Python module for Libravatar
 
 # The full text of the license isn't shipped

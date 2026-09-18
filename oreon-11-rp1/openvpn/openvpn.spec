@@ -25,8 +25,8 @@
 %bcond_without tests_long
 
 Name:              openvpn
-Version:           2.6.19
-Release:           2%{?dist}
+Version:           2.7.7
+Release:           1%{?dist}
 Summary:           A full-featured TLS VPN solution
 URL:               https://community.openvpn.net/
 Source0:        https://build.openvpn.net/downloads/releases/%{name}-%{version}.tar.gz

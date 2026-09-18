@@ -1,8 +1,8 @@
 %global source0_hash c1e28a849aa178fd1ec5f384b0f8bdd244bce453dc4ef7bb76d0830382fec304
 
 Name:           profanity
-Version:        0.15.1
-Release:        2%{?dist}
+Version:        0.18.2
+Release:        1%{?dist}
 Summary:        A console based XMPP client
 
 License:        GPL-3.0-only

@@ -2,8 +2,8 @@
 
 Name:		globus-gram-job-manager-lsf
 %global _name %(tr - _ <<< %{name})
-Version:	3.1
-Release:	2%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - LSF Job Manager Support
 
 License:	Apache-2.0

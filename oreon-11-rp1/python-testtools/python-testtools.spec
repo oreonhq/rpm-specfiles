@@ -1,96 +1,62 @@
-%global source0_hash 1aa19aaabf9736385fc111a95f94f6b0661c0b41e65ca5129223eb518c63e8b9
-
-# To build this package in a new environment (i.e. a new EPEL branch), you'll
-# need to build in a particular order.  Duplicate numbered steps can happen at
-# the same time.
-#
-# 1. bootstrap python-testtools
-# 2. python-fixtures
-# 2. python-testscenarios
-# 3. python-testresources
-# 4. python-testtools
-%bcond bootstrap 0
-
-# Twisted support is optional, but introduces twisted as a build requirement,
-# and that has it's own pile of dependencies.  Let's avoid that during EPEL
-# bringup.
-%bcond twisted %{undefined rhel}
+%global source0_hash none
 
 Name:           python-testtools
-Version:        2.8.7
+Version:        2.9.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Extensions to the Python standard library unit testing framework
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/testing-cabal/testtools
 Source:         %{pypi_source testtools}
 
 BuildArch:      noarch
-
-%global common_description %{expand:
-testtools is a set of extensions to the Python standard library's unit testing
-framework.}
-
-%description %{common_description}
-
-%package -n python3-testtools
-Summary:        %{summary}
 BuildRequires:  python3-devel
 
-%description -n python3-testtools %{common_description}
 
-%if %{without bootstrap}
-%package        doc
-BuildRequires:  make
-BuildRequires:  python3-sphinx
-Summary:        Documentation for %{name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'testtools' generated automatically by pyp2spec.}
 
-# https://fedoraproject.org/wiki/Packaging:No_Bundled_Libraries#Packages_granted_temporary_exceptions
-Provides:       bundled(jquery)
+%description %_description
 
-%description doc
-This package contains HTML documentation for %{name}.
-%endif
+%package -n     python3-testtools
+Summary:        %{summary}
+
+%description -n python3-testtools %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-testtools dev,test,twisted
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n testtools-%{version}
 
-%autosetup -p 1 -n testtools-%{version}
-
-%if %{without twisted}
-sed -e '/twistedsupport,/d' -i testtools/tests/__init__.py
-%endif
 
 %generate_buildrequires
-%pyproject_buildrequires %{!?with_bootstrap:-x test %{?with_twisted:-x twisted}}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,test,twisted
+
 
 %build
 %pyproject_wheel
 
-%if %{without bootstrap}
-make -C doc html
-%endif
 
 %install
 %pyproject_install
-%pyproject_save_files -l testtools
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{with bootstrap}
-# Exclude modules that import things that are not available during bootstrap.
-%pyproject_check_import -e testtools.twistedsupport
-%else
-%pyproject_check_import
-%{py3_test_envvars} %{python3} -m testtools.run -v tests.test_suite
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-testtools -f %{pyproject_files}
-%doc NEWS README.rst
-
-%if %{without bootstrap}
-%files doc
-%doc doc/_build/html/*
-%endif
 
 %changelog
 %autochangelog

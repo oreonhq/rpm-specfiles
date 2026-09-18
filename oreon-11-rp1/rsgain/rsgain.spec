@@ -1,6 +1,6 @@
 %global source0_hash 26f7acd1ba0851929dc756c93b3b1a6d66d7f2f36b31f744c8181f14d7b5c8a7
 
-Version:        3.6
+Version:        3.8
 %global forgeurl https://github.com/complexlogic/rsgain/
 %forgemeta
 

@@ -1,71 +1,62 @@
-%global source0_hash 1a23a667ce9d73a0dbfdf15745bfa2b7ab0b6402135c0cd5067574838398e0e6
+%global source0_hash none
 
-%global         srcname  zeep
-%global         desc     Zeep inspects the WSDL document and generates the corresponding\
-code to use the services and types in the document. This\
-provides an easy to use programmatic interface to a SOAP server.
-
-Name:           python-%{srcname}
-Version:        4.3.2
+Name:           python-zeep
+Version:        4.3.3
 Release:        %autorelease
-Summary:        A fast and modern Python SOAP client
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Python SOAP client
 
-# Automatically converted from old format: MIT and BSD - review is highly recommended.
-License:        LicenseRef-Callaway-MIT AND LicenseRef-Callaway-BSD
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
 URL:            https://github.com/mvantellingen/python-zeep
-Source0:        %pypi_source
+Source:         %{pypi_source zeep}
 
 BuildArch:      noarch
-# Since python-aiohttp excludes s390x we have to exclude it, as well
-# (because python-aioresponses requires python aiohttp)
-# See also:
-# https://src.fedoraproject.org/rpms/python-aiohttp/blob/67855c61bee706fcd99305d1715aad02d898cbfc/f/python-aiohttp.spec#_22
-# https://fedoraproject.org/wiki/EPEL/FAQ#RHEL_8.2B_has_binaries_in_the_release.2C_but_is_missing_some_corresponding_-devel_package._How_do_I_build_a_package_that_needs_that_missing_-devel_package.3F
-%if %{defined el8}
-ExcludeArch:    s390x
-%endif
-
-# required for py3_build macro
 BuildRequires:  python3-devel
 
-# NB: the python dependency auto-generator is enabled by default,
-#     we opt-in the build-time dependency generator, cf. below
 
-%description
-%{desc}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'zeep' generated automatically by pyp2spec.}
 
-%package -n python3-%{srcname}
+%description %_description
+
+%package -n     python3-zeep
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
 
-%description -n python3-%{srcname}
-%{desc}
+%description -n python3-zeep %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-zeep async,docs,xmlsec
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n zeep-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-
-# disable linting dependencies and exact test dependencies
-sed -i -e '/isort\|flake\|coverage\[toml\]\|pytest-cov/d' -e 's/\([a-z]\)[>=]\{2\}[0-9.]\+/\1/' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x async,docs,xmlsec
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files -l %{srcname}
 
 %check
-# skip tests that involve SHA1 since Fedora nowadays disables it, systemwide
-PYTHONPATH=src %{__python3} -m pytest tests -v -k 'not (SHA1 or test_sign_pw or test_verify_error or (test_signature and not test_signature_binary))'
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md examples
+
+%files -n python3-zeep -f %{pyproject_files}
 
 %changelog
 %autochangelog

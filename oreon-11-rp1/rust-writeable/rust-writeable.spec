@@ -7,7 +7,7 @@
 %global crate writeable
 
 Name:           rust-writeable
-Version:        0.6.3
+Version:        0.6.4
 Release:        %autorelease
 Summary:        A more efficient alternative to fmt::Display
 

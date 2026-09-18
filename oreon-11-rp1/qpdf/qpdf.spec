@@ -3,7 +3,7 @@
 
 Summary: Command-line tools and library for transforming PDF files
 Name:    qpdf
-Version: 12.3.2
+Version: 12.4.0
 Release: 1%{?dist}
 # MIT: e.g. libqpdf/sha2.c, but those are not compiled in (GNUTLS is used)
 # upstream uses ASL 2.0 now, but he allowed other to distribute qpdf under

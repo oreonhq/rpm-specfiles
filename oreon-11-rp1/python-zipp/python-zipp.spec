@@ -1,61 +1,62 @@
-%global source0_hash a07157588a12518c9d4034df3fbbee09c814741a33ff63c05fa29d26a2404166
+%global source0_hash none
 
-%global pypi_name zipp
-
-Name:           python-%{pypi_name}
-Version:        3.23.0
+Name:           python-zipp
+Version:        4.1.0
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Backport of pathlib-compatible object wrapper for zip files
 
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/jaraco/zipp
-Source0:        %{pypi_source}
+Source:         %{pypi_source zipp}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
-# Not using test dependencies because the list
-# is full of linters and static code checkers
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(jaraco-functools)
-BuildRequires:  python3dist(jaraco-test)
 
-%description
-A pathlib-compatible Zipfile object wrapper. A backport of the Path object.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'zipp' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-zipp
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-A pathlib-compatible Zipfile object wrapper. A backport of the Path object.
+%description -n python3-zipp %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-zipp check,cover,doc,enabler,test,type
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n zipp-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-# jaraco.itertools and func_timeout are not available in Fedora yet
-sed -i "/import jaraco.itertools/d" tests/test_path.py
-# coherent.licensed is not available in Fedora yet
-sed -i "/coherent.licensed/d" pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x check,cover,doc,enabler,test,type
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Skipped test needs jaraco.itertools
-%pytest -k "not test_joinpath_constant_time"
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
+
+%files -n python3-zipp -f %{pyproject_files}
 
 %changelog
 %autochangelog

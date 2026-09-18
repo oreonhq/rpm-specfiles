@@ -181,7 +181,7 @@
 # main package definition
 #################################################################################
 Name:		ceph
-Version:	20.2.1
+Version:	21.3.0
 Release:	1%{?dist}
 %if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 Epoch:		2

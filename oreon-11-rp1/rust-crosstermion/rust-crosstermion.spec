@@ -7,7 +7,7 @@
 %global crate crosstermion
 
 Name:           rust-crosstermion
-Version:        0.14.0
+Version:        0.16.0
 Release:        %autorelease
 Summary:        utilities for `crossterm`, without ties to `termion`
 

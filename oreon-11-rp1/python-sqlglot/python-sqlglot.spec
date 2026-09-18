@@ -1,66 +1,57 @@
-%global source0_hash 4bd9c3b7572e36da29c579aa484d5e6feca20854967cec37cab5a644c584ee92
-
-%global debug_package %{nil}
+%global source0_hash none
 
 Name:           python-sqlglot
-Version:        5.2.0
-Release:        14%{?dist}
-Summary:        SQL Parser and Transpiler
+Version:        9.0.6
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        An easily customizable SQL parser and transpiler
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/tobymao/sqlglot
-Source0:        %{url}/archive/v%{version}/sqlglot-%{version}.tar.gz
+Source:         %{pypi_source sqlglot}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
-# for tests
-BuildRequires:  python3-pytest
 
-Recommends:     python3-dateutil
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-SQLGlot is a no dependency Python SQL parser, transpiler, and optimizer.
-It can be used to format SQL or translate between different dialects like
-DuckDB, Presto, Spark, and BigQuery. It aims to read a wide variety of SQL
-inputs and output syntactically correct SQL in the targeted dialects.
-
-It is a very comprehensive generic SQL parser with a robust test suite. It
-is also quite performant while being written purely in Python.
-
-You can easily customize the parser, analyze queries, traverse expression
-trees, and programmatically build SQL.
-
-Syntax errors are highlighted and dialect incompatibilities can warn or
-raise depending on configurations.}
+This is package 'sqlglot' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-sqlglot
-Summary: %{summary}
+%package -n     python3-sqlglot
+Summary:        %{summary}
 
-%description -n python3-sqlglot %{_description}
+%description -n python3-sqlglot %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sqlglot-%{version}
 
-%autosetup -n sqlglot-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
-%check
-%pytest --pyargs --ignore tests/test_executor.py -k "not test_simplify and not test_tpch"
-# pkgs not available in fedora \
-# not sure why these 2nd two fail
 
 %install
 %pyproject_install
-%pyproject_save_files sqlglot
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-sqlglot -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

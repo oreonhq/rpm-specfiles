@@ -4,7 +4,7 @@
 %define _description PostCSS plugin to rebase, inline or copy on url()
 
 Name:           nodejs-%{npm_name}
-Version:        10.1.3
+Version:        10.1.4
 Release:        %autorelease
 Summary:        %{_description}
 

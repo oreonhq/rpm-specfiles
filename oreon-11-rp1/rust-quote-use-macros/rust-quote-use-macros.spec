@@ -7,7 +7,7 @@
 %global crate quote-use-macros
 
 Name:           rust-quote-use-macros
-Version:        0.8.4
+Version:        0.9.0
 Release:        %autorelease
 Summary:        Support use in procmacros hygienically
 

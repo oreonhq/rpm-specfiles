@@ -38,8 +38,8 @@
 %global lg_version   8.2.1
 
 Name:           php-%{pk_vendor}-%{pk_project}
-Version:        1.6.0
-Release:        9%{?dist}
+Version:        1.7.0
+Release:        1%{?dist}
 Summary:        Lacking future-compat polyfills for PHPUnit
 
 License:        MIT

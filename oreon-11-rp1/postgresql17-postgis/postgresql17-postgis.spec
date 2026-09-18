@@ -21,7 +21,7 @@
 %global        __provides_exclude_from %{_libdir}/pgsql
 
 Name:          postgresql%{pgversion}-postgis
-Version:       3.6.2
+Version:       3.6.4
 Release:       1%{?dist}
 Summary:       Geographic Information Systems Extensions to PostgreSQL
 License:       GPL-2.0-or-later

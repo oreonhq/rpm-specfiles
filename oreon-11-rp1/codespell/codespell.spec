@@ -1,7 +1,7 @@
 %global source0_hash 299fcdcb09d23e81e35a671bbe746d5ad7e8385972e65dbb833a2eaac33c01e5
 
 Name:           codespell
-Version:        2.4.1
+Version:        2.4.3
 Release:        %autorelease
 Summary:        Fix common misspellings in text files
 

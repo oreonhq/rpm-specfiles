@@ -1,7 +1,7 @@
 %global source0_hash bc53259cc2c6af79cd768bc23f5e10f06dd40225770b9bf5b4d37601fedd411e
 
 Name:           ini2toml
-Version:        0.14
+Version:        0.15
 Release:        %autorelease
 Summary:        Automatic conversion of .ini/.cfg files to TOML equivalents
 

@@ -2,8 +2,8 @@
 
 Name:		darkstat
 Summary:	Network traffic analyzer
-Version:	3.0.721
-Release:	13%{?dist}
+Version:	3.0.722
+Release:	1%{?dist}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:	GPL-2.0-only
 

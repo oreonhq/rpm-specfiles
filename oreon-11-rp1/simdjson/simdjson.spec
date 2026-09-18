@@ -3,7 +3,7 @@
 %global lib_version 25.0.0
 %global lib_soversion 25
 Name:		simdjson
-Version:	3.12.3
+Version:	4.6.11
 Release:	%autorelease
 Summary:	Parsing gigabytes of JSON per second
 

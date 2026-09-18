@@ -7,7 +7,7 @@
 %global crate serde_qs
 
 Name:           rust-serde_qs
-Version:        0.8.5
+Version:        1.1.3
 Release:        %autorelease
 Summary:        Querystrings for Serde
 

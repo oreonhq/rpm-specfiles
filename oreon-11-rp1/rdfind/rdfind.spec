@@ -1,7 +1,7 @@
 %global source0_hash 7a406e8ef1886a5869655604618dd98f672f12c6a6be4926d053be65070f3279
 
 Name:		rdfind
-Version:	1.6.0
+Version:	1.8.0
 Release:	%autorelease
 Summary:	Program that finds duplicate files
 

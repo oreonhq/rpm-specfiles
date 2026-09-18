@@ -10,7 +10,7 @@
 %global crate uu_unexpand
 
 Name:           rust-uu_unexpand
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        unexpand ~ (uutils) convert input spaces to tabs
 

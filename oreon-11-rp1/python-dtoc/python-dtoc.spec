@@ -1,23 +1,24 @@
-%global source0_hash 279fdb23c506c8f2c4ff1c789901a085c99d5071b01c822924e87b1183ee9544
+%global source0_hash none
 
 Name:           python-dtoc
-Version:        0.0.6
+Version:        0.0.7
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Devicetree-to-C generator
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
 URL:            https://docs.u-boot.org/en/latest/develop/driver-model/of-plat.html
 Source:         %{pypi_source dtoc}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  sed
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is a Python program and associated utilities, which supports converting
-devicetree files into C code. It generates header files containing struct
-definitions, as well as C files containing the data. It does not require any
-modification of the devicetree files.}
+This is package 'dtoc' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -26,34 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-dtoc %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n dtoc-%{version}
 
-# Fix dependency name
-sed -i 's:pylibfdt:libfdt:' pyproject.toml
-
-# Remove unnecessary shebangs
-sed -i src/dtoc/*.py \
-  -e "\|#!/usr/bin/env python3|d" \
-  -e "\|#!/usr/bin/python|d"
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files dtoc
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import -e dtoc.setup
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-dtoc -f %{pyproject_files}
-%doc README.rst
 %{_bindir}/dtoc
 
 %changelog

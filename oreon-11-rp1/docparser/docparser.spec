@@ -1,7 +1,7 @@
 %global source0_hash dc45d12e85deee67c2da103188a05b0e59e8d55ff9e6f48c6b7d988f39ee1b53
 
 Name:           docparser
-Version:        1.0.25
+Version:        1.0.26
 Release:        %autorelease
 Summary:        A document parser library ported from document2html
 

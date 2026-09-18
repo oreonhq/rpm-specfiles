@@ -1,55 +1,57 @@
-%global source0_hash 010d114890c7efc1652ed1c6d7f736534a15005c9db5383c7e6695e293b1ad74
+%global source0_hash none
 
-%global srcname pytest-repeat
+Name:           python-pytest-repeat
+Version:        0.9.4
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        pytest plugin for repeating tests
 
-Name:           python-%{srcname}
-Version:        0.9.3
-Release:        10%{?dist}
-Summary:        A pytest plugin for repeating test execution
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MPL-2.0
 URL:            https://github.com/pytest-dev/pytest-repeat
-Source0:        https://github.com/pytest-dev/pytest-repeat/archive/v%{version}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source pytest_repeat}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-pytest-repeat is a plugin for py.test that makes it easy to repeat a single
-test, or multiple tests, a specific number of times.
-}
+This is package 'pytest-repeat' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python%{python3_pkgversion}-%{srcname}
+%package -n     python3-pytest-repeat
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-devel
 
-%description -n python%{python3_pkgversion}-%{srcname} %_description
+%description -n python3-pytest-repeat %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_repeat-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-SETUPTOOLS_SCM_PRETEND_VERSION=%{version}; export SETUPTOOLS_SCM_PRETEND_VERSION
 %pyproject_buildrequires
 
+
 %build
-SETUPTOOLS_SCM_PRETEND_VERSION=%{version}; export SETUPTOOLS_SCM_PRETEND_VERSION
 %pyproject_wheel
 
+
 %install
-SETUPTOOLS_SCM_PRETEND_VERSION=%{version}; export SETUPTOOLS_SCM_PRETEND_VERSION
 %pyproject_install
-%pyproject_save_files pytest_repeat
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest test_repeat.py
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc CHANGES.rst README.rst
+
+%files -n python3-pytest-repeat -f %{pyproject_files}
 
 %changelog
 %autochangelog

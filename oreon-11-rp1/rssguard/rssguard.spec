@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           rssguard
-Version:        4.8.3
+Version:        5.2.5
 Release:        %autorelease
 Summary:        Simple yet powerful feed reader
 

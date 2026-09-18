@@ -1,7 +1,7 @@
 %global source0_hash 42c8c0ce1676eb3c1cfa67548823334cf51114519078d249882eacdfc214d932
 
 Name:           ocaml-omd
-Version:        1.3.2
+Version:        2.0.0~alpha1
 Release:        %autorelease
 Summary:        Extensible Markdown library and tool in "pure OCaml"
 

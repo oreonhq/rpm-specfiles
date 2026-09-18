@@ -4,8 +4,8 @@
 %bcond_with        tests
 
 Name:              redict
-Version:           7.3.2
-Release:           4%{?dist}
+Version:           7.3.6
+Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redict: LGPL-3.0-only
 # hiredict: BSD-3-Clause

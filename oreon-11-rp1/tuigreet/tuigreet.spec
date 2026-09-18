@@ -1,7 +1,7 @@
 %global source0_hash 14fd1fadeb84040eb31901da2b53a48aa55b0fdaccb36d96fa52ce2d2113667f
 
 Name:           tuigreet
-Version:        0.9.1
+Version:        0.11.1
 Release:        %autorelease
 Summary:        Graphical console greeter for greetd
 

@@ -7,7 +7,7 @@
 %global crate gufo-common
 
 Name:           rust-gufo-common
-Version:        1.1.0
+Version:        2.0.0
 Release:        %autorelease
 Summary:        Common features used in gufo crates
 

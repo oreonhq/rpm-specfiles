@@ -1,60 +1,64 @@
-%global source0_hash b011fda8875249042ff8cc2e22d8033c833717994d46f2c894738bba51be4470
+%global source0_hash none
 
 Name:           python-molmass
-Version:        2021.6.18
+Version:        2026.8.15
 Release:        %autorelease
-Summary:        Calculate molecular mass properties from elemental composition
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Molecular mass calculations
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD 
-URL:            https://www.lfd.uci.edu/~gohlke/molmass/
-Source0:        %{pypi_source molmass}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://github.com/cgohlke/molmass
+Source:         %{pypi_source molmass}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  dos2unix
-BuildRequires:  sed
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Molmass is a Python library and console script to calculate the molecular mass
-(average, nominal, and isotopic pure), the elemental composition, and the mass
-distribution spectrum of a molecule given by its chemical formula, relative 
-element weights, or sequence.}
+This is package 'molmass' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-molmass
+%package -n     python3-molmass
 Summary:        %{summary}
 
 %description -n python3-molmass %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-molmass all,gui
 
+
+%prep
 %autosetup -p1 -n molmass-%{version}
 
-# fix line endings
-dos2unix -k README.rst
-
-#remove shebang from non-executable
-sed s/#!.*$// molmass/molmass_web.py > molmass/molmass_web.py.noenv && touch -r molmass/molmass_web.py molmass/molmass_web.py.noenv && mv molmass/molmass_web.py.noenv molmass/molmass_web.py
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,gui
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files molmass
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-molmass -f %{pyproject_files}
-%doc README.rst
-%license LICENSE
 %{_bindir}/molmass
 %{_bindir}/molmass_web
-%{_bindir}/elements_gui
 
 %changelog
 %autochangelog

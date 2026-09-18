@@ -55,7 +55,7 @@ Summary:  The Berkeley Internet Name Domain (BIND) DNS (Domain Name System) serv
 Name:     bind9-next
 License:  MPL-2.0 AND ISC AND BSD-3-clause AND MIT AND BSD-2-clause
 #
-Version:  9.21.17
+Version:  9.21.26
 Release:  %autorelease
 Epoch:    32
 Url:      https://www.isc.org/downloads/bind/

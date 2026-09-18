@@ -10,7 +10,7 @@
 # testsuite missing deps: tasty-checklist hedgehog tasty-expected-failure tasty-hedgehog lumberjack tasty-sugar
 
 Name:           ghc-%{pkg_name}
-Version:        1.6.3
+Version:        1.8
 Release:        %autorelease
 Summary:        Solver-agnostic symbolic values support for issuing queries
 

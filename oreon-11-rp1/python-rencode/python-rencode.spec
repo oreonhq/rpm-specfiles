@@ -1,70 +1,64 @@
-%global source0_hash 480aab74948a7f339b749b5c39bdb4caf15429f4b49a998c770d5f371098d351
-
-%global srcname rencode
+%global source0_hash none
 
 Name:           python-rencode
-Version:        1.0.8
-Release:        4%{?dist}
-Summary:        Web safe object pickling/unpickling
-# Automatically converted from old format: GPLv3+ and BSD - review is highly recommended.
-License:        GPL-3.0-or-later AND LicenseRef-Callaway-BSD
+Version:        1.0.9
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        rencode is an object serialization library similar to bencode from the Bittorrent project.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        GPL-3.0-only
 URL:            https://github.com/aresch/rencode
+Source:         %{pypi_source rencode}
 
-Source0:        https://github.com/aresch/rencode/archive/v%{version}.tar.gz#/rencode-%{version}.tar.gz
+BuildRequires:  python3-devel
+BuildRequires:  gcc
 
-# Fix the build on aarc64
-# Resolved upstream:
-# https://github.com/aresch/rencode/commit/591b9f4d85d7e2d4f4e99441475ef15366389be2
-# https://github.com/aresch/rencode/commit/e7ec8ea718e73a8fee7dbc007c262e1584f7f94b
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'rencode' generated automatically by pyp2spec.}
+
 Patch:          fix-arm-build.patch
 
-BuildRequires:  gcc
-BuildRequires:  python3-devel
+%description %_description
 
-%description
-The rencode module is a modified version of bencode from the
-BitTorrent project.  For complex, heterogeneous data structures with
-many small elements, r-encodings take up significantly less space than
-b-encodings.
+%package -n     python3-rencode
+Summary:        %{summary}
 
-%package -n python3-rencode
-Summary:    Web safe object pickling/unpickling
+%description -n python3-rencode %_description
 
-%description -n python3-rencode
-The rencode module is a modified version of bencode from the
-BitTorrent project.  For complex, heterogeneous data structures with
-many small elements, r-encodings take up significantly less space than
-b-encodings.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-rencode dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n rencode-%{version}
 
-%autosetup -n rencode-%{version}
-
-# Make sure we rebuild the module
-rm -f ./rencode/_rencode.c
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -L rencode
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-pushd tests
-PYTHONPATH=$RPM_BUILD_ROOT%{python3_sitearch} %{__python3} test_rencode.py
-PYTHONPATH=$RPM_BUILD_ROOT%{python3_sitearch} %{__python3} timetest.py
-popd
 
-%files -n python%{python3_pkgversion}-rencode -f %{pyproject_files}
-%doc README.md
-%license COPYING
+%files -n python3-rencode -f %{pyproject_files}
 
 %changelog
 %autochangelog

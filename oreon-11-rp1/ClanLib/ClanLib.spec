@@ -2,8 +2,8 @@
 
 Summary:        Cross platform C++ game library
 Name:           ClanLib
-Version:        2.3.7
-Release:        37%{?dist}
+Version:        4.2.0
+Release:        1%{?dist}
 License:        zlib
 URL:            http://www.clanlib.org/
 Source0:        http://www.clanlib.org/download/releases-2.0/%{name}-%{version}.tgz

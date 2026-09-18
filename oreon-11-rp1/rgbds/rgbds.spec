@@ -1,8 +1,8 @@
 %global source0_hash 2be649a6b3c3b4a462e222b3082fa2e1c83142f317ba862b17899f5a25717380
 
 Name:		rgbds
-Version:	0.9.0
-Release:	4%{?dist}
+Version:	1.0.3
+Release:	1%{?dist}
 Summary:	A development package for the Game Boy, including an assembler
 
 License:	MIT

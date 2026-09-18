@@ -1,7 +1,7 @@
 %global source0_hash 794224f4cd08978a6115a767e9945f756fdf7cbc7c1a34eabca293e0293b21b8
 
 Name:           sngrep
-Version:        1.8.3
+Version:        1.8.4
 Release:        %autorelease
 Summary:        Ncurses SIP Messages flow viewer
 License:        GPL-3.0-or-later WITH cryptsetup-OpenSSL-exception

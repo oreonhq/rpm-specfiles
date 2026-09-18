@@ -1,63 +1,64 @@
-%global source0_hash d42d2934dde08f7cb52c97c567edba14a2353a22efa4eedca0457e4e77fe7045
+%global source0_hash none
 
-# The last versioned release of the devtools code is 1.2.1, but upstream
-# continues to update it without bumping the version. 😞
-%global         srcname         azure-devtools
-%global         commit          67d46b9c4292c267c14833b50bb313c077e63cd5
-%global         shortcommit     %(c=%{commit}; echo ${c:0:7})
-%global         short_version   1.2.1
-
-Name:           python-%{srcname}
-Version:        %{short_version}~git.4.%{shortcommit}
-Release:        16%{?dist}
+Name:           python-azure-devtools
+Version:        1.2.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Microsoft Azure Development Tools for SDK
-License:        MIT and Apache-2.0
-URL:            https://github.com/Azure/azure-sdk-for-python/
-# The azure-sdk-for-python repository is huge at > 160MB, but we only need ~
-# 100KB of source for this package. Use this script to generate a tarball of the
-# source code:
-# ./generate-devtools-tarball.sh COMMIT_SHA
-Source0:        azure-devtools-%{commit}.tar.gz
-# Asked upstream to update the vcrpy requirement. PR in progress.
-# https://github.com/Azure/azure-sdk-for-python/pull/20032
-Patch0:         python-azure-devtools-requirements-fix.patch
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/Azure/azure-python-devtools
+Source:         %{pypi_source azure-devtools}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Development tools for Python-based Azure tools
-This package contains tools to aid in developing Python-based Azure code.}
+This is package 'azure-devtools' generated automatically by pyp2spec.}
 
-%description %{_description}
+Patch0:         python-azure-devtools-requirements-fix.patch
 
-%package -n python3-%{srcname}
+%description %_description
+
+%package -n     python3-azure-devtools
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %{_description}
+%description -n python3-azure-devtools %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-azure-devtools ci-tools
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n azure-devtools-%{version}
 
-%autosetup -v -p3 -c -n %{srcname}-%{commit}
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x ci-tools
+
 
 %build
 %pyproject_wheel
 
-%generate_buildrequires
-%pyproject_buildrequires -r
 
 %install
 %pyproject_install
-%pyproject_save_files azure_devtools
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Some provided executables are only used internally in Azure SDK's CI.
-rm -f %{buildroot}%{_bindir}/{perfstress,perfstressdebug,systemperf}
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
-%license LICENSE
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-azure-devtools -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -11,14 +11,14 @@
 
 Name:    kf5-%{framework}
 Epoch:   1
-Version: 5.116.0
-Release: 7%{?dist}
+Version: 6.30.0
+Release: 1%{?dist}
 Summary: The Syndication Library
 
 License: BSD-2-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin 5.116
+%global majmin 6.30
 %global stable stable
 Source0:        https://download.kde.org/stable/frameworks/5.116/%{framework}-%{version}.tar.xz
 

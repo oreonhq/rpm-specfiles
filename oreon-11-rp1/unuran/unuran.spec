@@ -1,8 +1,8 @@
 %global source0_hash 098793854c590b4c2c7e98bc48a45408875f48c5ad47650b5fabbd3e94dd8049
 
 Name:		unuran
-Version:	1.11.0
-Release:	4%{?dist}
+Version:	1.12.0
+Release:	1%{?dist}
 Summary:	Universal Non-Uniform Random number generator
 
 License:	GPL-2.0-or-later

@@ -14,8 +14,8 @@
 %bcond check 1
 
 Name:		po-debconf
-Version:	1.0.21
-Release:	20%{release_posttag}%{?dist}
+Version:	1.0.22
+Release:	1%{release_posttag}%{?dist}
 Summary:	Tool for managing templates file translations with gettext
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

@@ -37,8 +37,8 @@
 
 Summary: Apache Portable Runtime Utility library
 Name: apr-util
-Version: 1.6.3
-Release: 27%{?dist}
+Version: 1.6.5
+Release: 1%{?dist}
 # Apache-2.0:  everything
 # RSA-MD:      https://gitlab.com/fedora/legal/fedora-legal-docs/-/merge_requests/187
 #              include\apr_md5.h, passwd\apr_md5.c, crypto\apr_md4.c, include\apr_md4.h
@@ -106,7 +106,7 @@ Summary: APR utility library LMDB driver
 Requires: apr-util%{?_isa} = %{version}-%{release}
 # Remove libdb dependency from apr-util
 # https://bugzilla.redhat.com/show_bug.cgi?id=1779267
-Obsoletes: apr-util-bdb < 1.6.3-13
+Obsoletes: apr-util-bdb < 1.6.5-13
 Provides: apr-util-%{aprver}(dbm)%{?_isa} = %{version}-%{release}
 
 %description lmdb

@@ -13,7 +13,7 @@
 # Github
 %global github_owner     doctrine
 %global github_name      lexer
-%global github_version   1.2.3
+%global github_version   3.0.1
 %global github_commit    c268e882d4dbdd85e36e4ad69e02dc284f89d229
 %global github_short     %(c=%{github_commit}; echo ${c:0:7})
 # Namespace
@@ -32,7 +32,7 @@
 
 Name:          php-%{composer_vendor}-%{composer_project}
 Version:       %{github_version}
-Release:       10%{?github_release}%{?dist}
+Release:       1%{?github_release}%{?dist}
 Summary:       Base library for a lexer that can be used in top-down, recursive descent parsers
 
 License:       MIT

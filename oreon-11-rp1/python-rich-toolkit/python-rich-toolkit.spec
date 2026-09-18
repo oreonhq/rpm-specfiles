@@ -1,61 +1,57 @@
-%global source0_hash 133c0915872da91d4c25d85342d5ec1dfacc69b63448af1a08a0d4b4f23ef46e
-
-%bcond inline_snapshot 1
-# Currently, all tests are snapshot-based.
-%bcond tests %{with inline_snapshot}
+%global source0_hash none
 
 Name:           python-rich-toolkit
-Version:        0.19.7
+Version:        0.20.5
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Rich toolkit for building command-line applications
 
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/patrick91/rich-toolkit
+URL:            ...
 Source:         %{pypi_source rich_toolkit}
 
-BuildSystem:            pyproject
-BuildOption(install):   -l rich_toolkit
-
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%if %{with tests}
-# Testing dependencies; these are included in the “dev” dependency group, but
-# this also includes a number of dependencies that are only used for debugging,
-# typechecking, running the examples, etc.; we therefore maintain this list
-# manually rather than attempting to generate it.
-BuildRequires:  %{py3_dist pytest} >= 8.3.2
-%if %{with inline_snapshot}
-BuildRequires:  %{py3_dist inline-snapshot} >= 0.12.1
-%endif
-# For tests/test_input_validator.py:
-BuildRequires:  %{py3_dist pydantic}
-%endif
 
-%global common_description %{expand:
-This is a very opinionated set of components for building CLI applications. It
-is based on Rich.}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'rich-toolkit' generated automatically by pyp2spec.}
 
-%description %common_description
+%description %_description
 
 %package -n     python3-rich-toolkit
 Summary:        %{summary}
 
-%description -n python3-rich-toolkit %common_description
+%description -n python3-rich-toolkit %_description
 
-%check -a
-%if %{with tests}
-%if %{without inline_snapshot}
-ignore="${ignore-} --ignore=tests/test_toolkit.py"
-ignore="${ignore-} --ignore=tests/test_tagged_style.py"
-%endif
 
-%pytest ${ignore-} -v
-%endif
+%prep
+%autosetup -p1 -n rich_toolkit-%{version}
+
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+
+%build
+%pyproject_wheel
+
+
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-rich-toolkit -f %{pyproject_files}
-%doc README.md
-%doc examples/
 
 %changelog
 %autochangelog

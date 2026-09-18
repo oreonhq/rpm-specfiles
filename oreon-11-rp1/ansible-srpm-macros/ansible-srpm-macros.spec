@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           ansible-srpm-macros
-Version:        1
-Release:        20.1%{?dist}
+Version:        2.21.4
+Release:        1.1%{?dist}
 Summary:        SRPM stage RPM packaging macros for Ansible collections
 
 License:        GPL-3.0-or-later

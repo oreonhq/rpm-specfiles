@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/polymaking
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        0.8.8
+Version:        0.8.9
 Release:        %autorelease
 Summary:        GAP interface to polymake
 

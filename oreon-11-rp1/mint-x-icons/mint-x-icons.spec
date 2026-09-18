@@ -3,8 +3,8 @@
 %bcond_without  nm_icons
 
 Name:           mint-x-icons
-Version:        1.7.5
-Release:        2%{?dist}
+Version:        1.7.7
+Release:        1%{?dist}
 Summary:        Icon theme for Linux Mint
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

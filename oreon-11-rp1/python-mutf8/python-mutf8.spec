@@ -1,30 +1,24 @@
-%global source0_hash c7a86f00bc8d313b9ce184375c944bf5be771127283d82a8d2becf33cc84e1c7
+%global source0_hash none
 
 Name:           python-mutf8
-Version:        1.0.6
+Version:        1.1.0
 Release:        %autorelease
-Summary:        Fast MUTF-8 encoder & decoder
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Fast MUTF-8 encoder _ decoder
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            http://github.com/TkTech/mutf8
-# Get sources from GitHub for tests
-Source:         %{url}/archive/v%{version}/mutf8-%{version}.tar.gz
+URL:            https://github.com/TkTech/mutf8
+Source:         %{pypi_source mutf8}
 
 BuildRequires:  python3-devel
 BuildRequires:  gcc
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This package contains simple pure-python as well as C encoders and decoders for
-the MUTF-8 character encoding. In most cases, you can also parse the even-rarer
-CESU-8.
-
-These days, you'll most likely encounter MUTF-8 when working on files or
-protocols related to the JVM. Strings in a Java .class file are encoded using
-MUTF-8, strings passed by the JNI, as well as strings exported by the object
-serializer.
-
-This library was extracted from Lawu, a Python library for working with JVM
-class files.}
+This is package 'mutf8' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -35,26 +29,32 @@ Summary:        %{summary}
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-#pyproject_extras_subpkg -n python3-mutf8 test
+%pyproject_extras_subpkg -n python3-mutf8 test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n mutf8-%{version}
 
+
 %generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
 %pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l mutf8
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-mutf8 -f %{pyproject_files}
 

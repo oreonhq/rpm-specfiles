@@ -1,8 +1,8 @@
 %global source0_hash 40c6d1e72eaaa200ccc1491ee4e4366fef7766c1604397725a8a3a6025c38ae8
 
 Name:           simspark
-Version:        0.3.5
-Release:        14%{?dist}
+Version:        0.3.8
+Release:        1%{?dist}
 Summary:        Spark physical simulation system
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.

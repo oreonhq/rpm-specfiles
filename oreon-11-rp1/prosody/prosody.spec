@@ -7,7 +7,7 @@
 
 Summary:           Flexible communications server for Jabber/XMPP
 Name:              prosody
-Version:           13.0.4
+Version:           13.0.6
 Release:           1%{?dist}
 License:           MIT
 URL:               https://prosody.im/

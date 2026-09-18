@@ -25,7 +25,7 @@
 # Do we want libedit support
 %global libedit 1
 
-%global openssh_ver 10.2p1
+%global openssh_ver 10.5p1
 
 Summary: An implementation of the SSH protocol with GSI authentication
 Name: gsi-openssh

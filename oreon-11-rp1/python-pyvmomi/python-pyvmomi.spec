@@ -7,7 +7,7 @@ pyVmomi is the Python SDK for the vSphere API that allows you to manage\
 ESX, ESXi, and vCenter.}
 
 Name:           python-%{srcname}
-Version:        9.0.0.0
+Version:        9.1.1.0
 Release:        1%{?dist}
 Summary:        vSphere Python SDK
 License:        Apache-2.0

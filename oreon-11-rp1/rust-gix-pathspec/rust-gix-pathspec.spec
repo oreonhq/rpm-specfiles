@@ -7,7 +7,7 @@
 %global crate gix-pathspec
 
 Name:           rust-gix-pathspec
-Version:        0.14.0
+Version:        0.20.0
 Release:        %autorelease
 Summary:        A crate of the gitoxide project dealing magical pathspecs
 

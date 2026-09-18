@@ -1,27 +1,24 @@
-%global source0_hash 42ba117ce857e9dd6c67c727e22e575671fd72e441900af137b05e7ee5c8fd88
+%global source0_hash none
 
 Name:           python-lion-pytorch
-Version:        0.2.3
+Version:        0.2.5
 Release:        %autorelease
-Summary:        A Pytorch optimizer
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Lion Optimizer - Pytorch
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/lucidrains/lion-pytorch
+URL:            https://pypi.org/project/lion-pytorch/
 Source:         %{pypi_source lion_pytorch}
 
 BuildArch:      noarch
-# Pytorch only on X86_64 and aarch64
-ExclusiveArch:  x86_64 aarch64
-
 BuildRequires:  python3-devel
 
-%global _description %{expand:
-Lion, EvoLved Sign Momentum, new optimizer discovered by Google Brain
-that is purportedly better than Adam(w), in Pytorch. This is nearly a
-straight copy from here, with few minor modifications.
 
-It is so simple, we may as well get it accessible and used asap by
-everyone to train some great models, if it really works. }
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'lion-pytorch' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -30,23 +27,34 @@ Summary:        %{summary}
 
 %description -n python3-lion-pytorch %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-lion-pytorch test
 
+
+%prep
 %autosetup -p1 -n lion_pytorch-%{version}
 
+
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l lion_pytorch
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-lion-pytorch -f %{pyproject_files}
 

@@ -7,7 +7,7 @@
 %global crate tls_codec_derive
 
 Name:           rust-tls_codec_derive
-Version:        0.4.2
+Version:        0.5.0
 Release:        %autorelease
 Summary:        Derive macros for the tls_codec trait
 

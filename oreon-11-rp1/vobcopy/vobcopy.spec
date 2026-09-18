@@ -1,8 +1,8 @@
 %global source0_hash f4737efaf5ad4f84b5c94ca82cda04dbb20c59cebc23588e3662e0c2813d6fde
 
 Name:           vobcopy
-Version:        1.2.1
-Release:        9%{?dist}
+Version:        1.2.4
+Release:        1%{?dist}
 Summary:        Utility to copy DVD .vob files to disk
 
 License:        GPL-2.0-or-later

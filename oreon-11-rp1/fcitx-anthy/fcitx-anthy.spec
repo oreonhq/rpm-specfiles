@@ -1,8 +1,8 @@
 %global source0_hash ed9b4956356ca68e5f7bdd46492873ebebc921a6cf713d7fc62e5680393f5d06
 
 Name:			fcitx-anthy
-Version:		0.2.3
-Release:		14%{?dist}
+Version:		0.2.4
+Release:		1%{?dist}
 Summary:		Anthy Engine for Fcitx
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:		GPL-2.0-or-later

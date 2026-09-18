@@ -3,8 +3,8 @@
 %global pkgname websockify
 %global summary WSGI based adapter for the Websockets protocol
 Name:           python-%{pkgname}
-Version:        0.12.0
-Release:        7%{?dist}
+Version:        0.13.0
+Release:        1%{?dist}
 Summary:        %{summary}
 
 License:        LGPL-3.0-only

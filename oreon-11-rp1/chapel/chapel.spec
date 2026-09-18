@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           chapel
-Version:        2.6.0
-%global shortversion 2.6
+Version:        2.9.0
+%global shortversion 2.9
 Release:        %{autorelease}
 Summary:        A Productive Parallel Programming Language
 

@@ -1,7 +1,7 @@
 %global source0_hash f19c2deb8a39c5f8de5a3a2acc48963e83db39a3679ee17565c819c1a3e0a44b
 
 Name:           beets
-Version:        2.7.1
+Version:        2.14.1
 Release:        %autorelease
 Summary:        Music library manager and MusicBrainz tagger
 License:        MIT and ISC

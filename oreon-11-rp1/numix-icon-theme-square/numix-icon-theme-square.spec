@@ -7,7 +7,7 @@
 
 Name:           numix-icon-theme-square
 Summary:        Numix Project square icon theme
-Version:        24.07.19
+Version:        26.02.21
 Release:        %autorelease
 License:        GPL-3.0-or-later
 

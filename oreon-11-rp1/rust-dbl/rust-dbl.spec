@@ -7,7 +7,7 @@
 %global crate dbl
 
 Name:           rust-dbl
-Version:        0.3.2
+Version:        0.5.0
 Release:        %autorelease
 Summary:        Double operation in Galois Field (GF)
 

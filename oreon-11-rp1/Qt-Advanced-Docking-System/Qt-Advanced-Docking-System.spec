@@ -2,8 +2,8 @@
 
 Name:           Qt-Advanced-Docking-System
 Summary:        Advanced Docking System for Qt
-Version:        4.4.1
-Release:        4%{?dist}
+Version:        5.1.1
+Release:        1%{?dist}
 License:        LGPL-2.1-or-later AND BSL-1.0 AND Apache-2.0
 URL:            https://github.com/githubuser0xFFFF/%{name}
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz

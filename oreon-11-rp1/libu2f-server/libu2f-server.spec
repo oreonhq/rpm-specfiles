@@ -1,8 +1,8 @@
 %global source0_hash a618f59051209d6d70c24cf42d64c9b67bd7dd5946b6dbd2c649181d7e8f1f6e
 
 Name:		libu2f-server
-Version:	1.0.1
-Release:	34%{?dist}
+Version:	1.1.0
+Release:	1%{?dist}
 Summary:	Yubico Universal 2nd Factor (U2F) Server C Library
 
 # Automatically converted from old format: BSD - review is highly recommended.

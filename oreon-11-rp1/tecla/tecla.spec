@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           tecla
-Version:        50.0
+Version:        51.0
 Release:        %autorelease
 Summary:        Keyboard layout viewer
 

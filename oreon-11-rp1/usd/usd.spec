@@ -27,7 +27,7 @@
 %bcond test          0
 
 Name:           usd
-Version:        26.03
+Version:        26.08
 Release:        %autorelease
 Summary:        3D VFX pipeline interchange file format
 

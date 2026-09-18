@@ -7,7 +7,7 @@
 %bcond obs 0
 
 Name:           mkosi
-Version:        26
+Version:        27
 Release:        %autorelease
 Summary:        Create bespoke OS images
 

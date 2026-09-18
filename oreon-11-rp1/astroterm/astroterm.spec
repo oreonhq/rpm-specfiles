@@ -1,8 +1,8 @@
 %global source0_hash 3dc44b1e90be8fbe5bcc7656032560f51275f985c7e3f783c9028e1838ec7bed
 
 Name:           astroterm
-Version:        1.0.6
-Release:        4%{?dist}
+Version:        1.2.0
+Release:        1%{?dist}
 Summary:        A planetarium for your terminal
 
 License:        MIT

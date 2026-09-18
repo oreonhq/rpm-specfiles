@@ -4,7 +4,7 @@
 %{!?tcl_sitearch: %global tcl_sitearch %{_libdir}/tcl%{tcl_version}}
 
 Name:           tcltls
-Version:        1.7.22
+Version:        2.0b2
 Release:        %autorelease
 Summary:        OpenSSL extension for Tcl
 

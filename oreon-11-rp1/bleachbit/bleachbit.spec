@@ -7,8 +7,8 @@
 %endif
 
 Name:		bleachbit
-Version:	4.6.0
-Release:	8%{?dist}
+Version:	6.0.4
+Release:	1%{?dist}
 Summary:	Remove sensitive data and free up disk space
 
 License:	GPL-3.0-or-later

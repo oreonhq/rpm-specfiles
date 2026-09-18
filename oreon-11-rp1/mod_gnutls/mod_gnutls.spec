@@ -2,8 +2,8 @@
 
 %{!?_httpd_mmn: %{expand: %%global _httpd_mmn %%(cat %{_includedir}/httpd/.mmn || echo 0-0)}}
 Name:      mod_gnutls
-Version:   0.12.0
-Release:   14%{?dist}
+Version:   0.12.1
+Release:   1%{?dist}
 Summary:   GnuTLS module for the Apache HTTP server
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:   Apache-2.0

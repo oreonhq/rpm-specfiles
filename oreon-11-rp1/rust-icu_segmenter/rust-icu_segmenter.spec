@@ -7,7 +7,7 @@
 %global crate icu_segmenter
 
 Name:           rust-icu_segmenter
-Version:        2.1.2
+Version:        2.3.0
 Release:        %autorelease
 Summary:        Unicode line breaking and text segmentation algorithms
 

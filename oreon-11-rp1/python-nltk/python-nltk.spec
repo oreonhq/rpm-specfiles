@@ -1,70 +1,64 @@
-%global source0_hash 03e06c8c13e352133962c4395ebe0696905c9f1fbdead2d19deae37ba48eb47c
+%global source0_hash none
 
-%global mod_name nltk
 Name:           python-nltk
-Epoch:          1
-Version:        3.9.1
-Release:        7%{?dist}
+Version:        3.10.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Natural Language Toolkit
 
-# The entire source code is ASL 2.0 except nltk/stem/porter.py is
-# GPLv2+ with exceptions
-# Automatically converted from old format: ASL 2.0 and GPLv2+ with exceptions - review is highly recommended.
-License:        Apache-2.0 AND LicenseRef-Callaway-GPLv2+-with-exceptions
-URL:            http://www.nltk.org/
-Source0:        https://github.com/nltk/nltk/archive/%{version}.tar.gz#/%{mod_name}-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/nltk/nltk
+Source:         %{pypi_source nltk}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-# https://github.com/nltk/nltk/pull/3309
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'nltk' generated automatically by pyp2spec.}
+
 Patch1: fix-import-WordNetLemmatizer.patch
-
-%global _description\
-NLTK is a Python package that simplifies the construction of programs\
-that process natural language; and defines standard interfaces between\
-the different components of an NLP system.  It was designed primarily\
-to help teach graduate and undergraduate students about computational\
-linguistics; but it is also useful as a framework for implementing\
-research projects.
 
 %description %_description
 
-%package -n python3-%{mod_name}
-Summary:        Natural Language Toolkit (Python 3)
-BuildRequires:  python3-devel
+%package -n     python3-nltk
+Summary:        %{summary}
 
-%description -n python3-%{mod_name}
-NLTK is a Python package that simplifies the construction of programs
-that process natural language; and defines standard interfaces between
-the different components of an NLP system.  It was designed primarily
-to help teach graduate and undergraduate students about computational
-linguistics; but it is also useful as a framework for implementing
-research projects.
+%description -n python3-nltk %_description
 
-This package provides the Python 3 build of NLTK.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-nltk all,corenlp,machine-learning,plot,tgrep,twitter
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n nltk-%{version}
 
-%autosetup -p1 -n %{mod_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x all,corenlp,machine-learning,plot,tgrep,twitter
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{mod_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# skip tests since it requires nltk-data and a few utilities not available in
-# Fedora
-#%%{__python3} %%{mod_name}/test/runtests.py
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{mod_name} -f %{pyproject_files}
-%{_bindir}/%{mod_name}
-%doc AUTHORS.md CONTRIBUTING.md ChangeLog README.md
+
+%files -n python3-nltk -f %{pyproject_files}
+%{_bindir}/nltk
 
 %changelog
 %autochangelog

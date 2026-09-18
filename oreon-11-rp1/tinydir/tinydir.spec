@@ -13,8 +13,8 @@ Lightweight, portable and easy to integrate C directory and file reader. \
 TinyDir wraps dirent for POSIX and FindFirstFile for Windows.
 
 Name:           tinydir
-Version:        1.2.5
-Release:        11%{?dist}
+Version:        1.2.6
+Release:        1%{?dist}
 Summary:        %{common_sum}
 
 # Automatically converted from old format: BSD - review is highly recommended.

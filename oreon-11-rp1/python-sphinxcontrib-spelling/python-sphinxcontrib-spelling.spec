@@ -1,122 +1,61 @@
-%global source0_hash 3819d12629d95e0c909224fa40b462a67e0adb321d50283d7fc0d11686c8ac7e
+%global source0_hash none
 
-%global pypi_name sphinxcontrib-spelling
-%global sum  A spelling checker for Sphinx-based documentation
-%global desc This package contains sphinxcontrib.spelling, a spelling checker for \
-Sphinx-based documentation. It uses PyEnchant to produce a report showing \
-misspelled words.
+Name:           python-sphinxcontrib-spelling
+Version:        8.0.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Sphinx spelling extension
 
-# Disable dependency generator
-%{?python_disable_dependency_generator}
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://sphinxcontrib-spelling.readthedocs.io/en/latest/
+Source:         %{pypi_source sphinxcontrib_spelling}
 
-%bcond_without python3
-
-Name:           python-%{pypi_name}
-Version:        7.3.3
-Release:        17%{?dist}
-Summary:        %{sum}
-
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://github.com/sphinx-contrib/spelling
-Source0:        %{pypi_source}
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%if 0%{?with_python3}
-BuildRequires:  python%{python3_pkgversion}-setuptools
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-pbr
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  python%{python3_pkgversion}-enchant
-BuildRequires:  python%{python3_pkgversion}-sphinx
-%endif
 
-%if 0%{?with_python3_other}
-BuildRequires:  python%{python3_other_pkgversion}-setuptools
-BuildRequires:  python%{python3_other_pkgversion}-devel
-BuildRequires:  python%{python3_other_pkgversion}-pbr
-BuildRequires:  python%{python3_other_pkgversion}-pytest
-BuildRequires:  python%{python3_other_pkgversion}-enchant
-BuildRequires:  python%{python3_other_pkgversion}-sphinx
-%endif
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sphinxcontrib-spelling' generated automatically by pyp2spec.}
 
-%description
-%{desc}
+%description %_description
 
-# Python 3 package
-%if %{with python3}
-%package -n     python%{python3_pkgversion}-%{pypi_name}
-Summary:        %{sum}
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
-Requires:       python%{python3_pkgversion}-enchant
-Requires:       python%{python3_pkgversion}-sphinx
+%package -n     python3-sphinxcontrib-spelling
+Summary:        %{summary}
 
-%description -n python%{python3_pkgversion}-%{pypi_name}
-%{desc}
-%endif
+%description -n python3-sphinxcontrib-spelling %_description
 
-# Python 3 other package
-%if 0%{?with_python3_other}
-%package -n     python%{python3_other_pkgversion}-%{pypi_name}
-Summary:        %{sum}
-%{?python_provide:%python_provide python%{python3_other_pkgversion}-%{pypi_name}}
-Requires:       python%{python3_other_pkgversion}-enchant
-Requires:       python%{python3_other_pkgversion}-sphinx
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sphinxcontrib-spelling test
 
-%description -n python%{python3_other_pkgversion}-%{pypi_name}
-%{desc}
-%endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sphinxcontrib_spelling-%{version}
 
-%autosetup -p0 -n %{pypi_name}-%{version}
 
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
-%if %{with python3}
-%py3_build
-%endif
+%pyproject_wheel
 
-%if 0%{?with_python3_other}
-%py3_other_build
-%endif
 
 %install
-%if 0%{?with_python3_other}
-%py3_other_install
-%endif
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with python3}
-%py3_install
-%endif
 
 %check
-%if %{with python3}
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%if 0%{?with_python3_other}
-%{__python3_other} -m pytest
-%endif
 
-%if %{with python3}
-%files -n python%{python3_pkgversion}-%{pypi_name}
-%doc README
-%license LICENSE
-%{python3_sitelib}/sphinxcontrib
-%{python3_sitelib}/sphinxcontrib_spelling*
-%endif
-
-%if 0%{?with_python3_other}
-%files -n python%{python3_other_pkgversion}-%{pypi_name}
-%doc README
-%license LICENSE
-%{python3_other_sitelib}/sphinxcontrib
-%{python3_other_sitelib}/sphinxcontrib_spelling*
-%endif
+%files -n python3-sphinxcontrib-spelling -f %{pyproject_files}
 
 %changelog
 %autochangelog

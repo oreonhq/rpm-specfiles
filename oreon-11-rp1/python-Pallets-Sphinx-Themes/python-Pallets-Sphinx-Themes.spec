@@ -1,48 +1,57 @@
-%global source0_hash 6293ced11a1d5d3de7268af1acd60428732b5a9e6051a47a596c6d9a083e60d9
+%global source0_hash none
 
-%global pypi_name Pallets-Sphinx-Themes
-
-Name:           python-%{pypi_name}
-Version:        2.3.0
+Name:           python-pallets-sphinx-themes
+Version:        2.5.0
 Release:        %autorelease
-Summary:        Sphinx themes for Pallets and related projects
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Sphinx themes for Pallets and related projects.
 
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
 URL:            https://github.com/pallets/pallets-sphinx-themes/
-Source0:        %{pypi_source pallets_sphinx_themes}
-BuildArch:      noarch
+Source:         %{pypi_source pallets_sphinx_themes}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%description
-Pallets Sphinx Themes Themes for the Pallets projects.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pallets-sphinx-themes' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-pallets-sphinx-themes
 Summary:        %{summary}
 
-Requires:       python3-sphinx
-%description -n python3-%{pypi_name}
-Pallets Sphinx Themes Themes for the Pallets projects.
+%description -n python3-pallets-sphinx-themes %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pallets_sphinx_themes-%{version}
 
-%autosetup -n pallets_sphinx_themes-%{version} -p1
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pallets_sphinx_themes
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE.txt
-%doc README.md CHANGES.rst
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-pallets-sphinx-themes -f %{pyproject_files}
 
 %changelog
 %autochangelog

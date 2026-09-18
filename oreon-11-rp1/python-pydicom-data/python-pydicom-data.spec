@@ -1,50 +1,57 @@
 %global source0_hash none
 
-# Since pydicom contains code to download files from the GitHub repository, we
-# really need to package a snapshot no older than the packaged pydicom release.
-%global commit 8da482f208401d63cd63f3f4efc41b6856ef36c7
-%global snapdate 20240919
-
 Name:           python-pydicom-data
-Version:        1.0.0^%{snapdate}git%{sub %{commit} 1 7}
+Version:        1.0.0
 Release:        %autorelease
-Summary:        Most of the test files used with pydicom, downloaded to cache when needed
+# Fill in the actual package summary to submit package to Fedora
+Summary:        ...
 
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/pydicom/pydicom-data
-Source:         %{url}/archive/%{commit}/pydicom-data-%{commit}.tar.gz
-
-BuildSystem:            pyproject
-BuildOption(install):   -l data_store
+Source:         %{pypi_source pydicom-data}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-# Test dependencies
-BuildRequires:  %{py3_dist pytest}
 
-%global common_description %{expand:
-%{summary}.}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pydicom-data' generated automatically by pyp2spec.}
 
-%description %{common_description}
+%description %_description
 
-%package -n python3-pydicom-data
+%package -n     python3-pydicom-data
 Summary:        %{summary}
 
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_provides_for_importable_modules
-#
-# Note that this would conflict with https://pypi.org/project/data.store/, but
-# that project has been inactive for nine years, and it is unlikely that it
-# would ever be packaged.
-%py_provides python3-data-store
+%description -n python3-pydicom-data %_description
 
-%description -n python3-pydicom-data %{common_description}
 
-%check -a
-%pytest -v
+%prep
+%autosetup -p1 -n pydicom-data-%{version}
+
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+
+%build
+%pyproject_wheel
+
+
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pydicom-data -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

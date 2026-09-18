@@ -9,7 +9,7 @@
 %undefine _include_minidebuginfo
 
 Name:    kwin
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 Summary: KDE Window manager
 

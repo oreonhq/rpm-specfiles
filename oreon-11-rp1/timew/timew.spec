@@ -1,7 +1,7 @@
 %global source0_hash 7ad34f95c0d61d356df55149f9479f8d9aaec417e5f57f2a1cc76ae2f8a3171b
 
 Name:       timew
-Version:    1.9.1
+Version:    1.10.0
 Release:    %autorelease
 Summary:    Timewarrior tracks and reports time
 # SPDX

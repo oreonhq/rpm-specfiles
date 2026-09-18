@@ -1,65 +1,67 @@
-%global source0_hash 9a21d35a7c8f4eadf979436a8ef4ddfa306388f241d36ded08039474d7dcb81d
-
-# test requires real credentials and network access
-%bcond check 1
+%global source0_hash none
 
 Name:           python-huami-token
-Version:        0.7.0
+Version:        0.8.0
 Release:        %autorelease
-Summary:        Obtain watch or band Bluetooth token from Huami servers
+# Fill in the actual package summary to submit package to Fedora
+Summary:        This script retrieves the Bluetooth access token for the watch or band from Huami servers. Additionally, it downloads the AGPS data packs, cep_alm_pak.zip and cep_7days.zip.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://codeberg.org/argrento/huami-token
-Source:         %{url}/archive/v%{version}.tar.gz#/huami_token-%{version}.tar.gz
-# relax dependencies
-Patch:          %{name}-deps.patch
-# fix entrypoint script
-# https://codeberg.org/argrento/huami-token/pulls/84
-Patch:          %{name}-entrypoint.patch
-# New Zepp API seems to require headers
-# https://codeberg.org/argrento/huami-token/issues/119
-Patch:          %{name}-headers.patch
+Source:         %{pypi_source huami_token}
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
-%if %{with check}
-BuildRequires:  python3dist(pytest)
-%endif
 
-%global _desc %{expand:
-Script to obtain watch or band bluetooth access token from Huami
-servers. It will also download AGPS data packs cep_alm_pak.zip and
-cep_7days.zip.
-}
 
-%description %_desc
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'huami-token' generated automatically by pyp2spec.}
 
-%package     -n python3-huami-token
+Patch:          %{name}-deps.patch
+Patch:          %{name}-entrypoint.patch
+Patch:          %{name}-headers.patch
+
+%description %_description
+
+%package -n     python3-huami-token
 Summary:        %{summary}
 
-%description -n python3-huami-token %_desc
+%description -n python3-huami-token %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-huami-token dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n huami_token-%{version}
 
-%autosetup -p1 -n huami-token
+
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -L huami_token
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%if %{with check}
-%pytest
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-huami-token -f %{pyproject_files}
-%doc README.md
-%{_bindir}/huami_token
+%{_bindir}/huami-token
 
 %changelog
 %autochangelog

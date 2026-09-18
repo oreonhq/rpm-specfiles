@@ -1,11 +1,11 @@
 %global source0_hash c728e2b7d4425ae81b54e1e07a3d3c8a4bd6377a63cffa43006045bceaa92e90
 
 %global tarname goocanvas
-%global apiver  2.0
+%global apiver  3.0
 
 Name:           goocanvas2
-Version:        2.0.4
-Release:        22%{?dist}
+Version:        3.0.0
+Release:        1%{?dist}
 Summary:        A new canvas widget for GTK+ that uses cairo for drawing
 # COPYING:          LGPL-2.0 text
 # po/cs.po:         "same license as the goocanvas package"

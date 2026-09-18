@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/groupoids
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.81
+Version:        1.84
 Release:        %autorelease
 Summary:        Groupoids, group graphs, and groupoid graphs
 

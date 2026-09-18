@@ -1,8 +1,8 @@
 %global source0_hash ca7111557df3ecda3cb48b6c5fb3290fa8b45b6226a34867d2a85cbee5747266
 
 Name:           pybox2d
-Version:        2.3.2
-Release:        34%{?dist}
+Version:        2.3.10
+Release:        1%{?dist}
 Summary:        A 2D rigid body simulation library for Python
 
 License:        zlib

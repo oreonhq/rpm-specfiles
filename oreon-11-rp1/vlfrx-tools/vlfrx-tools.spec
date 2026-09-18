@@ -1,8 +1,8 @@
 %global source0_hash 583d308622a6c3ceafd6fbe614c31c979512c0a0666fa81929e1d9eb5a69fd7c
 
 Name:		vlfrx-tools
-Version:	0.9m
-Release:	12%{?dist}
+Version:	0.9p
+Release:	1%{?dist}
 Summary:	VLF Receiver Software Toolkit
 # Automatically converted from old format: BSD - review is highly recommended.
 License:	LicenseRef-Callaway-BSD

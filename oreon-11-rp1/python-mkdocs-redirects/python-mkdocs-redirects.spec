@@ -1,47 +1,57 @@
-%global source0_hash 9420066d70e2a6bb357adf86e67023dcdca1857f97f07c7fe450f8f1fb42f861
+%global source0_hash none
 
 Name:           python-mkdocs-redirects
-Version:        1.2.1
+Version:        1.2.3
 Release:        %autorelease
-Summary:        MkDocs plugin for dynamic page redirects to prevent broken links
-BuildArch:      noarch
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A MkDocs plugin for dynamic page redirects to prevent broken links
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/datarobot/mkdocs-redirects
-Source:         %{pypi_source mkdocs-redirects}
+URL:            https://github.com/ProperDocs/properdocs-redirects
+Source:         %{pypi_source mkdocs_redirects}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
-%description
-A MkDocs plugin for dynamic page redirects to prevent broken links.
 
-%package -n python3-mkdocs-redirects
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'mkdocs-redirects' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-mkdocs-redirects
 Summary:        %{summary}
 
-%description -n python3-mkdocs-redirects
-A MkDocs plugin for dynamic page redirects to prevent broken links.
+%description -n python3-mkdocs-redirects %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n mkdocs_redirects-%{version}
 
-%autosetup -p1 -n mkdocs-redirects-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
-%check
-%pytest
 
 %install
 %pyproject_install
-%pyproject_save_files mkdocs_redirects
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-mkdocs-redirects -f %{pyproject_files}
-%doc README.md
 
 %changelog
 %autochangelog

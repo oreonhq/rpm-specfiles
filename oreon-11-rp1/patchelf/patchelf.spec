@@ -4,8 +4,8 @@
 %undefine _hardened_build
 
 Name:           patchelf
-Version:        0.18.0
-Release:        11%{?dist}
+Version:        0.19.1
+Release:        1%{?dist}
 Summary:        A utility for patching ELF binaries
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

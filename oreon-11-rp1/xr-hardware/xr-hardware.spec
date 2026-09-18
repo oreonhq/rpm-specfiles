@@ -6,7 +6,7 @@
 %forgemeta
 
 Name:           xr-hardware
-Version:        1.1.1
+Version:        1.1.2
 Release:        %autorelease
 Summary:        Udev rules files for normal user access to XR input devices
 

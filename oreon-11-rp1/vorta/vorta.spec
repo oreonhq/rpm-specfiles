@@ -1,8 +1,8 @@
 %global source0_hash 6d5193d21357e7fd7b45c5074d02e10dadcc7658232ae03825a59ad339cb5ea4
 
 Name:           vorta
-Version:        0.10.2
-Release:        7%{?dist}
+Version:        0.11.6
+Release:        1%{?dist}
 Summary:        A GUI for Borg Backup
 License:        GPL-3.0-only AND BSD-2-Clause AND OFL-1.1
 # src/vorta/qt_single_application.py if BSD-2-Clause

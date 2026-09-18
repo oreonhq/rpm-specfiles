@@ -7,7 +7,7 @@
 %bcond_with extended_tests
 
 Name:       bitcoin-core
-Version:    30.2
+Version:    31.1
 Release:    %autorelease
 Summary:    Peer to Peer Cryptographic Currency
 License:    MIT

@@ -7,7 +7,7 @@
 %global crate ansi-str
 
 Name:           rust-ansi-str
-Version:        0.8.0
+Version:        0.9.0
 Release:        %autorelease
 Summary:        Library which provides a set of methods to work with ANSI strings
 

@@ -15,7 +15,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        2.14.3
+Version:        2.15.2
 # can only be reset when subpkg bumped
 Release:        1%{?dist}
 Summary:        Haskell OAuth2 authentication client

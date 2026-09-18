@@ -4,7 +4,7 @@
 %bcond_without tests
 
 Name:           pytz
-Version:        2026.1
+Version:        2026.3.post1
 Release:        1%{?dist}
 Summary:        World Timezone Definitions for Python
 

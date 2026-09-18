@@ -1,67 +1,57 @@
-%global source0_hash 2bda73192e3009bacb626c8feacc9ab5f0685947eb5847e181fb1d330410bcc3
+%global source0_hash none
 
-%global         srcname         html-text
-%global         forgeurl        https://github.com/zytedata/html-text
-Version:        0.6.2
-%global         tag             %{version}
-%forgemeta
-
-Name:           python-%{srcname}
-Release:        7%{?dist}
+Name:           python-html-text
+Version:        0.7.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Extract text from HTML
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            %{forgeurl}
-Source:         %{forgeurl}/archive/%{version}/%{srcname}-%{version}.tar.gz
+URL:            https://github.com/zytedata/html-text
+Source:         %{pypi_source html_text}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
 
-BuildArch: noarch
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-How is html_text different from .xpath('//text()') from LXML
-or .get_text() from Beautiful Soup?
-
-- Text extracted with html_text does not contain inline styles,
-javascript, comments and other text that is not normally visible
-to users;
-
-- html_text normalizes whitespace, but in a way smarter than
-.xpath('normalize-space()), adding spaces around inline elements
-(which are often used as block elements in html markup), and trying
-to avoid adding extra spaces for punctuation;
-
-- html-text can add newlines (e.g. after headers or paragraphs), so
-that the output text looks more like how it is rendered in browsers.}
+This is package 'html-text' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-html-text
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-html-text %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n html_text-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files html_text
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%check 
-%pytest
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
- 
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-html-text -f %{pyproject_files}
+
 %changelog
 %autochangelog

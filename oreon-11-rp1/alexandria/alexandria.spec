@@ -5,7 +5,7 @@ Requires:       %{*} \
 BuildRequires:  %{*} \
 %{nil}
 
-%define		majorver	0.7.9
+%define		majorver	0.7.11
 %undefine		minorver	
 %undefine		ifpre	
 
@@ -73,7 +73,7 @@ Patch26:	alexandria-0.7.9-z3950-zoom-count.patch
 # Read negative value as integer in case position has such value
 # (bug 1014295)
 # https://github.com/mvz/alexandria-book-collection-manager/issues/135
-# Applied in 0.7.9
+# Applied in 0.7.11
 #Patch27:	alexandria-0.7.6-negative-value.patch
 # Specify goocanvas version (bug 1024931)
 # This is obsolete with 0.7.4. 0.7.4 uses goocanvas2 with introspection
@@ -117,7 +117,7 @@ BuildRequires:	gstreamer1-plugins-base
 # autoaudiosink
 BuildRequires:	gstreamer1-plugins-good
 
-# 0.7.9 uses nokogiri instead of hpricot
+# 0.7.11 uses nokogiri instead of hpricot
 #Requires:	ruby(amazon)
 %BothRequires	rubygem(gettext)
 %BothRequires	rubygem(htmlentities)

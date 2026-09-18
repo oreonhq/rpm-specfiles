@@ -1,58 +1,61 @@
-%global source0_hash 759aa22c216326356f65e62e791d66160a0f9c91d1424e8d8adc5e74dddfc6fb
+%global source0_hash none
 
-%global srcname cssselect2
-
-Name:           python-%{srcname}
-Version:        0.9.0
-Release:        1%{?dist}
+Name:           python-cssselect2
+Version:        0.10.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        CSS selectors for Python ElementTree
-License:        BSD-3-Clause
-URL:            https://doc.courtbouillon.org/cssselect2/stable/
-BuildArch:      noarch
-Source0:        %{pypi_source cssselect2}
 
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://doc.courtbouillon.org/cssselect2/
+Source:         %{pypi_source cssselect2}
+
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%description
-cssselect2 is a straightforward implementation of CSS4 Selectors for markup
-documents (HTML, XML, etc.) that can be read by ElementTree-like parsers,
-including cElementTree, lxml, html5lib, etc.
 
-%package -n python3-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'cssselect2' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-cssselect2
 Summary:        %{summary}
 
-%description -n python3-%{srcname}
-cssselect2 is a straightforward implementation of CSS4 Selectors for markup
-documents (HTML, XML, etc.) that can be read by ElementTree-like parsers,
-including cElementTree, lxml, html5lib, etc.
+%description -n python3-cssselect2 %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-cssselect2 doc,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n cssselect2-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
-# Skip the flake8 plugin: linting is useful for upstream only. Also flake8 was
-# not available in time for the Python 3.9 rebuild (and that might be the case
-# for Python 3.10+) so let's just remove it.
-# Same for isort.
-# Same for ruff.
-sed -i -e "s/, 'flake8'//" -e "s/, 'isort'//" -e "s/, 'ruff'//" pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
-%license LICENSE
+
+%files -n python3-cssselect2 -f %{pyproject_files}
 
 %changelog
 %autochangelog

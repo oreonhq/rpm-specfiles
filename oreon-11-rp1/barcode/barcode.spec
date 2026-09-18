@@ -2,8 +2,8 @@
 
 Summary:        Generates barcodes from text strings
 Name:           barcode
-Version:        0.98
-Release:        54%{?dist}
+Version:        0.99
+Release:        1%{?dist}
 License:        GPL-2.0-or-later
 URL:            https://www.gnu.org/software/barcode/
 Source0:        https://ftp.gnu.org/gnu/barcode/%{name}-%{version}.tar.gz

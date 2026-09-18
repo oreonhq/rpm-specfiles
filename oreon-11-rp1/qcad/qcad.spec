@@ -18,7 +18,7 @@
 #
 
 Name:    qcad
-Version: 3.32.6.0
+Version: 3.33.1.0
 Release: %autorelease
 Epoch:   1
 Summary: Powerful 2D CAD system

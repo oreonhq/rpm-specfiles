@@ -1,7 +1,7 @@
 %global source0_hash e51f3475771c9d07116e6cb5ae2e095ef3b11b3107d92c01d3a1dc03be13ff98
 
 Name:           mt32emu
-Version:        2.7.3
+Version:        2_8_3
 Release:        %autorelease
 Summary:        C/C++ library for emulating Roland MT-32, CM-32L and LAPC-I synthesizer modules
 

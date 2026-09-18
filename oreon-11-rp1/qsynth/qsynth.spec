@@ -2,8 +2,8 @@
 
 Summary:       Qt based Fluidsynth GUI front end
 Name:          qsynth
-Version:       1.0.5
-Release:       2%{?dist}
+Version:       1.0.6
+Release:       1%{?dist}
 URL:           http://qsynth.sourceforge.net
 Source0:       http://downloads.sourceforge.net/qsynth/%{name}-%{version}.tar.gz
 License:       GPL-2.0-or-later

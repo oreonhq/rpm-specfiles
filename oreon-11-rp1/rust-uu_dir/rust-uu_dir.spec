@@ -10,7 +10,7 @@
 %global crate uu_dir
 
 Name:           rust-uu_dir
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        Shortcut to ls -C -b
 

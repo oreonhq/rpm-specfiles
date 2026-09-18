@@ -5,8 +5,8 @@
 
 Name:           libvpl
 Epoch:          1
-Version:        2.16.0
-Release:        2%{?dist}
+Version:        2.17.0
+Release:        1%{?dist}
 Summary:        Intel Video Processing Library
 License:        MIT
 URL:            https://intel.github.io/libvpl/latest/index.html

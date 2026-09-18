@@ -18,8 +18,8 @@
 %global ns_project   Tokenizer
 
 Name:           php-%{gh_vendor}-%{gh_project}
-Version:        1.3.1
-Release:        2%{?dist}
+Version:        2.0.1
+Release:        1%{?dist}
 Summary:        Library for converting tokenized PHP source code into XML
 
 License:        BSD-3-Clause

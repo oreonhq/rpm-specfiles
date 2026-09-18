@@ -1,7 +1,7 @@
 %global source0_hash 6d77eace20e9ea106c1330e268ede70c9a4a89744ddc25715682754eca3368df
 
 Name: libexttextcat
-Version: 3.4.6
+Version: 3.4.8
 Release: %autorelease
 Summary: Text categorization library
 

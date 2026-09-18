@@ -4,8 +4,8 @@
 %global vimdatadir %{_datadir}/vim/vimfiles
 
 Name:           clustershell
-Version:        1.9.3
-Release:        8%{?dist}
+Version:        1.10.1
+Release:        1%{?dist}
 Summary:        Python framework for efficient cluster administration
 
 License:        LGPL-2.1-or-later

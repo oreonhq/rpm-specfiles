@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           sdcc
-Version:        4.4.0
-Release:        5%{?dist}
+Version:        4.6.0
+Release:        1%{?dist}
 Summary:        Small Device C Compiler
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

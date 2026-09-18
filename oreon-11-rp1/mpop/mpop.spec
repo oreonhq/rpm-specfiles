@@ -1,7 +1,7 @@
 %global source0_hash 4ca0d1e0d01366fe3e0cf490d88d154df511278fb595638713be3ca675665855
 
 Name:           mpop
-Version:        1.4.21
+Version:        1.4.23
 Release:        %autorelease
 Summary:        Client for receiving mail from POP3 mailboxes
 

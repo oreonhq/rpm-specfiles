@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/unipot
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.6
+Version:        1.7
 Release:        %autorelease
 Summary:        Unipotent subgroups of Chevalley groups for GAP
 

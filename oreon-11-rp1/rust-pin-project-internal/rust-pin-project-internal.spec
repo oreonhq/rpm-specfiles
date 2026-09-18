@@ -8,7 +8,7 @@
 %global crate pin-project-internal
 
 Name:           rust-pin-project-internal
-Version:        1.1.11
+Version:        1.1.13
 Release:        %autorelease
 Summary:        Implementation detail of the pin-project crate
 

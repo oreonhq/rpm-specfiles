@@ -1,8 +1,8 @@
 %global source0_hash 51d2478063e7ec50cde2b61381f3c1028604e45182e374cff0e14199822a081d
 
 Name:       golly
-Version:    4.3
-Release:    4%{?dist}
+Version:    5.0
+Release:    1%{?dist}
 Summary:    Cellular automata simulator (includes Conway's Game of Life)
 # The license for the code is GPLv2+ and for the included python parts Python-2.0.1
 #    see  /usr/share/licenses/golly/License.html

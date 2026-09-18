@@ -1,7 +1,7 @@
 %global source0_hash 74067faf6837f18af7acf6e61e0b9a4c0851bcc58a06ea846b14e5f30c000ecd
 
 Name:           esptool
-Version:        5.2.0
+Version:        5.4.0
 Release:        %autorelease
 Summary:        A utility to communicate with the ROM bootloader in Espressif ESP8266 & ESP32
 

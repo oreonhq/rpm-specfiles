@@ -7,8 +7,8 @@
 %global project xenlism
 
 Name:           %{project}-%{srcname}
-Version:        0
-Release:        0.21.%{gitdate}git%(c=%{commit0}; echo ${c:0:7} )%{?dist}
+Version:        2018.05beta2
+Release:        1.21.%{gitdate}git%(c=%{commit0}; echo ${c:0:7} )%{?dist}
 Summary:        Minimalist theme for your desktop
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

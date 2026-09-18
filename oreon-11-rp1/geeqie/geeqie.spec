@@ -10,7 +10,7 @@ Summary: Image browser and viewer
 Name: geeqie
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
-Version: 2.7
+Version: 3.1
 Release: %autorelease
 URL: https://www.geeqie.org
 

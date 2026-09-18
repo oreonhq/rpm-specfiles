@@ -1,56 +1,57 @@
-%global source0_hash 9742e9a5cbe37387f0c95ccda2d3f673553fe40d390a9341d14641ab269b8877
+%global source0_hash none
 
-%global pypi_name aiounifi
+Name:           python-aiounifi
+Version:        27
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        An asynchronous Python library for communicating with Unifi Controller API
 
-Name:           python-%{pypi_name}
-Version:        23
-Release:        21%{?dist}
-Summary:        Python library for communicating with Unifi Controller API
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/Kane610/aiounifi
-Source0:        %{url}/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source aiounifi}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-Asynchronous library to communicate with the Unifi Controller API.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'aiounifi' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-aiounifi
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-asyncio)
-BuildRequires:  python3dist(pytest-cov)
-BuildRequires:  python3dist(aioresponses)
-%{?python_provide:%python_provide python3-%{pypi_name}}
+%description -n python3-aiounifi %_description
 
-%description -n python3-%{pypi_name}
-Asynchronous library to communicate with the Unifi Controller API.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n aiounifi-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
-rm -rf %{pypi_name}.egg-info
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# Depends on asynctest
-# https://github.com/Kane610/aiounifi/issues/41
-#%%check
-#%%pytest -v tests
 
-%files -n python3-%{pypi_name}
-%doc README.md
-%license LICENSE
-%{python3_sitelib}/%{pypi_name}/
-%{python3_sitelib}/%{pypi_name}-%{version}-py%{python3_version}.egg-info/
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-aiounifi -f %{pyproject_files}
 
 %changelog
 %autochangelog

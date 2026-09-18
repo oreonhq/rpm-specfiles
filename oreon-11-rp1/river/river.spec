@@ -6,7 +6,7 @@
 %global zig_xkbcommon_ver 0.4.0
 
 Name:           river
-Version:        0.4.1
+Version:        0.4.8
 Release:        %autorelease
 Summary:        Non-monolithic Wayland compositor
 

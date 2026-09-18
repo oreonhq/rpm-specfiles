@@ -11,7 +11,7 @@
 %bcond bigtest 0
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        5.6.1
+Version:        5.6.3
 Release:        %autorelease
 Summary:        GAP methods for semigroups
 

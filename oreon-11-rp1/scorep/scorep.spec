@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           scorep
-Version:        9.4
-Release:        3%{?dist}
+Version:        10.1
+Release:        1%{?dist}
 Summary:        Scalable Performance Measurement Infrastructure for Parallel Codes
 License:        BSD-3-Clause
 URL:            http://www.vi-hps.org/projects/score-p/

@@ -3,7 +3,7 @@
 %bcond tests 1
 
 Name:           python-snakemake-executor-plugin-slurm
-Version:        2.3.1
+Version:        2.8.0
 Release:        %autorelease
 Summary:        A Snakemake executor plugin for submitting jobs to a SLURM cluster
 

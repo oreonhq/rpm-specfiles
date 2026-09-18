@@ -4,8 +4,8 @@
 %global repo_name ProcDump-for-Linux
 
 Name:           procdump
-Version:        3.5.0
-Release:        2%{?dist}
+Version:        3.5.3
+Release:        1%{?dist}
 Summary:        Sysinternals process dump utility
 
 License:        MIT

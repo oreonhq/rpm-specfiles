@@ -1,7 +1,7 @@
 %global source0_hash 497c3343fc92146fa3db040b61a11b49a6fd332925c25e8cd2d51bc5832f842d
 
 Name:           vim-ansible
-Version:        3.4
+Version:        5.0
 Release:        %autorelease
 Summary:        Vim plugin for syntax highlighting ansible's common filetypes
 License:        MIT AND BSD-3-Clause

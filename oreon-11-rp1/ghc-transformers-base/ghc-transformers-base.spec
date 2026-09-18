@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.4.6
+Version:        0.4.6.1
 Release:        %autorelease
 Summary:        Lift computations from the bottom of a transformer stack
 

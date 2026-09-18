@@ -1,83 +1,61 @@
-%global source0_hash 407ec0bd3f65fccc3ac8e02f7ba3bb31c95ceca10ebdcfe66120bf56db28e59b
+%global source0_hash none
 
-%global srcname conda-package-streaming
-%global pkgname conda_package_streaming
+Name:           python-conda-package-streaming
+Version:        0.13.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        An efficient library to read from new and old format .conda and .tar.bz2 conda packages.
 
-# We have a circular dep on conda for tests
-%bcond_with bootstrap
-
-Name:           python-%{srcname}
-Version:        0.11.0
-Release:        9%{?dist}
-Summary:        Extract metadata from remote conda packages without downloading whole file
-
-License:        BSD-3-Clause
-URL:            https://github.com/conda/conda-package-streaming
-Source0:        https://github.com/conda/%{srcname}/archive/v%{version}/%{srcname}-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://conda.github.io/conda-package-streaming/
+Source:         %{pypi_source conda_package_streaming}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%global common_description %{expand:Download conda metadata from packages without transferring entire file. Get
-metadata from local .tar.bz2 packages without reading entire files.
 
-Uses enhanced pip lazy_wheel to fetch a file out of .conda with no more than
-3 range requests, but usually 2.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'conda-package-streaming' generated automatically by pyp2spec.}
 
-Uses tar = tarfile.open(fileobj=...) to stream remote .tar.bz2. Closes the
-HTTP request once desired files have been seen.}
+%description %_description
 
-%description
-%{common_description}
-
-%package -n python%{python3_pkgversion}-%{srcname}
+%package -n     python3-conda-package-streaming
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-devel
-# For tests
-%if %{without bootstrap}
-# Need conda executable for tests
-BuildRequires:  conda
-%endif
 
-%description -n python%{python3_pkgversion}-%{srcname}
-%{common_description}
+%description -n python3-conda-package-streaming %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-conda-package-streaming docs,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n conda_package_streaming-%{version}
 
-%autosetup -n %{srcname}-%{version}
-# do not run coverage in pytest, drop unneeded and unpackaged boto3-stubs dev dep
-sed -i -e '/cov/d' -e '/boto3-stubs/d' pyproject.toml requirements.txt
-%if %{with bootstrap}
-sed -i -e '/"conda"/d' -e '/conda-package-handling/d' pyproject.toml
-%endif
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{pkgname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%if %{without bootstrap}
-# To set CONDA_EXE
-. /etc/profile.d/conda.sh
-export CONDA_EXE
-# The deselected tests require a populated conda package cache which we can't really provide
-%pytest -v tests \
-  --deselect=tests/test_transmute.py::test_transmute \
-  --deselect=tests/test_transmute.py::test_transmute_backwards \
-  --deselect=tests/test_url.py::test_lazy_wheel
-%else
-# Minimal non-conda required test
-%pytest -v tests/test_degraded.py
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-conda-package-streaming -f %{pyproject_files}
 
 %changelog
 %autochangelog

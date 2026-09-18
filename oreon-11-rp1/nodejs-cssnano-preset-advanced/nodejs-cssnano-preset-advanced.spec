@@ -9,7 +9,7 @@ provides advanced optimisations, which may or may not break your CSS.
 }
 
 Name:           nodejs-%{npm_name}
-Version:        7.0.7
+Version:        9.0.5
 Release:        %autorelease
 Summary:        Advanced optimisations for cssnano; may or may not break your CSS!
 

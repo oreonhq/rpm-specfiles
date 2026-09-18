@@ -17,7 +17,7 @@
 %endif
 
 Name:           python-pyscf
-Version:        2.12.1
+Version:        2.14.0
 Release:        1%{?dist}
 Summary:        Python module for quantum chemistry
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

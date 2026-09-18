@@ -8,7 +8,7 @@
 %global crate font-kit
 
 Name:           rust-font-kit
-Version:        0.11.0
+Version:        0.14.3
 Release:        %autorelease
 Summary:        Cross-platform font loading library
 

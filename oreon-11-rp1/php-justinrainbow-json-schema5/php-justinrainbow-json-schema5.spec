@@ -35,7 +35,7 @@
 %global eolv2        0
 
 Name:           php-%{gh_owner}-%{gh_project}%{major}
-Version:        5.3.2
+Version:        6.12.0
 Release:        1%{?dist}
 Summary:        A library to validate a json schema
 License:        MIT

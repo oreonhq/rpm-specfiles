@@ -5,8 +5,8 @@
 
 Name:           google-auth-httplib2
 Summary:        %{sum}
-Version:        0.3.0
-Release:        2%{?dist}
+Version:        0.4.2
+Release:        1%{?dist}
 
 License:        Apache-2.0
 URL:            https://github.com/googleapis/google-auth-library-python-httplib2

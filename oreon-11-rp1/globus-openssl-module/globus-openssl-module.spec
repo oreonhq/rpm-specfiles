@@ -2,8 +2,8 @@
 
 Name:		globus-openssl-module
 %global _name %(tr - _ <<< %{name})
-Version:	5.2
-Release:	14%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Globus OpenSSL Module Wrapper
 
 License:	Apache-2.0

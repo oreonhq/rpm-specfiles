@@ -5,8 +5,8 @@
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 Name:       libprojectM
-Version:    3.1.12
-Release:    14%{?dist}
+Version:    4.1.7
+Release:    1%{?dist}
 Summary:    The libraries for the projectM music visualization plugin
 License:    LGPLv2+
 URL:        https://github.com/projectM-visualizer/projectm

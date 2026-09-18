@@ -1,57 +1,62 @@
-%global source0_hash 5bfb2fc7b4cb63254fc58302223cd3d654766cac56ae6aac29ca37911ba5b3ab
+%global source0_hash none
 
 Name:           python-charset-normalizer
-Version:        3.4.6
+Version:        3.5.1
 Release:        %autorelease
-Summary:        The Real First Universal Charset Detector
-# SPDX
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet.
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/ousret/charset_normalizer
-Source0:        https://github.com/ousret/charset_normalizer/archive/refs/tags/3.4.6.tar.gz#/python-charset-normalizer-3.4.6.tar.gz
-BuildArch:      noarch
+URL:            https://github.com/jawah/charset_normalizer/blob/master/CHANGELOG.md
+Source:         %{pypi_source charset_normalizer}
 
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
-BuildRequires:  python3dist(pytest)
+BuildRequires:  gcc
 
 
-%description
-A library that helps you read text from an unknown charset encoding.
-Motivated by chardet, trying to resolve the issue by taking
-a new approach. All IANA character set names for which the Python core
-library provides codecs are supported.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'charset-normalizer' generated automatically by pyp2spec.}
+
+%description %_description
 
 %package -n     python3-charset-normalizer
 Summary:        %{summary}
 
-%description -n python3-charset-normalizer
-A library that helps you read text from an unknown charset encoding.
-Motivated by chardet, trying to resolve the issue by taking
-a new approach. All IANA character set names for which the Python core
-library provides codecs are supported.
+%description -n python3-charset-normalizer %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-charset-normalizer unicode-backport
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n charset_normalizer-%{version}
-# Drop mypy from build dependencies
-sed -i 's/"mypy.*"//' pyproject.toml
+%autosetup -p1 -n charset_normalizer-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x unicode-backport
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files charset_normalizer
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-charset-normalizer -f %{pyproject_files}
-%license LICENSE
-%doc README.md
 %{_bindir}/normalizer
 
 %changelog

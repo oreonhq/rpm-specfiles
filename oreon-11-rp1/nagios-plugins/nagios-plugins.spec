@@ -22,9 +22,9 @@
 %endif
 
 Name: nagios-plugins
-Version: 2.4.12
+Version: 2.5
 %if 0%{?fromgit}
-Release: 4.%{?commdate}git%{?shortcommit}%{?dist}
+Release: 1.%{?commdate}git%{?shortcommit}%{?dist}
 %else
 Release: 4%{?dist}
 %endif

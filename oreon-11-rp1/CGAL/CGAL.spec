@@ -12,7 +12,7 @@
 #global fullversion 6.1
 
 Name:           CGAL
-Version:        6.1.1
+Version:        6.2.1
 Release:        1%{?dist}
 Summary:        Computational Geometry Algorithms Library
 

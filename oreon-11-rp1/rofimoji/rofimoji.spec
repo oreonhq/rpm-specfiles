@@ -1,7 +1,7 @@
 %global source0_hash 9b537d8936a4e4092bbf6cfdc66ba8908b7300a3027ee44c49930199f3674dc3
 
 %global         srcname     rofimoji
-Version:        6.7.0
+Version:        6.8.0
 %global         forgeurl    https://github.com/fdw/rofimoji
 %global         tag         %{version}
 %forgemeta

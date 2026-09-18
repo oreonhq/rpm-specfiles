@@ -1,7 +1,7 @@
 %global source0_hash 80cfca1254bab8e81d639178e42d6406d856fba6e34cad60d1ab50ee6e5f7ebb
 
 Name:           typescript
-Version:        5.7.3
+Version:        7.1.0-dev.20260917.1
 Release:        %autorelease
 Summary:        A language for application-scale JavaScript
 License:        Apache-2.0

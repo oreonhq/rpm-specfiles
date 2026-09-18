@@ -1,49 +1,62 @@
-%global source0_hash 7e9b232fcb6fa86582bd29870e8aa8cd27d350d684d6132b402bf2476490f981
+%global source0_hash none
 
 Name:           python-sounddevice
-Version:        0.5.3
+Version:        0.5.6
 Release:        %autorelease
-Summary:        Play and record sound with Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Play and Record Sound with Python
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/spatialaudio/python-sounddevice
-Source:         %{url}/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+URL:            https://github.com/spatialaudio/python-sounddevice/
+Source:         %{pypi_source sounddevice}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  portaudio
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Play and record sound with Python.}
+This is package 'sounddevice' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-sounddevice
+%package -n     python3-sounddevice
 Summary:        %{summary}
 
 %description -n python3-sounddevice %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sounddevice numpy
 
-%autosetup -p1
+
+%prep
+%autosetup -p1 -n sounddevice-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x numpy
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files -l sounddevice _sounddevice
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-sounddevice -f %{pyproject_files}
-%doc README.rst
 
 %changelog
 %autochangelog

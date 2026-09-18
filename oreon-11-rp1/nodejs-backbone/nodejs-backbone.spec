@@ -11,13 +11,13 @@
 %bcond_with tests
 
 Name:           nodejs-%{modname}
-Version:        1.3.3
-Release:        23%{?dist}
+Version:        1.6.1
+Release:        1%{?dist}
 Summary:        Models, Views, Collections, and Events for JavaScript applications (Nodejs module)
 License:        MIT
 URL:            http://backbonejs.org/
 Source0:        http://registry.npmjs.org/%{modname}/-/%{modname}-%{version}.tgz
-# git archive --format=tar --prefix=test/ 1.3.3:test/ | bzip2 >tests-1.3.3.tar.bz2
+# git archive --format=tar --prefix=test/ 1.6.1:test/ | bzip2 >tests-1.3.3.tar.bz2
 Source1:        tests-%{version}.tar.bz2
 BuildArch:      noarch
 ExclusiveArch:  %{nodejs_arches} noarch

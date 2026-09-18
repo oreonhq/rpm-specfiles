@@ -1,66 +1,57 @@
-%global source0_hash b8c0dc52c93604d4f2d04c6bc19bfac0a10229ee06277e1140bacc75005fe85a
+%global source0_hash none
 
-%global srcname msgpack
+Name:           python-msgpack
+Version:        1.2.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        MessagePack serializer
 
-Name:           python-%{srcname}
-Version:        1.1.2
-Release:        2%{?dist}
-Summary:        Python MessagePack (de)serializer
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://msgpack.org/
-Source0:        https://github.com/msgpack/msgpack-python/archive/v%{version}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source msgpack}
 
-BuildRequires:  gcc-c++
+BuildRequires:  python3-devel
+BuildRequires:  gcc
 
-%description
-MessagePack is a binary-based efficient data interchange format that is
-focused on high performance. It is like JSON, but very fast and small.
-This is a Python (de)serializer for MessagePack.
 
-%package -n python%{python3_pkgversion}-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'msgpack' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-msgpack
 Summary:        %{summary}
 
-BuildRequires:  python%{python3_pkgversion}-Cython
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
-BuildRequires:  python%{python3_pkgversion}-pytest
+%description -n python3-msgpack %_description
 
-# For backwards compatibility
-Provides:       python3dist(%{srcname}-python) = %{version}
-Provides:       python%{python3_version}dist(%{srcname}-python) = %{version}
-
-%description -n python%{python3_pkgversion}-%{srcname}
-MessagePack is a binary-based efficient data interchange format that is
-focused on high performance. It is like JSON, but very fast and small.
-This is a Python %{python3_version} (de)serializer for MessagePack.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n msgpack-%{version}
 
-%autosetup -p1 -n %{srcname}-python-%{version}
-# Remove as soon as setuptools is available in a later release 
-sed -i "s/setuptools >= 69.5.1/setuptools/g" pyproject.toml
-# There is a circular dependency with python-msgpack-ext
-rm -rf test/test_timestamp.py
 
 %generate_buildrequires
-%pyproject_buildrequires -R
+%pyproject_buildrequires
+
 
 %build
-make cython
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v test
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
-%doc README.md
-%license COPYING
+
+%files -n python3-msgpack -f %{pyproject_files}
 
 %changelog
 %autochangelog

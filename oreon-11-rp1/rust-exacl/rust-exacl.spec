@@ -7,7 +7,7 @@
 %global crate exacl
 
 Name:           rust-exacl
-Version:        0.12.0
+Version:        0.13.0
 Release:        %autorelease
 Summary:        Manipulate file system access control lists
 

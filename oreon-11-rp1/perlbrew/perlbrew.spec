@@ -1,8 +1,8 @@
 %global source0_hash 7f775fd7922d0ca29650965815f2f362241372a8decc5f6e1b90f757aaffd41c
 
 Name:           perlbrew
-Version:        1.01
-Release:        4%{?dist}
+Version:        1.02
+Release:        1%{?dist}
 Summary:        Manage perl installations in your $HOME
 License:        MIT
 URL:            https://metacpan.org/release/App-perlbrew

@@ -10,8 +10,8 @@
 
 Name:		coin-or-%{module}
 Summary:	Coin-or branch and cut
-Version:	2.10.12
-Release:	12%{?dist}
+Version:	2.933
+Release:	1%{?dist}
 
 # The project as a whole is licensed EPL-2.0.  However, many source files still
 # claim to be licensed EPL-1.0.  This is probably an upstream oversight.
@@ -42,7 +42,7 @@ BuildRequires:	pkgconfig(vol)
 
 Requires(post):   %{_sbindir}/alternatives
 Requires(preun):  %{_sbindir}/alternatives
-Obsoletes:	      coin-or-Cbc < 0:2.10.12-5
+Obsoletes:	      coin-or-Cbc < 0:2.933-5
 
 # Install documentation in standard rpm directory
 Patch0:		%{name}-docdir.patch

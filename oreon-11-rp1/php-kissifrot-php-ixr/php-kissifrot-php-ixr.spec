@@ -4,8 +4,8 @@
 %global project  php-ixr
 Name: php-%{author}-%{project}
 
-Version: 1.8.4
-Release: 3%{?dist}
+Version: 1.8.5
+Release: 1%{?dist}
 
 Summary: XML-RPC library for PHP
 License: BSD

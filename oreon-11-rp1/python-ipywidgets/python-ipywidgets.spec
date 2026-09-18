@@ -1,49 +1,61 @@
-%global source0_hash 61f969306b95f85fba6b6986b7fe45d73124d1d9e3023a8068710d47a22ea668
+%global source0_hash none
 
-%global pypi_name ipywidgets
-
-Name:           python-%{pypi_name}
-Version:        8.1.8
+Name:           python-ipywidgets
+Version:        8.1.9
 Release:        %autorelease
-Summary:        IPython HTML widgets for Jupyter
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Jupyter interactive widgets
 
-License:        BSD-3-Clause
-URL:            http://ipython.org
-Source0:        %{pypi_source}
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            http://jupyter.org
+Source:         %{pypi_source ipywidgets}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%description
-Interactive HTML widgets for Jupyter notebooks and the IPython kernel.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'ipywidgets' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-ipywidgets
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name}
-Interactive HTML widgets for Jupyter notebooks and the IPython kernel.
+%description -n python3-ipywidgets %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-ipywidgets test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n ipywidgets-%{version}
 
-%autosetup -p3 -n %{pypi_name}-%{version}
 
 %generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
 %pyproject_buildrequires -x test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-ipywidgets -f %{pyproject_files}
 
 %changelog
 %autochangelog

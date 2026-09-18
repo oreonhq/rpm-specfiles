@@ -8,7 +8,7 @@ compact CSS appropriately.
 }
 
 Name:           nodejs-%{npm_name}
-Version:        7.0.7
+Version:        9.0.5
 Release:        %autorelease
 Summary:        A modular minifier, built on top of the PostCSS ecosystem
 

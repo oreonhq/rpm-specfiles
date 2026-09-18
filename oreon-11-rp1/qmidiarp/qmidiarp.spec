@@ -2,8 +2,8 @@
 
 Summary:          An arpeggiator, sequencer and MIDI LFO for ALSA
 Name:             qmidiarp
-Version:          0.6.5
-Release:          22%{?dist}
+Version:          0.7.5
+Release:          1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:          GPL-2.0-or-later
 URL:              http://sourceforge.net/projects/qmidiarp 

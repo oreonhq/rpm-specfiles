@@ -7,7 +7,7 @@
 %global crate h3
 
 Name:           rust-h3
-Version:        0.0.3
+Version:        0.0.8
 Release:        %autorelease
 Summary:        An async HTTP/3 implementation.
 

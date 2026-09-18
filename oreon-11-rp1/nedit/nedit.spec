@@ -2,8 +2,8 @@
 
 Summary: A GUI text editor for systems with X
 Name: nedit
-Version: 5.7
-Release: 22%{?dist}
+Version: 5.8
+Release: 1%{?dist}
 Source: http://sourceforge.net/projects/nedit/files/nedit-source/nedit-%{version}-src.tar.gz
 Source1: nedit.desktop
 Source2: nedit-icon.png
@@ -47,8 +47,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 pushd doc
 # Upstream really doesn't want you generating the manpages, but they forgot to
-# include the manpages in 5.7. So generate them.
-make VERSION='NEdit 5.7' man
+# include the manpages in 5.8. So generate them.
+make VERSION='NEdit 5.8' man
 popd
 make linux C_OPT_FLAGS="$RPM_OPT_FLAGS"
 

@@ -9,8 +9,8 @@ check on style.}
 
 Name:           pyflakes
 # WARNING: When updating pyflakes, check not to break flake8!
-Version:        3.1.0
-Release:        9%{?dist}
+Version:        3.4.0
+Release:        1%{?dist}
 Summary:        A simple program which checks Python source files for errors
 
 License:        MIT

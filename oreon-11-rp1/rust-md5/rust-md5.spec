@@ -7,7 +7,7 @@
 %global crate md5
 
 Name:           rust-md5
-Version:        0.7.0
+Version:        0.8.1
 Release:        %autorelease
 Summary:        The package provides the MD5 hash function.
 

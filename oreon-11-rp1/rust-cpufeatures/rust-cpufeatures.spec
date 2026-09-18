@@ -7,7 +7,7 @@
 %global crate cpufeatures
 
 Name:           rust-cpufeatures
-Version:        0.3.0
+Version:        0.3.1
 Release:        %autorelease
 Summary:        Lightweight runtime CPU feature detection for aarch64 and x86
 
@@ -17,7 +17,7 @@ Source:         %{crates_source}
 Patch:          cpufeatures-fix-metadata.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
-BuildRequires:  (crate(libc) >= 0.2.155 with crate(libc) < 0.3.0~)
+BuildRequires:  (crate(libc) >= 0.2.155 with crate(libc) < 0.3.1~)
 
 %global _description %{expand:
 Lightweight runtime CPU feature detection for aarch64, loongarch64, and

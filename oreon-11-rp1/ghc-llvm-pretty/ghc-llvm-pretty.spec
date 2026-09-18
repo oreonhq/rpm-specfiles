@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        0.13.1.0
+Version:        0.15.0.0
 Release:        %autorelease
 Summary:        A pretty printing library inspired by the llvm binding
 

@@ -1,8 +1,8 @@
 %global source0_hash 6b215d4f472b21d6232f30f221117a777e24bcfee68955ddefb7426467f9494b
 
 Name:             st
-Version:          0.9.2
-Release:          4%{?dist}
+Version:          0.9.3
+Release:          1%{?dist}
 Summary:          A simple terminal implementation for X
 %global           _stsourcedir %{_usrsrc}/%{name}-user-%{version}-%{release}
 License:          MIT

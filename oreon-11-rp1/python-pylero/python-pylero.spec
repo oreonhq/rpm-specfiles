@@ -1,82 +1,57 @@
-%global source0_hash 76b64ade2e73b3f0ad3049840498db0cb302c9f77690641ddc2684d5684e1893
+%global source0_hash none
 
 Name:           python-pylero
-Version:        0.1.1
-Release:        6%{?dist}
+Version:        0.2.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Python SDK for Polarion
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/RedHatQE/pylero
-Source:         %{url}/archive/%{version}/pylero-%{version}.tar.gz
+Source:         %{pypi_source pylero}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This is Pylero, the Python wrapper for the Polarion WSDL API. The Pylero
-wrapper enables native python access to Polarion objects and functionality
-using object oriented structure and functionality. This allows the devlopers to
-use Pylero in a natural fashion without being concerned about the Polarion
-details.
-
-All Pylero objects inherit from BasePolarion. The objects used in the library
-are all generated from the SOAP factory class, using the python-suds library.
-The Pylero class attributes are generated dynamically as properties, based on
-a mapping dict between the pylero naming convention and the Polarion attribute
-names.
-
-The use of properties allows the pylero object attributes to be virtual with no
-need for syncing between them and the Polarion objects they are based on.
-
-The Polarion WSDL API does not implement validation/verification of data passed
-in, so the Pylero library takes care of this itself. All enums are validated
-before being sent to the server and raise an error if not using a valid value.
-A number of workflow implementations are also included, for example when
-creating a Document, it automatically creates the Heading work item at the same
-time.
-
-Polarion Work Items are configured per installation, to give native workitem
-objects (such as TestCase), the library connects to the Polarion server,
-downloads the list of workitems and creates them.}
+This is package 'pylero' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-pylero
+%package -n     python3-pylero
 Summary:        %{summary}
 
 %description -n python3-pylero %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n pylero-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files pylero
-
-%global _pylero_import_exclude %{expand:
--e pylero.build -e pylero.build_linked_work_item -e pylero.cli.cmd -e pylero.document
--e pylero.plan -e pylero.plan_record -e pylero.test_record -e pylero.test_run
--e pylero.work_item
-}
 
 %check
-# If the Polarion server URL is not specified in config some libraries will
-# fail to import, so exclude the modules which require the server url
-%pyproject_check_import %_pylero_import_exclude
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pylero -f %{pyproject_files}
-%doc README.md
-%{_bindir}/pylero
-%{_bindir}/pylero-cmd
 
 %changelog
 %autochangelog

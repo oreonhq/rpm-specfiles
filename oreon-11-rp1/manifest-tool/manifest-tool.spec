@@ -25,8 +25,8 @@
 %global shortcommit    %(c=%{commit}; echo ${c:0:7})
 
 Name:           manifest-tool
-Version:        2.0.8
-Release:        12%{?dist}
+Version:        2.2.2
+Release:        1%{?dist}
 #Release:        5.git{shortcommit}{?dist}
 Summary:        A command line tool used for creating manifest list objects
 License:        Apache-2.0

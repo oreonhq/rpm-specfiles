@@ -5,8 +5,8 @@
 %global selinuxtype targeted
 
 Name:           trafficserver
-Version:        10.1.1
-Release:        3%{?dist}
+Version:        10.2.0
+Release:        1%{?dist}
 Summary:        Fast, scalable and extensible HTTP/1.1 and HTTP/2 caching proxy server
 
 License:        Apache-2.0

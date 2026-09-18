@@ -10,7 +10,7 @@
 %global supported_arches x86_64
 
 Name:           rust-az-cvm-vtpm
-Version:        0.7.4
+Version:        0.8.2
 Release:        %autorelease
 Summary:        Package with shared code for Azure Confidential VMs
 

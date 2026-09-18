@@ -1,8 +1,8 @@
 %global source0_hash add1433fcaa9861b59426d8db236e51047752b47fd788575ee0fe2dc3af3926e
 
 Name:           gnome-chemistry-utils
-Version:        0.14.17
-Release:        54%{?dist}
+Version:        0.15
+Release:        1%{?dist}
 Summary:        A set of chemical utilities
 
 #openbabel/* is GPLv2+

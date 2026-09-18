@@ -6,7 +6,7 @@
 # Copyright (C) 2017-2020 Red Hat, Inc.
 
 Name:           cockpit-podman
-Version:        122
+Version:        126
 Release:        1%{?dist}
 Summary:        Cockpit component for Podman containers
 License:        LGPL-2.1-or-later

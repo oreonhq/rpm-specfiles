@@ -1,78 +1,61 @@
-%global source0_hash 03671df12a36ec3b357c244d5154b6786362ff5d80770675c7b24815101066e4
+%global source0_hash none
 
-%global srcname astropy-healpix
-%global modname astropy_healpix
-
-Name:           python-%{srcname}
-Version:        1.1.2
+Name:           python-astropy-healpix
+Version:        2.0.1
 Release:        %autorelease
-Summary:        HEALPix for Astropy
+# Fill in the actual package summary to submit package to Fedora
+Summary:        BSD-licensed HEALPix for Astropy
 
-License:        BSD-3-Clause
-URL:            https://pypi.python.org/pypi/%{srcname}
-Source0:        %{pypi_source astropy_healpix}
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch: %{ix86}
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/astropy/astropy-healpix
+Source:         %{pypi_source astropy_healpix}
 
-BuildRequires:  gcc
 BuildRequires:  python3-devel
+BuildRequires:  gcc
 
-%description
-This is a BSD-licensed Python package for HEALPix, which is based on the C
-HEALPix code written by Dustin Lang originally in astrometry.net, and was
-added here with a Cython wrapper and expanded with a Python interface.
 
-%package -n python3-%{srcname}
-Summary: %{summary}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'astropy-healpix' generated automatically by pyp2spec.}
 
-%description -n python3-%{srcname}
-%{description}
+%description %_description
+
+%package -n     python3-astropy-healpix
+Summary:        %{summary}
+
+%description -n python3-astropy-healpix %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-astropy-healpix docs,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n astropy_healpix-%{version}
 
-%autosetup -n %{modname}-%{version} -p1
-
-# Remove egg files from source
-rm -r %{modname}.egg-info
 
 %generate_buildrequires
-%pyproject_buildrequires -x test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{modname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-export PYTEST_ADDOPTS='-p no:cacheprovider'
-pushd %{buildroot}/%{python3_sitearch}
-%pytest \
-%ifarch aarch64
---deselect "astropy_healpix/tests/test_healpy.py::test_ang2pix" \
---deselect "astropy_healpix/tests/test_healpy.py::test_ring2nest" \
---deselect "astropy_healpix/tests/test_healpy.py::test_interp_weights" \
---deselect "astropy_healpix/tests/test_healpy.py::test_ang2vec" \
-%endif
-%ifarch riscv64
---deselect "astropy_healpix/tests/test_healpy.py::test_pix2ang" \
---deselect "astropy_healpix/tests/test_healpy.py::test_pix2vec" \
---deselect "astropy_healpix/tests/test_healpy.py::test_ang2vec" \
-%endif
-%ifarch s390x
---deselect "astropy_healpix/tests/test_healpy.py::test_ang2vec" \
-%endif
-%{modname}
+%_pyproject_check_import_allow_no_modules -t
 
-# Hypothesis tests creates some files in sitearch... we remove them now
-rm -rf .hypothesis
-popd
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE.md
-%doc README.rst
+%files -n python3-astropy-healpix -f %{pyproject_files}
 
 %changelog
 %autochangelog

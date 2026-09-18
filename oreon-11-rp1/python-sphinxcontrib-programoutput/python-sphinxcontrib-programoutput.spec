@@ -1,88 +1,62 @@
-%global source0_hash 19cef6383bd9ce2ed316258d6f22e42539435fe92964cbbe065c6e8794d0cd68
-
-%{?python_enable_dependency_generator}
-%global srcname sphinxcontrib-programoutput
-%global _docdir_fmt %{name}
+%global source0_hash none
 
 Name:           python-sphinxcontrib-programoutput
-Version:        0.18
+Version:        0.20
 Release:        %autorelease
-Summary:        Extension to insert output of commands into documents
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Sphinx extension to include program output
 
-License:        BSD-3-Clause
-URL:            https://pypi.python.org/pypi/sphinxcontrib-programoutput
-Source0:        https://github.com/NextThought/sphinxcontrib-programoutput/archive/%{version}/%{srcname}-%{version}.tar.gz
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-2-Clause
+URL:            https://sphinxcontrib-programoutput.readthedocs.io/en/latest/
+Source:         %{pypi_source sphinxcontrib_programoutput}
 
 BuildArch:      noarch
-BuildRequires:  python3-sphinx
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3dist(sphinx) >= 1.3.5
-BuildRequires:  python3-furo
-# The documentation runs commands like 'python -V' and 'python --help'.
-# Any python version is fine.
-BuildRequires:  python-unversioned-command
-BuildRequires:  pytest
-BuildRequires:  git
-BuildRequires:  web-assets-devel
 
-%description
-A Sphinx extension to literally insert the output of arbitrary
-commands into documents, helping you to keep your command examples
-up to date.
 
-%package -n python3-%{srcname}
-Summary:       %{summary}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sphinxcontrib-programoutput' generated automatically by pyp2spec.}
 
-Requires:       js-jquery
-%{?python_provide:%python_provide python3-%{srcname}}
+%description %_description
 
-%description -n python3-%{srcname}
-A Sphinx extension to literally insert the output of arbitrary
-commands into documents, helping you to keep your command examples
-up to date.
+%package -n     python3-sphinxcontrib-programoutput
+Summary:        %{summary}
+
+%description -n python3-sphinxcontrib-programoutput %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sphinxcontrib-programoutput ansi,docs,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sphinxcontrib_programoutput-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
-sed -r -i s/python/python3/ src/sphinxcontrib/programoutput/tests/{test_directive.py,test_command.py,test_cache.py}
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x ansi,docs,test
+
 
 %build
-%py3_build
-rm build/lib/sphinxcontrib/__init__.py
+%pyproject_wheel
 
-# workaround https://github.com/python/cpython/issues/94741
-echo 'import importlib; importlib.invalidate_caches(); del importlib' > build/lib/sitecustomize.py
-PYTHONPATH=build/lib sphinx-build -b html docs build/html
-rm build/lib/sitecustomize.py build/lib/__pycache__/sitecustomize.*.pyc
-
-rm -r build/html/.buildinfo build/html/.doctrees
 
 %install
-%py3_install
-mkdir -p %{buildroot}%{_pkgdocdir}
-cp -rv build/html %{buildroot}%{_pkgdocdir}/
-ln -vsf %{_jsdir}/jquery/latest/jquery.min.js %{buildroot}%{_pkgdocdir}/html/_static/jquery.js
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-OPTIONS=(
-  # Those two fail because of some warnign:
-  # > assert 'Unexpected return code 1 from command' in excinfo.exception.args[0]
-  # E assert 'Unexpected return code 1 from command' in "directive 'deprecated' is already registered, it will be overridden"
-  # I'm not sure what exactly generates this warning. But it doesn't seem to be
-  # an actual problem with the code, so let's ignore this for now.
-  -k 'not (test_shell_with_unexpected_return_code or test_unexpected_return_code)'
-)
+%_pyproject_check_import_allow_no_modules -t
 
-%pytest -v %{buildroot}%{python3_sitelib}/sphinxcontrib "${OPTIONS[@]}"
 
-%files -n python3-%{srcname}
-%license LICENSE
-%doc %{_pkgdocdir}
-%{python3_sitelib}/sphinxcontrib/*
-%{python3_sitelib}/sphinxcontrib_programoutput*info/
+%files -n python3-sphinxcontrib-programoutput -f %{pyproject_files}
 
 %changelog
 %autochangelog

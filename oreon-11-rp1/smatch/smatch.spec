@@ -1,7 +1,7 @@
 %global source0_hash 0c3ee7214e81c6ba506c1886a110d5406ee080d49a17c1e7e673b62b28b213d6
 
 Name:       smatch
-Version:    1.74
+Version:    1.75
 Release:    1%{?dist}
 Summary:    A static analyzer for C
 

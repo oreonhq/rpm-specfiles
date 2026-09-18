@@ -1,7 +1,7 @@
 %global source0_hash 32266198a4bc6a6df395d8526688c9697d9c8e472f888c749fdde2e08ea88dd2
 
 Name:		samtools
-Version:	1.23.1
+Version:	1.24
 Release:	1%{?dist}
 Summary:	Tools for nucleotide sequence alignments in the SAM format
 

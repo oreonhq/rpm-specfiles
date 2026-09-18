@@ -3,8 +3,8 @@
 %define libnfnetlink 1.0.0
 
 Name:           libnetfilter_log
-Version:        1.0.1
-Release:        31%{?dist}
+Version:        1.0.2
+Release:        1%{?dist}
 Summary:        Netfilter logging userspace library
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only

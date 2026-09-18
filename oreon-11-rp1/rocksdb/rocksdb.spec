@@ -5,8 +5,8 @@
 %global forgeurl https://github.com/facebook/rocksdb
 
 Name:    rocksdb
-Version: 10.2.1
-Release: 2%{?dist}
+Version: 11.8.1
+Release: 1%{?dist}
 Summary: A Persistent Key-Value Store for Flash and RAM Storage
 
 # Automatically converted from old format: GPLv2 or ASL 2.0 and BSD - review is highly recommended.

@@ -3,7 +3,7 @@
 %global forgeurl https://github.com/AlizaMedicalImaging/AlizaMS
 
 Name:    alizams
-Version: 1.9.10
+Version: 1.10.3
 
 %forgemeta
 

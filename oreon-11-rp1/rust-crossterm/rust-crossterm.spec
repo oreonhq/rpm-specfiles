@@ -7,7 +7,7 @@
 %global crate crossterm
 
 Name:           rust-crossterm
-Version:        0.27.0
+Version:        0.29.0
 Release:        %autorelease
 Summary:        A crossplatform terminal library for manipulating terminals.
 

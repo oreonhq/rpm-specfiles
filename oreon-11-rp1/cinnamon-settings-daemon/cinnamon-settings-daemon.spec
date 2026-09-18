@@ -3,7 +3,7 @@
 %global cinnamon_desktop_version 6.6.0
 
 Name:           cinnamon-settings-daemon
-Version:        6.6.3
+Version:        6.7.4-unstable
 Release:        1%{?dist}
 Summary:        The daemon sharing settings from CINNAMON to GTK+/KDE applications
 

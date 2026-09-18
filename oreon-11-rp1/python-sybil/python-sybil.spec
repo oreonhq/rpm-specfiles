@@ -1,61 +1,64 @@
-%global source0_hash a64b2bf2925bb995dc94acb6a82c51e916acb90e21c0f0cab48282f86378dbd1
+%global source0_hash none
 
-%global pypi_name sybil
+Name:           python-sybil
+Version:        10.1.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Automated testing for the examples in your code and documentation.
 
-Name:           python-%{pypi_name}
-Version:        9.1.0
-Release:        6%{?dist}
-Summary:        Automated testing for the examples in your documentation
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://sybil.readthedocs.io/
-Source0:        https://github.com/simplistix/sybil/archive/refs/tags/%{version}.tar.gz
-# seedir is not available in Fedora yet
-Patch:          drop-dependency-on-seedir.patch
+URL:            https://github.com/simplistix/sybil
+Source:         %{pypi_source sybil}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-This library provides a way to test examples in your documentation by parsing
-them from the documentation source and evaluating the parsed examples as part
-of your normal test run. Integration is provided for the three main Python
-test runners.
 
-%package -n python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'sybil' generated automatically by pyp2spec.}
+
+Patch:          drop-dependency-on-seedir.patch
+
+%description %_description
+
+%package -n     python3-sybil
 Summary:        %{summary}
 
-BuildRequires:  make
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-pytest
-BuildRequires:  python3-testfixtures
-BuildRequires:  python3-pyyaml
+%description -n python3-sybil %_description
 
-%description -n python3-%{pypi_name}
-This library provides a way to test examples in your documentation by parsing
-them from the documentation source and evaluating the parsed examples as part
-of your normal test run. Integration is provided for the three main Python
-test runners.
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-sybil myst,pytest
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sybil-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p1
-sed -i "/seeddir/d" setup.py
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x myst,pytest
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{pytest} tests
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%doc README.rst
-%license docs/license.rst
-%{python3_sitelib}/*.egg-info
-%{python3_sitelib}/%{pypi_name}/
+
+%files -n python3-sybil -f %{pyproject_files}
 
 %changelog
 %autochangelog

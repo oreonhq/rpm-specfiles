@@ -12,17 +12,17 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:       gnome-abrt
-Version:    1.4.3
-Release:    9%{?snapshot:.git%{shortcommit}}%{?dist}
+Version:    1.5.2
+Release:    1%{?snapshot:.git%{shortcommit}}%{?dist}
 Epoch:      1
 Summary:    A utility for viewing problems that have occurred with the system
 
 License:    GPL-2.0-or-later
 URL:        https://github.com/abrt/%{name}
 %if 0%{?snapshot}
-Source0:        https://github.com/abrt/gnome-abrt/archive/refs/tags/1.4.3.tar.gz#/gnome-abrt-1.4.3.tar.gz
+Source0:        https://github.com/abrt/gnome-abrt/archive/refs/tags/1.5.2.tar.gz#/gnome-abrt-1.4.3.tar.gz
 %else
-Source0:        https://github.com/abrt/gnome-abrt/archive/refs/tags/1.4.3.tar.gz#/gnome-abrt-1.4.3.tar.gz
+Source0:        https://github.com/abrt/gnome-abrt/archive/refs/tags/1.5.2.tar.gz#/gnome-abrt-1.4.3.tar.gz
 %endif
 
 BuildRequires: git-core

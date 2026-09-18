@@ -5,7 +5,7 @@
 %global giturl        https://github.com/gap-packages/sonata
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        2.9.7
+Version:        2.9.8
 Release:        %autorelease
 Summary:        GAP package for systems of nearrings
 

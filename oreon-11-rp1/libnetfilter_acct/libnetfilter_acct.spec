@@ -1,8 +1,8 @@
 %global source0_hash 0128f19c3419fbd84f7e6d46b13a33ef7bda9b9f5e493bc5ae1882d087514b71
 
 Name:           libnetfilter_acct
-Version:        1.0.2
-Release:        27%{?dist}
+Version:        1.0.3
+Release:        1%{?dist}
 Summary:        A library providing interface to extended accounting infrastructure
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

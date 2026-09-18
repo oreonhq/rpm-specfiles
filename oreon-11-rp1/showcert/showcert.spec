@@ -1,7 +1,7 @@
 %global source0_hash c2f259e683baed02399023d1f68442aebf46f7330aa5d76fab6f2766d6d8a7dc
 
 Name:           showcert
-Version:        0.4.12
+Version:        0.4.16
 Release:        1%{?dist}
 Summary:        inspect TLS certificates presented by remote servers
 

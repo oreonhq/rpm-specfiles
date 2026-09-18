@@ -25,8 +25,8 @@
 %global php_home     %{_datadir}/php
 
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
-Version:        3.0.0
-Release:        9%{?dist}
+Version:        4.0.0
+Release:        1%{?dist}
 Summary:        Looks up which function or method a line of code belongs to, version %{major}
 
 License:        BSD-3-Clause
@@ -47,7 +47,7 @@ BuildRequires:  phpunit10
 # from composer.json, "require": {
 #        "php": ">=8.1"
 Requires:       php(language) >= 8.1
-# From phpcompatinfo report for version 3.0.0
+# From phpcompatinfo report for version 4.0.0
 Requires:       php-reflection
 # Autoloader
 Requires:       php-composer(fedora/autoloader)

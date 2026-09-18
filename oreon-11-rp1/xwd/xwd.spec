@@ -1,7 +1,7 @@
 %global source0_hash dc121b84947eb4a3d1131bff1e9844cfa2124d95b47b35f9932340fa931fbd3f
 
 Name:       xwd
-Version:    1.0.9
+Version:    1.0.10
 Release:    %autorelease
 Summary:    Dump an X window to file
 

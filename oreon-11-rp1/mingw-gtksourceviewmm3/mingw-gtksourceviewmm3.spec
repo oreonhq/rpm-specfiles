@@ -5,8 +5,8 @@
 %global pkgname gtksourceviewmm3
 
 Name:          mingw-%{pkgname}
-Version:       3.21.3
-Release:       8%{?dist}
+Version:       3.91.1
+Release:       1%{?dist}
 Summary:       MinGW Windows GtkSourceViewmm library
 License:       LGPL-2.0-or-later
 BuildArch:     noarch

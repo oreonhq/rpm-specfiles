@@ -18,7 +18,7 @@
 
 Name:       nodejs-%{npm_name}
 Summary:    An HTTP/1.1 client, written from scratch for Node.js
-Version:    7.24.0
+Version:    8.10.2
 Release:    %autorelease
 
 License:    MIT

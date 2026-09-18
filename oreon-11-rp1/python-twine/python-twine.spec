@@ -1,111 +1,62 @@
-%global source0_hash e5ed0d2fd70c9959770dce51c8f39c8945c574e18173a7b81802dab51b4b75cf
+%global source0_hash none
 
-%global srcname twine
-
-%bcond_without tests
-%bcond_without docs
-%bcond_with internet
-
-Name:           python-%{srcname}
-Version:        6.2.0
+Name:           python-twine
+Version:        7.0.0
 Release:        %autorelease
-Summary:        Collection of utilities for interacting with PyPI
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Collection of utilities for publishing packages on PyPI
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://github.com/pypa/%{srcname}
-Source0:        %{pypi_source}
+URL:            https://twine.readthedocs.io/
+Source:         %{pypi_source twine}
 
 BuildArch:      noarch
-
-%description
-Twine is a utility for interacting with PyPI.
-Currently it only supports registering projects and uploading distributions.
-
-%package -n %{srcname}
-Summary:        Twine is a utility for publishing Python packages on PyPI
-
 BuildRequires:  python3-devel
-BuildRequires:  pyproject-rpm-macros
 
-%if %{with tests}
-# Test dependencies
-BuildRequires:  python3dist(build)
-BuildRequires:  python3dist(jaraco-envs)
-BuildRequires:  python3dist(munch)
-BuildRequires:  python3dist(portend)
-BuildRequires:  python3dist(pretend)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-cov)
-%if %{with docs}
-# Doc (manpage) deps
-BuildRequires:  python3dist(sphinx)
-BuildRequires:  python3dist(sphinxcontrib-programoutput)
-%endif
-# with docs
-%if %{with internet}
-# pytest-services and pytest-socket are not packaged yet
-#BuildRequires:  python3dist(pytest-services)
-#BuildRequires:  python3dist(pytest-socket)
-BuildRequires:  gcc
-BuildRequires:  libffi-devel
-BuildRequires:  git-core
-%endif
-# with internet
 
-%endif
-# with tests
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'twine' generated automatically by pyp2spec.}
 
-Obsoletes:      python2-%{srcname} < 1.12.2-3
-Obsoletes:      python3-%{srcname} < 1.12.2-3
+%description %_description
 
-%description -n %{srcname}
-Twine is a utility for interacting with PyPI.
-Currently it only supports registering projects and uploading distributions.
+%package -n     python3-twine
+Summary:        %{summary}
+
+%description -n python3-twine %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-twine keyring
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n twine-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x keyring
 
-%if %{without internet}
-sed -i '/--disable-socket/d' pytest.ini
-%endif
 
 %build
 %pyproject_wheel
-%if %{with docs}
-PYTHONPATH=$PWD sphinx-build-3 -b man docs/ docs/build/man -c docs/
-rm -r docs/build/man/.doctrees
-%endif
+
 
 %install
 %pyproject_install
-%pyproject_save_files twine
-%if %{with docs}
-install -p -D -T -m 0644 docs/build/man/%{srcname}.1 %{buildroot}%{_mandir}/man1/%{srcname}.1
-%endif
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with tests}
+
 %check
-%pytest -v \
-%if %{without internet}
-      --deselect tests/test_integration.py \
-      --deselect tests/test_upload.py::test_check_status_code_for_wrong_repo_url \
-%endif
-;
-# without internet
-%endif
-# with tests
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n %{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst AUTHORS
-%if %{with docs}
-%{_mandir}/man1/%{srcname}.1*
-%endif
+
+%files -n python3-twine -f %{pyproject_files}
 %{_bindir}/twine
 
 %changelog

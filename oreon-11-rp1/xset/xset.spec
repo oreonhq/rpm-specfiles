@@ -1,8 +1,8 @@
 %global source0_hash 9f692d55635b3862cd63633b1222a87680ec283c7a8e8ed6dd698a3147f75e2f
 
 Name:       xset
-Version:    1.2.5
-Release:    9%{?dist}
+Version:    1.2.6
+Release:    1%{?dist}
 Summary:    User preference utility for X
 
 License:    MIT-open-group

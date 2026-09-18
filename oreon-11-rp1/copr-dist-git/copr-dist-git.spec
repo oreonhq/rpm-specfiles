@@ -3,8 +3,8 @@
 %global copr_common_version 0.25.1~~dev0
 
 Name:       copr-dist-git
-Version:    1.3
-Release:    4%{?dist}
+Version:    1.7-1
+Release:    1%{?dist}
 Summary:    Copr services for Dist Git server
 
 License:    GPL-2.0-or-later

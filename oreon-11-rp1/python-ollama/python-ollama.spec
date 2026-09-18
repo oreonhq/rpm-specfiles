@@ -1,27 +1,24 @@
-%global source0_hash 891dcbe54f55397d82d289c459de0ea897e103b86a3f1fad0fdb1895922a75ff
+%global source0_hash none
 
-%global pypi_name ollama
-
-Name:           python-%{pypi_name}
-Version:        0.4.7
+Name:           python-ollama
+Version:        0.6.2
 Release:        %autorelease
-Summary:        The official Python client for Ollama
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The official Python client for Ollama.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://ollama.com
 Source:         %{pypi_source ollama}
 
 BuildArch:      noarch
-# Ollama only on x86_64
-ExclusiveArch:  x86_64
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest-httpserver)
-BuildRequires:  python3dist(pytest-asyncio)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The Ollama Python library provides the easiest way to integrate
-Python 3.8+ projects with Ollama.}
+This is package 'ollama' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -30,27 +27,31 @@ Summary:        %{summary}
 
 %description -n python3-ollama %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n ollama-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-ollama -f %{pyproject_files}
-%license LICENSE
-%doc README.md
 
 %changelog
 %autochangelog

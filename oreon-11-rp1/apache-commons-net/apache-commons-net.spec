@@ -1,7 +1,7 @@
 %global source0_hash 3686e1446dff59245432b0679c760d3bf3f40bfb64d8c8312d71feed7114d0a0
 
 Name:           apache-commons-net
-Version:        3.12.0
+Version:        3.13.0
 Release:        %autorelease
 Summary:        Internet protocol suite Java library
 License:        Apache-2.0

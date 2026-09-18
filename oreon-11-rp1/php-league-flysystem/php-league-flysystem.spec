@@ -21,8 +21,8 @@
 %global ns_project   Flysystem
 
 Name:           php-%{pk_vendor}-%{pk_name}
-Version:        1.1.10
-Release:        9%{?dist}
+Version:        3.36.0
+Release:        1%{?dist}
 Summary:        Filesystem abstraction: Many filesystems, one API
 
 License:        MIT

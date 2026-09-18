@@ -1,7 +1,7 @@
 %global source0_hash ddf561e294385f07d0bd5a28d0aab9de79b8dbaed29b576f206d58f3df79b508
 
 %global forgeurl https://github.com/dirkvdb/ffmpegthumbnailer
-Version:        2.3.0
+Version:        2.3.1
 %global tag v%{version}
 %forgemeta
 

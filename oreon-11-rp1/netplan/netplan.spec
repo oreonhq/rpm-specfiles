@@ -19,8 +19,8 @@
 %bcond_with tests
 
 Name:           netplan
-Version:        1.1.2
-Release:        4%{?dist}
+Version:        1.2.2
+Release:        1%{?dist}
 Summary:        Network configuration tool using YAML
 License:        GPL-3.0-only
 URL:            http://netplan.io/
@@ -29,7 +29,7 @@ Source0:        https://github.com/canonical/%{name}/archive/%{version}/%{name}-
 # Downstream only
 Patch1001:      netplan-fallback-renderer.patch
 # https://github.com/canonical/netplan/pull/555
-# probably won't be necessary in > 1.1.2
+# probably won't be necessary in > 1.2.2
 Patch1002:      status_fail_cleanly.patch
 
 BuildRequires:  gcc

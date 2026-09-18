@@ -10,7 +10,7 @@
 %global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           gnome-keyring
-Version:        50.0
+Version:        51.1
 Release:        %autorelease
 Summary:        Framework for managing passwords and other secrets
 

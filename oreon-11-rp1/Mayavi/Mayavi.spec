@@ -4,7 +4,7 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           Mayavi
-Version:        4.8.3
+Version:        4.9.0
 Release:        %autorelease
 Summary:        Scientific data 3-dimensional visualizer
 # Automatically converted from old format: BSD and EPL and LGPLv2+ and LGPLv2 and LGPLv3 - review is highly recommended.

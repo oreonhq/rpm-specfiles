@@ -7,7 +7,7 @@
 %global crate gptman
 
 Name:           rust-gptman
-Version:        1.1.4
+Version:        3.1.1
 Release:        %autorelease
 Summary:        Pure Rust library to read and modify GUID partition tables
 

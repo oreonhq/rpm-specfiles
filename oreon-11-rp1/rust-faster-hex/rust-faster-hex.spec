@@ -7,7 +7,7 @@
 %global crate faster-hex
 
 Name:           rust-faster-hex
-Version:        0.5.0
+Version:        0.10.0
 Release:        %autorelease
 Summary:        Fast hex encoding.
 

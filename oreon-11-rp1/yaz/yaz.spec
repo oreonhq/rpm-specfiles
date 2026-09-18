@@ -1,8 +1,8 @@
 %global source0_hash 9257feb06e2fdbbfceb7d040c139fa13957c4d1ebba6aa293a6dd13cab2225ce
 
 Name:           yaz
-Version:        5.37.0
-Release:        2%{?dist}
+Version:        5.38.0
+Release:        1%{?dist}
 Summary:        Z39.50/SRW/SRU toolkit
 # SPDX confirmed
 License:        BSD-3-Clause

@@ -7,7 +7,7 @@
 %global crate serde_regex
 
 Name:           rust-serde_regex
-Version:        1.1.0
+Version:        1.2.0
 Release:        %autorelease
 Summary:        Serde wrapper that (de)serializes regex as strings
 

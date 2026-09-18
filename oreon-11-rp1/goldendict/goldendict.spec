@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name: goldendict
-Version: 1.5.0
-Release: 9%{?dist}
+Version: 1.5.1
+Release: 1%{?dist}
 
 License: GPL-3.0-or-later
 Summary: A feature-rich dictionary lookup program

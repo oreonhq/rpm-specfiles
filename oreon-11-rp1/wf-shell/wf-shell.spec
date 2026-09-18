@@ -7,7 +7,7 @@
 %global gvc_shortcommit %(c=%{gvc_commit}; echo ${c:0:7})
 
 Name:           wf-shell
-Version:        0.10.0
+Version:        0.11.0
 %forgemeta
 Release:        %autorelease
 Summary:        A GTK4-based panel for wayfire
@@ -28,7 +28,7 @@ BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(wayfire)
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  pkgconfig(wayland-protocols)
-BuildRequires:  pkgconfig(wf-config) >= 0.10.0
+BuildRequires:  pkgconfig(wf-config) >= 0.11.0
 Recommends:     wayland-logout
 Requires:       hicolor-icon-theme
 Provides:       bundled(gvc) = 0.git%{gvc_shortcommit}

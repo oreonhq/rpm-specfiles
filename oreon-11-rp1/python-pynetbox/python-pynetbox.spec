@@ -1,51 +1,56 @@
-%global source0_hash 8a7ee99b89d08848be134793015afc17c85711a18e8c7e67c353362e1c8d7fc7
+%global source0_hash none
 
-%global pypi_name pynetbox
-
-Name:           python-%{pypi_name}
-Version:        7.6.1
+Name:           python-pynetbox
+Version:        7.8.0
 Release:        %autorelease
-Summary:        Python API client library for Netbox
+# Fill in the actual package summary to submit package to Fedora
+Summary:        NetBox API client library
 
-License:        Apache-2.0
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/netbox-community/pynetbox
-Source:         %{pypi_source}
+Source:         %{pypi_source pynetbox}
 
 BuildArch:      noarch
-
-%global _description \
-%{summary}.
-
-%description %{_description}
-
-%package     -n python3-%{pypi_name}
-Summary:        %{summary}
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
 
-%description -n python3-%{pypi_name} %{_description}
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pynetbox' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-pynetbox
+Summary:        %{summary}
+
+%description -n python3-pynetbox %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pynetbox-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p1
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -vv tests/test_*.py tests/unit
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.md CHANGELOG.md
+
+%files -n python3-pynetbox -f %{pyproject_files}
 
 %changelog
 %autochangelog

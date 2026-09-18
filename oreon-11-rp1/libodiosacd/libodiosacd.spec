@@ -3,7 +3,7 @@
 %global forgeurl https://github.com/tari01/libodiosacd
 
 Name:           libodiosacd
-Version:        23.8.1
+Version:        25.4.1
 Release:        %autorelease
 Summary:        SACD decoder shared library
 

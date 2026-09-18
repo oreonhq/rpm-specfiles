@@ -4,7 +4,7 @@
 %global giturl  https://github.com/sphinx-doc/sphinx-autobuild
 
 Name:           python-sphinx-autobuild
-Version:        2025.08.25
+Version:        2025.8.25
 Release:        %autorelease
 Summary:        Autobuild a Sphinx directory when a change is detected
 

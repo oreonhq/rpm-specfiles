@@ -6,7 +6,7 @@
 %global crate tokei
 
 Name:           rust-tokei
-Version:        14.0.0
+Version:        15.0.0
 Release:        %autorelease
 Summary:        Count your code, quickly
 

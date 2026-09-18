@@ -2,8 +2,8 @@
 
 Name:           pylibacl
 Summary:        POSIX.1e ACLs library wrapper for Python
-Version:        0.6.0
-Release:        16%{?dist}
+Version:        0.7.2
+Release:        1%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://pylibacl.k1024.org

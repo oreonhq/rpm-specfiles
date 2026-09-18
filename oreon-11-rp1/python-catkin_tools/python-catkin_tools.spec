@@ -1,96 +1,60 @@
-%global source0_hash 5b6e1867b0e82b7a69b847be170d808074f6b817c44766d261bca55856475647
+%global source0_hash none
 
-%global srcname catkin_tools
+Name:           python-catkin-tools
+Version:        0.9.5
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Command line tools for working with catkin.
 
-Name:           python-%{srcname}
-Version:        0.9.4
-Release:        13%{?dist}
-Summary:        Command line tools for working with catkin
-
-License:        Apache-2.0
-URL:            http://catkin-tools.readthedocs.org
-Source0:        https://github.com/catkin/%{srcname}/archive/%{version}/%{srcname}-%{version}.tar.gz
-# From https://github.com/catkin/catkin_tools/commit/8ef11ff40514ea9cdb973e4f8486fcc26f5eadcf
-Patch0:         %{srcname}-0.9.5-sphinx8.patch
-# Maintainers, please upstream
-Patch1:         %{name}-rm-python-mock-usage.patch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://catkin-tools.readthedocs.org/
+Source:         %{pypi_source catkin_tools}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-Provides command line tools for working with catkin
 
-%package doc
-Summary:        HTML documentation for %{srcname}
-BuildRequires:  make
-BuildRequires:  python3-rpm-macros
-BuildRequires:  python%{python3_pkgversion}-sphinx
-BuildRequires:  python%{python3_pkgversion}-sphinx_rtd_theme
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'catkin-tools' generated automatically by pyp2spec.}
 
-%description doc
-HTML documentation for %{srcname}
+Patch0:         %{srcname}-0.9.5-sphinx8.patch
+Patch1:         %{name}-rm-python-mock-usage.patch
 
-%package -n python%{python3_pkgversion}-%{srcname}
+%description %_description
+
+%package -n     python3-catkin-tools
 Summary:        %{summary}
-BuildRequires:  cmake
-BuildRequires:  python%{python3_pkgversion}-catkin_pkg >= 0.3.0
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-osrf-pycommon >= 0.1.1
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  python%{python3_pkgversion}-PyYAML
-BuildRequires:  python%{python3_pkgversion}-setuptools
-Requires:       cmake
-Requires:       make
-Conflicts:      python2-%{srcname} < 0.4.4-7
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
 
-%if %{undefined __pythondist_requires}
-Requires:       python%{python3_pkgversion}-catkin_pkg >= 0.3.0
-Requires:       python%{python3_pkgversion}-osrf-pycommon >= 0.1.1
-Requires:       python%{python3_pkgversion}-PyYAML
-Requires:       python%{python3_pkgversion}-setuptools
-%endif
+%description -n python3-catkin-tools %_description
 
-%if !0%{?rhel} || 0%{?rhel} >= 8
-Suggests:       %{name}-doc = %{version}-%{release}
-%endif
-
-%description -n python%{python3_pkgversion}-%{srcname}
-Provides command line tools for working with catkin
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n catkin_tools-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
 
-%make_build -C docs html man SPHINXBUILD=sphinx-build-%{python3_version}
-rm docs/_build/html/.buildinfo
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-install -p -m0644 -D docs/_build/man/%{srcname}.1 %{buildroot}%{_mandir}/man1/%{srcname}.1
 
 %check
-# Many system tests require catkin itself, which isn't packaged in Fedora
-%pytest tests/unit
+%_pyproject_check_import_allow_no_modules -t
 
-%files doc
-%license LICENSE
-%doc docs/_build/html
 
-%files -n python%{python3_pkgversion}-%{srcname}
-%license LICENSE
-%doc README.md
-%{python3_sitelib}/%{srcname}/
-%{python3_sitelib}/%{srcname}-%{version}-py%{python3_version}.egg-info/
+%files -n python3-catkin-tools -f %{pyproject_files}
 %{_bindir}/catkin
-%{_mandir}/man1/%{srcname}.1.*
-%{_datadir}/zsh/site-functions/_catkin
-%{_datadir}/bash-completion/
 
 %changelog
 %autochangelog

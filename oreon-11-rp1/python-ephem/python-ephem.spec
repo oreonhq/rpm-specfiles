@@ -1,78 +1,59 @@
-%global source0_hash 3c4fd64f453e8f40cf862420a70da95a71b6487ace75e8e0cf85d73707db6065
+%global source0_hash none
 
-%global pypi_name ephem
-
-Name:           python-%{pypi_name}
-Version:        4.2
-Release:        7%{?dist}
+Name:           python-ephem
+Version:        4.2.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Compute positions of the planets and stars
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            http://rhodesmill.org/pyephem/
-Source0:        %{pypi_source}
-# Build libastro with -Wl,-Bsymbolic, to prevent symbol collision with range from netcdf
-# https://stackoverflow.com/questions/6538501/linking-two-shared-libraries-with-some-of-the-same-symbols
-Patch0:         ephem_bsymbolic.patch
+URL:            https://github.com/brandon-rhodes/pyephem
+Source:         %{pypi_source ephem}
 
+BuildRequires:  python3-devel
 BuildRequires:  gcc
 
-%description
-PyEphem provides an ephem Python package for performing high-precision
-astronomy computations. The underlying numeric routines are coded in C
-and are the same ones that drive the popular XEphem astronomy application.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'ephem' generated automatically by pyp2spec.}
+
+Patch0:         ephem_bsymbolic.patch
+
+%description %_description
+
+%package -n     python3-ephem
 Summary:        %{summary}
-BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
 
-%description -n python3-%{pypi_name}
-PyEphem provides an ephem Python package for performing high-precision
-astronomy computations. The underlying numeric routines are coded in C
-and are the same ones that drive the popular XEphem astronomy application.
+%description -n python3-ephem %_description
 
-%package -n python-%{pypi_name}-doc
-Summary:        The %{pypi_name} documentation
-BuildArch:      noarch
-BuildRequires:  python3-sphinx
-
-%description -n python-%{pypi_name}-doc
-Documentation for %{pypi_name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n ephem-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p1
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
-PYTHONPATH=${PWD} sphinx-build-3 ephem/doc html
-rm -rf html/.{doctrees,buildinfo}
+
 
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-cd %{buildroot}%{python3_sitearch}/%{pypi_name}
-# One test has an AttributeError
-# test_constellation is temporarily disabled because ephem is not compatible with
-# Python 3.10 yet.
-# For more info see: https://bugzilla.redhat.com/show_bug.cgi?id=1891793
-%pytest -v tests -k "not JPLTest and not test_github_25 and not test_constellation"
-# Remove left-overs from the tests
-rm -rf %{buildroot}%{python3_sitearch}/%{pypi_name}/{.benchmarks,.hypothesis,.pytest_cache}
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
 
-%files -n python-%{pypi_name}-doc
-%doc html
-%license LICENSE
+%files -n python3-ephem -f %{pyproject_files}
 
 %changelog
 %autochangelog

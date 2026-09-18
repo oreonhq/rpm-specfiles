@@ -3,8 +3,8 @@
 %global _vpath_srcdir src
 
 Name:		yoshimi
-Version:	2.3.0
-Release:	9%{?dist}
+Version:	2.3.6.5
+Release:	1%{?dist}
 Summary:	Rewrite of ZynAddSubFx aiming for better JACK support
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

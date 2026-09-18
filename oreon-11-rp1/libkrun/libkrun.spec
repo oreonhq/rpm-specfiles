@@ -15,8 +15,8 @@
 %endif
 
 Name:           libkrun
-Version:        1.19.0
-Release:        2%{?dist}
+Version:        1.19.4
+Release:        1%{?dist}
 Summary:        Dynamic library providing Virtualization-based process isolation capabilities
 
 License:        Apache-2.0

@@ -2,9 +2,9 @@
 
 Name:           dh-make
 # Squeeze
-Version:        2.202503
+Version:        2.202601
 
-Release:        4%{?dist}
+Release:        1%{?dist}
 Summary:        Tool that converts source archives into Debian package source
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

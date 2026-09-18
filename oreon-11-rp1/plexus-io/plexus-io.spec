@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           plexus-io
-Version:        3.5.0
+Version:        3.7.0
 Release:        %autorelease
 Summary:        Plexus IO Components
 License:        Apache-2.0
@@ -32,7 +32,7 @@ BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-api)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.5.0-7
+Obsoletes:      %{name}-javadoc < 3.7.0-7
 
 %description
 Plexus IO is a set of plexus components, which are designed for use

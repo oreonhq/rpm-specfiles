@@ -1,66 +1,56 @@
-%global source0_hash 93312a6318fc7ec14d2455c399e25d9d533b7dc4abae33b77afb394a0446b4ab
+%global source0_hash none
 
-%global pypi_name django-authority
+Name:           python-django-authority
+Version:        0.14
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A Django app that provides generic per-object-permissions for Django_s auth app.
 
-Name:           python-%{pypi_name}
-Version:        0.11
-Release:        35%{?dist}
-Summary:        A Django app for generic per-object permissions and custom permission checks
-
-# Automatically converted from old format: BSD - review is highly recommended.
-License:        LicenseRef-Callaway-BSD
-URL:            https://github.com/jazzband/django-authority
-Source0:        https://files.pythonhosted.org/packages/source/d/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/jazzband/django-authority/
+Source:         %{pypi_source django-authority}
 
 BuildArch:      noarch
-
-%description
-This is a Django app for generic per-object permissions, custom permission
-checks and permission requests. It also includes view decorators and template
-tags for ease of use.
-
-%package -n python3-%{pypi_name}
-Summary:        Django app for permissions - Python 3 version
-
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-Requires:       python3-django
 
-%{?python_provide:%python_provide python3-%{pypi_name}}
 
-Obsoletes:      python-%{pypi_name} < 0.11-5
-Obsoletes:      python2-%{pypi_name} < 0.11-5
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'django-authority' generated automatically by pyp2spec.}
 
-%description -n python3-%{pypi_name}
-This is a Django app for generic per-object permissions, custom permission
-checks and permission requests. It also includes view decorators and template
-tags for ease of use. This package provides Python 3 build of %{pypi_name}.
+%description %_description
+
+%package -n     python3-django-authority
+Summary:        %{summary}
+
+%description -n python3-django-authority %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n django-authority-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
-# remove executable-flag from manage.py in example 
-chmod ugo-x example/manage.py
+%generate_buildrequires
+%pyproject_buildrequires
 
-# remove hidden files in example
-find example -name '._*.py' -exec rm '{}' \;
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# example gets accidently installed to python_sitelib, too
-rm -rf %{buildroot}/%{python3_sitelib}/example
 
-%files -n python3-%{pypi_name}
-%license LICENSE
-%doc AUTHORS README.rst docs/ example/
-%{python3_sitelib}/authority/
-%{python3_sitelib}/django_authority-%{version}-py%{python3_version}.egg-info
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-django-authority -f %{pyproject_files}
 
 %changelog
 %autochangelog

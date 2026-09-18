@@ -5,8 +5,8 @@
 %global debug_package %{nil}
 
 Name:          sugar-pippy
-Version:       75
-Release:       16%{?dist}
+Version:       76
+Release:       1%{?dist}
 Summary:       Pippy for Sugar
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:       GPL-2.0-or-later

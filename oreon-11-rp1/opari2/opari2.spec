@@ -1,8 +1,8 @@
 %global source0_hash d57139f757c5666afaaead45ed3d0954a9b98c4a6cef6b22afe672707cffd779
 
 Name:           opari2
-Version:        2.0.9
-Release:        3%{?dist}
+Version:        2.0.10
+Release:        1%{?dist}
 Summary:        An OpenMP runtime performance measurement instrumenter
 
 License:        BSD-3-Clause

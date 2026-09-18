@@ -1,89 +1,61 @@
-%global source0_hash 0d33371ce9ef554c7022ee300564ba9ffbd615e304ee615f6769d4068e063171
+%global source0_hash none
 
-# Unset -s on python shebang - ensure that extensions installed with pip
-# to user locations are seen and properly loaded
-%global py3_shebang_flags %(echo %py3_shebang_flags | sed s/s//)
+Name:           python-qtconsole
+Version:        5.7.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Jupyter Qt console
 
-%global pypi_name qtconsole
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            http://jupyter.org
+Source:         %{pypi_source qtconsole}
 
-Name:		python-%{pypi_name}
-Version:	5.7.0
-Release:	%autorelease
-Summary:	Jupyter Qt console
-License:	BSD-3-Clause
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-URL:		http://jupyter.org
-Source0:	https://files.pythonhosted.org/packages/source/q/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
-BuildArch:	noarch
 
-BuildRequires:	python3-devel
-BuildRequires:	python3-ipython-sphinx
-BuildRequires:	python3-sphinx_rtd_theme
-BuildRequires:	python3-qt5
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'qtconsole' generated automatically by pyp2spec.}
 
-BuildRequires:	desktop-file-utils
+%description %_description
 
-%description
-Qt-based console for Jupyter with support for rich media output
+%package -n     python3-qtconsole
+Summary:        %{summary}
 
-%package -n     python3-%{pypi_name}
-Summary:	Jupyter Qt console
+%description -n python3-qtconsole %_description
 
-%py_provides	python3-ipython-gui
-Obsoletes:	python3-ipython-gui < 4
- 
-Requires:	python3-qt5
-Requires:	python3-traitlets
-Requires:	python3-jupyter-core
-Requires:	python3-jupyter-client >= 4.1
-Requires:	python3-pygments
-Requires:	python3-ipykernel >= 4.1
-Requires:	python3-setuptools
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-qtconsole doc,test
 
-%description -n python3-%{pypi_name}
-Qt-based console for Jupyter with support for rich media output
-
-%package -n python-%{pypi_name}-doc
-Summary:	Documentation subpackage for qtconsole
-
-%description -n python-%{pypi_name}-doc
-Documentation for qtconsole
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n qtconsole-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x doc,test
+
 
 %build
 %pyproject_wheel
 
-# generate html docs 
-sphinx-build docs/source html
-
-# fix file encoding and utf-8
-sed -i 's/\r$//' html/objects.inv
-
-# remove the sphinx-build leftovers
-rm -rf html/.{doctrees,buildinfo}
 
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
-desktop-file-install --dir=%{buildroot}%{_datadir}/applications examples/jupyter-qtconsole.desktop
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import -e 'qtconsole.tests*'
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}  -f %{pyproject_files}
-%doc README.md
-%{_bindir}/jupyter-qtconsole
-%{_datadir}/applications/jupyter-qtconsole.desktop
 
-%files -n python-%{pypi_name}-doc
-%doc html 
+%files -n python3-qtconsole -f %{pyproject_files}
 
 %changelog
 %autochangelog

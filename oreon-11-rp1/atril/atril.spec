@@ -1,7 +1,7 @@
 %global source0_hash 74c4f42979f3ead52def23767448d06ad7f715421e03c9b509404b096de8193e
 
 Name:          atril
-Version:       1.28.1
+Version:       1.28.7
 Release:       %autorelease
 Summary:       Document viewer
 # Automatically converted from old format: GPLv2+ and LGPLv2+ and MIT - review is highly recommended.

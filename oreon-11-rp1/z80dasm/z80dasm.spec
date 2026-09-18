@@ -1,8 +1,8 @@
 %global source0_hash 1d6966bf7bddd0965421455e666872607019cfa43352188f5580304dd1039539
 
 Name:		z80dasm
-Version:	1.1.3
-Release:	24%{?dist}
+Version:	1.2.0
+Release:	1%{?dist}
 Summary:	Z80 Disassembler
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:	GPL-2.0-or-later

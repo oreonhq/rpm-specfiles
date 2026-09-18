@@ -1,7 +1,7 @@
 %global source0_hash 0b06d1434a750b5e4981be9696a9f65bfd7b38fe2d8d24199d92f11394bb8459
 
 Name:           libtsm
-Version:        4.5.0
+Version:        4.7.1
 Release:        1%{?dist}
 Summary:        DEC-VT terminal emulator state machine
 License:        MIT AND LGPL-2.1-or-later

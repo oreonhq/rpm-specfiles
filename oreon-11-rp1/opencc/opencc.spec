@@ -1,8 +1,8 @@
 %global source0_hash ad4bcd8d87219a240a236d4a55c9decd2132a9436697d2882ead85c8939b0a99
 
 Name:       opencc
-Version:    1.1.9
-Release:    7%{?dist}
+Version:    1.4.2
+Release:    1%{?dist}
 Summary:    Libraries for Simplified-Traditional Chinese Conversion
 License:    Apache-2.0
 URL:        https://github.com/BYVoid/OpenCC

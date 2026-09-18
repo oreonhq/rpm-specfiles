@@ -7,7 +7,7 @@
 %global crate geo-types
 
 Name:           rust-geo-types
-Version:        0.6.2
+Version:        0.7.20
 Release:        %autorelease
 Summary:        Geospatial primitive data types
 

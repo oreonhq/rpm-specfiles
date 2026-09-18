@@ -3,7 +3,7 @@
 %bcond autoreconf 1
 
 Name:           rlwrap
-Version:        0.47.1
+Version:        0.48
 Release:        %autorelease
 Summary:        Wrapper for GNU readline
 

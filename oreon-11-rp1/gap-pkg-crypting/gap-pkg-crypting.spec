@@ -4,7 +4,7 @@
 %global giturl      https://github.com/gap-packages/crypting
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        0.10.6
+Version:        0.10.7
 Release:        %autorelease
 Summary:        Hashes and Crypto in GAP
 

@@ -1,67 +1,57 @@
-%global source0_hash e19edc6dcc25d69fb8fde0a267b8f0c44d7e915c7bcbeacf5d3a8b595baf0674
+%global source0_hash none
 
-%global srcname sgp4
-
-Name:           python-%{srcname}
-Version:        2.25
+Name:           python-sgp4
+Version:        2.27
 Release:        %autorelease
-Summary:        Compute position and velocity of earth-orbiting satellites
-# Python code is MIT, backend algorithms are based on SGP4 code
-# which is made available through its usage permission notice
-License:        MIT AND SGP4
-URL:            https://pypi.python.org/pypi/%{srcname}
-Source:         %{pypi_source}
+# Fill in the actual package summary to submit package to Fedora
+Summary:        The C++ SGP4 routine that, given an Earth satellite TLE, computes its position.
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch:    %{ix86}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/brandon-rhodes/python-sgp4
+Source:         %{pypi_source sgp4}
 
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
 BuildRequires:  python3-devel
+BuildRequires:  gcc
 
-# For tests
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(numpy)
 
-Provides:       bundled(sgp4)
-
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This Python package computes the position and velocity of an earth-orbiting
-satellite, given the satellite’s TLE orbital elements from a source like
-CelesTrak. It implements the most recent version of SGP4, and is regularly
-run against the SGP4 test suite to make sure that its satellite position
-predictions agree to within 0.1 mm with the predictions of the standard
-distribution of the algorithm. This error is far less than the 1–3 km/day
-by which satellites themselves deviate from the ideal orbits described in
-TLE files.}
+This is package 'sgp4' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{srcname}
+%package -n     python3-sgp4
 Summary:        %{summary}
 
-%description -n python3-%{srcname} %_description
+%description -n python3-sgp4 %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n sgp4-%{version}
 
-%autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest sgp4/tests.py
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
+
+%files -n python3-sgp4 -f %{pyproject_files}
 
 %changelog
 %autochangelog

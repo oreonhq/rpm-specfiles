@@ -1,74 +1,59 @@
-%global source0_hash e68121a6e0f39acdde9c6e611acd8bce8bc7c9a8910ddcd53f0477063dae1bbd
+%global source0_hash none
 
-# Created by pyp2rpm-3.3.5
-%global pypi_name codecov
-
-%global common_description %{expand:
-Find coverage reports for supported languages, gather them and submit them to
-Codecov.}
-
-Name:           python-%{pypi_name}
-Version:        2.1.12
+Name:           python-codecov
+Version:        2.1.13
 Release:        %autorelease
-Summary:        Python report uploader for Codecov
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Hosted coverage reports for GitHub, Bitbucket and Gitlab
 
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
-License:        Apache-2.0
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/codecov/codecov-python
-# PyPI doesn't include tests so use the GitHub tarball instead
-Source0:        %{url}/archive/v%{version}/codecov-python-%{version}.tar.gz
-# Maintainers, please upstream
-Patch0:         python-codecov-rm-python-mock-usage.diff
+Source:         %{pypi_source codecov}
 
 BuildArch:      noarch
-
-BuildRequires:  sed
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(ddt)
-BuildRequires:  python3dist(requests)
 
-%description
-%{common_description}
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'codecov' generated automatically by pyp2spec.}
+
+Patch0:         python-codecov-rm-python-mock-usage.diff
+
+%description %_description
+
+%package -n     python3-codecov
 Summary:        %{summary}
-%if 0%{?fedora} == 32
-%py_provides    python3-%{pypi_name}
-%endif
 
-%description -n python3-%{pypi_name}
-%{common_description}
+%description -n python3-codecov %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n codecov-%{version}
 
-%autosetup -p1 -n codecov-python-%{version}
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
-# Remove unneeded shebang
-sed -e "\|#!/usr/bin/env python3|d" -i %{pypi_name}/*.py
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Disable tests that require network access
-%pytest tests/test.py \
-  --deselect tests/test.py::TestUploader::test_bowerrc_none \
-  --deselect tests/test.py::TestUploader::test_prefix \
-  --deselect tests/test.py::TestUploader::test_send
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%license LICENSE
-%doc README.md CHANGELOG.md
+
+%files -n python3-codecov -f %{pyproject_files}
 %{_bindir}/codecov
-%{python3_sitelib}/%{pypi_name}
-%{python3_sitelib}/%{pypi_name}-%{version}-py%{python3_version}.egg-info
 
 %changelog
 %autochangelog

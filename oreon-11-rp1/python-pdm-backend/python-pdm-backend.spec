@@ -1,69 +1,57 @@
-%global source0_hash a509d083850378ce919d41e7a2faddfc57a1764d376913c66731125d6b14110f
+%global source0_hash none
 
 Name:           python-pdm-backend
-Version:        2.4.7
+Version:        2.4.9
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        The build backend used by PDM that supports latest packaging standards
-# SPDX
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/pdm-project/pdm-backend
 Source:         %{pypi_source pdm_backend}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-editables
-BuildRequires:  python3-packaging
-BuildRequires:  python3-tomli-w
-BuildRequires:  python3-pyproject-metadata
-# Test-only deps
-BuildRequires:  gcc
-BuildRequires:  git-core
-BuildRequires:  mercurial
-BuildRequires:  python3-editables
-BuildRequires:  python3-pytest
-BuildRequires:  python3-setuptools
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The build backend used by PDM that supports latest packaging standards.}
+This is package 'pdm-backend' generated automatically by pyp2spec.}
 
 %description %_description
 
 %package -n     python3-pdm-backend
 Summary:        %{summary}
-Requires:       python3-editables
-Requires:       python3-packaging
-Requires:       python3-tomli-w
-Requires:       python3-pyproject-metadata
 
 %description -n python3-pdm-backend %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
+%prep
 %autosetup -p1 -n pdm_backend-%{version}
-# Remove bundled dependencies
-rm -rv src/pdm/backend/_vendor
-find ./ -name "*.py" | xargs \
-  sed -i "s/from pdm\.backend\._vendor\./from /;s/from pdm\.backend\._vendor //"
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pdm
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-git config --global user.name "John Doe"
-git config --global user.email "john@doe.com"
-%pytest
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-pdm-backend -f %{pyproject_files}
-%license LICENSE
-%doc README.md
 
 %changelog
 %autochangelog

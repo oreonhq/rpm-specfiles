@@ -12,7 +12,7 @@
 # published by the Open Source Initiative.
 
 Name:           python-pynest2d
-Version:        4.8.0
+Version:        5.2.0
 Release:        %autorelease
 Summary:        Python bindings for libnest2d
 # Automatically converted from old format: LGPLv3 - review is highly recommended.

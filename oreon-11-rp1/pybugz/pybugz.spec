@@ -6,8 +6,8 @@
 
 Name:       pybugz
 Summary:    Command line interface for Bugzilla written in Python
-Version:    0.13
-Release:    18.%{posttag}%{?dist}
+Version:    0.14
+Release:    1.%{posttag}%{?dist}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:    GPL-2.0-only
 URL:        https://github.com/williamh/pybugz

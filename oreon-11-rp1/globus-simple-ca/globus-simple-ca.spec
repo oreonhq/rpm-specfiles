@@ -2,8 +2,8 @@
 
 Name:		globus-simple-ca
 %global _name %(tr - _ <<< %{name})
-Version:	5.4
-Release:	10%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Simple CA Utility
 
 License:	Apache-2.0

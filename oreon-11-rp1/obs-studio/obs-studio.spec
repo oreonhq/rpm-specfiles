@@ -47,8 +47,8 @@
 #global shortcommit %%(c=%%{commit}; echo ${c:0:7})
 
 Name:           obs-studio
-Version:        32.0.4
-Release:        4%{?dist}
+Version:        32.2.2
+Release:        1%{?dist}
 Summary:        Open Broadcaster Software Studio
 
 # OBS itself is GPL-2.0-or-later, while various plugin dependencies are of various other licenses

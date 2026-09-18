@@ -4,8 +4,8 @@
 
 Summary:       A polyphonic sampler synthesizer with stereo fx
 Name:          samplv1
-Version:       0.9.91
-Release:       5%{?dist}
+Version:       1.5.0
+Release:       1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:       GPL-2.0-or-later
 URL:           https://%{name}.sourceforge.io/

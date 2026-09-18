@@ -1,55 +1,44 @@
 %global source0_hash none
 
-# what it's called on pypi
-%global srcname pyjwt
-# what it's imported as
-%global libname jwt
-# package name fragment
-%global pkgname %{libname}
-
-%global common_description %{expand:
-A Python implementation of JSON Web Token draft 01. This library provides a
-means of representing signed content using JSON data structures, including
-claims to be transferred between two parties encoded as digitally signed and
-encrypted JSON objects.}
-
-
-Name:           python-%{pkgname}
-Version:        2.10.1
-Release:        3%{?dist}
+Name:           python-pyjwt
+Version:        2.14.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        JSON Web Token implementation in Python
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/jpadilla/pyjwt
-Source:         %pypi_source
+Source:         %{pypi_source pyjwt}
+
 BuildArch:      noarch
-
-
-%description %{common_description}
-
-
-%package -n python3-%{pkgname}
-Summary:        %{summary}
 BuildRequires:  python3-devel
-Recommends:     python3-%{pkgname}+crypto
 
 
-%description -n python3-%{pkgname} %{common_description}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pyjwt' generated automatically by pyp2spec.}
 
+%description %_description
 
-%pyproject_extras_subpkg -n python3-%{pkgname} crypto
+%package -n     python3-pyjwt
+Summary:        %{summary}
+
+%description -n python3-pyjwt %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pyjwt crypto
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{srcname}-%{version}
-# remove coverage buildreq and relax pytest req
-sed -e '/coverage\[toml\]/d' \
-    -e '/pytest/ s/,<7.0.0//' \
-    -i pyproject.toml
+%autosetup -p1 -n pyjwt-%{version}
 
 
 %generate_buildrequires
-%pyproject_buildrequires -x crypto,tests
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x crypto
 
 
 %build
@@ -58,16 +47,16 @@ sed -e '/coverage\[toml\]/d' \
 
 %install
 %pyproject_install
-%pyproject_save_files %{libname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-%pytest -k 'not (test_ec_to_jwk_with_invalid_curve or test_get_jwt_set_sslcontext_default)'
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files -n python3-%{pkgname} -f %{pyproject_files}
-%doc README.rst
-
+%files -n python3-pyjwt -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.10.1-3

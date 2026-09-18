@@ -1,61 +1,57 @@
-%global source0_hash 58c1bdab4257d2551b9ef91cd48571f77b7c4d2bc45bf5e3c05ac97b3a4d7282
+%global source0_hash none
 
-%global srcname xyzservices
-
-Name:           python-%{srcname}
-Version:        2024.6.0
+Name:           python-xyzservices
+Version:        2026.9.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Source of XYZ tiles providers
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/geopandas/xyzservices
-Source0:        %pypi_source %{srcname}
+Source:         %{pypi_source xyzservices}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%description
-xyzservices is a lightweight library providing a repository of available XYZ
-services offering raster basemap tiles. The repository is provided via Python
-API and as a compressed JSON file. XYZ tiles can be used as background for your
-maps to provide necessary spatial context.
 
-%package -n     python3-%{srcname}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'xyzservices' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-xyzservices
 Summary:        %{summary}
 
-BuildRequires:  python3dist(mercantile)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(requests)
+%description -n python3-xyzservices %_description
 
-%description -n python3-%{srcname}
-xyzservices is a lightweight library providing a repository of available XYZ
-services offering raster basemap tiles. The repository is provided via Python
-API and as a compressed JSON file. XYZ tiles can be used as background for your
-maps to provide necessary spatial context.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n xyzservices-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%{pytest} -o 'markers=request'
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license LICENSE
-%doc README.md
-%{_datadir}/%{srcname}/
+
+%files -n python3-xyzservices -f %{pyproject_files}
 
 %changelog
 %autochangelog

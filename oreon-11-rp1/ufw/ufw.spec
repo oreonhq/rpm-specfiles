@@ -1,8 +1,8 @@
 %global source0_hash 662f865bc83bf8aa1a40a6fe578bc2ce796ff60a1be2c1103def7db1b91f8509
 
 Name:           ufw
-Version:        0.35
-Release:        39%{?dist}
+Version:        0.36.2
+Release:        1%{?dist}
 Summary:        Uncomplicated Firewall
 
 License:        GPL-3.0-only

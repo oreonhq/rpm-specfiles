@@ -1,17 +1,17 @@
 %global source0_hash 2eacc122297a5569ce2136dd2d4116616d310b04e9891f6748e6727ab8889907
 
 Name:           maildir-utils
-Version:        1.12.12
+Version:        1.14.3
 Release:        %autorelease
 Summary:        A command-line mail organization utility
 
 License:        GPL-3.0-or-later
 URL:            http://www.djcbsoftware.nl/code/mu/index.html
 Source0:        https://github.com/djcb/mu/releases/download/v%{version}/mu-%{version}.tar.xz
-Patch0:         1.12.12-mu4e-docs-directory.patch
-Patch1:         1.12.12-mu-docs-directory.patch
-Patch2:         1.12.12-mu-guile-scripts-directory.patch
-Patch3:         1.12.12-mu-scm-directory.patch
+Patch0:         1.14.3-mu4e-docs-directory.patch
+Patch1:         1.14.3-mu-docs-directory.patch
+Patch2:         1.14.3-mu-guile-scripts-directory.patch
+Patch3:         1.14.3-mu-scm-directory.patch
 
 BuildRequires:  make
 BuildRequires:  gcc

@@ -7,7 +7,7 @@
 %global crate duct_sh
 
 Name:           rust-duct_sh
-Version:        0.13.7
+Version:        1.0.0
 Release:        %autorelease
 Summary:        Sub-crate for the sh function, formerly in duct
 

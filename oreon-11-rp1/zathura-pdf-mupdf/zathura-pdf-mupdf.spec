@@ -2,8 +2,8 @@
 
 Name:             zathura-pdf-mupdf
 
-Version:          0.4.4
-Release:          9%{?dist}
+Version:          2026.07.18
+Release:          1%{?dist}
 Summary:          PDF support for zathura via mupdf
 License:          Zlib
 URL:              https://pwmt.org/projects/%{name}/

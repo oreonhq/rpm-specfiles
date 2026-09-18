@@ -13,7 +13,7 @@
 %endif
 
 Name:           ghc-%{pkg_name}
-Version:        1.0.5
+Version:        1.1.5
 Release:        %autorelease
 Summary:        Cryptography Primitives sink
 

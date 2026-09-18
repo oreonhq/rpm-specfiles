@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           woodstox-core
-Version:        7.1.0
+Version:        7.2.2
 Release:        %autorelease
 Summary:        High-performance XML processor
 License:        Apache-2.0
@@ -30,7 +30,7 @@ BuildRequires:  mvn(org.mockito:mockito-core)
 BuildRequires:  mvn(org.osgi:osgi.core)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 7.1.0-5
+Obsoletes:      %{name}-javadoc < 7.2.2-5
 
 %description
 Woodstox is a high-performance namespace-aware StAX-compliant

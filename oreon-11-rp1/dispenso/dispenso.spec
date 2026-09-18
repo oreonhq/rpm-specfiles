@@ -27,7 +27,7 @@
 %endif
 
 Name:           dispenso
-Version:        1.4.0
+Version:        1.6.2
 Release:        %{autorelease}
 Summary:        A library for working with sets of tasks in parallel
 

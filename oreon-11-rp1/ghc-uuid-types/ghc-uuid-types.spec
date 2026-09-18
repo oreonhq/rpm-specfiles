@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           ghc-%{pkg_name}
-Version:        1.0.6
+Version:        1.0.6.1
 Release:        %autorelease
 Summary:        Type definitions for Universally Unique Identifiers
 

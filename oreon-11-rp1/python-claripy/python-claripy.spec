@@ -1,50 +1,57 @@
-%global source0_hash 0bcff6ad72b91b96cd53903cfbe08ab501529c933338d38d40f3a87623e3854b
+%global source0_hash none
 
-%global pypi_name claripy
+Name:           python-claripy
+Version:        9.3.5
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        An abstraction layer for constraint solvers
 
-Name:           python-%{pypi_name}
-Version:        9.2.189
-Release:        2%{?dist}
-Summary:        Abstraction layer for constraint solvers
-
-License:        LicenseRef-Callaway-BSD
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-2-Clause
 URL:            https://github.com/angr/claripy
-Source0:        %{url}/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
-BuildArch:      noarch
+Source:         %{pypi_source claripy}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
 
-%description
-Claripy is an abstracted constraint-solving wrapper.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'claripy' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-claripy
 Summary:        %{summary}
 
-Requires:       python3-z3
+%description -n python3-claripy %_description
 
-%description -n python3-%{pypi_name}
-Claripy is an abstracted constraint-solving wrapper.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n claripy-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
-# Remove installation requirement. Fedora is using a different name, see above
-sed -i 's/, "z3-solver==4.13.0.0"//' pyproject.toml
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.md
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-claripy -f %{pyproject_files}
 
 %changelog
 %autochangelog

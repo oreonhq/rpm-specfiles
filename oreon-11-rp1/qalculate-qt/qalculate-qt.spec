@@ -1,7 +1,7 @@
 %global source0_hash e4efb8c4df594e65781bd60add020ab154c62e07422530907792aecaad4cf646
 
 Name:           qalculate-qt
-Version:        5.9.0.1
+Version:        5.12.0
 Release:        %autorelease
 Summary:        Powerful and easy to use calculator
 # For translations, check data/io.github.Qalculate.qalculate-qt.metainfo.xml.

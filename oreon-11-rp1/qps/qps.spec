@@ -1,8 +1,8 @@
 %global source0_hash 76eb98b560e56b6a68b091e7ca2a4623d99f0b6106b181a7cc9e951352467004
 
 Name:           qps
-Version:        2.12.0
-Release:        2%{?dist}
+Version:        2.13.0
+Release:        1%{?dist}
 Summary:        Qt process viewer and manager
 
 License:        GPL-2.0-or-later

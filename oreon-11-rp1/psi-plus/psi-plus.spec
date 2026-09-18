@@ -5,7 +5,7 @@
 %global version_l10n 1.5.2073
 
 Name:           psi-plus
-Version:        1.5.2081
+Version:        1.5.2182
 Release:        %autorelease
 Epoch:          1
 

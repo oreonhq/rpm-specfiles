@@ -1,7 +1,7 @@
 %global source0_hash a01276052c31e84e4a069ee4452eab3b65a7d101a3fd7a09803be59125616270
 
 Name:           Coin4
-Version:        4.0.7
+Version:        4.0.10
 Release:        1%{?dist}
 Summary:        High-level 3D visualization library
 

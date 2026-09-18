@@ -1,7 +1,7 @@
 %global source0_hash 438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e
 %global source100_hash 1e5ee8ea4a6a1f7249a44134c67ad466dd68d7bbbadbf1da2bd860756cbd531f
 
-%global ghdlver 5.1.1
+%global ghdlver 6.0.0
 %global ghdldate 20250618
 %global ghdlcommit 91725e47fdded6a3ac2e4e5ee5fa1adb4b8b4f6f
 %global ghdlshortcommit %(c=%{ghdlcommit}; echo ${c:0:7})
@@ -40,7 +40,7 @@
 Summary: A VHDL simulator, using the GCC technology
 Name: ghdl
 Version: %{ghdlver}
-Release: 2.%{ghdlgitrev}%{?dist}
+Release: 1.%{ghdlgitrev}%{?dist}
 # Automatically converted from old format: GPLv2+ and GPLv3+ and GPLv3+ with exceptions and GPLv2+ with exceptions and LGPLv2+ and BSD - review is highly recommended.
 License: GPL-2.0-or-later AND GPL-3.0-or-later AND LicenseRef-Callaway-GPLv3+-with-exceptions AND LicenseRef-Callaway-GPLv2+-with-exceptions AND LicenseRef-Callaway-LGPLv2+ AND LicenseRef-Callaway-BSD
 URL: http://ghdl.free.fr/

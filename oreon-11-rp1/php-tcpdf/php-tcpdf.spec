@@ -18,7 +18,7 @@
 
 Name:           php-tcpdf
 Summary:        PHP class for generating PDF documents and barcodes
-Version:        6.11.2
+Version:        7.0.10
 Release:        1%{?dist}
 
 URL:            http://www.tcpdf.org

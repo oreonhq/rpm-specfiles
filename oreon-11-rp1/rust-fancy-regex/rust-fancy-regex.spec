@@ -7,7 +7,7 @@
 %global crate fancy-regex
 
 Name:           rust-fancy-regex
-Version:        0.16.2
+Version:        0.19.2
 Release:        %autorelease
 Summary:        An implementation of regexes, supporting a relatively rich set of fea...
 

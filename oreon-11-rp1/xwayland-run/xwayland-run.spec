@@ -1,13 +1,13 @@
 %global source0_hash b000386a0f0270cf49d5207b60215de7a09423d8afe3a45fe3e315791667fbb5
 
 Name:           xwayland-run
-Version:        0.0.5
+Version:        0.0.6
 Release:        1%{?dist}
 Summary:        Set of utilities to run headless X/Wayland clients
 
 License:        GPL-2.0-or-later
 URL:            https://gitlab.freedesktop.org/ofourdan/xwayland-run
-Source0:        https://gitlab.freedesktop.org/ofourdan/xwayland-run/-/archive/0.0.5/xwayland-run-0.0.5.tar.gz
+Source0:        https://gitlab.freedesktop.org/ofourdan/xwayland-run/-/archive/0.0.6/xwayland-run-0.0.5.tar.gz
 
 BuildArch:      noarch
 

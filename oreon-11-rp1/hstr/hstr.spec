@@ -1,8 +1,8 @@
 %global source0_hash e5293d4fe2502662f19c793bef416e05ac020490218e71c75a5e92919c466071
 
 Name:           hstr
-Version:        3.1
-Release:        7%{?dist}
+Version:        3.2
+Release:        1%{?dist}
 Summary:        Suggest box like shell history completion
 
 License:        Apache-2.0

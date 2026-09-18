@@ -1,22 +1,24 @@
-%global source0_hash 60dffc950e61a2b4ec980087d79352293f138f7b41bf3d7f8e1907160986c886
-
-%bcond plugins 0
-%bcond_without check
+%global source0_hash none
 
 Name:           python-markdown-it-py
-Version:        3.0.0
-Release:        1%{?dist}
-Summary:        Python port of markdown-it
+Version:        4.2.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python port of markdown-it. Markdown parsing, done right!
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/executablebooks/markdown-it-py
-Source0:        https://github.com/executablebooks/markdown-it-py/archive/v%{version}/markdown-it-py-%{version}.tar.gz
+Source:         %{pypi_source markdown_it_py}
+
 BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  pyproject-rpm-macros
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Markdown parser done right.}
+This is package 'markdown-it-py' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -25,33 +27,36 @@ Summary:        %{summary}
 
 %description -n python3-markdown-it-py %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-markdown-it-py benchmarking,compare,linkify,plugins,profiling,rtd,testing
+
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n markdown-it-py-%{version}
-sed -i '1{\@^#!/usr/bin/env python@d}' markdown_it/cli/parse.py
-sed -i '/"coverage",/d' pyproject.toml
-sed -i '/"pytest-cov",/d' pyproject.toml
-sed -i '/"pytest-regressions",/d' pyproject.toml
+%autosetup -p1 -n markdown_it_py-%{version}
+
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x benchmarking,compare,linkify,plugins,profiling,rtd,testing
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files markdown_it
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with check}
+
 %check
-%pyproject_check_import
-%pytest tests/ --ignore=tests/test_port --ignore=tests/test_tree.py --ignore=tests/test_cmark_spec --ignore=tests/test_api/test_main.py --ignore=tests/test_linkify.py
-%endif
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-markdown-it-py -f %{pyproject_files}
-%license LICENSE LICENSE.markdown-it
-%doc README.md
 %{_bindir}/markdown-it
 
 %changelog

@@ -3,7 +3,7 @@
 %global upver release-%{version}
 
 Name:           libminc
-Version:        2.4.03
+Version:        2.5.0
 Release:        %{autorelease}
 Summary:        Core library and API of the MINC toolkit
 

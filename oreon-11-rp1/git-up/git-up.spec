@@ -3,8 +3,8 @@
 %global pypi_name git_up
 
 Name:           git-up
-Version:        2.3.0
-Release:        5%{?dist}
+Version:        2.5.0
+Release:        1%{?dist}
 Summary:        A more friendly "git pull" in Python
 
 License:        MIT

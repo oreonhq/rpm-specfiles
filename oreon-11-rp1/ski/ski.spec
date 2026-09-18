@@ -1,7 +1,7 @@
 %global source0_hash 442ea167efef4b56c354806fa67faad3d29fa54f465f370e226404d2bd6696f0
 
 Name:           ski
-Version:        1.5.0
+Version:        1.5.1
 Release:        1%{?dist}
 Summary:        IA-64 user and system mode simulator
 

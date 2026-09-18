@@ -7,7 +7,7 @@
 %global crate gix-filter
 
 Name:           rust-gix-filter
-Version:        0.24.1
+Version:        0.34.0
 Release:        %autorelease
 Summary:        A crate of the gitoxide project implementing git filters
 

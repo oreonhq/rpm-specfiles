@@ -6,7 +6,7 @@
 %bcond          viewer      0  # Graphical viewer
 
 Name:           materialx
-Version:        1.39.4
+Version:        1.39.5
 Release:        %autorelease
 Summary:        Vendor-neutral specification for 3D material interchange
 

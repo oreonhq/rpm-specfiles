@@ -1,10 +1,10 @@
 %global source0_hash 417af6da4e855e9a83b93458aa98b01a2c88f880088baad2b59d323ce162586e
 
-%global soversion 1.9
+%global soversion 1.10
 
 Name:           octomap
-Version:        1.9.8
-Release:        10%{?dist}
+Version:        1.10.0
+Release:        1%{?dist}
 Summary:        Efficient Probabilistic 3D Mapping Framework Based on Octrees
 
 # octovis is GPLv2, octomap and dynamic-edt-3d are BSD

@@ -1,61 +1,57 @@
-%global source0_hash 28d5c99de241648d3985ca69f65b4a43d342ddaf23ce28313f2f24e2b4c664d7
+%global source0_hash none
 
-%global pypi_name cmap
-%global forgeurl https://github.com/tlambert03/cmap
-
-Name:           python-%{pypi_name}
-Version:        0.3.0
-Release:        %{autorelease}
+Name:           python-cmap
+Version:        0.7.2
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Scientific colormaps for python, without dependencies
-%forgemeta
-# The colormaps carry their own licenses
-License:        BSD-3-Clause AND MIT AND Apache-1.1 AND CC-BY-4.0 AND BSD-1-Clause
-URL:            %forgeurl
-Source:         %forgesource
+
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        BSD-3-Clause
+URL:            https://github.com/pyapp-kit/cmap
+Source:         %{pypi_source cmap}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
-# For hatch-vcs
-BuildRequires:  git-core
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Scientific colormaps for python, with no dependencies beyond numpy.
-
-With cmap, you can use any of the colormaps from matplotlib, cmocean,
-colorbrewer, crameri, seaborn, and a host of other collections in your
-python code, without having to install matplotlib or any other
-dependencies beyond numpy.}
+This is package 'cmap' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{pypi_name}
+%package -n     python3-cmap
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-cmap %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n cmap-%{version}
 
-%forgeautosetup -p1 -S git
-
-# Make sure this is the last step in prep
-git tag v%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires -x test_min
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest -v
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md CHANGELOG.md
+
+%files -n python3-cmap -f %{pyproject_files}
 
 %changelog
 %autochangelog

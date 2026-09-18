@@ -2,8 +2,8 @@
 
 Summary: A FUSE filesystem module to mount your camera as a filesystem
 Name: gphotofs
-Version: 0.5
-Release: 26%{?dist}
+Version: 0.5.0
+Release: 1%{?dist}
 License: GPL-1.0-or-later
 URL: http://www.gphoto.org/proj/gphotofs/
 BuildRequires:  gcc

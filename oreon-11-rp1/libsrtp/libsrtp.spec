@@ -1,8 +1,8 @@
 %global source0_hash bf641aa654861be10570bfc137d1441283822418e9757dc71ebb69a6cf84ea6b
 
 Name:		libsrtp
-Version:	2.6.0
-Release:	4%{?dist}
+Version:	2.8.0
+Release:	1%{?dist}
 Summary:	An implementation of the Secure Real-time Transport Protocol (SRTP)
 License:	BSD-3-Clause
 URL:		https://github.com/cisco/libsrtp
@@ -15,7 +15,7 @@ BuildRequires:	procps-ng
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(libpcap)
 Provides:	libsrtp-tools = %{version}-%{release}
-Obsoletes:	libsrtp-tools < 2.6.0-1
+Obsoletes:	libsrtp-tools < 2.8.0-1
 
 %description
 This package provides an implementation of the Secure Real-time

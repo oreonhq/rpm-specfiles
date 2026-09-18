@@ -1,53 +1,57 @@
-%global source0_hash bd049b867079b22e3ca9021cfd80fa8096ce481588747803b6bebf0c355012a4
+%global source0_hash none
 
-%global srcname pytest-flake8-path
+Name:           python-pytest-flake8-path
+Version:        1.7.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A pytest fixture for testing flake8 plugins.
 
-Name:           python-%{srcname}
-Version:        1.5.0
-Release:        11%{?dist}
-Summary:        A pytest fixture for testing flake8 plugins
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/adamchainz/pytest-flake8-path
-Source0:        https://github.com/adamchainz/pytest-flake8-path/archive/%{version}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source pytest_flake8_path}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-pytest-flake8-path is the successor to pytest-flake8dir. pytest-flake8dir was
-based upon pytest’s tmpdir fixture, which returned a legacy py.path.local
-object. Since version 3.9.0, pytest has provided the tmp_path fixture, which
-returns a standard library pathlib.Path object. pytest-flake8-path is a
-rewrite of pytest-flake8dir to use tmp_path instead of tmpdir.}
+This is package 'pytest-flake8-path' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python%{python3_pkgversion}-%{srcname}
+%package -n     python3-pytest-flake8-path
 Summary:        %{summary}
-BuildRequires:  python%{python3_pkgversion}-devel
 
-%description -n python%{python3_pkgversion}-%{srcname} %_description
+%description -n python3-pytest-flake8-path %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_flake8_path-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires requirements/requirements.in
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files pytest_flake8_path
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python%{python3_pkgversion}-%{srcname} -f %{pyproject_files}
-%doc HISTORY.rst README.rst
+
+%files -n python3-pytest-flake8-path -f %{pyproject_files}
 
 %changelog
 %autochangelog

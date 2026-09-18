@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:          pdfbox
-Version:       3.0.6
-Release:       2%{?dist}
+Version:       3.0.8
+Release:       1%{?dist}
 Summary:       Apache PDFBox library for working with PDF documents
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:       Apache-2.0

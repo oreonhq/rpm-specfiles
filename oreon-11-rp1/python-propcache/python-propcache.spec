@@ -1,58 +1,57 @@
-%global source0_hash f4394e27f251a9852df736a5d081fcacbd3258593af4cfc4281635e64474559e
+%global source0_hash none
 
-%global pypi_name propcache
-
-Name:           python-%{pypi_name}
-Version:        0.4.1
+Name:           python-propcache
+Version:        0.5.4
 Release:        %autorelease
-Summary:        Module for fast property caching
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Accelerated property cache
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
-URL:            https://github.com/aio-libs/propcache
-Source:        https://github.com/aio-libs/propcache/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
+URL:            https://matrix.to/#/#aio-libs:matrix.org
+Source:         %{pypi_source propcache}
 
-BuildRequires:  gcc
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(cython)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-xdist)
+BuildRequires:  gcc
 
-%global debug_package %{nil}
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Module for fast property caching.}
+This is package 'propcache' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{pypi_name}
+%package -n     python3-propcache
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-propcache %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n propcache-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p1
-# Disable coverage
-sed -r -e 's/(-.*cov.*$)/#\1/g' -i pytest.ini
-# Remove Cython's upper version pin
-sed -i 's/Cython ~= 3\.1\.0/Cython >= 3.1.0/g' packaging/pep517_backend/_backend.py
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc CHANGES.rst README.rst
+
+%files -n python3-propcache -f %{pyproject_files}
 
 %changelog
 %autochangelog

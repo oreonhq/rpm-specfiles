@@ -3,7 +3,7 @@
 
 Summary: Shared MIME information database
 Name: shared-mime-info
-Version: 2.4
+Version: 2.5.1
 Release: %autorelease
 License: GPL-2.0-or-later
 URL: http://freedesktop.org/Software/shared-mime-info

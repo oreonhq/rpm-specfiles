@@ -7,7 +7,7 @@
 %global crate find-crate
 
 Name:           rust-find-crate
-Version:        0.6.3
+Version:        0.7.1
 Release:        %autorelease
 Summary:        Find the crate name from the current Cargo.toml
 

@@ -3,7 +3,7 @@
 %{?mingw_package_header}
 
 Name:           mingw-rest
-Version:        0.9.1
+Version:        0.10.2
 Release:        1%{?dist}
 Summary:        A library for access to RESTful web services
 

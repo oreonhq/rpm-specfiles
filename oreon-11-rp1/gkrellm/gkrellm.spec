@@ -1,7 +1,7 @@
 %global source0_hash 6f83665760b936ad4b55f9182b1ec7601faf38a0f25ea1e4bddc9965088f032d
 
 Name:           gkrellm
-Version:        2.4.0
+Version:        2.5.1
 Release:        %autorelease
 Summary:        Multiple stacked system monitors in one process
 License:        GPL-3.0-or-later

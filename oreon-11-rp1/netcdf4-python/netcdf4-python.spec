@@ -1,8 +1,8 @@
 %global source0_hash dff77ab20e26e43426dd19256e71aacbd4c92bfb172cc30e647c9e34b4c53828
 
 Name:           netcdf4-python
-Version:        1.7.3
-Release:        2%{?dist}
+Version:        1.7.4rel
+Release:        1%{?dist}
 Summary:        Python/numpy interface to netCDF
 
 License:        MIT

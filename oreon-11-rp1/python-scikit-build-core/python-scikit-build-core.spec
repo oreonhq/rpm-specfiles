@@ -1,83 +1,64 @@
-%global source0_hash 8f0a1edb86cb087876f3c699d2a2682012efd8867b390ed37355f13949d0628e
-
-%global debug_package %{nil}
-
-# On epel python hatch/trove classifier check may fail because of old package
-# Fedora checks should be sufficient though.
-%bcond no_classifier_check 0%{?rhel}
+%global source0_hash none
 
 Name:           python-scikit-build-core
-Version:        0.11.5
+Version:        1.0.3
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
 Summary:        Build backend for CMake based projects
 
-# The main project is licensed under Apache-2.0, but it has a vendored project
-# src/scikit_build_core/_vendor/pyproject_metadata: MIT
-# https://github.com/scikit-build/scikit-build-core/issues/933
-License:        Apache-2.0 AND MIT
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0
 URL:            https://github.com/scikit-build/scikit-build-core
 Source:         %{pypi_source scikit_build_core}
 
+BuildArch:      noarch
 BuildRequires:  python3-devel
-BuildRequires:	python3dist(cattrs) >= 22.2
-BuildRequires:	python3dist(pytest-subprocess) >= 1.5
-BuildRequires:	python3dist(pytest-xdist) >= 3.1
-# Testing dependences
-BuildRequires:  cmake
-BuildRequires:  ninja-build
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-BuildRequires:  git
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A next generation Python CMake adapter and Python API for plugins
-}
+This is package 'scikit-build-core' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-scikit-build-core
+%package -n     python3-scikit-build-core
 Summary:        %{summary}
-Requires:       cmake
-Requires:       ninja-build
-BuildArch:      noarch
-
-Provides:       bundled(python3dist(pyproject-metadata)) = 0.9.1
-
-Obsoletes:      python3-scikit-build-core+pyproject < 0.10.7-3
 
 %description -n python3-scikit-build-core %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-scikit-build-core hatchling,setuptools,wheel-free-setuptools,wheels
 
-%autosetup -n scikit_build_core-%{version}
-# Rename the bundled license so that it can be installed together
-cp -p src/scikit_build_core/_vendor/pyproject_metadata/LICENSE LICENSE-pyproject-metadata
+
+%prep
+%autosetup -p1 -n scikit_build_core-%{version}
+
 
 %generate_buildrequires
-%if %{with no_classifier_check}
-export HATCH_METADATA_CLASSIFIERS_NO_VERIFY=1
-%endif
-%pyproject_buildrequires -x test,test-meta,test-numpy
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x hatchling,setuptools,wheel-free-setuptools,wheels
+
 
 %build
-%if %{with no_classifier_check}
-export HATCH_METADATA_CLASSIFIERS_NO_VERIFY=1
-%endif
 %pyproject_wheel
+
 
 %install
 %pyproject_install
-%pyproject_save_files scikit_build_core
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%pytest \
-    -m "not network"
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-scikit-build-core -f %{pyproject_files}
-%license LICENSE LICENSE-pyproject-metadata
-%doc README.md
+%{_bindir}/scikit-build
+%{_bindir}/scikit-build-core
 
 %changelog
 %autochangelog

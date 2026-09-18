@@ -37,16 +37,16 @@
 %if %{defined gitrev}
 %define package_version %{?gitrev}
 %else
-%define package_version 1.2.1
+%define package_version 1.2.4
 %endif
 
 Summary:        Creates a common metadata repository
 Name:           createrepo_c
 Version:        %{package_version}
-Release:        5%{?dist}
+Release:        1%{?dist}
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/createrepo_c
-Source0:        https://github.com/rpm-software-management/createrepo_c/archive/refs/tags/1.2.1.tar.gz#/createrepo_c-1.2.1.tar.gz
+Source0:        https://github.com/rpm-software-management/createrepo_c/archive/refs/tags/1.2.4.tar.gz#/createrepo_c-1.2.1.tar.gz
 Patch1:         0001-Fix-libname-of-Libs.private.patch
 Patch2:         0002-Use-IMPORTED_TARGET-for-3rd-party-dependencies.patch
 Patch3:         0003-Don-t-try-to-use-imported-targets-of-turned-off-depe.patch

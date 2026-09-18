@@ -7,7 +7,7 @@
 %global crate delicious-adwaita
 
 Name:           rust-delicious-adwaita
-Version:        0.3.1
+Version:        0.3.2
 Release:        %autorelease
 Summary:        Color scheme manager for gtk4 libadwaita applications
 

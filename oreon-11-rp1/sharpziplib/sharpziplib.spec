@@ -8,8 +8,8 @@
 %bcond_with brokentests
 
 Name:           sharpziplib
-Version:        1.3.3
-Release:        10%{?dist}
+Version:        1.4.2
+Release:        1%{?dist}
 Summary:        Zip, GZip, Tar and BZip2 library
 
 # - as stated on the homepage, license is aka GNU Classpath exception:

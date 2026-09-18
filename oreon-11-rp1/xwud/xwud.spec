@@ -1,7 +1,7 @@
 %global source0_hash e55cbedab36d7a5f671abf8e594888afc48caa116d51d429ea53ea317ec0c61e
 
 Name:       xwud
-Version:    1.0.7
+Version:    1.0.8
 Release:    %autorelease
 Summary:    Tool to display an X window image
 

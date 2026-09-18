@@ -8,8 +8,8 @@
 %global _binaries_in_noarch_packages_terminate_build 0
 
 Name:           avr-libc
-Version:        2.2.1
-Release:        5%{?dist}
+Version:        2_3_2-release
+Release:        1%{?dist}
 Summary:        C library for use with GCC on Atmel AVR microcontrollers
 License:        BSD-3-Clause
 URL:            https://github.com/avrdudes/avr-libc/

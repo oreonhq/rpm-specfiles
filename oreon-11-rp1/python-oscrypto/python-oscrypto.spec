@@ -1,82 +1,57 @@
-%global source0_hash 5855d4cc18172513c6b2c6dde00b89731faa907c7003d4965862f2f2e0fb9ae4
+%global source0_hash none
 
-# main package is archful to run tests everywhere but produces noarch packages
-%global debug_package %{nil}
-%bcond check 0
-%global pname oscrypto
-%global forgeurl https://github.com/wbond/oscrypto
-%global commit 1547f535001ba568b239b8797465536759c742a3
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-%global commitdate 20230823
-%global version0 1.3.0
+Name:           python-oscrypto
+Version:        1.3.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        TLS _SSL_ sockets, key generation, encryption, decryption, signing, verification and KDFs using the OS crypto libraries. Does not require a compiler, and relies on the OS for patching. Works on Windows, OS X and Linux/BSD.
 
-%global desc %{expand:
-Currently the following features are implemented. Many of these should only be
-used for integration with existing/legacy systems.
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/wbond/oscrypto
+Source:         %{pypi_source oscrypto}
 
-* TLSv1.x socket wrappers
-* Exporting OS trust roots
-* Encryption/decryption
-* Generating public/private key pairs
-* Generating DH parameters
-* Signing and verification
-* Loading and normalizing DER and PEM formatted keys
-* Key derivation
-* Random byte generation
-}
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-Name: python-%{pname}
-Version: %{version0}^%{commitdate}git%{shortcommit}
-Release: 1%{?dist}
-Summary: Compiler-free Python crypto library backed by the OS
-License: MIT
-URL: %{forgeurl}
-Source0: %{url}/archive/%{commit}/oscrypto-%{shortcommit}.tar.gz
 
-%description %{desc}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'oscrypto' generated automatically by pyp2spec.}
 
-%package -n python3-%{pname}
-Summary: %{summary}
-BuildRequires: python3-devel
-%if %{with check}
-BuildRequires: ca-certificates
-BuildRequires: python3-asn1crypto
-BuildRequires: python3-pytest
-BuildRequires: python3-pytest-xdist
-BuildRequires: openssl-libs
-%endif
-BuildArch: noarch
-Requires: ca-certificates
-Requires: openssl-libs
+%description %_description
 
-%description -n python3-%{pname} %{desc}
+%package -n     python3-oscrypto
+Summary:        %{summary}
+
+%description -n python3-oscrypto %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n oscrypto-%{version}
 
-%autosetup -n oscrypto-%{commit}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with check}
+
 %check
-export SSL_CERT_FILE=/etc/pki/ca-trust/extracted/openssl/ca-bundle.trust.crt
-export OPENSSL_ENABLE_SHA1_SIGNATURES=1 
-# run only non-network tests
-%pytest -k 'not TLSTests'
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pname} -f %{pyproject_files}
-%license LICENSE
-%doc readme.md
+
+%files -n python3-oscrypto -f %{pyproject_files}
 
 %changelog
 %autochangelog

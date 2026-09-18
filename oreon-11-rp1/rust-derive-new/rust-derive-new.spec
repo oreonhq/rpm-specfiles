@@ -7,7 +7,7 @@
 %global crate derive-new
 
 Name:           rust-derive-new
-Version:        0.6.0
+Version:        0.7.0
 Release:        %autorelease
 Summary:        Derive simple constructor functions for structs and enums
 

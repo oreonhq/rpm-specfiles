@@ -1,73 +1,57 @@
-%global source0_hash e68023b0bfdb8cf6d9436f850029900964e9977305763ba12be9c3474ea13175
+%global source0_hash none
 
-%global srcname jwcrypto
-
-Name:           python-%{srcname}
-Version:        1.4.2
+Name:           python-jwcrypto
+Version:        1.6.1
 Release:        %autorelease
-Summary:        Implements JWK, JWS, JWE specifications using python-cryptography
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Implementation of JOSE Web standards
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-3.0-or-later
-URL:            https://github.com/latchset/%{srcname}
-Source0:        https://github.com/latchset/%{srcname}/releases/download/v%{version}/%{srcname}-%{version}.tar.gz
+URL:            https://github.com/latchset/jwcrypto
+Source:         %{pypi_source jwcrypto}
 
 BuildArch:      noarch
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
-BuildRequires:  python%{python3_pkgversion}-cryptography >= 2.3
-BuildRequires:  python%{python3_pkgversion}-pytest
-%if %{undefined rhel}
-BuildRequires:  python%{python3_pkgversion}-deprecated
-%endif
-
-%description
-Implements JWK, JWS, JWE specifications using python-cryptography
+BuildRequires:  python3-devel
 
 
-%package -n python%{python3_pkgversion}-%{srcname}
-Summary:        Implements JWK, JWS, JWE specifications using python-cryptography
-Requires:       python%{python3_pkgversion}-cryptography >= 2.3
-%if %{undefined rhel}
-Requires:       python%{python3_pkgversion}-deprecated
-%endif
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'jwcrypto' generated automatically by pyp2spec.}
 
-%description -n python%{python3_pkgversion}-%{srcname}
-Implements JWK, JWS, JWE specifications using python-cryptography
+%description %_description
+
+%package -n     python3-jwcrypto
+Summary:        %{summary}
+
+%description -n python3-jwcrypto %_description
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{srcname}-%{version}
-%if %{defined rhel}
-# avoid python-deprecated dependency
-sed -i -e '/deprecated/d' setup.py %{srcname}.egg-info/requires.txt
-sed -i -e '/^from deprecated/d' -e '/@deprecated/d' %{srcname}/*.py
-%endif
+%autosetup -p1 -n jwcrypto-%{version}
+
+
+%generate_buildrequires
+%pyproject_buildrequires
 
 
 %build
-%py3_build
-
-
-%check
-%{__python3} -bb -m pytest %{srcname}/test*.py
+%pyproject_wheel
 
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-rm -rf %{buildroot}%{_docdir}/%{srcname}
-rm -rf %{buildroot}%{python3_sitelib}/%{srcname}/tests{,-cookbook}.py*
-rm -rf %{buildroot}%{python3_sitelib}/%{srcname}/__pycache__/tests{,-cookbook}.*.py*
+
+%check
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files -n python%{python3_pkgversion}-%{srcname}
-%doc README.md
-%license LICENSE
-%{python3_sitelib}/%{srcname}
-%{python3_sitelib}/%{srcname}-%{version}-py%{python3_version}.egg-info
-
+%files -n python3-jwcrypto -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.2-1

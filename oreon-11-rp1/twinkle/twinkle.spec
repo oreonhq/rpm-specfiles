@@ -5,8 +5,8 @@
 %global snap .git%{shortcommit}
 
 Name:           twinkle
-Version:        1.10.3
-Release:        10%{?snap}%{?dist}
+Version:        1.11.0
+Release:        1%{?snap}%{?dist}
 Summary:        SIP-based VoIP client
 
 # Incorrect FSF addresses: https://github.com/LubosD/twinkle/issues/71

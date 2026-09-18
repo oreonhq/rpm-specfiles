@@ -10,7 +10,7 @@
 %global crate uu_mktemp
 
 Name:           rust-uu_mktemp
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        mktemp ~ (uutils) create and display a temporary file or directory from TEMPLATE
 

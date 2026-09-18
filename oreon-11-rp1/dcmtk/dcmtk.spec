@@ -14,13 +14,13 @@
 
 Name: dcmtk
 Summary: Offis DICOM Toolkit (DCMTK)
-Version: 3.6.9
+Version: 3.7.0
 
 # soname version is "abi_version.version"
 # https://github.com/DCMTK/dcmtk/blob/master/CMake/dcmtkPrepare.cmake#L78
 %global soname_version %{abi_version}.%{version}
 
-Release: 5%{?dist}
+Release: 1%{?dist}
 
 # see licenses-3.6.9.txt for license breakdown
 License: BSD-3-Clause and Apache-2.0 and BSD-2-Clause and (WTFPL or MIT) and GPL-3.0-or-later and ISC and MIT
@@ -51,7 +51,7 @@ Patch:      0015-Update-colorTransformation-for-CharLS-2.patch
 Patch:      0016-Update-JpegLsEncode-for-CharLS-2.patch
 %endif
 
-# Upstream fixes, backported to 3.6.9:
+# Upstream fixes, backported to 3.7.0:
 # https://github.com/sanjayankur31/dcmtk/tree/fedora-3.6.9
 
 # Increase sleep in tests

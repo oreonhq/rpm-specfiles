@@ -10,7 +10,7 @@
 %bcond_without                  tests
 
 Name:       php-%{composer_vendor}
-Version:    2.0.52
+Version:    4.0.1
 Release:    1%{?dist}
 Summary:    PHP Secure Communications Library
 License:    MIT

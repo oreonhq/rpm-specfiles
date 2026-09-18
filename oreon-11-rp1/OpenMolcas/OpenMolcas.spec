@@ -4,7 +4,7 @@
 %global commit 3cb6f2cd61a5d482611d85c47dcb61f8d51d50ba
 
 Name:           OpenMolcas
-Version:        26.02
+Version:        26.06
 Release:        1%{?dist}
 Summary:        A multiconfigurational quantum chemistry software package
 License:        LGPL-2.1-only

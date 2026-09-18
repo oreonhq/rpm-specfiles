@@ -1,11 +1,11 @@
 %global source0_hash 3df429b22d9294c0ca5291c86e83a35f6326600a1c271933107bba199b919008
 
 %global toolchain clang
-%global reltag 6.0.2-RELEASE
+%global reltag 6.3.3-RELEASE-RELEASE
 
 Name:           libdispatch
-Version:        6.0.2
-Release:        3%{?dist}
+Version:        6.3.3-RELEASE
+Release:        1%{?dist}
 Summary:        Apple's Grand Central Dispatch library
 License:        Apache-2.0
 URL:            https://github.com/apple/swift-corelibs-libdispatch

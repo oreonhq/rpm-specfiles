@@ -7,7 +7,7 @@
 %global crate crypto-auditing
 
 Name:           rust-crypto-auditing
-Version:        0.2.4
+Version:        0.3.2
 Release:        %autorelease
 Summary:        Client library for crypto-auditing project
 

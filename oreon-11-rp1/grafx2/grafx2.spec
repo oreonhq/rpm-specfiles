@@ -4,8 +4,8 @@
 %global sixfivezerotwover 0.1
 
 Name:		grafx2
-Version:	2.8
-Release:	13%{?dist}
+Version:	2.9
+Release:	1%{?dist}
 Summary:	A bitmap paint program specialized in 256 color drawing
 URL:		http://grafx2.chez.com/
 # recoil is GPLv2+, grafX2 is GPLv2 only

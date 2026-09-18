@@ -3,8 +3,8 @@
 #global pre_release .pre1
 
 Name:		libva-utils
-Version:	2.23.0
-Release:	2%{?dist}
+Version:	2.24.0
+Release:	1%{?dist}
 Summary:	Tools for VAAPI (including vainfo)
 # Automatically converted from old format: MIT and BSD - review is highly recommended.
 License:	LicenseRef-Callaway-MIT AND LicenseRef-Callaway-BSD

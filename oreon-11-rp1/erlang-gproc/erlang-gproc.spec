@@ -3,7 +3,7 @@
 %global realname gproc
 
 Name:		erlang-%{realname}
-Version:	1.1.0
+Version:	1.3.0
 Release:	%autorelease
 BuildArch:	noarch
 Summary:	Extended process registry for Erlang

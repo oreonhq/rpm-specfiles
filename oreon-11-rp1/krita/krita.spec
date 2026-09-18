@@ -9,8 +9,8 @@
 %global gmic_version 3.6.6.2
 
 Name:           krita
-Version:        6.0.0~beta2
-Release:        2%{?dist}
+Version:        6.0.4
+Release:        1%{?dist}
 
 Summary:        Krita is a sketching and painting program
 License:        GPL-2.0-or-later

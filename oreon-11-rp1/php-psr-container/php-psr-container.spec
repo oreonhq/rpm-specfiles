@@ -20,8 +20,8 @@
 %{!?phpdir:  %global phpdir  %{_datadir}/php}
 
 Name:      php-%{pk_vendor}-%{pk_project}
-Version:   1.1.2
-Release:   11%{?dist}
+Version:   2.0.2
+Release:   1%{?dist}
 Summary:   Common Container Interface
 
 License:   MIT

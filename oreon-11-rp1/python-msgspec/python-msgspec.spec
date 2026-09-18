@@ -1,65 +1,64 @@
-%global source0_hash 33961077a37830c54fa3108bd226a9d7a09b91ff82ef7b976a371039b54b6bc7
+%global source0_hash none
 
-%global debug_package %{nil}
-%global pypi_name msgspec
-
-Name:           python-%{pypi_name}
-Summary:        Fast serialization and validation library
-Version:        0.19.0
-Source:         https://github.com/jcrist/%{pypi_name}/archive/refs/tags/%{version}/msgspec-%{version}.tar.gz
+Name:           python-msgspec
+Version:        0.21.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A fast serialization and validation library, with builtin support for JSON, MessagePack, YAML, and TOML.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://jcristharif.com/msgspec/
-
-# Python 3.14: Fix annotations support
-Patch:          https://github.com/jcrist/msgspec/pull/852.patch
+Source:         %{pypi_source msgspec}
 
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(wheel)
-# Adding the pytest dependency manually, as the `tests` extras group also
-# includes mypy, pyright, pre-commit and other unpackaged dependencies
-BuildRequires:  python3dist(pytest)
 BuildRequires:  gcc
-ExcludeArch: s390x i686
 
-%generate_buildrequires
-%pyproject_buildrequires
 
-%package -n     python3-%{pypi_name}
-Summary:        %{summary}
-
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A fast serialization and validation library, with builtin support for
-JSON, MessagePack, YAML, and TOML.}
+This is package 'msgspec' generated automatically by pyp2spec.}
+
+Patch:          https://github.com/jcrist/msgspec/pull/852.patch
 
 %description %_description
-%description -n python3-%{pypi_name} %_description
+
+%package -n     python3-msgspec
+Summary:        %{summary}
+
+%description -n python3-msgspec %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-msgspec toml,yaml
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n msgspec-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
-# Relax all getrefcount tests to allow lower numbers
-# Proposed as https://github.com/jcrist/msgspec/pull/854 but does not apply cleanly
-sed -Ei 's/sys\.getrefcount\(([^\)]+)\) == ([0-9]+)/sys.getrefcount(\1) <= \2/' tests/test_*.py
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x toml,yaml
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-# tests/test_raw.py::test_raw_copy_doesnt_leak calls Python from subprocess and is confused by msgspec in $PWD
-export PYTHONSAFEPATH=1
-%pytest
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
-%license LICENSE
+
+%files -n python3-msgspec -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -5,8 +5,8 @@
 %global gitdate 20110613
 
 Name:		mono-reflection
-Version:	0.1
-Release:	0.34.%{gitdate}git%{gitrev}%{?dist}
+Version:	1.1
+Release:	1.34.%{gitdate}git%{gitrev}%{?dist}
 Summary:	Helper library for Mono Reflection support
 URL:		https://github.com/jbevain/mono.reflection
 License:	MIT

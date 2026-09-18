@@ -2,8 +2,8 @@
 
 Name:		globus-gram-job-manager-condor
 %global _name %(tr - _ <<< %{name})
-Version:	3.0
-Release:	23%{?dist}
+Version:	6.2.20251212
+Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Condor Job Manager Support
 
 License:	Apache-2.0

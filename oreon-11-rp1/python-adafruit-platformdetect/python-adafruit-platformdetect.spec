@@ -1,69 +1,57 @@
-%global source0_hash 485fce8671db80443954fc47767a042284aeeab48d93e2125846febf7d22f21f
+%global source0_hash none
 
-%global pypi_name adafruit-platformdetect
-
-Name:           python-%{pypi_name}
-Version:        3.81.0
+Name:           python-adafruit-platformdetect
+Version:        3.89.1
 Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Platform detection for use by libraries like Adafruit-Blinka.
 
-Summary:        Platform detection module
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/adafruit/Adafruit_Python_PlatformDetect
-Source0:        %{pypi_source adafruit_platformdetect}
+Source:         %{pypi_source adafruit_platformdetect}
+
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(setuptools-scm)
-BuildRequires:  python3dist(wheel)
-BuildRequires:  python3dist(pip)
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-This library provides best-guess platform detection for a range of
-single-board computers and (potentially) other platforms.}
+This is package 'adafruit-platformdetect' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-adafruit-platformdetect
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-adafruit-platformdetect %_description
 
-%package -n python-%{pypi_name}-doc
-Summary:        Documentation for adafruit-platformdetect
-
-BuildRequires:  python3dist(sphinx)
-%description -n python-%{pypi_name}-doc
-Documentation for adafruit-platformdetect.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n adafruit_platformdetect-%{version}
 
-%autosetup -n adafruit_platformdetect-%{version}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
-PYTHONPATH=${PWD} sphinx-build-3 docs html
-rm -rf html/.{doctrees,buildinfo}
+
 
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files adafruit_platformdetect
 
-%ifarch %{arm} %{arm64}
 %check
-%pytest -v tests
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
 
-%files -n python-%{pypi_name}-doc
-%doc html
-%license LICENSE
+%files -n python3-adafruit-platformdetect -f %{pyproject_files}
 
 %changelog
 %autochangelog

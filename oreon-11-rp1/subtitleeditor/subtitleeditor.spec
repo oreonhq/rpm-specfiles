@@ -1,8 +1,8 @@
 %global source0_hash 1bfcd00efb1d0aeae55ac32129d5007a29697cd32351a52306675eabfda7dbb1
 
 Name:           subtitleeditor
-Version:        0.55.0
-Release:        2%{?dist}
+Version:        0.56.2
+Release:        1%{?dist}
 Summary:        GTK+3 tool to edit subtitles for GNU/Linux/*BSD
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

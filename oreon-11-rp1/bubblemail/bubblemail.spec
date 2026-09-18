@@ -1,7 +1,7 @@
 %global source0_hash f20c15dbfad81f0a19f8152316f79fbc607c9d2a144eff442801e241707f61b0
 
 Name:           bubblemail
-Version:        1.10
+Version:        1.12
 Release:        %autorelease
 Summary:        Extensible mail notification service
 

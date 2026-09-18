@@ -3,7 +3,7 @@
 %global fullname net.sourceforge.Lifeograph
 
 Name:       lifeograph
-Version:    3.0.4
+Version:    3.1.4
 Release:    %autorelease
 Summary:    A diary program
 

@@ -1,8 +1,8 @@
 %global source0_hash 0da7c9772a2186dab1fba6bf6c777afe7424f40beacadf1b117d5cc825fe2db3
 
 Name:           gambit-c
-Version:        4.9.7
-Release:        3%{?dist}
+Version:        4.9.8
+Release:        1%{?dist}
 Summary:        Scheme programming system
 
 License:        Apache-2.0 OR LGPL-2.1-only

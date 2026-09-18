@@ -7,7 +7,7 @@
 %global crate secrecy
 
 Name:           rust-secrecy
-Version:        0.8.0
+Version:        0.10.3
 Release:        %autorelease
 Summary:        Wrapper types and traits for secret management which help ensure
 

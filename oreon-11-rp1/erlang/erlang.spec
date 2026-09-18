@@ -71,7 +71,7 @@
 %global __with_wxwidgets 1
 
 Name:		erlang
-Version:	26.2.5.18
+Version:	29.1
 Release:	1%{?dist}
 Summary:	General-purpose programming language and runtime environment
 

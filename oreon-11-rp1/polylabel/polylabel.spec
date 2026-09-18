@@ -3,8 +3,8 @@
 %global debug_package %{nil}
 
 Name:           polylabel
-Version:        2.0.1
-Release:        5%{?dist}
+Version:        2.1.0
+Release:        1%{?dist}
 Summary:        A fast algorithm for finding the pole of inaccessibility of a polygon
 
 License:        ISC

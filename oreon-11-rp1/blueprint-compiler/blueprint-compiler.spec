@@ -4,7 +4,7 @@
 %global major_minor_version %%(echo %%{tarball_version} | cut -d "." -f 1-2)
 
 Name:           blueprint-compiler
-Version:        0.20.4
+Version:        0.22.2
 Release:        %autorelease
 Summary:        A markup language for GTK user interfaces
 License:        LGPL-3.0-or-later

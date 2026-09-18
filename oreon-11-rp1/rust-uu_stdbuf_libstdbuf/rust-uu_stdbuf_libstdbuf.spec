@@ -7,7 +7,7 @@
 %global crate uu_stdbuf_libstdbuf
 
 Name:           rust-uu_stdbuf_libstdbuf
-Version:        0.7.0
+Version:        0.12.0
 Release:        %autorelease
 Summary:        stdbuf/libstdbuf ~ (uutils); dynamic library required for stdbuf
 

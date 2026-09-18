@@ -1,67 +1,69 @@
-%global source0_hash d75d805a06ed56150dbcea76505e700f9809abd9e98f98117ae46f5df2ccf1d7
+%global source0_hash none
 
-%global shortname mediafile
 Name:           python-mediafile
-Version:        0.12.0
-Release:        12%{dist}
-Summary:        Elegant audio file tagging in Python
+Version:        0.17.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A simple, cross-format library for reading and writing media file metadata.
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/beetbox/mediafile
-Source0:        %{pypi_source mediafile}
+Source:         %{pypi_source mediafile}
+
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'mediafile' generated automatically by pyp2spec.}
+
 Patch0:         0001-Set-new-ORIGINALDATE-tag-for-m4a-files-in-addition-t.patch
 Patch1:         0002-Version-bump-changelog-for-71.patch
 Patch2:         0003-remove-usage-of-six-__future__.patch
 Patch3:         0004-Changelog-for-72.patch
 Patch4:         0005-Bump-minimum-Python-versions.patch
-# From PR 73 but without the binary change
 Patch5:         49da9728a69ae8a63af8a4630fccc55c10e66392-nobinary.patch
 
-BuildArch:     noarch
-BuildRequires:  python3-devel
+%description %_description
 
-%global _description %{expand:
-MediaFile is a simple interface to the metadata tags for many audio file
-formats. It wraps Mutagen, a high-quality library for low-level tag
-manipulation, with a high-level, format-independent interface for a common set
-of tags.}
-
-%description %{_description}
-
-%package -n python3-%{shortname}
+%package -n     python3-mediafile
 Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{shortname}}
 
-Requires:       python3 >= 3.6
-Requires:       python3-filetype >= 1.2.0
-Requires:       python-mutagen
+%description -n python3-mediafile %_description
 
-%description -n python3-%{shortname} %{_description}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-mediafile docs
 
-Python 3 version.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n mediafile-%{version}
 
-%autosetup -n %{shortname}-%{version} -p1
-rm test/rsrc/only-magic-bytes.jpg
 
 %generate_buildrequires
-%pyproject_buildrequires -r -t -e %{toxenv}-test
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs
+
 
 %build
 %pyproject_wheel
 
-%check
-%tox -e %{toxenv}-test
 
 %install
 %pyproject_install
-%pyproject_save_files '*%{shortname}*'
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-%{shortname} -f %{pyproject_files}
-%license LICENSE
-%doc README.rst
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-mediafile -f %{pyproject_files}
 
 %changelog
 %autochangelog

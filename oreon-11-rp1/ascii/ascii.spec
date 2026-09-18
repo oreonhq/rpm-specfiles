@@ -1,7 +1,7 @@
 %global source0_hash 309aa75fcc46921b3ac1bb2a6742e6e343049529ea5b4859564625be742a013c
 
 Name:           ascii
-Version:        3.31
+Version:        3.32
 Release:        1%{?dist}
 URL:            http://www.catb.org/~esr/ascii/
 Source0:        http://www.catb.org/~esr/ascii/ascii-%{version}.tar.gz

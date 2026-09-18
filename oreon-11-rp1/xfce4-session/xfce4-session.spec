@@ -1,9 +1,9 @@
 %global source0_hash dbf00672c5316a30b7001fe852e6a5ba9f889afeab8a247545a160d4302f1fa2
 
-%global xfceversion 4.20
+%global xfceversion 4.21
 
 Name:           xfce4-session
-Version:        4.20.3
+Version:        4.21.0
 Release:        %autorelease
 Summary:        Xfce session manager
 

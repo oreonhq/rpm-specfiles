@@ -10,7 +10,7 @@
 %global crate rustbus
 
 Name:           rust-rustbus
-Version:        0.17.0
+Version:        0.19.3
 Release:        %autorelease
 Summary:        Implementation of the dbus protocol
 

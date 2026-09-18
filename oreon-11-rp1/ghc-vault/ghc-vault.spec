@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        0.3.1.6
+Version:        0.3.2.0
 Release:        %autorelease
 Summary:        A persistent store for values of arbitrary types
 

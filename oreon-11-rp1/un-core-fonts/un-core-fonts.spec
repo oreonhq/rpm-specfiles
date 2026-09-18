@@ -8,8 +8,8 @@
 
 BuildArch: noarch
 
-Version: 1.0.2
-Release: 0.50.%{alphatag}%{?dist}
+Version: 1.0.2-080608-080608
+Release: 1.50.%{alphatag}%{?dist}
 License: GPL-2.0-only
 URL:     http://kldp.net/projects/unfonts/
 
@@ -54,7 +54,7 @@ This package includes UnDinaru, a fantasy font.
 %global fontfamily3       Un Core Dotum
 %global fontsummary3      Un Core fonts - UnDotum
 %global fontpkgheader3    %{expand:
-Obsoletes:       %{name}-common < 1.0.2-0.43.080608
+Obsoletes:       %{name}-common < 1.0.2-080608-0.43.080608
 Provides:        %{name}-common = %{version}-%{release}
 }
 %global fonts3            UnDotum.ttf UnDotumBold.ttf

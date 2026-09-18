@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%global blender_api 5.1
+%global blender_api 5.2
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 %global _without_bundled_deps 1
 
@@ -49,7 +49,7 @@
 
 Name:           blender
 Epoch:          1
-Version:        5.1.0
+Version:        5.2.2
 Release:        %autorelease
 
 Summary:        3D modeling, animation, rendering and post-production

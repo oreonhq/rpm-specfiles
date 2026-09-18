@@ -1,60 +1,59 @@
-%global source0_hash 72ac1abbae5bddb4918688713f991f5a7fb6c9b593646a82f4bf3ac53de7eeb5
+%global source0_hash none
 
-Name:      python-construct-classes
-Version:   0.1.2
-Release:   14%{?dist}
-Summary:   Parse your binary structs into dataclasses
+Name:           python-construct-classes
+Version:        0.2.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Parse your binary structs into dataclasses
 
-License:   MIT
-URL:       https://github.com/matejcik/construct-classes
-Source0:   %{pypi_source construct-classes}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/matejcik/construct-classes
+Source:         %{pypi_source construct_classes}
 
-# Only include license and documentation for sdist #2
-# https://github.com/matejcik/construct-classes/pull/2
-Patch0:    https://patch-diff.githubusercontent.com/raw/matejcik/construct-classes/pull/2.patch#/only-include-license-documentation-for-sdist.patch
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildArch: noarch
 
-BuildRequires: python3-devel
-
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Parse your binary data into dataclasses. Pack your dataclasses into binary data.
+This is package 'construct-classes' generated automatically by pyp2spec.}
 
-construct-classes rely on construct for parsing and packing. The programmer
-needs to manually write the Construct expressions. There is also no type
-verification, so it is the programmer's responsibility that the dataclass and
-the Construct expression match.}
+Patch0:    https://patch-diff.githubusercontent.com/raw/matejcik/construct-classes/pull/2.patch#/only-include-license-documentation-for-sdist.patch
 
 %description %_description
 
-%package -n python3-construct-classes
-Summary:       %{summary}
+%package -n     python3-construct-classes
+Summary:        %{summary}
 
 %description -n python3-construct-classes %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n construct-classes-%{version}
+%prep
+%autosetup -p1 -n construct_classes-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files construct_classes
 
 %check
-# Tests are left out from the sdist
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-construct-classes -f %{pyproject_files}
-%license LICENSE
-%doc CHANGELOG.rst
-%doc README.rst
 
 %changelog
 %autochangelog

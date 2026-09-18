@@ -1,74 +1,65 @@
-%global source0_hash a231629d166b58b0d557fc453374374d1fe0f3aff205b34bd8196e62ec285c55
+%global source0_hash none
 
 Name:           python-geopy
-Version:        2.4.1
+Version:        2.5.0
 Release:        %autorelease
-Summary:        Geocoding library for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python Geocoding Toolbox
 
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://geopy.readthedocs.io
-%global forgeurl https://github.com/geopy/geopy
-Source:         %{forgeurl}/archive/%{version}/geopy-%{version}.tar.gz
-
-# Downstream-only: drop coverage from test extra
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-Patch:          0001-Downstream-only-drop-coverage-from-test-extra.patch
-
-# Downstream-only: allow newer Sphinx for testing
-# (We have no choice; we must use what we have!)
-#
-# Applies on top of the coverage patch.
-Patch:          0002-Downstream-only-allow-newer-Sphinx-for-testing.patch
+URL:            https://github.com/geopy/geopy
+Source:         %{pypi_source geopy}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%global common_description %{expand:
-geopy is a Python client for several popular geocoding web services.
 
-geopy makes it easy for Python developers to locate the coordinates of
-addresses, cities, countries, and landmarks across the globe using third-party
-geocoders and other data sources.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'geopy' generated automatically by pyp2spec.}
 
-geopy includes geocoder classes for the OpenStreetMap Nominatim, Google
-Geocoding API (V3), and many other geocoding services.}
+Patch:          0001-Downstream-only-drop-coverage-from-test-extra.patch
+Patch:          0002-Downstream-only-allow-newer-Sphinx-for-testing.patch
 
-%description %{common_description}
+%description %_description
 
-%package -n python3-geopy
+%package -n     python3-geopy
 Summary:        %{summary}
 
-%description -n python3-geopy %{common_description}
+%description -n python3-geopy %_description
 
-%pyproject_extras_subpkg -n python3-geopy aiohttp,requests,timezone
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-geopy aiohttp,dev,dev-docs,dev-lint,dev-test,requests,timezone
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n geopy-%{version}
 
-%autosetup -n geopy-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires -x dev-test,aiohttp,requests,timezone
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x aiohttp,dev,dev-docs,dev-lint,dev-test,requests,timezone
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l geopy
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-# Exclude tests which make API calls (require network access)
-k="${k-}${k+ and }not test_geocoder_constructor_uses_https_proxy"
-k="${k-}${k+ and }not test_geocoder_https_proxy_auth_is_respected"
-k="${k-}${k+ and }not test_ssl_context_with_proxy_is_respected"
-k="${k-}${k+ and }not test_ssl_context_without_proxy_is_respected"
-%pytest -v test --ignore test/geocoders/ -k "${k-}"
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-geopy -f %{pyproject_files}
-%doc CONTRIBUTING.md README.rst
 
 %changelog
 %autochangelog

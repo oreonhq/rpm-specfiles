@@ -8,7 +8,7 @@
 %endif
 
 Name:           packit
-Version:        1.15.1
+Version:        1.16.3
 Release:        1%{?dist}
 Summary:        A tool for integrating upstream projects with Fedora operating system
 

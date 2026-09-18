@@ -1,8 +1,8 @@
 %global source0_hash e632d31b45919be41b4ab29634e20926b2bdbba4086a8817e311fb68dd17c036
 
 Name:       makepasswd
-Version:    0.5.3
-Release:    36%{?dist}
+Version:    0.5.4
+Release:    1%{?dist}
 Summary:    Generates (pseudo-)random passwords of a desired length
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

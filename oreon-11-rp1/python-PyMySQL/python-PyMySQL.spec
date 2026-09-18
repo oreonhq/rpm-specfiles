@@ -1,42 +1,44 @@
-%global source0_hash 4961d3e165614ae65014e361811a724e2044ad3ea3739de9903ae7c21f539f03
+%global source0_hash none
 
-Name:           python-PyMySQL
-Version:        1.1.2
-Release:        3%{?dist}
-Summary:        Pure-Python MySQL client library
+Name:           python-pymysql
+Version:        1.2.3
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Pure Python MySQL Driver
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://pypi.org/project/pymysql/
-Source:        https://files.pythonhosted.org/packages/source/p/pymysql/pymysql-1.1.2.tar.gz
+URL:            https://github.com/PyMySQL/PyMySQL
+Source:         %{pypi_source pymysql}
+
 BuildArch:      noarch
-
-%description
-This package contains a pure-Python MySQL client library. The goal of PyMySQL is
-to be a drop-in replacement for MySQLdb and work on CPython, PyPy, IronPython
-and Jython.
-
-
-%package -n     python3-PyMySQL
-Summary:        %{summary}
 BuildRequires:  python3-devel
 
 
-%description -n python3-PyMySQL
-This package contains a pure-Python MySQL client library. The goal of PyMySQL is
-to be a drop-in replacement for MySQLdb and work on CPython, PyPy, IronPython
-and Jython.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pymysql' generated automatically by pyp2spec.}
 
+%description %_description
 
-%pyproject_extras_subpkg -n python3-PyMySQL rsa %{!?rhel:ed25519}
+%package -n     python3-pymysql
+Summary:        %{summary}
+
+%description -n python3-pymysql %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-pymysql ed25519,rsa
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n pymysql-%{version}
+%autosetup -p1 -n pymysql-%{version}
 
 
 %generate_buildrequires
-%pyproject_buildrequires -x rsa %{!?rhel:-x ed25519}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x ed25519,rsa
 
 
 %build
@@ -45,17 +47,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %pyproject_install
-%pyproject_save_files pymysql
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
 
 %check
-# Tests cannot be launch on koji, they require a mysqldb running.
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
 
-%files -n python3-PyMySQL -f %{pyproject_files}
-%doc README.md
-
+%files -n python3-pymysql -f %{pyproject_files}
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.2-3

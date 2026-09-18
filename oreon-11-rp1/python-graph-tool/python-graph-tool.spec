@@ -4,7 +4,7 @@
 %global _smp_tasksize_proc 15360
 
 Name:           python-graph-tool
-Version:        2.98
+Version:        3.7
 Release:        %autorelease
 Summary:        Efficient network analysis tool written in Python
 

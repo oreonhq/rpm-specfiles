@@ -1,49 +1,62 @@
-%global source0_hash 2302d827796d52aa87a457e204a59c6e5bb307792cd31379a9c85f6494a4a59a
+%global source0_hash none
 
-Name:      python-aiorpcx
-Version:   0.24.0
-Release:   6%{?dist}
-Summary:   Generic async RPC implementation
+Name:           python-aiorpcx
+Version:        0.25.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Generic async RPC implementation, including JSON-RPC
 
-# https://github.com/kyuupichan/aiorpcX/issues/11
-# aiorpcx/curio.py is BSD, rest is MIT
-# Automatically converted from old format: MIT and BSD - review is highly recommended.
-License:   LicenseRef-Callaway-MIT AND LicenseRef-Callaway-BSD
-URL:       https://pypi.org/project/aiorpcX/
-Source:    %{pypi_source aiorpcx}
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        MIT
+URL:            https://github.com/kyuupichan/aiorpcX
+Source:         %{pypi_source aiorpcx}
 
-BuildArch: noarch
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Transport, protocol and framing-independent async RPC client
-and server implementation.}
+This is package 'aiorpcx' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-aiorpcx
+%package -n     python3-aiorpcx
 Summary:        %{summary}
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
 
 %description -n python3-aiorpcx %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-aiorpcx ws
 
-%autosetup -n aiorpcx-%{version}
-rm -vrf *.egg-info
+
+%prep
+%autosetup -p1 -n aiorpcx-%{version}
+
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x ws
+
 
 %build
-%py3_build
+%pyproject_wheel
+
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%files -n python3-aiorpcx
-%doc README.rst
-%license LICENCE
-%{python3_sitelib}/aiorpcx/
-%{python3_sitelib}/aiorpcX-*.egg-info/
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-aiorpcx -f %{pyproject_files}
 
 %changelog
 %autochangelog

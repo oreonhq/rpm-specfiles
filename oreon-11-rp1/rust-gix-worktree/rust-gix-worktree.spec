@@ -7,7 +7,7 @@
 %global crate gix-worktree
 
 Name:           rust-gix-worktree
-Version:        0.46.0
+Version:        0.56.0
 Release:        %autorelease
 Summary:        A crate of the gitoxide project for shared worktree related types and...
 

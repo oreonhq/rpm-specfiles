@@ -4,8 +4,8 @@
 %global mc_plugindir %{_libdir}/mission-control-plugins.0
 
 Name:           telepathy-mission-control
-Version:        5.16.5
-Release:        15%{?dist}
+Version:        5.16.6
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Central control for Telepathy connection manager
 

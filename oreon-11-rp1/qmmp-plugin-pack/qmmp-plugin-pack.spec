@@ -1,8 +1,8 @@
 %global source0_hash a23c202f90faaf6aebb97a9c02ee21fb3c8164b07755514349ccb3e1acb81ab5
 
 Name:           qmmp-plugin-pack
-Version:        2.3.0
-Release:        4%{?dist}
+Version:        2.4.0
+Release:        1%{?dist}
 Summary:        A set of extra plugins for Qmmp
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
@@ -10,7 +10,7 @@ License:        GPL-2.0-or-later
 URL:            http://qmmp.ylsoftware.com/plugins.php
 Source0:        %{url}/files/{%name}/2.3/%{name}-%{version}.tar.bz2
 
-BuildRequires:  qmmp-devel >= 2.3.0
+BuildRequires:  qmmp-devel >= 2.4.0
 BuildRequires:  cmake
 BuildRequires:  ffmpeg-free-devel
 BuildRequires:  libmms-devel

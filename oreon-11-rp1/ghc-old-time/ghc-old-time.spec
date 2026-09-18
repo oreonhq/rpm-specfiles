@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        1.1.0.5
+Version:        1.1.1.0
 Release:        %autorelease
 Summary:        Time library
 

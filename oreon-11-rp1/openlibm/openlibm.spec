@@ -4,8 +4,8 @@
 
 Summary:        High quality system independent, open source libm
 Name:           openlibm
-Version:        0.7.5
-Release:        13%{?dist}
+Version:        0.8.8
+Release:        1%{?dist}
 # Automatically converted from old format: BSD and MIT and ISC and Public Domain - review is highly recommended.
 License:        LicenseRef-Callaway-BSD AND LicenseRef-Callaway-MIT AND ISC AND LicenseRef-Callaway-Public-Domain
 Source0:        https://github.com/JuliaLang/openlibm/archive/v%{version}.tar.gz

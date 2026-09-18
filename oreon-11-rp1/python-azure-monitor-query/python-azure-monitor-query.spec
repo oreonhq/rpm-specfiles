@@ -1,19 +1,24 @@
-%global source0_hash 699c6f3c5942f09da98cef273ffbb7403904ec43f93c0d63f10a367b4479e009
+%global source0_hash none
 
 Name:           python-azure-monitor-query
-Version:        1.4.0
+Version:        2.0.0
 Release:        %autorelease
-Summary:        Microsoft Azure Monitor Query Client Library for Python
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Microsoft Corporation Azure Monitor Query Client Library for Python
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/Azure/azure-sdk-for-python
-Source:         %{pypi_source azure-monitor-query %{version}}
+URL:            https://github.com/Azure/azure-sdk-for-python/tree/main/sdk
+Source:         %{pypi_source azure_monitor_query}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Microsoft Azure Monitor Query Client Library for Python.}
+This is package 'azure-monitor-query' generated automatically by pyp2spec.}
 
 %description %_description
 
@@ -22,23 +27,29 @@ Summary:        %{summary}
 
 %description -n python3-azure-monitor-query %_description
 
-%prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n azure-monitor-query-%{version}
+%prep
+%autosetup -p1 -n azure_monitor_query-%{version}
+
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files azure
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-azure-monitor-query -f %{pyproject_files}
 

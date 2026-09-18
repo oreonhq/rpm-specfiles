@@ -1,74 +1,58 @@
-%global source0_hash 8fa993c8e9c8c55655e81bec3096b5ccb5b49b73271762c9bc4c2a46ea4b3e1f
+%global source0_hash none
 
-# tests are enabled by default
-%bcond_without tests
-
-%global         srcname     google-cloud-dns
-%global         forgeurl    https://github.com/googleapis/python-dns
-Version:        0.34.2
-%global         tag         v%{version}
-%forgemeta
-
-Name:           python-%{srcname}
+Name:           python-google-cloud-dns
+Version:        0.37.1
 Release:        %autorelease
-Summary:        Python Client for Google Cloud DNS
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Google Cloud DNS API client library
 
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
-License:        Apache-2.0
-URL:            %forgeurl
-Source0:        %forgesource
-Patch0:         python-google-cloud-dns-mock.patch
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-dns
+Source:         %{pypi_source google_cloud_dns}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildRequires:  pyproject-rpm-macros
 
-%if %{with tests}
-BuildRequires:  python3dist(google-cloud-core)
-BuildRequires:  python3dist(pytest)
-%endif
-
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The Google Cloud DNS API provides methods that you can use to manage DNS
-on Google infrastructure.}
+This is package 'google-cloud-dns' generated automatically by pyp2spec.}
 
-%description %{_description}
+Patch0:         python-google-cloud-dns-mock.patch
 
-%package -n python3-%{srcname}
-Summary: %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
+%description %_description
 
-%description -n python3-%{srcname} %_description
+%package -n     python3-google-cloud-dns
+Summary:        %{summary}
+
+%description -n python3-google-cloud-dns %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n google_cloud_dns-%{version}
 
-%forgeautosetup -p1
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files google
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%if %{with tests}
-# NOTE(mhayden): Setting PYTHONUSERBASE as a hack for PEP 420 namespaces.
-# Thanks to churchyard for the fix.
-PYTHONUSERBASE=%{buildroot}%{_prefix} \
-    %pytest tests/unit
-%endif
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst CHANGELOG.md SECURITY.md
-%license LICENSE
-%{python3_sitelib}/google_cloud_dns-%{version}-py*-nspkg.pth
+%files -n python3-google-cloud-dns -f %{pyproject_files}
 
 %changelog
 %autochangelog

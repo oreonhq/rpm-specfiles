@@ -1,7 +1,7 @@
 %global source0_hash a1018644655ab187728d6a65149186b8517a6c8f1ea4d8416900c129eea58a36
 
 Name:           ibus-array
-Version:        0.2.3
+Version:        0.3.2
 Release:        %autorelease
 Summary:        The Array 30 input method for IBus input platform
 Summary(zh_TW): IBus行列30輸入法

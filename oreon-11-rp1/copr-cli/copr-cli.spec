@@ -4,8 +4,8 @@
 %global min_python_copr_version 1.128.1
 
 Name:       copr-cli
-Version:    2.4
-Release:    3%{?dist}
+Version:    2.6-1
+Release:    1%{?dist}
 Summary:    Command line interface for COPR
 
 License:    GPL-2.0-or-later

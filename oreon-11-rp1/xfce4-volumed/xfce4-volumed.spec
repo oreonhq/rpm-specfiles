@@ -6,8 +6,8 @@
 %global minorversion 0.2
 
 Name:           xfce4-volumed
-Version:        0.2.3
-Release:        38%{?dist}
+Version:        0.2.5
+Release:        1%{?dist}
 Summary:        Daemon to add additional functionality to the volume keys of the keyboard
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later

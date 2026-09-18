@@ -1,7 +1,7 @@
 %global source0_hash 213ccc7c98683d2ca6304d9760005effa12ec51d664bababf114566cb2b1e23c
 
 Name:           cpr
-Version:        1.14.1
+Version:        1.14.2
 Release:        %autorelease
 Summary:        C++ Requests: Curl for People, a spiritual port of Python Requests
 

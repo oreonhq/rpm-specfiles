@@ -15,9 +15,9 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        1.1
+Version:        1.1.0.1
 # can only be reset when subpkg bumped
-Release:        5%{?dist}
+Release:        1%{?dist}
 Summary:        SPDX license expression language, Extras
 
 License:        BSD-3-Clause

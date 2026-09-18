@@ -1,8 +1,8 @@
 %global source0_hash e5a8aa78c475677b11504646da8d93dacc30744258076a2ca418a24438aeb907
 
 Name:       xkill
-Version:    1.0.6
-Release:    9%{?dist}
+Version:    1.0.7
+Release:    1%{?dist}
 Summary:    Utility to force-close an X client's connection
 
 License:    MIT-open-group

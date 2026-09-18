@@ -72,8 +72,8 @@
 
 Name:           cjdns
 # major version is cjdns protocol version:
-Version:        21.1
-Release:        16%{?dist}
+Version:        22.3
+Release:        1%{?dist}
 Summary:        The privacy-friendly network without borders
 # cjdns is all GPLv3 except libuv which is MIT and BSD and ISC
 # cnacl is unused except when use_embedded is true

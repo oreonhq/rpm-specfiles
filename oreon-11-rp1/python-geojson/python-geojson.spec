@@ -1,57 +1,58 @@
-%global source0_hash 4ea0262bc8c733d3ee4a7ff8971bf0065c2148bff170644fe5d194f07694532a
+%global source0_hash none
 
-%global pypi_name geojson
+Name:           python-geojson
+Version:        3.3.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Python bindings and utilities for GeoJSON
 
-Name:       python-%{pypi_name}
-Version:    3.2.0
-Release:    4%{?dist}
-Summary:    Encoder/decoder for simple GIS features
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/jazzband/geojson
+Source:         %{pypi_source geojson}
 
-License:    LicenseRef-Callaway-BSD
-URL:        https://github.com/jazzband/geojson
-Source0:    https://github.com/jazzband/geojson/archive/%{version}/%{pypi_name}-%{version}.tar.gz
-Patch0:     remove-check.patch
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildArch:  noarch
 
-BuildRequires: python3-devel
-BuildRequires: python3-pytest
-
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Geojson provides geometry, feature, and collection classes, and supports\
-pickle-style dump and load of objects that provide the lab's Python geo\
-interface.}
+This is package 'geojson' generated automatically by pyp2spec.}
+
+Patch0:     remove-check.patch
 
 %description %_description
 
-%package -n     python3-%{pypi_name}
+%package -n     python3-geojson
 Summary:        %{summary}
 
-%description -n python3-%{pypi_name} %_description
+%description -n python3-geojson %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n geojson-%{version}
 
-%autosetup -n %{pypi_name}-%{version} -p0
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
+%_pyproject_check_import_allow_no_modules -t
 
-%{pytest} -v
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc CHANGELOG.rst README.rst 
-%license LICENSE.rst
+%files -n python3-geojson -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,56 +1,56 @@
-%global source0_hash 3f0d7bcdcea6d6267a816bc62360a7c632ade149054932ec8e40423e74016b40
+%global source0_hash none
 
-%global srcname enthought-sphinx-theme
-%global modname enthought_sphinx_theme
-
-Name:           python-%{srcname}
-Version:        0.7.3
+Name:           python-enthought-sphinx-theme
+Version:        0.7.5
 Release:        %autorelease
-Summary:        Sphinx theme for Enthought projects
+# Fill in the actual package summary to submit package to Fedora
+Summary:        Sphinx theme for Enthought products
 
-# Bundled bootstrap is MIT
-# Bundles the fonts Source Sans Pro and Source Code Pro from Adobe Systems Incorporated under the 
-# SIL Open Font License, Version 1.1.
-# Automatically converted from old format: BSD and MIT and OFL - review is highly recommended.
-License:        LicenseRef-Callaway-BSD AND LicenseRef-Callaway-MIT AND LicenseRef-Callaway-OFL
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://github.com/enthought/enthought-sphinx-theme
-Source0:        https://github.com/enthought/enthought-sphinx-theme/archive/%{version}/%{srcname}-%{version}.tar.gz
+Source:         %{pypi_source enthought_sphinx_theme}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-Sphinx theme for Enthought projects, derived from the Scipy theme.}
+This is package 'enthought-sphinx-theme' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-enthought-sphinx-theme
 Summary:        %{summary}
-BuildRequires:  python3-devel
-Provides:       bundled(bootstrap) = 2.3.2
 
-%description -n python3-%{srcname} %_description
+%description -n python3-enthought-sphinx-theme %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n enthought_sphinx_theme-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{modname}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-#check
-# No tests
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%license licenses/*.txt
-%doc CHANGES.rst README.rst
+%check
+%_pyproject_check_import_allow_no_modules -t
+
+
+%files -n python3-enthought-sphinx-theme -f %{pyproject_files}
 
 %changelog
 %autochangelog

@@ -1,7 +1,7 @@
 %global source0_hash edf9dc76dd70089e3334bac27fddf24450fc4385d0dc3089d7ecc983d19c977c
 
 Name:           taskopen
-Version:        1.1.5
+Version:        2.0.3
 Release:        %autorelease
 Summary:        Script for taking notes and open urls with taskwarrior
 

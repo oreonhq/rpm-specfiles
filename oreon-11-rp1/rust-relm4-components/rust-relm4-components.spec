@@ -7,7 +7,7 @@
 %global crate relm4-components
 
 Name:           rust-relm4-components
-Version:        0.9.1
+Version:        0.11.0
 Release:        %autorelease
 Summary:        Idiomatic GUI library inspired by Elm and based on gtk4-rs
 

@@ -8,7 +8,7 @@
 %{?haskell_setup}
 
 Name:           ghc-%{pkg_name}
-Version:        3.4.13
+Version:        3.4.14
 Release:        %autorelease
 Summary:        HTTP over TLS support for Warp via the TLS package
 

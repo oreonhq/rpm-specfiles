@@ -11,7 +11,7 @@
 %global giturl  https://github.com/cvc5/cvc5
 
 Name:           cvc5
-Version:        1.3.3
+Version:        1.4.0
 Release:        %autorelease
 Summary:        Automatic theorem prover for SMT problems
 

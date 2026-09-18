@@ -3,7 +3,7 @@
 %global build_flags prefix=%{_prefix} lib_dir=%{_libdir} libexec_dir=%{_libexecdir}/%{name} etc_dir=%{_sysconfdir}/%{name}
 
 Name:           authbind
-Version:        2.1.2
+Version:        2.2.0
 Release:        %autorelease
 Summary:        Allow non-root users to open restricted ports
 

@@ -1,118 +1,66 @@
-%global source0_hash aeb1b2f5c065b79840df979f2c4e11ee05328eb6e86e8df9111019a4f0e42260
+%global source0_hash none
 
-%global srcname rosdistro
+Name:           python-rosdistro
+Version:        1.1.0
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A tool to work with rosdistro files
 
-Name:           python-%{srcname}
-Version:        1.0.1
-Release:        7%{?dist}
-Summary:        File format for managing ROS Distributions
-
-License:        BSD-3-Clause AND MIT
-URL:            http://www.ros.org/wiki/rosdistro
-Source0:        https://github.com/ros-infrastructure/%{srcname}/archive/%{version}/%{srcname}-%{version}.tar.gz
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
+URL:            https://github.com/ros-infrastructure/rosdistro
+Source:         %{pypi_source rosdistro}
 
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-The rosdistro tool allows you to get access to the full dependency tree and
-the version control system information of all packages and repositories. To
-increase performance, the rosdistro tool will automatically look for a cache
-file on your local disk. If no cache file is found locally, it will try to
-download the latest cache file from the server. The cache files are only used
-to improve performance, and are not needed to get correct results. rosdistro
-will automatically go to Github to find any dependencies that are not part
-of the cache file. Note that operation without a cache file can be very slow,
-depending on your own internet connection and the response times of Github.
-The rosdistro tool will always write the latest dependency information to a
-local cache file, to speed up performance for the next query.
 
-%package doc
-Summary:        HTML documentation for '%{name}'
-BuildRequires:  make
-BuildRequires:  python%{python3_pkgversion}-catkin-sphinx
-BuildRequires:  python%{python3_pkgversion}-sphinx
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'rosdistro' generated automatically by pyp2spec.}
 
-%description doc
-HTML documentation for the '%{srcname}' python module
+%description %_description
 
-%package -n python%{python3_pkgversion}-%{srcname}
-Summary:        File format for managing ROS Distributions
-BuildRequires:  git
-BuildRequires:  python%{python3_pkgversion}-catkin_pkg
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  python%{python3_pkgversion}-PyYAML
-BuildRequires:  python%{python3_pkgversion}-rospkg
-BuildRequires:  python%{python3_pkgversion}-setuptools
-%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
-Obsoletes:      python2-%{srcname} < 0.7.4-4
+%package -n     python3-rosdistro
+Summary:        %{summary}
 
-%if %{undefined __pythondist_requires}
-Requires:       python%{python3_pkgversion}-catkin_pkg
-Requires:       python%{python3_pkgversion}-PyYAML
-Requires:       python%{python3_pkgversion}-rospkg
-Requires:       python%{python3_pkgversion}-setuptools
-%endif
+%description -n python3-rosdistro %_description
 
-Suggests:       %{name}-doc = %{version}-%{release}
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-rosdistro test
 
-%description -n python%{python3_pkgversion}-%{srcname}
-The rosdistro tool allows you to get access to the full dependency tree and
-the version control system information of all packages and repositories. To
-increase performance, the rosdistro tool will automatically look for a cache
-file on your local disk. If no cache file is found locally, it will try to
-download the latest cache file from the server. The cache files are only used
-to improve performance, and are not needed to get correct results. rosdistro
-will automatically go to Github to find any dependencies that are not part
-of the cache file. Note that operation without a cache file can be very slow,
-depending on your own internet connection and the response times of Github.
-The rosdistro tool will always write the latest dependency information to a
-local cache file, to speed up performance for the next query.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n rosdistro-%{version}
 
-%autosetup -p1 -n %{srcname}-%{version}
+
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x test
+
 
 %build
-%py3_build
+%pyproject_wheel
 
-PYTHONPATH=$PWD/src \
-  %make_build -C doc html SPHINXBUILD=sphinx-build-%{python3_version} SPHINXAPIDOC=sphinx-apidoc-%{python3_version}
-rm doc/_build/html/.buildinfo
 
 %install
-%py3_install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-# backwards compatibility symbolic links
-pushd %{buildroot}%{_bindir}
-for i in *; do
-  ln -s ./$i python%{python3_pkgversion}-$i
-done
-popd
 
 %check
-%pytest -k 'not test_manifest_providers' test
+%_pyproject_check_import_allow_no_modules -t
 
-%files doc
-%license LICENSE.txt
-%doc doc/_build/html
 
-%files -n python%{python3_pkgversion}-%{srcname}
-%license LICENSE.txt
-%doc README.md
-%{python3_sitelib}/%{srcname}/
-%{python3_sitelib}/%{srcname}-%{version}-py%{python3_version}.egg-info/
+%files -n python3-rosdistro -f %{pyproject_files}
 %{_bindir}/rosdistro_build_cache
 %{_bindir}/rosdistro_freeze_source
 %{_bindir}/rosdistro_migrate_to_rep_141
 %{_bindir}/rosdistro_migrate_to_rep_143
 %{_bindir}/rosdistro_reformat
-%{_bindir}/python%{python3_pkgversion}-rosdistro_build_cache
-%{_bindir}/python%{python3_pkgversion}-rosdistro_freeze_source
-%{_bindir}/python%{python3_pkgversion}-rosdistro_migrate_to_rep_141
-%{_bindir}/python%{python3_pkgversion}-rosdistro_migrate_to_rep_143
-%{_bindir}/python%{python3_pkgversion}-rosdistro_reformat
 
 %changelog
 %autochangelog

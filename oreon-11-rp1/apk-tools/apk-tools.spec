@@ -8,7 +8,7 @@
 %global optflags %optflags -DOPENSSL_NO_ENGINE
 
 Name:           apk-tools
-Version:        3.0.3
+Version:        3.0.8
 Release:        1%{?dist}
 Summary:        Fast and lightweight package manager originally for Alpine
 # libapk AND netbsd-libfetch

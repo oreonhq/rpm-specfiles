@@ -7,7 +7,7 @@
 %global crate gix-mailmap
 
 Name:           rust-gix-mailmap
-Version:        0.29.0
+Version:        0.34.1
 Release:        %autorelease
 Summary:        A crate of the gitoxide project for parsing mailmap files
 

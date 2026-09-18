@@ -1,8 +1,8 @@
 %global source0_hash 5c9e46bb79c52ed49a11e773c4164446d3f274814c5961a2e5fad75a680ac550
 
 Name:		timeline
-Version:	2.11.0
-Release:	4%{?dist}
+Version:	2.12.0
+Release:	1%{?dist}
 Summary:	Displays and navigates events on a timeline
 
 License:	GPL-3.0-only

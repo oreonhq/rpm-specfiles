@@ -1,8 +1,8 @@
 %global source0_hash 6dd5511b92b64df115b358c064e7701b350b343f30711232a8d74c6274c962a5
 
 Name:		gti		
-Version:	1.6.1
-Release:	14%{?dist}
+Version:	1.9.1
+Release:	1%{?dist}
 Summary:	Just a silly gti launcher
 Patch0:		gti-1.2.0-nostrip.patch
 

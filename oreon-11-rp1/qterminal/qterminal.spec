@@ -1,8 +1,8 @@
 %global source0_hash c2cc182e23f142bf2318523c7063012d146a802cd7b6d59e4f7563869a307dc5
 
 Name:		qterminal
-Version:	2.3.0
-Release:	2%{?dist}
+Version:	2.4.0
+Release:	1%{?dist}
 License:	GPL-2.0-only
 URL:		https://github.com/qterminal/qterminal
 Source0:	https://github.com/%{name}/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz

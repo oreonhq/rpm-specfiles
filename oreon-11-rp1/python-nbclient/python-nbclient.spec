@@ -1,75 +1,63 @@
-%global source0_hash 90b7fc6b810630db87a6d0c2250b1f0ab4cf4d3c27a299b0cde78a4ed3fd9193
+%global source0_hash none
 
-# Unset -s on python shebang - ensure that extensions installed with pip
-# to user locations are seen and properly loaded
-%global py3_shebang_flags %(echo %py3_shebang_flags | sed s/s//)
-
-%global pypi_name nbclient
-
-%global _description %{expand:
-NBClient, a client library for programmatic notebook execution, is a tool for 
-running Jupyter Notebooks in different execution contexts. NBClient was spun 
-out of nbconvert (formerly ExecutePreprocessor). NBClient lets you execute notebooks.
-}
-
-Name:           python-%{pypi_name}
-Version:        0.10.2
+Name:           python-nbclient
+Version:        0.11.0
 Release:        %autorelease
-Summary:        A client library for executing notebooks
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A client library for executing notebooks. Formerly nbconvert_s ExecutePreprocessor.
 
-License:        BSD-3-Clause
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://jupyter.org
-Source0:        %{pypi_source}
-
-# Makes tests compatible with ipython 9.8.0+
-Patch:          https://github.com/jupyter/nbclient/commit/b42ad03acc0bb1ed26db65ab72ac617679cbbb62.patch
+Source:         %{pypi_source nbclient}
 
 BuildArch:      noarch
-
 BuildRequires:  python3-devel
 
-%bcond bootstrap 0
-%bcond check %{without bootstrap}
 
-%description
-%_description
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'nbclient' generated automatically by pyp2spec.}
 
-%package -n     python3-%{pypi_name}
+Patch:          https://github.com/jupyter/nbclient/commit/b42ad03acc0bb1ed26db65ab72ac617679cbbb62.patch
+
+%description %_description
+
+%package -n     python3-nbclient
 Summary:        %{summary}
-%py_provides python3-%{pypi_name}
 
-%description -n python3-%{pypi_name}
-%_description
+%description -n python3-nbclient %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-nbclient dev,docs,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n nbclient-%{version}
 
-%autosetup -p1 -n %{pypi_name}-%{version}
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
-# Drop version limit from pytest
-sed -i "/pytest/s/,<8//" pyproject.toml
-# Remove unused dependency on pytest-cov
-sed -Ei '/"pytest-cov>=.+",/d' pyproject.toml
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_check:-x test}
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev,docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%if %{with check}
+
 %check
-# For now ignore DeprecationWarnings from python-pytest-asyncio for Python 3.14
-%pytest -vv -W ignore::DeprecationWarning
-%endif
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-nbclient -f %{pyproject_files}
 %{_bindir}/jupyter-execute
 
 %changelog

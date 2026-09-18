@@ -4,7 +4,7 @@
 %bcond check 1
 
 Name:       stgit
-Version:    2.5.5
+Version:    2.6.1
 Release:    %autorelease
 Summary:    Stack-based patch management for Git
 

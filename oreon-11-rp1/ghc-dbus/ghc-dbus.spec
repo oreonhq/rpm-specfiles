@@ -11,7 +11,7 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        1.4.1
+Version:        1.4.3
 Release:        %autorelease
 Summary:        A client library for the D-Bus IPC system
 

@@ -1,50 +1,61 @@
-%global source0_hash 5026853fcbf6f91d5a6b11ea7860a641fe27b36d4172c731f4aa16b900cf8464
+%global source0_hash none
 
-%global pypi_name lazr.uri
 Name:           python-lazr-uri
-Version:        1.0.6
+Version:        4.0.0
 Release:        %autorelease
-Summary:        Parsing and dealing with URIs
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A self-contained, easily reusable library for parsing, manipulating, and generating URIs.
 
-License:        LGPL-3.0-only
+# No license information obtained, it's up to the packager to fill it in
+License:        ...
 URL:            https://launchpad.net/lazr.uri
-Source0:        %{pypi_source}
-BuildArch:      noarch
+Source:         %{pypi_source lazr_uri}
 
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-The lazr.uri package includes code for parsing and dealing with URIs.}
+This is package 'lazr-uri' generated automatically by pyp2spec.}
 
 %description %_description
 
 %package -n     python3-lazr-uri
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
+%description -n python3-lazr-uri %_description
 
-%description -n python3-lazr-uri  %_description
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-lazr-uri docs,test
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n lazr_uri-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x docs,test
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l lazr
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-%pyproject_check_import
-%{py3_test_envvars} %{python3} -m unittest src/lazr/uri/tests/*py
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-lazr-uri -f %{pyproject_files}
-%doc README.rst
-%{python3_sitelib}/%{pypi_name}-%{version}-py%{python3_version}-*.pth
 
 %changelog
 %autochangelog

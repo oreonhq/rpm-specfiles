@@ -2,7 +2,7 @@
 
 Summary: Graphical Boot Animation and Logger
 Name: plymouth
-Version: 24.004.60
+Version: 26.134.222
 Release: %autorelease
 License: GPL-2.0-or-later
 URL: http://www.freedesktop.org/wiki/Software/Plymouth

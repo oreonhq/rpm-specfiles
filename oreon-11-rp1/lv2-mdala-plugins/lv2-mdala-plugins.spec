@@ -1,8 +1,8 @@
 %global source0_hash aeea5986a596dd953e2997421a25e45923928c6286c4c8c36e5ef63ca1c2a75a
 
 Name:           lv2-mdala-plugins
-Version:        1.2.10
-Release:        10%{?dist}
+Version:        1.2.12
+Release:        1%{?dist}
 Summary:        A collection of LV2 plugins ported from the MDA VST plugins
 
 # BSD for waflib

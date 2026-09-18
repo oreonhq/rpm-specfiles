@@ -17,9 +17,9 @@
 
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
-Version:        2.0.1
+Version:        2.2.0
 %global spversion 2.0.0
-Release:        4%{?dist}
+Release:        1%{?dist}
 
 # MIT: src/cJSON.{c,h} (used by gpgme-json)
 License:        LGPL-2.1-or-later AND MIT

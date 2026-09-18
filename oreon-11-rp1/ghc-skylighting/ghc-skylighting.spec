@@ -23,9 +23,9 @@
 %global subpkgs %{skylightingcore} %{skylightingformatansi} %{skylightingformatblazehtml} %{skylightingformatcontext} %{skylightingformatlatex} %{skylightingformattypst}
 
 Name:           ghc-%{pkg_name}
-Version:        0.14.7
+Version:        0.15
 # can only be reset when all subpkgs bumped
-Release:        16%{?dist}
+Release:        1%{?dist}
 Summary:        Syntax highlighting library
 
 License:        GPL-2.0-or-later

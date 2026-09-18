@@ -24,8 +24,8 @@
 %global with_tests 0
 
 Name: python-aexpect
-Version: 1.6.2
-Release: 19%{?gitrel}%{?dist}
+Version: 1.8.0
+Release: 1%{?gitrel}%{?dist}
 Summary: A python library to control interactive applications
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

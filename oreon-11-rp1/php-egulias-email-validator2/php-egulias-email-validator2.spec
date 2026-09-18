@@ -12,7 +12,7 @@
 
 %global github_owner     egulias
 %global github_name      EmailValidator
-%global github_version   2.1.25
+%global github_version   4.0.4
 %global github_commit    0dbf5d78455d4d6a41d186da50adc1122ec066f4
 %global github_short     %(c=%{github_commit}; echo ${c:0:7})
 %global major            2
@@ -33,7 +33,7 @@
 
 Name:          php-%{composer_vendor}-%{composer_project}%{major}
 Version:       %{github_version}
-Release:       13%{?github_release}%{?dist}
+Release:       1%{?github_release}%{?dist}
 Summary:       A library for validating emails
 
 License:       MIT

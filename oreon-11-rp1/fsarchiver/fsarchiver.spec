@@ -1,8 +1,8 @@
 %global source0_hash f7cd059e70fc57e888db282c622ec050c0dcdbaacc65e3c1eb163cd9d92d810d
 
 Name:		fsarchiver
-Version:	0.8.7
-Release:	3%{?dist}
+Version:	0.8.9
+Release:	1%{?dist}
 Summary:	Safe and flexible file-system backup/deployment tool
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.

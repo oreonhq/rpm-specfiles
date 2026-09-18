@@ -4,8 +4,8 @@
 %global debian_release 1
 
 Name:             apt-cacher-ng
-Version:          3.7.5
-Release:          2%{?dist}
+Version:          3.7.5.orig.orig
+Release:          1%{?dist}
 Summary:          Caching proxy for package files from Debian
 
 License:          BSD-4-Clause

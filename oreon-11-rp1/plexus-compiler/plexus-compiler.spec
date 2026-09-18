@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           plexus-compiler
-Version:        2.15.0
+Version:        2.17.1
 Release:        %autorelease
 Summary:        Compiler call initiators for Plexus
 # extras subpackage has a bit different licensing
@@ -29,7 +29,7 @@ BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.15.0-11
+Obsoletes:      %{name}-javadoc < 2.17.1-11
 
 %description
 Plexus Compiler adds support for using various compilers from a

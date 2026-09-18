@@ -13,7 +13,7 @@
 %endif
 
 Name:           ghc-%{pkg_name}
-Version:        1.6.14
+Version:        1.9.1
 Release:        %autorelease
 Summary:        X.509 Certificate and CRL validation
 

@@ -41,7 +41,7 @@
 
 Summary: Enhanced system logging and kernel message trapping daemon
 Name: rsyslog
-Version: 8.2602.0
+Version: 8.2608.0
 Release: %autorelease
 License: GPL-3.0-or-later AND Apache-2.0
 URL: http://www.rsyslog.com/

@@ -2,14 +2,14 @@
 
 Name:          openapv
 Release:       %autorelease
-Version:       0.2.1.2
+Version:       1.1.1.0
 Summary:       Open Advanced Professional Video Codec
 License:       BSD-3-Clause
 URL:           https://github.com/AcademySoftwareFoundation/openapv
 Source:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 # https://github.com/AcademySoftwareFoundation/openapv/pull/177
 Patch0:        %{name}-fix-md5-hash-mismatch-on-big-endian.patch
-# bump version to 0.2.1.2
+# bump version to 1.1.1.0
 Patch1:        %{name}-version.patch
 BuildRequires: cmake
 BuildRequires: ninja-build

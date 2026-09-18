@@ -4,8 +4,8 @@
 %global distname py3dns
 
 Name:               python3-py3dns
-Version:            4.0.0
-Release:            13%{?dist}
+Version:            4.0.2
+Release:            1%{?dist}
 Summary:            Python3 DNS library
 
 # Automatically converted from old format: Python - review is highly recommended.

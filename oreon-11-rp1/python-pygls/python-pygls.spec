@@ -1,7 +1,7 @@
 %global source0_hash d90856373a80bc5bc6490541a22953649e730149a2970e08a86c20ac24a5ac90
 
 Name:           python-pygls
-Version:        2.0.1
+Version:        2.1.1
 Release:        %autorelease
 Summary:        A pythonic generic language server
 

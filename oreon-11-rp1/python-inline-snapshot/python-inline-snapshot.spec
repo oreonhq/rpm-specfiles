@@ -1,78 +1,62 @@
-%global source0_hash 5025074eab5c82a88504975e2655beeb5e96fd57ed2d9ebb38538473748f2065
-
-# This package has support for integrating with Pydantic, including tests that
-# require Pydantic; but both python-pydantic-core and python-pydantic use
-# python-inline-snapshot in their tests, creating a dependency cycle. We can
-# break it by disabling the Pydantic integration tests during bootstrapping.
-%bcond bootstrap 0
-# We may also need to disable Pydantic integration tests for a longer period,
-# e.g. while waiting for Pydantic to support a new Python version.
-%bcond pydantic_fti 0
-%bcond pydantic_tests %[ %{without bootstrap} && %{without pydantic_fti} ]
+%global source0_hash none
 
 Name:           python-inline-snapshot
-Version:        0.32.5
+Version:        0.35.4
 Release:        %autorelease
-Summary:        Golden master/snapshot/approval testing library
+# Fill in the actual package summary to submit package to Fedora
+Summary:        golden master/snapshot/approval testing library which puts the values right into your source code
 
-# SPDX
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
-URL:            https://github.com/15r10nk/inline-snapshot
+URL:            https://15r10nk.github.io/inline-snapshot/latest
 Source:         %{pypi_source inline_snapshot}
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -g dev -x black,dirty-equals
-BuildOption(install):   -l inline_snapshot
-
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildRequires:  tomcli
 
-%global common_description %{expand:
-Golden master/snapshot/approval testing library which puts the values right
-into your source code.}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'inline-snapshot' generated automatically by pyp2spec.}
 
-%description %{common_description}
+%description %_description
 
-%package -n python3-inline-snapshot
+%package -n     python3-inline-snapshot
 Summary:        %{summary}
 
-%description -n python3-inline-snapshot %{common_description}
+%description -n python3-inline-snapshot %_description
 
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
 %pyproject_extras_subpkg -n python3-inline-snapshot black,dirty-equals
 
-%prep -a
-# Remove linters, typecheckers, formatters, coverage analysis tools, etc. from
-# the “dev” dependency group so we can use it to generate BuildRequires.
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-tomcli set pyproject.toml lists delitem --no-first --type regex \
-    dependency-groups.dev '(mypy|pyright|coverage)\b.*'
-%if %{without pydantic_tests}
-tomcli set pyproject.toml lists delitem --no-first --type regex \
-    dependency-groups.dev '(pydantic)\b.*'
-%endif
 
-%check -a
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-ignore="${ignore-} --ignore=tests/test_typing.py"
-%if %{without pydantic_tests}
-ignore="${ignore-} --ignore=tests/test_pydantic.py"
-%endif
+%prep
+%autosetup -p1 -n inline_snapshot-%{version}
 
-# Ignore all DeprecationWarning messages; they may pop up from anywhere in our
-# dependency tree, and this can cause tests that expect precisely-matching
-# pytest output to fail unnecessarily.
-export PYTHONWARNINGS='ignore::DeprecationWarning'
 
-# Note that tests expect black-formatted generated code, and we cannot
-# meaningingfully test the package without black; there would be 100+ test
-# failures.
+%generate_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x black,dirty-equals
 
-%pytest ${ignore-} -vv -rs
+
+%build
+%pyproject_wheel
+
+
+%install
+%pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
+
+%check
+%_pyproject_check_import_allow_no_modules -t
+
 
 %files -n python3-inline-snapshot -f %{pyproject_files}
-%doc CHANGELOG.md
-%doc README.md
 
 %changelog
 %autochangelog

@@ -16,7 +16,7 @@
 %global mingw_build_win32 0
 
 Name:           wine-dxvk
-Version:        2.7.1
+Version:        3.1.1
 Release:        %autorelease
 Summary:        Vulkan-based implementation of D3D8, 9, 10 and 11 for Linux / Wine
 

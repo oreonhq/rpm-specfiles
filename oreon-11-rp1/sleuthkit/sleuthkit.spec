@@ -5,7 +5,7 @@
 %global _lto_cflags %nil
 
 Name:           sleuthkit
-Version:        4.14.0
+Version:        4.15.0
 Release:        %autorelease
 Summary:        The Sleuth Kit (TSK)
 

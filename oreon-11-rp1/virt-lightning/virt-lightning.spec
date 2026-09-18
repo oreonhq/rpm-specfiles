@@ -13,7 +13,7 @@ This is handy to quickly validate a new Ansible playbook, or a role on a large
 number of environments.}
 
 Name:           %{srcname}
-Version:        2.3.2
+Version:        2.5.0
 Release:        %autorelease
 Summary:        CLI to start Cloud image on libvirt
 

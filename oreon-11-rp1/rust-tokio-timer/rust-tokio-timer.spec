@@ -7,7 +7,7 @@
 %global crate tokio-timer
 
 Name:           rust-tokio-timer
-Version:        0.1.2
+Version:        0.2.13
 Release:        %autorelease
 Summary:        Timer facilities for Tokio
 

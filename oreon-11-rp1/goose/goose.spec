@@ -11,7 +11,7 @@ Name:           goose
 # features like code execution, plugins and etc, which brings dependencies like
 # `v8` and `deno-core`, that are very difficult to handle.
 # See https://issues.redhat.com/browse/RSPEED-2434 for more details.
-Version:        1.23.2
+Version:        1.51.0
 Release:        %autorelease
 Summary:        Extensible AI agent client
 URL:            https://github.com/block/goose

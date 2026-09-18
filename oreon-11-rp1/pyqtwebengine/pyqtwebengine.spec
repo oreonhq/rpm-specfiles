@@ -2,8 +2,8 @@
 
 Summary: Python bindings for QtWebEngine
 Name:    pyqtwebengine
-Version: 5.15.6
-Release: 11%{?dist}
+Version: 5.15.7
+Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License: GPL-3.0-only

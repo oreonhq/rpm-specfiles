@@ -1,51 +1,62 @@
-%global source0_hash 89e28ac1d2a5412aab18ee3f3dfd1ee8b5c1f2f7a44d0add0d0d4f69f0191bfe
+%global source0_hash none
 
-%global srcname fastprogress
+Name:           python-fastprogress
+Version:        1.1.6
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A nested progress with plotting options for fastai
 
-Name: python-%{srcname}
-Version: 1.0.0
-Release: %autorelease
-Summary: Progress bar for Jupyter Notebook and console 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
+License:        Apache-2.0
+URL:            https://github.com/answerdotai/fastprogress
+Source:         %{pypi_source fastprogress}
 
-License: Apache-2.0
-URL: https://github.com/AnswerDotAI/fastprogress
-Source0: %{pypi_source}
+BuildArch:      noarch
+BuildRequires:  python3-devel
 
-BuildArch: noarch
 
+# Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
-A Python-based, fast and simple progress bar 
-for Jupyter Notebook and console.}
+This is package 'fastprogress' generated automatically by pyp2spec.}
 
 %description %_description
 
-%package -n python3-%{srcname}
+%package -n     python3-fastprogress
 Summary:        %{summary}
-BuildRequires:  python3-devel
 
-%description -n python3-%{srcname} %_description
+%description -n python3-fastprogress %_description
+
+# For official Fedora packages, review which extras should be actually packaged
+# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%pyproject_extras_subpkg -n python3-fastprogress dev
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n fastprogress-%{version}
 
-%autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires
-%pyproject_buildrequires
+# Keep only those extras which you actually want to package or use during tests
+%pyproject_buildrequires -x dev
+
 
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
 
-%pyproject_save_files %{srcname}
 
 %check
-%pyproject_check_import -t
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-fastprogress -f %{pyproject_files}
 
 %changelog
 %autochangelog

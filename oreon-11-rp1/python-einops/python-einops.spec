@@ -1,110 +1,57 @@
-%global source0_hash a5e295fb634a999782e147f1c0b394fc566c514acfa653ec37c3bfbe685df7e5
+%global source0_hash none
 
-%global pypi_name einops
-%global pypi_version 0.8.1
-
-Name:           python-%{pypi_name}
-Version:        %{pypi_version}
+Name:           python-einops
+Version:        0.8.2
 Release:        %autorelease
-Summary:        Deep learning operations reinvented
+# Fill in the actual package summary to submit package to Fedora
+Summary:        A new flavour of deep learning operations
 
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/arogozhnikov/einops
-Source0:        %{url}/archive/v%{version}.tar.gz#/%{pypi_name}-%{pypi_version}.tar.gz
+Source:         %{pypi_source einops}
 
 BuildArch:      noarch
-# Pytorch only on X86_64 and aarch64
-# Fail to build 1/31/26
-# ExclusiveArch:  x86_64 aarch64
-ExclusiveArch:  x86_64
-
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(numpy)
-BuildRequires:  python3dist(nbformat)
-BuildRequires:  python3dist(nbconvert)
-BuildRequires:  python3dist(pillow)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(torch)
 
-# For test
-BuildRequires:  jupyterlab
-BuildRequires:  python3dist(notebook)
-BuildRequires:  python3dist(hatchling)
-BuildRequires:  python3dist(ipython)
-BuildRequires:  python3dist(ipywidgets)
-BuildRequires:  python3dist(ipykernel)
-BuildRequires:  python3dist(jupyter-console)
 
-%description
-Flexible and powerful tensor operations for readable and reliable code.
-Supports numpy, pytorch, tensorflow, jax, and others.
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'einops' generated automatically by pyp2spec.}
 
-%package -n     python3-%{pypi_name}
-Summary:        Deep learning operations reinvented
+%description %_description
 
-%description -n python3-%{pypi_name}
-Flexible and powerful tensor operations for readable and reliable code.
-Supports numpy, pytorch, tensorflow, jax, and others.
+%package -n     python3-einops
+Summary:        %{summary}
+
+%description -n python3-einops %_description
+
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n einops-%{version}
 
-%autosetup -n %{pypi_name}-%{pypi_version}
-
-# Remove bundled egg-info
-rm -rf %{pypi_name}.egg-info
-
-# To prevent import errors, remove the frameworks we have no support for.
-# rm einops/layers/chainer.py
-rm einops/layers/flax.py
-rm einops/layers/keras.py
-rm einops/layers/oneflow.py
-rm einops/layers/paddle.py
-rm einops/layers/tensorflow.py
-
-# numpy 2
-# import numpy.array_api as -> import numpy as
-# Fixed in the upstream with
-# commit 11680b457ce2216d9827330d0b794565946847d7
-# Author: Alex Rogozhnikov <iamfullofspam@gmail.com>
-# Date:   Wed Aug 7 17:35:43 2024 -0700
-#
-#    fix tests for numpy regression (see https://github.com/numpy/numpy/issues/27137)
-#
-# sed -i -e 's@import numpy.array_api as@import numpy as@' tests/*.py
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
-%pyproject_save_files -l %{pypi_name}
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-export EINOPS_TEST_BACKENDS=numpy
-%pyproject_check_import
-export EINOPS_TEST_BACKENDS=torch
-%pyproject_check_import
-export PYTHONPATH=$PYTHONPATH:%{buildroot}%{python3_sitelib}/%{pypi_name}
-# AttributeError: 'numpy.int64' object has no attribute '__dlpack__'
-k="${k-}${k+ and }not (test_ops and test_reduce_array_api)"
-# ImportError: attempted relative import with no known parent package
-k="${k-}${k+ and }not (test_notebooks and test_notebook_1)"
-k="${k-}${k+ and }not (test_notebooks and test_notebook_2_with_all_backends)"
-k="${k-}${k+ and }not (test_notebooks and test_notebook_3)"
-k="${k-}${k+ and }not (test_notebooks and test_notebook_4)"
-# RuntimeError: Dynamo is not supported on Python 3.13+
-k="${k-}${k+ and }not (test_other and test_torch_compile)"
-k="${k-}${k+ and }not (test_ops and test_torch_compile_with_dynamic_shape)"
-# Disable
-# EINOPS_TEST_BACKENDS=numpy %%pytest -k "${k-}"
-# EINOPS_TEST_BACKENDS=torch %%pytest -k "${k-}"
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
+
+%files -n python3-einops -f %{pyproject_files}
 
 %changelog
 %autochangelog

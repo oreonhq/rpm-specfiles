@@ -7,7 +7,7 @@
 %global crate cssparser
 
 Name:           rust-cssparser
-Version:        0.35.0
+Version:        0.38.0
 Release:        %autorelease
 Summary:        Rust implementation of CSS Syntax Level 3
 

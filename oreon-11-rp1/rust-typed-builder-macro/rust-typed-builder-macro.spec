@@ -7,7 +7,7 @@
 %global crate typed-builder-macro
 
 Name:           rust-typed-builder-macro
-Version:        0.18.2
+Version:        0.23.2
 Release:        %autorelease
 Summary:        Compile-time type-checked builder derive
 

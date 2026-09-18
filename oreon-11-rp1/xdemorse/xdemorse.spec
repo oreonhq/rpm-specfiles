@@ -1,8 +1,8 @@
 %global source0_hash 32de070badc9ef369b942ee36089c73935b5b7fc9fecf6d4d2418d2e3c02e9cf
 
 Name:           xdemorse
-Version:        3.5
-Release:        20%{?dist}
+Version:        3.6.7
+Release:        1%{?dist}
 Summary:        GTK based application for decoding and displaying Morse code signals
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

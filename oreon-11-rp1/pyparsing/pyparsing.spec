@@ -2,7 +2,7 @@
 
 Summary:        Python package with an object-oriented approach to text processing
 Name:           pyparsing
-Version:        3.1.2
+Version:        3.3.2
 Release:        %autorelease
 
 # SPDX

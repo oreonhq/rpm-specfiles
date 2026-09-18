@@ -8,8 +8,8 @@ ExcludeArch: %{ix86}
 %endif
 
 Name:           ocaml-bos
-Version:        0.2.1
-Release:        33%{?dist}
+Version:        0.3.0
+Release:        1%{?dist}
 Summary:        Basic OS interaction for OCaml
 
 License:        ISC

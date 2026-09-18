@@ -1,8 +1,8 @@
 %global source0_hash a4dfeac8221688be1452273458d69075c83a2ecad0dc8a27f973e8456737ec48
 
 Name:		tuptime
-Version:	5.2.5
-Release:	2%{?dist}
+Version:	5.2.6
+Release:	1%{?dist}
 Summary:	Report historical system real time
 
 License:	GPL-2.0-or-later

@@ -18,9 +18,9 @@
 %bcond tests 0
 
 Name:           ghc-%{pkg_name}
-Version:        1.43.2
+Version:        1.52.4
 # can only be reset when subpkg bumped
-Release:        23%{?dist}
+Release:        1%{?dist}
 Summary:        A library providing the core functionality of hledger
 
 License:        GPL-3.0-or-later

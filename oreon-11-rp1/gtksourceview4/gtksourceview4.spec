@@ -6,8 +6,8 @@
 %global gtk_version 3.22
 
 Name:           gtksourceview4
-Version:        4.8.4
-Release:        11%{?dist}
+Version:        5.21.0
+Release:        1%{?dist}
 Summary:        Source code editing widget
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

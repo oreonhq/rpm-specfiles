@@ -10,7 +10,7 @@
 # testsuite missing deps: quickcheck-instances
 
 Name:           ghc-%{pkg_name}
-Version:        0.6.3
+Version:        0.7
 Release:        %autorelease
 Summary:        Converting to/from HTTP API data
 

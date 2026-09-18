@@ -1,8 +1,8 @@
 %global source0_hash 632747ad5ebb9a9b9e91d1bc810e2a0314709edeb035dc5931812b74327fef17
 
 # SPDX-License-Identifier: MIT
-Version: 1.200
-Release: 20%{?dist}
+Version: 3.000
+Release: 1%{?dist}
 
 %global foundry           SIL
 %global fontlicense       OFL-1.1-RFN

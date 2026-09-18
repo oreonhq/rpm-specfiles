@@ -1,59 +1,57 @@
-%global source0_hash dc601ebe4a3c0368a8a25f9a104e9b41e3c0e77bc256832d20e9b9efcdcd6c5e
+%global source0_hash none
 
-%global pypi_name pytest-datafiles
+Name:           python-pytest-datafiles
+Version:        3.0.1
+Release:        %autorelease
+# Fill in the actual package summary to submit package to Fedora
+Summary:        py.test plugin to create a _tmp_path_ containing predefined files/directories.
 
-Name:           python-%{pypi_name}
-Version:        3.0.0
-Release:        4%{?dist}
-Summary:        A pytest plugin to create a 'tmpdir' containing predefined content
-
+# Check if the automatically generated License and its spelling is correct for Fedora
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/omarkohl/pytest-datafiles
-Source0:        %{url}/archive/%{version}/%{pypi_name}-%{version}.tar.gz
+Source:         %{pypi_source pytest_datafiles}
+
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
-%description
-This plugin allows you to specify one or several files/directories that are
-copied to a temporary directory (tmpdir) before the execution of the test.
-This means the original files are not modified and every test runs on its
-own version of the same files.
 
-%package -n     python3-%{pypi_name}
+# Fill in the actual package description to submit package to Fedora
+%global _description %{expand:
+This is package 'pytest-datafiles' generated automatically by pyp2spec.}
+
+%description %_description
+
+%package -n     python3-pytest-datafiles
 Summary:        %{summary}
 
-BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-%{?python_provide:%python_provide python3-%{pypi_name}}
+%description -n python3-pytest-datafiles %_description
 
-%description -n python3-%{pypi_name}
-This plugin allows you to specify one or several files/directories that are
-copied to a temporary directory (tmpdir) before the execution of the test.
-This means the original files are not modified and every test runs on its
-own version of the same files.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n pytest_datafiles-%{version}
 
-%autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
 
+
 %build
 %pyproject_wheel
 
+
 %install
 %pyproject_install
+# For official Fedora packages, including files with '*' +auto is not allowed
+# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+%pyproject_save_files '*' +auto
+
 
 %check
-PYTHONPATH=%{buildroot}%{python3_sitelib} %pytest -v tests
+%_pyproject_check_import_allow_no_modules -t
 
-%files -n python3-%{pypi_name}
-%license LICENSE
-%doc README.rst CHANGELOG.rst
-%{python3_sitelib}/__pycache__/*
-%{python3_sitelib}/pytest_datafiles.py
-%{python3_sitelib}/*.dist-info/
+
+%files -n python3-pytest-datafiles -f %{pyproject_files}
 
 %changelog
 %autochangelog

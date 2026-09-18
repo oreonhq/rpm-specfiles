@@ -29,7 +29,7 @@
 
 Name:           netgen-mesher
 # Also update version in netgen_fallback-version.patch!
-Version:        6.2.2601
+Version:        6.2.2607
 Release:        1%{?dist}
 Summary:        Automatic mesh generation tool
 # FIXME https://github.com/NGSolve/netgen/issues/226

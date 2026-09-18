@@ -1,8 +1,8 @@
 %global source0_hash 58e4fb2c1fb8421573a31cf3b4dfec301076d61f48ac5720df632986c87e9573
 
 Name:           xarchiver
-Version:        0.5.4.26
-Release:        2%{?dist}
+Version:        0.5.4.27
+Release:        1%{?dist}
 Summary:        Archive manager for Xfce
 
 License:        GPL-2.0-or-later AND BSD-4-Clause-UC AND (LGPL-2.1-or-later OR AFL-2.0)

@@ -7,7 +7,7 @@
 %global crate auto_enums
 
 Name:           rust-auto_enums
-Version:        0.8.7
+Version:        0.8.10
 Release:        %autorelease
 Summary:        Library for to allow multiple return types by automatically generated enum
 

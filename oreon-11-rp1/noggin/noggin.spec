@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           noggin
-Version:        1.9.0
-Release:        10%{?dist}
+Version:        1.11.0
+Release:        1%{?dist}
 Summary:        Self-service user portal for FreeIPA for communities
 
 License:        MIT

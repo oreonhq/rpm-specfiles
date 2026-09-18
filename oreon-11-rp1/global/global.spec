@@ -1,7 +1,7 @@
 %global source0_hash f6e7fd0b68aed292e85bb686616baf6551d5c9424adcddca11d808ba318cb320
 
 Name:           global
-Version:        6.6.14
+Version:        6.7
 Release:        1%{?dist}
 Summary:        Source code tag system
 # The entire source code is GPL-3.0-or-later except:

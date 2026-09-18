@@ -33,7 +33,7 @@
 
 # This can be slightly different than %%{version}.
 # For example, it has dash instead of tilde for release candidates.
-%global package_version 1.4.5
+%global package_version 1.5.3
 
 %global gocryptfs_version 2.5.1
 %global squashfuse_version 0.6.0
@@ -46,8 +46,8 @@
 
 Summary: Application and environment virtualization formerly known as Singularity
 Name: apptainer
-Version: 1.4.5
-Release: 6%{?dist}
+Version: 1.5.3
+Release: 1%{?dist}
 # See LICENSE.md for first party code (BSD-3-Clause and LBNL BSD)
 # See LICENSE_THIRD_PARTY.md for incorporated code (ASL 2.0)
 # See LICENSE_DEPENDENCIES.md for dependencies

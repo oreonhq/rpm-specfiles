@@ -7,7 +7,7 @@
 %global crate nanoserde
 
 Name:           rust-nanoserde
-Version:        0.1.37
+Version:        0.2.1
 Release:        %autorelease
 Summary:        Fork of makepad-tinyserde without any external dependencies.
 

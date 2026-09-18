@@ -7,7 +7,7 @@
 %global crate dlopen2_derive
 
 Name:           rust-dlopen2_derive
-Version:        0.4.0
+Version:        0.5.0
 Release:        %autorelease
 Summary:        Derive macros for the dlopen2 crate
 

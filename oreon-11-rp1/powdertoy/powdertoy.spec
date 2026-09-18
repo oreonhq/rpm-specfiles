@@ -11,8 +11,8 @@ URL: https://powdertoy.co.uk
 # src/lua/ is MIT
 License: GPL-3.0-only AND Apache-2.0 AND MIT
 
-Version: 99.3.384
-Release: 5%{?dist}
+Version: 100.1.400
+Release: 1%{?dist}
 
 %global repo_owner The-Powder-Toy
 %global repo_name The-Powder-Toy
