@@ -1,7 +1,7 @@
-%global source0_hash 1bc2f0bc0d18d87f2be0b6cbf40cb93bf4a09d3ad57d66be3e97e59f549a34ad
+%global source0_hash f917772a40db9dd025d3227b0e50614a667dd4ce26de0f3b712e7db1d5df1f44
 
 Name:           jaxb-api
-Version:        4.1.0-M1
+Version:        4.0.5
 Release:        %autorelease
 Summary:        Jakarta XML Binding API
 License:        BSD-3-Clause
