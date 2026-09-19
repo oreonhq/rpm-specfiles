@@ -1,9 +1,9 @@
-%global source0_hash 8117eb0931dd81d1511f985e12575944502bd908ed7132ac7c88e170714837f1
+%global source0_hash 7f2507723f759f069ad3b02d3a45015eb7daae4889feb8ef351a98906084e95f
 
 %bcond_with bootstrap
 
 Name:           jakarta-activation
-Version:        2.2.0-M2
+Version:        2.1.4
 Release:        %autorelease
 Summary:        Jakarta Activation API
 # the whole project is licensed under (EPL-2.0 or BSD)
