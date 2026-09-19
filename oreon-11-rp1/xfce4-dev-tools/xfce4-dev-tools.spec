@@ -4,7 +4,7 @@
 %global xfceversion 4.20
 
 Name:           xfce4-dev-tools
-Version:        4.20.0
+Version:        4.21.2
 Release:        %autorelease
 Summary:        Xfce developer tools
 

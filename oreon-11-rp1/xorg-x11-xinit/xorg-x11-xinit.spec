@@ -4,7 +4,7 @@
 
 Summary:    X.Org X11 X Window System xinit startup scripts
 Name:       xorg-x11-%{pkgname}
-Version:    1.4.4
+Version:    2.5
 Release:    1%{?dist}
 License:    X11-distribute-modifications-variant AND MIT-open-group
 URL:        https://www.x.org

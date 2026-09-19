@@ -8,8 +8,8 @@
 
 Summary:   Xorg X11 dummy video driver
 Name:      xorg-x11-drv-dummy
-Version:   0.4.1
-Release:   8%{?dist}
+Version:   25.0.0
+Release:   1%{?dist}
 URL:       http://www.x.org
 License:   MIT AND X11
 

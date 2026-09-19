@@ -1,7 +1,7 @@
-%global source0_hash e2211dcbd38fa6729853af3dc3b55816793a6563afa4361dd5ae04945a166332
+%global source0_hash b4c30d10147e71059c118aea17f415fd986b709c4600201f85fef0b6f4c8cb47
 
 Name:             xdp-tools
-Version:          1.6.2
+Version:          1.6.3
 Release:          1%{?dist}
 Summary:          Utilities and example programs for use with XDP
 %global _soversion 1.6.0

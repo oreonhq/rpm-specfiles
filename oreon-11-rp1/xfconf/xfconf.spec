@@ -3,7 +3,7 @@
 %global xfceversion 4.20
 
 Name:           xfconf
-Version:        4.20.0
+Version:        4.21.2
 Release:        %autorelease
 Summary:        Hierarchical configuration system for Xfce
 
