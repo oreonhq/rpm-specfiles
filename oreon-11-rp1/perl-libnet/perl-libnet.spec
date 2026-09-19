@@ -14,8 +14,8 @@
 %bcond_without perl_libnet_enables_ssl
 
 Name:           perl-libnet
-Version:        3.15
-Release:        522%{?dist}
+Version:        5.43.6
+Release:        1%{?dist}
 Summary:        Perl clients for various network protocols
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/libnet

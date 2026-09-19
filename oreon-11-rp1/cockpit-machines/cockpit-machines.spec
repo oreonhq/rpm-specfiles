@@ -1,4 +1,4 @@
-%global source0_hash 130c3639ed6b44f14f79b497cadd35c178761d1e70dc6bb1afeb35fac466424d
+%global source0_hash 9a8afda8b784222b55996e321f92a2038f0880219c365138dfa9b265afd6c8b1
 %global source1_hash 2e0bfb252887f0d6fb8a0a5651f4b976620ddf45921c2e58d1390ccb51fe694a
 
 # SPDX-License-Identifier: LGPL-2.1-or-later
@@ -6,7 +6,7 @@
 # Copyright (C) 2021 Red Hat, Inc.
 
 Name:           cockpit-machines
-Version:        349.1
+Version:        356
 Release:        1%{?dist}
 Summary:        Cockpit user interface for virtual machines
 License:        LGPL-2.1-or-later AND MIT

@@ -2,7 +2,7 @@
 
 %global xver 9
 %global yver 0
-%global zver 2
+%global zver 4
 
 %global majorver %{xver}.%{yver}
 %global vers %{majorver}.%{zver}

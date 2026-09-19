@@ -1,4 +1,4 @@
-%global source0_hash 7ca5ca26242ff5781c2c58933a357948885b19f6d20416fc25171e65cb7df810
+%global source0_hash c8e2997cdacf3467d3d880ce4656d72ff3555e97e594e05fd0acac53382aa407
 
 %define bzinstallprefix %{_datadir}
 %define bzdatadir %{_sharedstatedir}/bugzilla
@@ -6,7 +6,7 @@
 Summary: Bug tracking system
 URL: https://www.bugzilla.org/
 Name: bugzilla
-Version: 5.2
+Version: 5.3.3
 Release: 1%{?dist}
 # Automatically converted from old format: MPLv1.1 - review is highly recommended.
 License: LicenseRef-Callaway-MPLv1.1

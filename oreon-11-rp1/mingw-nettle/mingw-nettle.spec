@@ -1,9 +1,9 @@
-%global source0_hash fe9ff51cb1f2abb5e65a6b8c10a92da0ab5ab6eaf26e7fc2b675c45f1fb519b5
+%global source0_hash 77c75b3aaf983030b843840eb06fa593e7ed37f4fc308c2b11b98efb73dba651
 
 %{?mingw_package_header}
 
 Name:           mingw-nettle
-Version:        4.0
+Version:        4.0rc1
 Release:        1%{?dist}
 
 Summary: MinGW package for nettle cryptographic library

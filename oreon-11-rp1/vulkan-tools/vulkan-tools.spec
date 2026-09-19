@@ -1,7 +1,7 @@
 %global source0_hash dc65f1ea97dd0b2155c2281a79e87d27183c0737fb96377744091a3c8460ae1e
 
 Name:           vulkan-tools
-Version:        1.4.362
+Version:        1.4.363
 Release:        %autorelease
 Summary:        Vulkan tools
 

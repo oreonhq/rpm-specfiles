@@ -2,8 +2,8 @@
 
 %global base_version 1.26
 Name:           perl-Unicode-Normalize
-Version:        1.32
-Release:        521%{?dist}
+Version:        3.48
+Release:        1%{?dist}
 Summary:        Unicode Normalization Forms
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Unicode-Normalize

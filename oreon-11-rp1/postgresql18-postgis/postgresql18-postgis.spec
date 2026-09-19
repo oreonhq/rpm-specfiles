@@ -1,4 +1,4 @@
-%global source0_hash d488089a64ee4060bce7dbba0291fcca358e7f7ac5230e2ee5b344e7485729c4
+%global source0_hash 67ef9e85fbf9ef8a99807c9ccd80bef839058b699d16764083d937b13e1259b3
 %global source3_hash 1217a0212aaa143e44831849d1845b198f248923d7e96634219d3369a6ec8714
 
 %{!?javabuild:%global javabuild 0}
@@ -22,7 +22,7 @@
 %global        __provides_exclude_from %{_libdir}/pgsql
 
 Name:          postgresql%{pgversion}-postgis
-Version:       3.6.4
+Version:       3.7.0rc2
 Release:       1%{?dist}
 Summary:       Geographic Information Systems Extensions to PostgreSQL
 License:       GPL-2.0-or-later
@@ -442,6 +442,7 @@ fi
 %{_mandir}/man1/shp2pgsql.1*
 
 %if 0%{?fedora}
+%{_mandir}/man1/raster2pgsql.1.*
 %files -n %{pkgname}-gui
 %{_bindir}/shp2pgsql-gui
 %{_datadir}/applications/shp2pgsql-gui.desktop

@@ -1,4 +1,4 @@
-%global source0_hash 81f5035a25c576af1a93f0061cf70bde6d00a0c7bd1274abf73f5b5389a6f82d
+%global source0_hash bec622d80eeaa5a97b3cebc2afb6545c888e6e5fca98f63b04fd958d26463d7b
 
 #
 # Red Hat BIND9 package .spec file
@@ -88,7 +88,7 @@ License:  MPL-2.0 AND ISC AND MIT AND BSD-3-Clause AND BSD-2-Clause
 #
 # Before rebasing bind, ensure bind-dyndb-ldap is ready to be rebuild and use side-tag with it.
 # Updating just bind will cause freeipa-dns-server package to be uninstallable.
-Version:  9.18.50
+Version:  9.21.26
 Release:  1%{?dist}
 Epoch:    32
 Url:      https://www.isc.org/downloads/bind/

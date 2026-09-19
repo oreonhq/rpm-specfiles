@@ -2,7 +2,7 @@
 
 %global major 6
 %global minor 0
-%global patchlevel 4
+%global patchlevel 5
 
 %global x11_app_defaults_dir %{_datadir}/X11/app-defaults
 

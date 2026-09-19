@@ -6,8 +6,8 @@ Name:           perl-ExtUtils-CBuilder
 # Compete with perl.spec
 Epoch:          1
 # Mimic perl.spec
-Version:        0.280242
-Release:        521%{?dist}
+Version:        2.16
+Release:        1%{?dist}
 Summary:        Compile and link C code for Perl modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/ExtUtils-CBuilder
