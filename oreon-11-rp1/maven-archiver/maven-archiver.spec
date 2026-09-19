@@ -1,9 +1,9 @@
-%global source0_hash 87f4f2a112f18ed49e5a9f7ce624473c441995546486e9d7ca81f3ffcb216217
+%global source0_hash 7afcbc38b650dda4cd07168e792f8d5137ae630fc10ea31135735e0da04aee47
 
 %bcond_without bootstrap
 
 Name:           maven-archiver
-Version:        4.0.0-beta-1
+Version:        3.6.6
 Release:        %autorelease
 Summary:        Maven Archiver
 License:        Apache-2.0
