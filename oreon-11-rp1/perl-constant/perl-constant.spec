@@ -10,8 +10,8 @@
 %global cpan_version 1.27
 
 Name:           perl-constant
-Version:        1.33
-Release:        522%{?dist}
+Version:        1.52
+Release:        1%{?dist}
 Summary:        Perl pragma to declare constants
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/constant

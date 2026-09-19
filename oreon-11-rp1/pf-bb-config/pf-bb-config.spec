@@ -1,8 +1,8 @@
-%global source0_hash f5c2b7733ca731d15bab3defb177e2a705ab6cea02230969c7a1559e5dd4cdb9
+%global source0_hash ea7973d4b46c2063af7252815a56b75f7de7080a406fcd976634b7462ea2a49a
 
 Name:           pf-bb-config
-Version:        24.07
-Release:        4%{?dist}
+Version:        25.11
+Release:        1%{?dist}
 Summary:        PF BBDEV (baseband device) Configuration Application
 
 License:        Apache-2.0

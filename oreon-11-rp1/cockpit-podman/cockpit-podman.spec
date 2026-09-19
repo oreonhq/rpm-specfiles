@@ -1,4 +1,4 @@
-%global source0_hash 538a39ebbd4b2a85a38cc90f408759c32986a85b7cf48c936d6bce32bd9cd341
+%global source0_hash 897a9dd9e845e19a7909c7f27f0c8966c5ff6a1b3962d71aecd0365f25b1a24f
 %global source1_hash 447a260efffc3ed8c6a710dbcb2b6bb52071b1d42ab3e0c74ac779cfad303997
 
 # SPDX-License-Identifier: LGPL-2.1-or-later
@@ -6,7 +6,7 @@
 # Copyright (C) 2017-2020 Red Hat, Inc.
 
 Name:           cockpit-podman
-Version:        126
+Version:        130
 Release:        1%{?dist}
 Summary:        Cockpit component for Podman containers
 License:        LGPL-2.1-or-later

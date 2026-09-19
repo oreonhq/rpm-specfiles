@@ -1,7 +1,7 @@
-%global source0_hash 80090e29d7fd0db472ddc663513f5be89bc936815e62b767e630c1d627279fe2
+%global source0_hash 5df7386911bc15fd1ca783132528748d219768ae4fc5f8e0b61184f041648092
 
 Name:           vmaf
-Version:        3.1.0
+Version:        3.2.1
 Release:        1%{?dist}
 Summary:        Video Multi-Method Assessment Fusion
 

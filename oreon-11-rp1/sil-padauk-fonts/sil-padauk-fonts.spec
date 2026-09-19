@@ -1,7 +1,7 @@
-%global source0_hash b47b2639489d7cec5ad38d025f181b061767e4e161a41f19528e910f79fd03a1
+%global source0_hash 4f5fd3e50292d07467cea545cceb326506d6d4efeefcc1204375c0c2a3ebcad9
 
-Version:  3.003
-Release:  21%{?dist}
+Version:  6.000
+Release:  1%{?dist}
 URL:      https://software.sil.org/padauk/
 
 %global         foundry         SIL
@@ -42,7 +42,7 @@ Source11: 66-%{fontpkgname1}.conf
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n padauk-3.003
+%autosetup -n padauk-%{version}
 %linuxtext *.txt documentation/*.txt
 
 %build

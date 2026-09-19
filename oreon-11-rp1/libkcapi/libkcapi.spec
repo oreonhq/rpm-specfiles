@@ -3,7 +3,7 @@
 # Shared object version of libkcapi.
 %global vmajor            1
 %global vminor            5
-%global vpatch            0
+%global vpatch            1
 
 # Do we build the replacements packages?
 %bcond_with replace_coreutils

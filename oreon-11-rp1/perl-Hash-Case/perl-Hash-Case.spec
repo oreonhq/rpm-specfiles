@@ -3,7 +3,7 @@
 %global cpan_version 1.07
 
 Name:           perl-Hash-Case
-Version:        1.70.0
+Version:        4.05
 Release:        1%{?dist}
 Summary:        Base class for hashes with key-casing requirements
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

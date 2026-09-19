@@ -4,7 +4,7 @@
 %global emojidir %{unicodedir}/emoji
 
 Name:           unicode-emoji
-Version:        16.0
+Version:        17.0
 Release:        %autorelease
 Summary:        Unicode Emoji Data Files
 

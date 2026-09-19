@@ -1,11 +1,11 @@
-%global source0_hash 656966868b7146c4776a0c051ab6385517bf753fa7e3463a95775c0b526c2afc
+%global source0_hash cedd55533de917b6e397352a67a31993da4c07816f1fefcc94eacf542fc86337
 
 %{!?_httpd_confdir:    %{expand: %%global _httpd_confdir    %%{_sysconfdir}/httpd/conf.d}}
 
 Summary: ModSecurity Core Ruleset
 Name: mod_security_crs
-Version: 4.15.0
-Release: 3%{?dist}
+Version: 4.29.0
+Release: 1%{?dist}
 License: Apache-2.0
 URL: https://coreruleset.org/
 Source:        https://github.com/coreruleset/coreruleset/archive/refs/tags/v%{version}.tar.gz#/mod_security_crs-4.15.0.tar.gz

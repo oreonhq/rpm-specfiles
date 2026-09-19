@@ -6,7 +6,7 @@
 %global nmlibdir %{_prefix}/lib/NetworkManager
 
 Name:           nvme-cli
-Version:        3.0-b.5
+Version:        3.1
 Release:        1%{?dist}
 Summary:        NVMe management command line interface
 

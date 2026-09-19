@@ -7,8 +7,8 @@
 
 Name:    pesign
 Summary: Signing utility for UEFI binaries
-Version: 116
-Release: 8%{?dist}
+Version: 117
+Release: 1%{?dist}
 License: GPL-2.0-only
 URL:     https://github.com/rhboot/pesign
 

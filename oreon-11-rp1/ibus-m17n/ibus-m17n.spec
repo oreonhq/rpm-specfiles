@@ -1,9 +1,9 @@
-%global source0_hash fdc30c2efdb03104912d1d607197b5e06108f15e16eaa3a8e93833f1ae2b17a1
+%global source0_hash 51c98bc028ad56ae2236f6d9b9d2bd71b44dc5677b6be4855083d4322d18d16d
 
 %global require_ibus_version 1.4.0
 
 Name:       ibus-m17n
-Version:    1.4.39
+Version:    1.4.40
 Release:    %autorelease
 Summary:    The M17N engine for IBus platform
 License:    GPL-2.0-or-later

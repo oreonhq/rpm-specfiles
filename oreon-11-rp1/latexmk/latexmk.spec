@@ -1,7 +1,7 @@
 %global source0_hash b145a1ccfbde15985a517341dbd6510d391dfc21919c649669ebc977d91aa57f
 
 Name:           latexmk
-Version:        4.88
+Version:        488
 Release:        %autorelease
 Summary:        A make-like utility for LaTeX files
 
