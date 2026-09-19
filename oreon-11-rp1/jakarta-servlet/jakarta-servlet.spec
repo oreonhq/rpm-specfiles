@@ -1,9 +1,9 @@
-%global source0_hash 1a6b8a403aeabc42f5a85a11e5fcab5662dd84ff3fdb809e15f189c3f4a9a03f
+%global source0_hash afb0cd16dce07c45ff3fb4388f9b3f32704e665f2fdbad2f18a8b29fdd46fd43
 
 %bcond_with bootstrap
 
 Name:           jakarta-servlet
-Version:        6.2.0-M2
+Version:        6.1.0
 Release:        %autorelease
 Summary:        Jakarta Servlet
 # most of the project is EPL-2.0 or GPLv2 w/exceptions,
