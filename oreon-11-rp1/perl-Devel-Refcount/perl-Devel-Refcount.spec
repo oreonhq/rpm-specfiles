@@ -1,8 +1,8 @@
 %global source0_hash b654d46963d1a881426ba15994f28f52eb839b0d135bf239b4d1bf38b1caca4a
 
 Name:           perl-Devel-Refcount
-Version:        0.10
-Release:        41%{?dist}
+Version:        20110802.00
+Release:        1%{?dist}
 Summary:        Obtain the REFCNT value of a referent
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-Refcount

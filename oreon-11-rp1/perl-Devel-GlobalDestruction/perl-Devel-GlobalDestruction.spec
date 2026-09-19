@@ -1,8 +1,8 @@
 %global source0_hash 34b8a5f29991311468fe6913cadaba75fd5d2b0b3ee3bb41fe5b53efab9154ab
 
 Name:		perl-Devel-GlobalDestruction
-Version:	0.14
-Release:	28%{?dist}
+Version:	20110802.00
+Release:	1%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:	Expose PL_dirty, the flag that marks global destruction
 URL:		https://metacpan.org/release/Devel-GlobalDestruction

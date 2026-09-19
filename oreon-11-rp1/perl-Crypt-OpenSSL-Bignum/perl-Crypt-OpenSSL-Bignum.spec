@@ -1,8 +1,8 @@
 %global source0_hash 234e72fb8396d45527e6fd45e43759c5c3f3a208cf8f29e6a22161a996fd42dc
 
 Name:           perl-Crypt-OpenSSL-Bignum
-Version:        0.09
-Release:        32%{?dist}
+Version:        4.022
+Release:        1%{?dist}
 Summary:        Perl interface to OpenSSL's multiprecision integer arithmetic
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Crypt-OpenSSL-Bignum

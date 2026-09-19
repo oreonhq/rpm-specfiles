@@ -1,7 +1,7 @@
 %global source0_hash 6c6fe90babfa09bd3c544643d3fc3ea9516f9cbc74e8b3342f0d50416862b76f
 
 Name:           blosc2
-Version:        3.3.4
+Version:        4.13.1
 Release:        %autorelease
 Summary:        High performance compressor optimized for binary data
 

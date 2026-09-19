@@ -1,8 +1,8 @@
 %global source0_hash 6b105b8c641561631f533ec3423e8067a3d7d58043bf85f0f5e09d706905706b
 
 Name:           perl-AnyEvent-AIO
-Version:        1.1
-Release:        46%{?dist}
+Version:        7.17
+Release:        1%{?dist}
 Summary:        Truly asynchronous file and directrory I/O
 
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.

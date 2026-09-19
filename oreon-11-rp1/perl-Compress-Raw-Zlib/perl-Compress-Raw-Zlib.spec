@@ -9,7 +9,7 @@
 
 
 Name:           perl-Compress-Raw-Zlib
-Version:        2.222
+Version:        4.009
 Release:        1%{?dist}
 Summary:        Low-level interface to the zlib compression library
 # Zlib.xs:  (GPL-1.0-or-later OR Artistic-1.0-Perl) AND Zlib

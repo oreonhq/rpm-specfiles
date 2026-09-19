@@ -1,8 +1,8 @@
 %global source0_hash f998d34d55fd9c82cf910786a0448d1edfa60bf68e2c2306724ca67c629de861
 
 Name:           perl-Encode-EUCJPASCII
-Version:        0.03
-Release:        49%{?dist}
+Version:        14.2
+Release:        1%{?dist}
 Summary:        EucJP-ascii - An eucJP-open mapping
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Encode-EUCJPASCII

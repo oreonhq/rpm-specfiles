@@ -59,9 +59,9 @@
 %global dbus_python_version 0.83.0
 
 Name:           ibus
-Version:        1.5.34~rc1
+Version:        1.5.34
 # https://github.com/fedora-infra/rpmautospec/issues/101
-Release:        3%{?dist}
+Release:        1%{?dist}
 Summary:        Intelligent Input Bus for Linux OS
 License:        LGPL-2.1-or-later
 URL:            https://github.com/ibus/%name/wiki

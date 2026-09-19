@@ -7,9 +7,9 @@
 #%%global rcversion RC1
 
 Name:		mingw-%{name1}
-Version:	8.45
+Version:	10.37
 %global myversion %{version}%{?rcversion:-%rcversion}
-Release:	10%{?dist}
+Release:	1%{?dist}
 Summary:	MinGW Windows pcre library
 
 License:	BSD-3-Clause

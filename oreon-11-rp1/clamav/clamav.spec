@@ -27,8 +27,8 @@
 
 Summary:    End-user tools for the Clam Antivirus scanner
 Name:       clamav
-Version:    1.4.4
-Release:    2%{?dist}
+Version:    1.5.4
+Release:    1%{?dist}
 License:    %{?with_unrar:proprietary}%{!?with_unrar:GPL-2.0-only}
 URL:        https://www.clamav.net/
 Source0:    https://www.clamav.net/downloads/production/%{name}-%{version}%{?prerelease}.tar.gz

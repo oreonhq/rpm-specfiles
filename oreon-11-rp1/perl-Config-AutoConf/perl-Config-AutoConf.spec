@@ -6,8 +6,8 @@
 %bcond perl_Config_AutoConf_enables_Scalar_Util 1
 
 Name:           perl-Config-AutoConf
-Version:        0.320
-Release:        15%{?dist}
+Version:        2.16
+Release:        1%{?dist}
 Summary:        A module to implement some of AutoConf macros in pure Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Config-AutoConf

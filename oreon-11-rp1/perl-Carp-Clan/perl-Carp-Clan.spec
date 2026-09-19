@@ -1,8 +1,8 @@
 %global source0_hash c75f92e34422cc5a65ab05d155842b701452434e9aefb649d6e2289c47ef6708
 
 Name:           perl-Carp-Clan
-Version:        6.08
-Release:        22%{?dist}
+Version:        6.36
+Release:        1%{?dist}
 Summary:        Perl module to print improved warning messages
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

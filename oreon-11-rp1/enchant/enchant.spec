@@ -5,8 +5,8 @@
 
 Summary: An Enchanting Spell Checking Library
 Name: enchant
-Version: 1.6.0
-Release: 41%{?dist}
+Version: 2.8.21
+Release: 1%{?dist}
 Epoch: 1
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2+

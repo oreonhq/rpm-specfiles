@@ -1,8 +1,8 @@
-%global source0_hash 1c2b0032a539033313b5be2e48ddd0ae94c84faf21d93956d53562eef4614868
+%global source0_hash ff30c60161f7043df4dcc6e7cdea8e064e382aa06c73dcc3d1885c7d2c77451d
 
 Name:           libxdg-basedir
-Version:        1.2.0
-Release:        38%{?dist}
+Version:        1.2.3
+Release:        1%{?dist}
 Summary:        Implementation of the XDG Base Directory Specifications
 
 License:        MIT

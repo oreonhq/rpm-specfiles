@@ -3,8 +3,8 @@
 %global debug_package %{nil}
 
 Name:		libkkc-data
-Version:	0.2.7
-Release:	31%{?dist}
+Version:	0.3.5
+Release:	1%{?dist}
 Epoch:		1
 Summary:	Language model data for libkkc
 

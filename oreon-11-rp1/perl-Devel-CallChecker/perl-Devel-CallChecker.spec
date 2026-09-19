@@ -10,8 +10,8 @@
 %endif
 
 Name:           perl-Devel-CallChecker
-Version:        0.009
-Release:        11%{?dist}
+Version:        20110802.00
+Release:        1%{?dist}
 Summary:        Custom op checking attached to subroutines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-CallChecker

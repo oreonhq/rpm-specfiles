@@ -4,8 +4,8 @@
 %bcond_without perl_DBD_SQLite_enables_optional_test
 
 Name:           perl-DBD-SQLite
-Version:        1.78
-Release:        2%{?dist}
+Version:        4.18
+Release:        1%{?dist}
 Summary:        SQLite DBI Driver
 # lib/DBD/SQLite.pm:        GPL-1.0-or-later OR Artistic-1.0-Perl
 # LICENSE:                  GPL-1.0-or-later OR Artistic-1.0-Perl

@@ -8,7 +8,7 @@
 %global tzversion 2026b
 
 Name:           perl-DateTime-TimeZone
-Version:        2.68
+Version:        9999.13
 Release:        1%{?dist}
 Summary:        Time zone object base class and factory
 # tzdata%%{tzversion}.tar.gz archive:   LicenseRef-Public-Domain

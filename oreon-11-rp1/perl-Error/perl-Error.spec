@@ -2,8 +2,8 @@
 
 Name:           perl-Error
 Epoch:          1
-Version:        0.17030
-Release:        3%{?dist}
+Version:        2.008004
+Release:        1%{?dist}
 Summary:        Error/exception handling in an OO-ish way
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND X11
 URL:            https://metacpan.org/release/Error

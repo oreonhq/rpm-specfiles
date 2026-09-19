@@ -1,8 +1,8 @@
 %global source0_hash eac15e730aaf612edd9edf71e6aa954653611bae5a1043b960aff5a9b1e571ff
 
 Name:           perl-CBOR-XS
-Version:        1.87
-Release:        9%{?dist}
+Version:        7.17
+Release:        1%{?dist}
 Summary:        Concise Binary Object Representation (CBOR)
 # COPYING:      GPL-3.0 text
 ## Replaced by system header-only package

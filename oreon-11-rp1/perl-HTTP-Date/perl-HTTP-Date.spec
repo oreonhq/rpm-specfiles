@@ -1,8 +1,8 @@
 %global source0_hash 7b685191c6acc3e773d1fc02c95ee1f9fae94f77783175f5e78c181cc92d2b52
 
 Name:           perl-HTTP-Date
-Version:        6.06
-Release:        8%{?dist}
+Version:        7.04
+Release:        1%{?dist}
 Summary:        Date conversion routines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/HTTP-Date

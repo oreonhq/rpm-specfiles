@@ -1,9 +1,9 @@
-%global source0_hash 5d1fd38ee713684b991d6551b4fc305b12ef51731e8498bf1b40668e4e24c0e6
+%global source0_hash 939f062fb34cffd3e5e3bf520dec8beaacd1b44f33896a22f0e97b2c1595a8a6
 
 %bcond_with bootstrap
 
 Name:           maven-compiler-plugin
-Version:        3.16.0
+Version:        4.0.0-beta-1
 Release:        %autorelease
 Summary:        Maven Compiler Plugin
 License:        Apache-2.0

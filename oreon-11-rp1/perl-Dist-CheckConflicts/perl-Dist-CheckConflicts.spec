@@ -8,8 +8,8 @@
 %endif
 
 Name:		perl-Dist-CheckConflicts
-Version:	0.11
-Release:	34%{?dist}
+Version:	6.033
+Release:	1%{?dist}
 Summary:	Declare version conflicts for your dist
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Dist-CheckConflicts

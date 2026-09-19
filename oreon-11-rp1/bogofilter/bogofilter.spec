@@ -1,4 +1,4 @@
-%global source0_hash 3248a1373bff552c500834adbea4b6caee04224516ae581fb25a4c6a6dee89ea
+%global source0_hash bc6324706ad169bbac17c2d821791fe51867b8adf91398d84c24bba5f12e7ae2
 
 %global with_libdb_migration 1
 %global libdb_migration_build_dir libdb_migration_build
@@ -6,8 +6,8 @@
 
 Summary: Fast anti-spam filtering by Bayesian statistical analysis
 Name: bogofilter
-Version: 1.2.5
-Release: 22%{?dist}
+Version: 1.3.0.rc2
+Release: 1%{?dist}
 License: GPL-2.0-only
 URL: http://bogofilter.sourceforge.net/
 Source0:        https://downloads.sourceforge.net/bogofilter/bogofilter-%{version}.tar.xz

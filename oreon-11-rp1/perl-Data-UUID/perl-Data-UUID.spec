@@ -1,8 +1,8 @@
 %global source0_hash 95bda7276265f57bc48ffdeddec5ef28cd6f765e3a183757fa5f09f0ce6b98ac
 
 Name:		perl-Data-UUID
-Version:	1.227
-Release:	7%{?dist}
+Version:	20182514.062550
+Release:	1%{?dist}
 Summary:	Globally/Universally Unique Identifiers (GUIDs/UUIDs)
 # Makefile.PL says BSD but LICENSE file is HP-1989
 # LICENSE: HP-1989

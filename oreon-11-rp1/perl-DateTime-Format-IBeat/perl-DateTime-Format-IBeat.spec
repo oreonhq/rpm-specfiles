@@ -1,8 +1,8 @@
 %global source0_hash 1873a67ea73129a915e1e71cf50404ebee871ea11964620c020796f18a42d5cb
 
 Name:           perl-DateTime-Format-IBeat
-Version:        0.161
-Release:        53%{?dist}
+Version:        4.11
+Release:        1%{?dist}
 Summary:        Format times in .beat notation 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Format-IBeat            

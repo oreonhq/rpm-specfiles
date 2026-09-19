@@ -1,8 +1,8 @@
 %global source0_hash c8574875cce073e7dc5345a7b06d502e52044d68894f9160203fcaab379514fe
 
 Name:		perl-ExtUtils-Helpers
-Version:	0.028
-Release:	4%{?dist}
+Version:	7.76
+Release:	1%{?dist}
 Summary:	Various portability utilities for module builders
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/ExtUtils-Helpers

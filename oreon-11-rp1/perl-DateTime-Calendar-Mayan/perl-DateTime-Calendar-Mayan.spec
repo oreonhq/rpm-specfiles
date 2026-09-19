@@ -1,8 +1,8 @@
 %global source0_hash ed517bd765948cbee84113358744df2bfff3539badbb37d62037f2b28bbb2557
 
 Name:		perl-DateTime-Calendar-Mayan 
-Version:	0.0601 
-Release:	48%{?dist}
+Version:	4.11 
+Release:	1%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:	Mayan Long Count Calendar 
 URL:		https://metacpan.org/release/DateTime-Calendar-Mayan

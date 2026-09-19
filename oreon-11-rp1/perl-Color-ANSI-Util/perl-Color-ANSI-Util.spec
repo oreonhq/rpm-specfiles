@@ -1,8 +1,8 @@
 %global source0_hash 70a69e7c4e65cb0c35bf16a0115a6d113a534e4ad9cd6cf2d767a6bd55311ae5
 
 Name:           perl-Color-ANSI-Util
-Version:        0.165
-Release:        5%{?dist}
+Version:        20260626.0.0
+Release:        1%{?dist}
 Summary:        Routines for dealing with ANSI colors
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Color-ANSI-Util/

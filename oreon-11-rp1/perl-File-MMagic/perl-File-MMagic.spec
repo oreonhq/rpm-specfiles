@@ -1,8 +1,8 @@
 %global source0_hash cf0c1b1eb29705c02d97c2913648009c0be42ce93ec24b36c696bf2d4f5ebd7e
 
 Name:           perl-File-MMagic
-Version:        1.30
-Release:        37%{?dist}
+Version:        9999.32
+Release:        1%{?dist}
 Summary:        A Perl module emulating the file(1) command
 # MMagic.pm and COPYING files contain identical license texts of App-s2p
 # license, BSD license, and ASL 1.0 license.

@@ -5,8 +5,8 @@
 
 Name:		perl-CPAN-Changes
 Summary:	Read and write Changes files
-Version:	0.500005
-Release:	3%{?dist}
+Version:	5.20250923
+Release:	1%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/CPAN-Changes
 Source0:        https://cpan.metacpan.org/modules/by-module/CPAN/CPAN-Changes-%{version}.tar.gz

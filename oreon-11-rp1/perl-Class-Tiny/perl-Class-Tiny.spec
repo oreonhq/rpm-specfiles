@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Class-Tiny
-Version:        1.008
-Release:        15%{?dist}
+Version:        5.23.6
+Release:        1%{?dist}
 Summary:        Minimalist class construction
 License:        Apache-2.0
 URL:            https://metacpan.org/release/Class-Tiny

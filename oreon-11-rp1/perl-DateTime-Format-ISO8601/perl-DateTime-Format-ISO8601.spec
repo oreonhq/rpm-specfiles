@@ -1,8 +1,8 @@
 %global source0_hash 04899f3b1896b2e0933a1d728b3094ccd2f7d09e434c4eac2696cd931bbf0551
 
 Name:       perl-DateTime-Format-ISO8601 
-Version:    0.17
-Release:    3%{?dist}
+Version:    9999.13
+Release:    1%{?dist}
 # LICENSE, lib/DateTime/Format/ISO8601.pod -> GPL+ or Artistic
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:    Parses ISO8601 date-time formats

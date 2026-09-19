@@ -1,8 +1,8 @@
 %global source0_hash 1bc56dc2ff4b3152612e1d474ca65071ae2c00912e3fa4bc6f5a99e5e7a1da68
 
 Name:           perl-DateTime-Locale
-Version:        1.45
-Release:        3%{?dist}
+Version:        9999.13
+Release:        1%{?dist}
 Summary:        Localization support for DateTime.pm
 # Although the CLDR license is listed as "MIT" on the Fedora Wiki, it's more
 # similar to recently added "Unicode-DFS-2015" license.

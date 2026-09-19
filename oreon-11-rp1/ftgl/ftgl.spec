@@ -1,7 +1,7 @@
 %global source0_hash 521ff7bd62c459ff5372e269c223e2a6107a6a99a36afdc2ae634a973af70c59
 
 Name:           ftgl
-Version:        2.1.3
+Version:        2.4.0
 Release:        %autorelease
 Summary:        OpenGL frontend to Freetype 2
 

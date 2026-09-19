@@ -1,8 +1,8 @@
 %global source0_hash 03ad231ad1f9d64b52474392d63c31197b0bc7bd416e58b1c10a329a5ed89caf
 
 Name:           libao
-Version:        1.2.0
-Release:        31%{?dist}
+Version:        1.2.2
+Release:        1%{?dist}
 Summary:        Cross Platform Audio Output Library
 License:        GPL-2.0-or-later
 URL:            http://xiph.org/ao/

@@ -32,7 +32,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 Name:           jdom
-Version:        1.1.3
+Version:        2.0.6.1
 Release:        %autorelease
 Summary:        Java alternative to DOM and SAX
 License:        Saxpath

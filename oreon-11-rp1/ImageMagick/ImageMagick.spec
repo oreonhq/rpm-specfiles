@@ -15,7 +15,7 @@
 
 Name:           ImageMagick
 Epoch:          1
-Version:        7.1.2.27
+Version:        7.1.2.31
 Release:        1%{?dist}
 Summary:        An X application for displaying and manipulating images
 

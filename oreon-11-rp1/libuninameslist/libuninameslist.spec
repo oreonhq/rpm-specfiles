@@ -1,8 +1,8 @@
-%global source0_hash f4cb7ee4e19b6b558d829c44ffa18f3b3a4cda2f61150128b07bb9cbb262414a
+%global source0_hash 553f63d14234c79ce29a63c0594b81d78e716a8d7b28f5cd1f54668b4d54eefe
 
 Name:           libuninameslist
-Version:        20260107
-Release:        2%{?dist}
+Version:        20260918
+Release:        1%{?dist}
 
 Summary:        A library providing Unicode character names and annotations
 

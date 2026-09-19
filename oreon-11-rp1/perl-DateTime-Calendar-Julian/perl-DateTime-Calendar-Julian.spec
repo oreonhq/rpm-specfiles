@@ -1,8 +1,8 @@
 %global source0_hash fcb2b424844bb13bcad46b1c7aa239b5a09bab2556f53bd1f27fad90c260d33d
 
 Name:		perl-DateTime-Calendar-Julian
-Version:	0.107
-Release:	12%{?dist}
+Version:	1.907
+Release:	1%{?dist}
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:	Julian Calendar support for DateTime.pm

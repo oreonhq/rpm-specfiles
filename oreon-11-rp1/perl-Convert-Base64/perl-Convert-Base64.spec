@@ -1,8 +1,8 @@
 %global source0_hash bc99df7fe1c1ae615f82b40194e7d0bd2f42be6692de037fd6a267930b273ebb
 
 Name:           perl-Convert-Base64
-Version:        0.001
-Release:        28%{?dist}
+Version:        4.04
+Release:        1%{?dist}
 Summary:        Encoding and decoding of Base64 strings
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Convert-Base64

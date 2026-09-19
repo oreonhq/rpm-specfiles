@@ -2,7 +2,7 @@
 
 Name:		globus-openssl-module
 %global _name %(tr - _ <<< %{name})
-Version:	6.2.20251212
+Version:	6.2.20260123
 Release:	1%{?dist}
 Summary:	Grid Community Toolkit - Globus OpenSSL Module Wrapper
 

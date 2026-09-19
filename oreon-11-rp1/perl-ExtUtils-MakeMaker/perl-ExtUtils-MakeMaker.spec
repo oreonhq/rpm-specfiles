@@ -7,7 +7,7 @@
 
 Name:           perl-%{cpan_name}
 Epoch:          2
-Version:        7.78
+Version:        9.99
 Release:        1%{?dist}
 Summary:        Create a module Makefile
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

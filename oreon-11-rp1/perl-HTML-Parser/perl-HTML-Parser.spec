@@ -2,8 +2,8 @@
 
 Name:           perl-HTML-Parser
 Summary:        Perl module for parsing HTML
-Version:        3.83
-Release:        5%{?dist}
+Version:        7.04
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/HTML-Parser-%{version}.tar.gz
 URL:            https://metacpan.org/release/HTML-Parser

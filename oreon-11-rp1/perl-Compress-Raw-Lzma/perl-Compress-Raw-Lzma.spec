@@ -4,7 +4,7 @@
 %bcond_without perl_Compress_Raw_Lzma_enables_optional_test
 
 Name:		perl-Compress-Raw-Lzma
-Version:	2.221
+Version:	3.8
 Release:	1%{?dist}
 Summary:	Low-level interface to lzma compression library
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl

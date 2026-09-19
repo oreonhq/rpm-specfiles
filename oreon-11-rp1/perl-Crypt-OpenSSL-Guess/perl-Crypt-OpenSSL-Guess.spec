@@ -1,8 +1,8 @@
 %global source0_hash 1c5033381819fdb4c9087dd291b90ec70e7810d31d57eade9b388eccfd70386d
 
 Name:           perl-Crypt-OpenSSL-Guess
-Version:        0.15
-Release:        11%{?dist}
+Version:        1.37
+Release:        1%{?dist}
 Summary:        Guess OpenSSL include path
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Crypt-OpenSSL-Guess/

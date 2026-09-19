@@ -1,8 +1,8 @@
 %global source0_hash d73a7f09442983b098260df3df7a832a5f660773a313ca273fa8b56665f97cdc
 
 Name:           perl-File-pushd
-Version:        1.016
-Release:        24%{?dist}
+Version:        5.23.6
+Release:        1%{?dist}
 Summary:        Change directory temporarily for a limited scope
 License:        Apache-2.0
 URL:            https://metacpan.org/release/File-pushd

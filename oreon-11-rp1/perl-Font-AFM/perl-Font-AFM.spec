@@ -1,8 +1,8 @@
 %global source0_hash 32671166da32596a0f6baacd0c1233825a60acaf25805d79c81a3f18d6088bc1
 
 Name:           perl-Font-AFM
-Version:        1.20
-Release:        52%{?dist}
+Version:        6.06
+Release:        1%{?dist}
 Summary:        Perl interface to Adobe Font Metrics files
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

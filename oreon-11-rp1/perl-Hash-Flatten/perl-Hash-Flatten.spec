@@ -1,8 +1,8 @@
 %global source0_hash 70c6c49d8b6c460746417a5098edd2a0fd31fd8b86c54bf8492e853c1f4e4b98
 
 Name:           perl-Hash-Flatten
-Version:        1.19
-Release:        44%{?dist}
+Version:        1.070
+Release:        1%{?dist}
 Summary:        Flatten/unflatten complex data hashes
 License:        GPL-2.0-only
 URL:            https://metacpan.org/release/Hash-Flatten

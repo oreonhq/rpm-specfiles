@@ -1,8 +1,8 @@
 %global source0_hash 473d65127b23dac0e8039c01e28bc4072cb9a6e93e81a1ea4893cea08c698db0
 
 Name:           perl-Config-General
-Version:        2.67
-Release:        4%{?dist}
+Version:        4.58
+Release:        1%{?dist}
 Summary:        Generic configuration module for Perl
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Config-General

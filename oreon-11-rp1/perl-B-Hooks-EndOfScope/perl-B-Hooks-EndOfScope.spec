@@ -10,8 +10,8 @@
 %bcond_without perl_B_Hooks_EndOfScope_enables_optional_test
 
 Name:		perl-B-Hooks-EndOfScope
-Version:	0.28
-Release:	5%{?dist}
+Version:	2.07
+Release:	1%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:	Execute code after scope compilation finishes
 URL:		https://metacpan.org/release/B-Hooks-EndOfScope

@@ -1,8 +1,8 @@
 %global source0_hash 462bd66bf55e74b78f29ebdc9626af622d4f0115b5191b03167e82164db98f5a
 
 Name:		perl-File-Copy-Recursive-Reduced
-Version:	0.008
-Release:	5%{?dist}
+Version:	9999.32
+Release:	1%{?dist}
 Summary:	Recursive copying of files and directories within Perl 5 toolchain
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/File-Copy-Recursive-Reduced

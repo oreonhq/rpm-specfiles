@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Devel-CheckLib
-Version:        1.16
-Release:        16%{?dist}
+Version:        20110802.00
+Release:        1%{?dist}
 Summary:        Check that a library is available
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

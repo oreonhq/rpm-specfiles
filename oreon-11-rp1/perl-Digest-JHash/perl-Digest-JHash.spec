@@ -1,8 +1,8 @@
 %global source0_hash c746cf0a861a004090263cd54d7728d0c7595a0cf90cbbfd8409b396ee3b0063
 
 Name:           perl-Digest-JHash
-Version:        0.10
-Release:        33%{?dist}
+Version:        20190309.001
+Release:        1%{?dist}
 Summary:        Perl extension for 32 bit Jenkins Hashing Algorithm
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Digest-JHash

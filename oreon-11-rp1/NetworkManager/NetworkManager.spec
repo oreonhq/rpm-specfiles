@@ -7,7 +7,7 @@ URL:     https://networkmanager.dev/
 Group:   System Environment/Base
 
 Epoch:   1
-Version: 1.58.1
+Version: 1.59.1-dev
 Release: 1%{?dist}
 
 ###############################################################################

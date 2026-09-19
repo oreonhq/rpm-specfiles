@@ -6,8 +6,8 @@
 
 Name:		fontawesome4-fonts
 Epoch:		1
-Version:	4.7.0
-Release:	26%{?dist}
+Version:	7.3.1
+Release:	1%{?dist}
 
 Summary:	Iconic font set
 License:	OFL-1.1-RFN

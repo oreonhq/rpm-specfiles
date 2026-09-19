@@ -1,8 +1,8 @@
 %global source0_hash ae1886050d9ca21223c073e2870abdc80dc30e3f55289a11c37da3820a8321ff
 
 Name:           perl-File-Find-Rule-Perl
-Version:        1.16
-Release:        12%{?dist}
+Version:        6.36
+Release:        1%{?dist}
 Summary:        Common rules for searching for Perl things
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Find-Rule-Perl

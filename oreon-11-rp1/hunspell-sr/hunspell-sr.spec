@@ -8,7 +8,7 @@
 
 Name: hunspell-sr
 Summary: Serbian hunspell dictionaries
-Version: 26.8.0.3
+Version: 20130715
 Release: 1%{?dist}
 License: LGPL-3.0-only
 URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/sr

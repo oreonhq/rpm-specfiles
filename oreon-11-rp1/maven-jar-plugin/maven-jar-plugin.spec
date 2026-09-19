@@ -1,9 +1,9 @@
-%global source0_hash 87d77c76b594d5ebb6d719d5ea5ccd1249411183ff243e50d6c315c358307b4f
+%global source0_hash 8d591e5560b6935da1b8cbf9c6572943fea46790e08b40e05acc5c5685d5b533
 
 %bcond_without bootstrap
 
 Name:           maven-jar-plugin
-Version:        3.5.1
+Version:        4.0.0-beta-1
 Release:        %autorelease
 Summary:        Maven JAR Plugin
 License:        Apache-2.0

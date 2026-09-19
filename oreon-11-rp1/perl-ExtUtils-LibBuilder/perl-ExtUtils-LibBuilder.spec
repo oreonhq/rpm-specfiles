@@ -1,7 +1,7 @@
 %global source0_hash dbfac85d015874189a704fa0a2f001d13b5a0c7d89f36c06ff32d569720a6cfb
 
 Name:           perl-ExtUtils-LibBuilder
-Version:        0.09
+Version:        2.16
 Release:        %autorelease
 Summary:        Perl library to build C libraries and programs
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

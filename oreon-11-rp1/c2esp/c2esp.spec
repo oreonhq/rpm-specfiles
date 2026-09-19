@@ -3,8 +3,8 @@
 %global version_no_dot 27
 
 Name:           c2esp
-Version:        2.7
-Release:        37%{?dist}
+Version:        27
+Release:        1%{?dist}
 Summary:        CUPS driver for Kodak AiO printers
 
 License:        GPL-2.0-or-later

@@ -1,8 +1,8 @@
 %global source0_hash b1e852e5cd3f8d5c38aa2e7fa5f8521ba22a52515936eb09597047288272b3ec
 
 Name:           perl-DateTime-Incomplete
-Version:        0.08
-Release:        30%{?dist}
+Version:        4.11
+Release:        1%{?dist}
 Summary:        Representing partial dates and times
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 # patch to address https://fedoraproject.org/wiki/Common_Rpmlint_issues#incorrect-fsf-address has been sent upstream at https://rt.cpan.org/Ticket/Display.html?id=97520

@@ -1,8 +1,8 @@
 %global source0_hash 5ec4425c6bc22207889630be7350d99686e62a44c6136960110203cd594ae0ea
 
 Name:           perl-Crypt-RC4
-Version:        2.02
-Release:        43%{?dist}
+Version:        5.00
+Release:        1%{?dist}
 Summary:        Perl implementation of the RC4 encryption algorithm
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Crypt-RC4

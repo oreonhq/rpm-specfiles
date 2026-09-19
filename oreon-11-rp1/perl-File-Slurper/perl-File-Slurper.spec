@@ -1,8 +1,8 @@
 %global source0_hash d5a36487339888c3cd758e648160ee1d70eb4153cacbaff57846dbcefb344b0c
 
 Name:           perl-File-Slurper
-Version:        0.014
-Release:        9%{?dist}
+Version:        5.44.0
+Release:        1%{?dist}
 Summary:        Simple, sane and efficient module to slurp a file
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Slurper

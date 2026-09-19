@@ -4,7 +4,7 @@
 
 
 Name:    libkcddb 
-Version: 26.04.3
+Version: 26.08.1
 Release: 1%{?dist}
 Summary: CDDB retrieval library
 

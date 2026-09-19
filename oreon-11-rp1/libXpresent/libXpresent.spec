@@ -1,7 +1,7 @@
 %global source0_hash c11ae015141a9afbe10f4f2b8ee00b11adca6373dc1b9808d7c6c138b2da7b8a
 
 Name:           libXpresent
-Version:        1.0.0
+Version:        1.0.2
 Release:        %autorelease
 Summary:        A Xlib-compatible API for the Present extension
 

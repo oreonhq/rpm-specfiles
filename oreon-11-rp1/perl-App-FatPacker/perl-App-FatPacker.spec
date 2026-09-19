@@ -1,8 +1,8 @@
 %global source0_hash 129db36dc845661a582286810cfe2d5216eb2ce082bad40ae1fcdce0f45deccf
 
 Name:           perl-App-FatPacker
-Version:        0.010008
-Release:        22%{?dist}
+Version:        6.59
+Release:        1%{?dist}
 Summary:        Pack dependencies onto a script file
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

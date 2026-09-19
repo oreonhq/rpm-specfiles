@@ -1,8 +1,8 @@
 %global source0_hash 93e36010940464626e5f31b9faedd65e12ed8d1abf16ce052febf23f495aefc8
 
 Name:           perl-AnyEvent-BDB
-Version:        1.1
-Release:        49%{?dist}
+Version:        7.17
+Release:        1%{?dist}
 Summary:        Truly asynchronous Berkeley DB access
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/AnyEvent-BDB

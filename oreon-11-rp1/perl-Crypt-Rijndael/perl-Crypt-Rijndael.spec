@@ -1,8 +1,8 @@
 %global source0_hash 6540085e3804b82a6f0752c1122cf78cadd221990136dd6fd4c097d056c84d40
 
 Name:           perl-Crypt-Rijndael
-Version:        1.16
-Release:        18%{?dist}
+Version:        5.44.0
+Release:        1%{?dist}
 Summary:        Crypt::CBC compliant Rijndael encryption module
 # Rijndael.{h,xs}, _rijndael.c: LGPL-2.0-or-later
 # Rijndael.pm, COPYING:         LGPL-3.0-only

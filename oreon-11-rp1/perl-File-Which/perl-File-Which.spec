@@ -1,8 +1,8 @@
 %global source0_hash 3201f1a60e3f16484082e6045c896842261fc345de9fb2e620fd2a2c7af3a93a
 
 Name:           perl-File-Which
-Version:        1.27
-Release:        15%{?dist}
+Version:        100.00
+Release:        1%{?dist}
 Summary:        Portable implementation of the 'which' utility
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Which

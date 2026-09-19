@@ -1,8 +1,8 @@
 %global source0_hash 348d60938445f174cdbc56147393411a164e286abb680c8d30832019e9063a82
 
 Name:           perl-Class-Prototyped
-Version:        1.16
-Release:        4%{?dist}
+Version:        2.15
+Release:        1%{?dist}
 Summary:        Fast prototype-based OO programming in Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Prototyped

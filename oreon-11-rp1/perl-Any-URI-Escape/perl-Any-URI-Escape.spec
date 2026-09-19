@@ -1,8 +1,8 @@
 %global source0_hash e3813cec9f108fa5c0be66e08c1986bfba4d242151b0f9f4ec5e0c5e17108c4c
 
 Name:           perl-Any-URI-Escape
-Version:        0.01
-Release:        38%{?dist}
+Version:        2.0.8
+Release:        1%{?dist}
 Summary:        Load URI::Escape::XS preferentially over URI::Escape
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

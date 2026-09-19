@@ -1,8 +1,8 @@
 %global source0_hash 5821cf0b40aa11913992c3b832201aa309a38cb99cab7fea357d6ed8d5ca211a
 
 Name:           perl-ColorThemeRole-ANSI
-Version:        0.001
-Release:        16%{?dist}
+Version:        20260626.0.0
+Release:        1%{?dist}
 Summary:        Roles for using ColorTheme::* with ANSI codes
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/ColorThemeRole-ANSI/

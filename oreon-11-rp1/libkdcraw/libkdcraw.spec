@@ -4,8 +4,8 @@
 
 Name:    libkdcraw
 Summary: A C++ interface around LibRaw library
-Version: 25.12.3
-Release: 5%{?dist}
+Version: 26.08.1
+Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later
 URL:     https://invent.kde.org/graphics/%{name}

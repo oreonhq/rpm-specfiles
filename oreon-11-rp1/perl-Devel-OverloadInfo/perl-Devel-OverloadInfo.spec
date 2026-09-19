@@ -1,8 +1,8 @@
 %global source0_hash 91347d3a0b9a269180a3ea0e0d43f12c55dec3ddb974642f0e19093f907543d4
 
 Name:		perl-Devel-OverloadInfo
-Version:	0.008
-Release:	2%{?dist}
+Version:	20110802.00
+Release:	1%{?dist}
 Summary:	Introspect overloaded operators
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Devel-OverloadInfo

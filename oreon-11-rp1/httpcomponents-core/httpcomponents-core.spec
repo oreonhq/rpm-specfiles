@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           httpcomponents-core
-Version:        4.4.16
+Version:        5.4.3
 Release:        %autorelease
 Summary:        Set of low level Java HTTP transport components for HTTP services
 License:        Apache-2.0

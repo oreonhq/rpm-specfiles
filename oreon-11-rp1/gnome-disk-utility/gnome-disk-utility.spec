@@ -5,8 +5,8 @@
 %global libhandy_version 1.5.0
 
 Name:           gnome-disk-utility
-Version:        46.1
-Release:        4%{?dist}
+Version:        51.beta
+Release:        1%{?dist}
 Summary:        Disks
 
 License:        GPL-2.0-or-later AND CC0-1.0

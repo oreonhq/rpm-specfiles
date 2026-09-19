@@ -1,8 +1,8 @@
 %global source0_hash 6f42c34f11e2b4e3ea2e0e6b9416a88a685add447910caf4d91dd2c178177252
 
 Name:           perl-Devel-Leak
-Version:        0.03
-Release:        61%{?dist}
+Version:        20110802.00
+Release:        1%{?dist}
 Summary:        Utility for looking for perl objects that are not reclaimed
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-Leak

@@ -1,8 +1,8 @@
 %global source0_hash 31ebf912df48d5d681def74b9880d78b1f3aca4351a0ed1fe3570b8e03af6c79
 
 Name:           perl-File-chdir
-Version:        0.1011
-Release:        29%{?dist}
+Version:        5.23.6
+Release:        1%{?dist}
 Summary:        A more sensible way to change directories
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-chdir

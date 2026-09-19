@@ -1,8 +1,8 @@
 %global source0_hash 8c4297c2bab22b72bb4fce9df26c6360d4a4166a0a97b29a58465a2592dbd01c
 
 Name: 		perl-Date-Pcalc
-Version:	6.1
-Release:	49%{?dist}
+Version:	7.4
+Release:	1%{?dist}
 Summary:	Gregorian calendar date calculations
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL: 		https://metacpan.org/release/Date-Pcalc

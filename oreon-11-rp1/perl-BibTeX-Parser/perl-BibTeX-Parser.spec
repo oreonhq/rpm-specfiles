@@ -1,11 +1,11 @@
-%global source0_hash 6ea3682cd6ecb91a772d7c233366f1a51258253997a208d1451deda56487a5ca
+%global source0_hash 0f37ee5fb69170dfb7b04aa928eb257cf0a3ea31801e83ce13738f26b39aabaa
 
 # Run optional test
 %bcond_without perl_BibTeX_Parser_enables_optional_test
 
 Name:           perl-BibTeX-Parser
-Version:        1.93
-Release:        2%{?dist}
+Version:        1.95
+Release:        1%{?dist}
 Summary:        Pure Perl BibTeX parser
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/BibTeX-Parser

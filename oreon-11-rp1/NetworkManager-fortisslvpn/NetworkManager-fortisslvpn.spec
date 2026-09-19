@@ -4,8 +4,8 @@
 Summary:   NetworkManager VPN plugin for Fortinet SSL VPN
 Name:      NetworkManager-fortisslvpn
 Epoch:     1
-Version:   1.4.0
-Release:   2%{?dist}
+Version:   1.4.1-dev
+Release:   1%{?dist}
 License:   GPL-2.0-or-later
 URL:       https://wiki.gnome.org/Projects/NetworkManager/VPN
 

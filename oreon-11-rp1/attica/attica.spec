@@ -1,8 +1,8 @@
 %global source0_hash 3b9c53770862c0b21b7af7ea15951c35831126022bb8d052760d9cf8bd7ee4f8
 
 Name:           attica
-Version:        0.4.2
-Release:        36%{?dist}
+Version:        6.30.0
+Release:        1%{?dist}
 Summary:        Implementation of the Open Collaboration Services API
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

@@ -7,8 +7,8 @@
 %endif
 
 Name:           perl-File-Find-Object-Rule
-Version:        0.0313
-Release:        12%{?dist}
+Version:        9999.32
+Release:        1%{?dist}
 Summary:        Alternative interface to File::Find::Object
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Find-Object-Rule

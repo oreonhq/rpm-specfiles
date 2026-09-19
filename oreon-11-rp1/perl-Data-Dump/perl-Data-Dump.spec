@@ -1,8 +1,8 @@
 %global source0_hash a4aa6e0ddbf39d5ad49bddfe0f89d9da864e3bc00f627125d1bc580472f53fbd
 
 Name:           perl-Data-Dump
-Version:        1.25
-Release:        14%{?dist}
+Version:        20182514.062550
+Release:        1%{?dist}
 Summary:        Pretty printing of data structures
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-Dump

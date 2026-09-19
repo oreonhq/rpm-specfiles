@@ -1,8 +1,8 @@
 %global source0_hash 244bf093798832a7d841d9ee5b4b0e6b489996eef63541e505091aa34a9015e2
 
 Name:           perl-Env-Path
-Version:        0.19
-Release:        34%{?dist}
+Version:        1.54
+Release:        1%{?dist}
 Summary:        Advanced operations on path variables
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Env-Path

@@ -1,8 +1,8 @@
 %global source0_hash ca6e8d7ce7471c2be54e1009f64c367d7ee233a2894cacf52ebe6f53b04e81e5
 
 Name:           perl-Capture-Tiny
-Version:        0.50
-Release:        4%{?dist}
+Version:        5.23.6
+Release:        1%{?dist}
 Summary:        Capture STDOUT and STDERR from Perl, XS or external programs
 License:        Apache-2.0
 URL:            https://metacpan.org/release/Capture-Tiny

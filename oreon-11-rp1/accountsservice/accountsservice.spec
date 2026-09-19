@@ -1,7 +1,7 @@
 %global source0_hash adda4cdeae24fa0992e7df3ffff9effa7090be3ac233a3edfdf69d5a9c9b924f
 
 Name:           accountsservice
-Version:        23.13.9
+Version:        26.27.3
 Release:        %autorelease
 Summary:        D-Bus interfaces for querying and manipulating user account information
 License:        GPL-3.0-or-later

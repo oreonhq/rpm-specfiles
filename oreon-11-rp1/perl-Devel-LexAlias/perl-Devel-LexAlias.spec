@@ -1,8 +1,8 @@
 %global source0_hash 5e0ad9d43e266033856e424e104a0009f8e63449e40cd5aba59ad94cb1bcee72
 
 Name:           perl-Devel-LexAlias
-Version:        0.05
-Release:        42%{?dist}
+Version:        3.12
+Release:        1%{?dist}
 Summary:        Alias lexical variables
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-LexAlias

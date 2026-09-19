@@ -1,7 +1,7 @@
 %global source0_hash 18bb66df4932ea61471dfb6057b5b27944f32d5be31fca832030a0c8082422a5
 
 Name:           perl-EV
-Version:        4.37
+Version:        7.17
 Release:        1%{?dist}
 Summary:        Wrapper for the libev high-performance event loop library
 

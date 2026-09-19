@@ -1,8 +1,8 @@
 %global source0_hash c36fd2b68d48c2e17417bf2873c78820f3ae02460fdf5976b8eeab887d59e16c
 
 Name:           perl-Date-Handler
-Version:        1.2
-Release:        35%{?dist}
+Version:        6.98
+Release:        1%{?dist}
 Summary:        Easy but complete date object
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Date-Handler

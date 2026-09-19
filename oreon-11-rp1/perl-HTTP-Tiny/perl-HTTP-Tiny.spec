@@ -4,8 +4,8 @@
 %bcond_without perl_HTTP_Tiny_enables_optional_deps
 
 Name:           perl-HTTP-Tiny
-Version:        0.092
-Release:        2%{?dist}
+Version:        5.90129
+Release:        1%{?dist}
 Summary:        Small, simple, correct HTTP/1.1 client
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/HTTP-Tiny

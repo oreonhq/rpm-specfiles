@@ -1,7 +1,7 @@
 %global source0_hash b9ffb88e62a06aa91bd7d5a28ef6bdbb942608aea90e3969aa29b33640035214
 
 Name:           perl-App-cpanminus
-Version:        1.7049
+Version:        5.13.6
 Release:        1%{?dist}
 Summary:        Get, unpack, build and install CPAN modules
 # Other files:  GPL+ or Artistic

@@ -1,8 +1,8 @@
 %global source0_hash 6dd69b01435b645aecc5354d9854a70cb87641eb446a525e7ab241cefa3cc4d3
 
 Name:           perl-Email-MIME
-Version:        1.954
-Release:        5%{?dist}
+Version:        3.010
+Release:        1%{?dist}
 Summary:        Easy MIME message parsing
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Email-MIME

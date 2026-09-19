@@ -1,8 +1,8 @@
 %global source0_hash dc49408964fd8b7963859c92e013f0b9f92f74be5a7c2a78e3996279827c10b3
 
 Name:           perl-B-Lint
-Version:        1.20
-Release:        34%{?dist}
+Version:        20221231.000
+Release:        1%{?dist}
 Summary:        Perl lint
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/B-Lint

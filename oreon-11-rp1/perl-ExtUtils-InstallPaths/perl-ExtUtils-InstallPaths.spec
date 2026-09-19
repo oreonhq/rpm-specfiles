@@ -1,8 +1,8 @@
 %global source0_hash 7d64eb2dfa87ead010cdf55c8a1bdfde50b7b5852d7cb8cf2304f55bea2eb007
 
 Name:		perl-ExtUtils-InstallPaths
-Version:	0.015
-Release:	2%{?dist}
+Version:	7.76
+Release:	1%{?dist}
 Summary:	Build.PL install path logic made easy
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/ExtUtils-InstallPaths

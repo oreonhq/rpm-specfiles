@@ -3,8 +3,8 @@
 %global prever  b1
 
 Name:           cvsps
-Version:        2.2
-Release:        0.41.b1%{?dist}
+Version:        3.13
+Release:        1%{?dist}
 Summary:        Patchset tool for CVS
 
 License:        GPL-1.0-or-later

@@ -11,8 +11,8 @@
 
 Summary:    A collection of SNMP protocol tools and libraries
 Name:       net-snmp
-Version:    5.9.5.2
-Release:    4%{?dist}
+Version:    6.0.1
+Release:    1%{?dist}
 Epoch:      1
 
 License:    MIT-CMU AND BSD-3-Clause AND MIT

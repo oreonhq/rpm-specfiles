@@ -1,8 +1,8 @@
 %global source0_hash 6afb541f6df6b535ccf7642d361ae18d7a95a3f93ace1bc5373f64c2410ca5af
 
 Name:           perl-Email-Address
-Version:        1.913
-Release:        9%{?dist}
+Version:        3.010
+Release:        1%{?dist}
 Summary:        RFC 2822 Address Parsing and Creation (DEPRECATED)
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Email-Address

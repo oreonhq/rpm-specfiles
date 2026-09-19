@@ -2,8 +2,8 @@
 
 Summary: Tools for using the foomatic database of printers and printer drivers
 Name:       foomatic
-Version:    4.0.13
-Release:    35%{?dist}
+Version:    4.0.17
+Release:    1%{?dist}
 License:    GPL-2.0-or-later
 
 # The database engine.

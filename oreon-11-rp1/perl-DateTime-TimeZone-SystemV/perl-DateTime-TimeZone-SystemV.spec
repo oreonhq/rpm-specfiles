@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-DateTime-TimeZone-SystemV
-Version:        0.010
-Release:        25%{?dist}
+Version:        5.17.0
+Release:        1%{?dist}
 Summary:        System V and POSIX timezone strings
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-TimeZone-SystemV

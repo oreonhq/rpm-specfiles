@@ -1,8 +1,8 @@
-%global source0_hash 69aa0cd365dba5ea7799b850a7da659ad303e6074bbd67f4ab84e4d6f5f6c3a4
+%global source0_hash c08d14832e8dcf8f06840405824a4f9611a0cb3daed0198946326c740941c8b6
 
 Name:         liblo
-Version:      0.34
-Release:      3%{?dist}
+Version:      0.36
+Release:      1%{?dist}
 Summary:      Open Sound Control library
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:      LicenseRef-Callaway-LGPLv2+

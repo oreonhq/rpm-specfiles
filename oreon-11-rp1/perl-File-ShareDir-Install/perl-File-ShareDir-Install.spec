@@ -1,8 +1,8 @@
 %global source0_hash 8f9533b198f2d4a9a5288cbc7d224f7679ad05a7a8573745599789428bc5aea0
 
 Name:           perl-File-ShareDir-Install
-Version:        0.14
-Release:        10%{?dist}
+Version:        9999.32
+Release:        1%{?dist}
 Summary:        Install shared files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-ShareDir-Install

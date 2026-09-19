@@ -4,7 +4,7 @@
 Summary:   NetworkManager VPN plugin for PPTP
 Name:      NetworkManager-pptp
 Epoch:     1
-Version:   1.2.12
+Version:   1.2.13-dev
 Release:   1%{?dist}
 License:   GPL-2.0-or-later
 URL:       https://wiki.gnome.org/Projects/NetworkManager/VPN

@@ -1,8 +1,8 @@
 %global source0_hash 1f3d5b4ff0b1c7b39e9ac7c318fb37adcd0bac9556036546494d14f06dc5643c
 
 Name:           perl-Email-MessageID
-Version:        1.408
-Release:        8%{?dist}
+Version:        3.010
+Release:        1%{?dist}
 Summary:        Generate world unique message-ids
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

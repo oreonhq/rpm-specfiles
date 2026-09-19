@@ -1,8 +1,8 @@
 %global source0_hash aaf48467765deea6e48054bc7d43e46e4d40cbcda16552c629d37be098289309
 
 Name:		perl-Algorithm-C3
-Version:	0.11
-Release:	17%{?dist}
+Version:	4.00.00
+Release:	1%{?dist}
 Summary:	Module for merging hierarchies using the C3 algorithm
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Algorithm-C3

@@ -1,8 +1,8 @@
 %global source0_hash 3ab4ff9bd49497bfc711dccf8c990aab10470a7bba65a9877632b14d8f5fdb55
 
 Name:           perl-Data-Denter
-Version:        0.15
-Release:        47%{?dist}
+Version:        1.11111111111
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:        An alternative to Data::Dumper and Storable
 Source:         https://cpan.metacpan.org/authors/id/I/IN/INGY/Data-Denter-%{version}.tar.gz

@@ -1,8 +1,8 @@
 %global source0_hash e7950246433f7ed6c3e4fd4df2227e0f2341137c3cab1989018fc370f58145c4
 
 Name:           perl-Email-MIME-ContentType
-Version:        1.028
-Release:        9%{?dist}
+Version:        3.010
+Release:        1%{?dist}
 Summary:        Parse a MIME Content-Type Header
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Email-MIME-ContentType

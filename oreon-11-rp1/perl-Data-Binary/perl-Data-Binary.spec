@@ -1,8 +1,8 @@
 %global source0_hash 4821a2de10ac7108f4dcb284a71b876981b0cb1ea6c5ed6afb177bf2e7cb8d73
 
 Name:		perl-Data-Binary
-Version:	0.01
-Release:	21%{?dist}
+Version:	20182514.062550
+Release:	1%{?dist}
 Summary:	Simple detection of binary versus text in strings
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Data-Binary

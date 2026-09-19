@@ -2,8 +2,8 @@
 
 Name:      	perl-Class-ReturnValue
 Summary:   	Class::ReturnValue Perl module
-Version:   	0.55
-Release:   	50%{?dist}
+Version:   	5.14.1
+Release:   	1%{?dist}
 License:   	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:       	https://metacpan.org/release/Class-ReturnValue
 

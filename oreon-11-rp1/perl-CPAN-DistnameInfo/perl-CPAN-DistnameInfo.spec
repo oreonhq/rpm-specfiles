@@ -1,8 +1,8 @@
 %global source0_hash 2f24fbe9f7eeacbc269d35fc61618322fc17be499ee0cd9018f370934a9f2435
 
 Name:           perl-CPAN-DistnameInfo
-Version:        0.12
-Release:        34%{?dist}
+Version:        2.112991
+Release:        1%{?dist}
 Summary:        Extract distribution name and version from a distribution filename
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/CPAN-DistnameInfo

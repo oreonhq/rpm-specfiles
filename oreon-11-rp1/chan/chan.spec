@@ -1,8 +1,8 @@
 %global source0_hash 12d930dad94a822756e5622f17d234afbf83f731709fce0fad33e5ce60775e3b
 
 Name: chan
-Version: 0.0.4
-Release: 17%{?dist}
+Version: 0.1.23
+Release: 1%{?dist}
 Summary: Pure C implementation of Go channels
 License: Apache-2.0
 URL: https://github.com/tylertreat/%{name}

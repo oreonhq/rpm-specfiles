@@ -1,8 +1,8 @@
 %global source0_hash ffacf98fbe3c6289125068f7b7d7b54a956d049279a4bb3ddb0860095409a0b0
 
 Name:		perl-Devel-EnforceEncapsulation
-Version:	0.51
-Release:	34%{?dist}
+Version:	20110802.00
+Release:	1%{?dist}
 Summary:	Find access violations to blessed objects
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Devel-EnforceEncapsulation

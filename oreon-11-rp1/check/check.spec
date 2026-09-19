@@ -6,8 +6,8 @@
 %bcond bootstrap 0
 
 Name:           check
-Version:        0.15.2
-Release:        21%{?dist}
+Version:        1.13.0
+Release:        1%{?dist}
 Summary:        A unit test framework for C
 License:        LGPL-2.1-or-later
 URL:            https://libcheck.github.io/check/

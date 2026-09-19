@@ -4,7 +4,7 @@
 %bcond_without perl_Clone_enables_optional_test
 
 Name:           perl-Clone
-Version:        0.48
+Version:        1.08
 Release:        1%{?dist}
 Summary:        Recursively copy perl data types
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

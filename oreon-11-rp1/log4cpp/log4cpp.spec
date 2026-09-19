@@ -1,7 +1,7 @@
-%global source0_hash 2cbbea55a5d6895c9f0116a9a9ce3afb86df383cd05c9d6c1a4238e5e5c8f51d
+%global source0_hash a036bc6bd6044479e6c456de7edd042b060ea5c843e47beb75f59baea9b20e3a
 
 Name:           log4cpp
-Version:        1.1.3
+Version:        1.1.6
 Release:        %autorelease
 Summary:        C++ logging library
 

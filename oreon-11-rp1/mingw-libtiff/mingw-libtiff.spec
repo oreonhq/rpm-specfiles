@@ -1,10 +1,10 @@
-%global source0_hash b92017489bdc1db3a4c97191aa4b75366673cb746de0dce5d7a749d5954681ba
+%global source0_hash 4996f0c4f93094719b1ca5c6279b20e588773ba8a247533e486416fb662ddb88
 
 %{?mingw_package_header}
 
 Summary:        MinGW Windows port of the LibTIFF library
 Name:           mingw-libtiff
-Version:        4.7.2
+Version:        4.7.2rc4
 Release:        1%{?dist}
 License:        libtiff
 URL:            http://www.simplesystems.org/libtiff/

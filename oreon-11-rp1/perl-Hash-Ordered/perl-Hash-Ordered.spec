@@ -1,8 +1,8 @@
 %global source0_hash 8dc36cd79155ae37ab8a3de5fd9120ffba9a31e409258c28529ec5251c59747b
 
 Name:           perl-Hash-Ordered
-Version:        0.014
-Release:        8%{?dist}
+Version:        5.23.6
+Release:        1%{?dist}
 Summary:        Perl class for ordered hashes
 License:        Apache-2.0
 URL:            https://metacpan.org/release/Hash-Ordered

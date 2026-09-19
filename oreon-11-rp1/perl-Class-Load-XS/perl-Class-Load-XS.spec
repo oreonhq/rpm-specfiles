@@ -1,8 +1,8 @@
 %global source0_hash 5bc22cf536ebfd2564c5bdaf42f0d8a4cee3d1930fc8b44b7d4a42038622add1
 
 Name:		perl-Class-Load-XS
-Version:	0.10
-Release:	30%{?dist}
+Version:	4.18
+Release:	1%{?dist}
 Summary:	XS implementation of parts of Class::Load
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Class-Load-XS

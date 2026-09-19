@@ -1,8 +1,8 @@
 %global source0_hash 9e290179fd1ab8574f7a2297baf015ea4fef3703a99d48798f61ec9347b4905b
 
 Name:		perl-CPAN-Requirements-Dynamic
-Version:	0.002
-Release:	3%{?dist}
+Version:	5.20250923
+Release:	1%{?dist}
 Summary:	Dynamic prerequisites in meta files
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/CPAN-Requirements-Dynamic

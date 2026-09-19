@@ -5,8 +5,8 @@
 %global pkgname protobuf
 
 Name:          mingw-%{pkgname}
-Version:       3.19.6
-Release:       11%{?dist}
+Version:       36.2
+Release:       1%{?dist}
 Summary:       MinGW Windows protobuf library
 
 BuildArch:     noarch

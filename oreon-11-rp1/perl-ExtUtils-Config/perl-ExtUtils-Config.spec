@@ -1,8 +1,8 @@
 %global source0_hash 82e7e4e90cbe380e152f5de6e3e403746982d502dd30197a123652e46610c66d
 
 Name:		perl-ExtUtils-Config
-Version:	0.010
-Release:	4%{?dist}
+Version:	7.76
+Release:	1%{?dist}
 Summary:	A wrapper for perl's configuration
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/ExtUtils-Config

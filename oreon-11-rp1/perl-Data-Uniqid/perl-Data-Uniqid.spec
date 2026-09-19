@@ -1,8 +1,8 @@
 %global source0_hash b6919ba49b9fe98bfdf3e8accae7b9b7f78dc9e71ebbd0b7fef7a45d99324ccb
 
 Name:           perl-Data-Uniqid
-Version:        0.12
-Release:        38%{?dist}
+Version:        20182514.062550
+Release:        1%{?dist}
 Summary:        Perl extension for simple generating of unique id's
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl

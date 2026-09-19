@@ -1,7 +1,7 @@
 %global source0_hash 1dfe42d83a51282260afb6f2438b345198dc483d287a791d9f716306a0372c89
 
 Name:           package-notes
-Version:        0.17
+Version:        0.20
 Release:        %autorelease
 Summary:        ELF Package and Dlopen Notes
 License:        0BSD

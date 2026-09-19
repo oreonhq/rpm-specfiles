@@ -1,4 +1,4 @@
-%global source0_hash dafb39c08ef24a0e2abd00d05d7341b1bf1f0c38bfcd5a4c69cf5f0ecb6db112
+%global source0_hash 82c29c833c1604c48ca3ab8a35e86b7189b8effac1b1476095c0529afb702808
 %global source1_hash 95edc8ff8b4323c8f962a621846cd3b393707ea9734940efa6aaab0b8a6fe555
 
 %if !0%{?bootstrap} && (0%{?fedora} || 0%{?rhel} > 6) || (0%{?oreon} >= 11)
@@ -7,9 +7,9 @@
 %endif
 
 Name:    lensfun
-Version: 0.3.4
+Version: 0.3.95
 Summary: Library to rectify defects introduced by photographic lenses
-Release: 11%{?dist}
+Release: 1%{?dist}
 
 License: LGPLv3 and CC-BY-SA
 URL: https://lensfun.github.io/

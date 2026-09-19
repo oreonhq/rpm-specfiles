@@ -1,7 +1,7 @@
 %global source0_hash b16b3a1b0e53cd45ed3328906d33ad4d59a13b57abf341424553aecf3e443aac
 
 Name:           perl-Business-ISSN
-Version:        1.008
+Version:        20260914.001
 Release:        %autorelease
 Summary:        Perl library for International Standard Serial Numbers
 License:        Artistic-2.0

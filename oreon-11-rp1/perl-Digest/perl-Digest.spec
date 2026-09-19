@@ -1,8 +1,8 @@
 %global source0_hash 72f55db5c21b808607cb38f75f9b9d5d0bfcb9bd5aa636568db7488f04de689a
 
 Name:           perl-Digest
-Version:        1.20
-Release:        521%{?dist}
+Version:        20260402.0
+Release:        1%{?dist}
 Summary:        Modules that calculate message digests
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Digest

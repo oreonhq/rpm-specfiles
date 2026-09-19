@@ -1,8 +1,8 @@
 %global source0_hash 8d34dbe314cfa2d99bd9aae546bbde94c38bb05b74b07c89bde1673a6f6c55f4
 
 Name:           perl-Data-Perl
-Version:        0.002011
-Release:        18%{?dist}
+Version:        8.000001
+Release:        1%{?dist}
 Summary:        Base classes wrapping fundamental Perl data types
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-Perl

@@ -1,8 +1,8 @@
 %global source0_hash ceaced62d39e4e2a1469fa2f20662d4d370279b3209930250766db02f44ae8de
 
 Name:		HepMC
-Version:	2.06.11
-Release:	18%{?dist}
+Version:	3.04.01
+Release:	1%{?dist}
 Summary:	C++ Event Record for Monte Carlo Generators
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

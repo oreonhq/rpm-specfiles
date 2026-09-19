@@ -1,8 +1,8 @@
-%global source0_hash 1e954e4f6d0f4d6bb9de4ab9354031656ed63794dc3f1e6a06d81e0785e6af34
+%global source0_hash 9f82ea55e7230eddeb016c848b7d3f7df6185f88215f59157b86ce258302a2e1
 
 Name:           cockpit-composer
-Version:        53
-Release:        5%{?dist}
+Version:        53.1
+Release:        1%{?dist}
 Summary:        Composer GUI for use with Cockpit
 
 License:        MIT

@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:           keysmith
-Version:        26.04.3
+Version:        26.08.1
 Release:        1%{?dist}
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later

@@ -2,8 +2,8 @@
 
 Name:           perl-Any-Moose
 Summary:        Use Moose or Mouse automagically (DEPRECATED)
-Version:        0.27
-Release:        34%{?dist}
+Version:        6.36
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Any-Moose
 Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Any-Moose-%{version}.tar.gz

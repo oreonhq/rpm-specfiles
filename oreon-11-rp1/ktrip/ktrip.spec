@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:          ktrip
-Version:       26.04.3
+Version:       26.08.1
 Release:       1%{?dist}
 Summary:       Public transport navigation, allows you to find journeys between specified locations, departures for a specific station and shows real-time delay and disruption information.
 

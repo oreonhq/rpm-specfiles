@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Eval-Closure
-Version:        0.14
-Release:        27%{?dist}
+Version:        5.17.1
+Release:        1%{?dist}
 Summary:        Safely and cleanly create closures via string eval
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Eval-Closure

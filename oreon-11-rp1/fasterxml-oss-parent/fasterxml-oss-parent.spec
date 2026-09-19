@@ -1,10 +1,10 @@
-%global source0_hash 088dc709b8d6d1494044f743a7f0a5cd4e6bf71da06a8fea9769e236dc29b684
+%global source0_hash 3b123bf667636bb1aa3047f5970f7b5c2c24613df148c342a40917f69c1f6725
 
 %global srcname oss-parent
 
 Name:          fasterxml-oss-parent
-Version:       62
-Release:       6%{?dist}
+Version:       80
+Release:       1%{?dist}
 Summary:       FasterXML parent pom
 License:       Apache-2.0
 

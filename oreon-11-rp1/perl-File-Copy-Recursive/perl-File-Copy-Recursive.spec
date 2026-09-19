@@ -1,8 +1,8 @@
 %global source0_hash d3971cf78a8345e38042b208bb7b39cb695080386af629f4a04ffd6549df1157
 
 Name: 		perl-File-Copy-Recursive
-Version: 	0.45
-Release: 	19%{?dist}
+Version: 	9999.32
+Release: 	1%{?dist}
 Summary: 	Extension for recursively copying files and directories 
 License: 	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL: 		https://metacpan.org/release/File-Copy-Recursive
